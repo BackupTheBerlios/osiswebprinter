@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.3 2003/04/22 07:25:51 r23 Exp $
+   $Id: mail.php,v 1.4 2003/04/30 07:13:43 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -12,29 +12,36 @@
    ----------------------------------------------------------------------
    Based on:
    
-   File: whos_online.php,v 1.28 2002/08/13 20:37:48 dgw_
+   File: mail.php,v 1.9 2002/01/19 22:44:34 harley_vb
    ----------------------------------------------------------------------
-  $Id: mail.php,v 1.3 2003/04/22 07:25:51 r23 Exp $
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2002 osCommerce
-
+   Copyright (c) 2002 osCommerce
    ----------------------------------------------------------------------
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-define('HEADING_TITLE', 'eMail an Kunden versenden');
+define('TITLE', 'eMail versenden.');
+define('NAVBAR_TITLE', 'eMail versenden');
+define('HEADING_TITLE', 'eMail an '.  OWP_NAME .' - Anwender versenden.');
 
-define('TEXT_CUSTOMER', 'Kunde:');
+define('TEXT_USER', 'Anwender:');
 define('TEXT_SUBJECT', 'Betreff:');
-define('TEXT_FROM', 'Absender:');
+define('TEXT_FROM_NAME', 'Absender Name:');
+define('TEXT_FROM_MAIL', 'Absender eMail:');
+
 define('TEXT_MESSAGE', 'Nachricht:');
-define('TEXT_SELECT_CUSTOMER', 'Kunden ausw&auml;hlen');
-define('TEXT_ALL_CUSTOMERS', 'Alle Kunden');
-define('TEXT_NEWSLETTER_CUSTOMERS', 'An alle Newsletter-Abonnenten');
+define('TEXT_SELECT_USER', 'Anwender ausw&auml;hlen');
+define('TEXT_ALL_USER', 'Alle Anwender');
+define('TEXT_NEWSLETTER_USER', 'An alle Newsletter-Abonnenten');
+
+define('EMAIL_GREET_MR', 'Sehr geehrter Herr ');
+define('EMAIL_GREET_MS', 'Sehr geehrte Frau ');
+define('EMAIL_FOOT', 'Mit den besten Grüssen,' . "\n" .  OWP_NAME . "\n\n\n" . OWP_HTTP_SERVER . '/' . "\n\n");
 
 define('NOTICE_EMAIL_SENT_TO', 'Hinweis: eMail wurde versendet an: %s');
-define('ERROR_NO_CUSTOMER_SELECTED', 'Fehler: Es wurde kein Kunde ausgew&auml;hlt.');
+define('ERROR_NO_USER_SELECTED', 'Fehler: Es wurde kein Kunde ausgew&auml;hlt.');
+define('ERROR_NO_FROM_NAME', 'Fehler: Es wurde kein Absender - Name eingeben.');
+define('ERROR_NO_FROM_MAIL', 'Fehler: Es wurde keine Absender - eMail Adresse eingeben.');
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: password_funcs.php,v 1.2 2003/04/29 06:27:17 r23 Exp $
+   $Id: password_funcs.php,v 1.3 2003/04/30 07:13:43 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -35,8 +35,8 @@
    ----------------------------------------------------------------------
     
    $Log: password_funcs.php,v $
-   Revision 1.2  2003/04/29 06:27:17  r23
-   login
+   Revision 1.3  2003/04/30 07:13:43  r23
+   mail update
 
    Revision 1.1  2003/04/04 07:53:41  r23
    initial import
@@ -125,10 +125,10 @@ function owpCryptPassword($plain_pass){
 
 function owpCreatePassword($pass_len = '8'){
   mt_srand ((double) microtime() * 1000000);
-  $allchar = "abcdefghijklnmpqrstuvwxyzABCDEFGHKLNMPQRSTUVWXYZ2345679";
+  $allchar = "abcdefghijknmpqrstuvwxyzABCDEFGHKLNMPQRSTUVWXYZ2345679";
   $password = "" ;
   for ($i = 0; $i<$pass_len ; $i++){
-    $password .= substr( $allchar, mt_rand (0,55), 1 ) ;
+    $password .= substr( $allchar, mt_rand (0,54), 1 ) ;
   }
   return($password);
 }

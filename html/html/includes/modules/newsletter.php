@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletter.php,v 1.6 2003/04/29 17:02:07 r23 Exp $
+   $Id: newsletter.php,v 1.7 2003/04/30 07:13:43 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -39,14 +39,14 @@
       GLOBAL $db, $_GET, $owpFilename;
 
       $owpDBTable = owpDBGetTables();
-      $sql = "SELECT count(*) as count 
+      $sql = "SELECT count(*) as total 
               FROM " . $owpDBTable['administrators'] . " 
               WHERE admin_newsletter = '1'";
       $mail = $db->Execute($sql);
 
       $confirm_string = '<table border="0" cellspacing="0" cellpadding="2">' . "\n" .
                         '  <tr>' . "\n" .
-                        '    <td class="main"><font color="#ff0000"><b>' . sprintf(TEXT_COUNT_CUSTOMERS, $mail['count']) . '</b></font></td>' . "\n" .
+                        '    <td class="main"><font color="#ff0000"><b>' . sprintf(TEXT_COUNT_USER, $mail->fields['total']) . '</b></font></td>' . "\n" .
                         '  </tr>' . "\n" .
                         '  <tr>' . "\n" .
                         '    <td>' . owpTransLine('1', '10') . '</td>' . "\n" .
@@ -81,20 +81,27 @@
       $send_mail->From = EMAIL_FROM;
       $send_mail->FromName = '';
       $send_mail->Subject = $this->title;
-
-      $mail_values = $db->Execute("select customers_firstname, customers_lastname, customers_email_address from " . $owpDBTable['administrators'] . " where customers_newsletter = '1'");
+      
+      $sql = "SELECT admin_gender, admin_firstname, admin_lastname,
+                     admin_email_address 
+              FROM " . $owpDBTable['administrators'] . " 
+              WHERE admin_newsletter = '1'";
+      $mail_values = $db->Execute($sql);
       while ($mail = $mail_values->fields) {
       	$send_mail->Body = $this->content;
-      	$send_mail->AddAdress($mail['customers_email_address'], $mail['customers_firstname'] . ' ' . $mail['customers_lastname']);
+      	$send_mail->AddAdress($mail['admin_email_address'], $mail['admin_firstname'] . ' ' . $mail['admin_lastname']);
         $send_mail->Send();
         // Clear all addresses and attachments for next loop
         $send_mail->ClearAddresses();
         $send_mail->ClearAttachments();
         $mail->MoveNext();
       }
-
-      $newsletter_id = owp_db_prepare_input($newsletter_id);
-      $db->Execute("update " . $owpDBTable['newsletters'] . " set date_sent = now(), status = '1' where newsletters_id = '" . owpDBInput($newsletter_id) . "'");
+      
+      $today = date("Y-m-d H:i:s");
+      $db->Execute("UPDATE " . $owpDBTable['newsletters'] . " 
+                       SET date_sent = " . $db->DBTimeStamp($today) . ",
+                           status = '1' 
+                     WHERE newsletters_id = '" . owpDBInput($newsletter_id) . "'");
     }
   }
 ?>

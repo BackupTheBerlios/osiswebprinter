@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletters.php,v 1.15 2003/04/29 17:02:07 r23 Exp $
+   $Id: newsletters.php,v 1.16 2003/04/30 07:13:43 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -91,9 +91,7 @@
         }
         break;
       case 'deleteconfirm':
-        $newsletter_id = owpPrepareInput($_GET['nID']);
-
-        $db->Execute("DELETE FROM " . $owpDBTable['newsletters'] . " WHERE newsletters_id = '" . owpDBInput($newsletter_id) . "'");
+        $db->Execute("DELETE FROM " . $owpDBTable['newsletters'] . " WHERE newsletters_id = '" . owpDBInput($_GET['nID']) . "'");
 
         owpRedirect(owpLink($owpFilename['newsletters'], 'page=' . $_GET['page']));
         break;
@@ -284,8 +282,8 @@
 
     $nInfo = new objectInfo($newsletter);
 
-    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . '.php');
-    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . '.php');
+    include_once(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . '.php');
+    include_once(OWP_MODULES_DIR . $nInfo->module . '.php');
     $module_name = $nInfo->module;
     $module = new $module_name($nInfo->title, $nInfo->content);
 ?>

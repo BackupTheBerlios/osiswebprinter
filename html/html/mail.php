@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.8 2003/04/29 17:02:07 r23 Exp $
+   $Id: mail.php,v 1.9 2003/04/30 07:13:43 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,55 +23,84 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
- 
+/* 
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
- 
+*/ 
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['mail']);
+  $breadcrumb->add(NAVBAR_TITLE, owpLink($owpFilename['mail']));
 
-  if ( ($_GET['action'] == 'send_email_to_user') && ($_POST['customers_email_address']) && (!$_POST['back_x']) ) {
-    switch ($_POST['customers_email_address']) {
+  if ( ($_GET['action'] == 'send_email_to_user') && ($_POST['user_email_address']) && (!$_POST['back_x']) ) {
+    switch ($_POST['user_email_address']) {
       case '***':
-        $mail_query = tep_db_query("SELECT customers_firstname, customers_lastname, customers_email_address FROM " . TABLE_CUSTOMERS);
-        $mail_sent_to = TEXT_ALL_CUSTOMERS;
+        $sql = "SELECT admin_gender, admin_firstname, admin_lastname, admin_email_address 
+                FROM " . $owpDBTable['administrators'] . " 
+                ORDER BY admin_lastname";
+        $mail_query = $db->Execute($sql);
+        $mail_sent_to = TEXT_ALL_USER;
         break;
       case '**D':
-        $mail_query = tep_db_query("SELECT customers_firstname, customers_lastname, customers_email_address FROM " . TABLE_CUSTOMERS . " WHERE customers_newsletter = '1'");
-        $mail_sent_to = TEXT_NEWSLETTER_CUSTOMERS;
+        $sql = "SELECT admin_gender, admin_firstname, admin_lastname, admin_email_address 
+                FROM " . $owpDBTable['administrators'] . " 
+                WHERE admin_newsletter = '1'
+                ORDER BY admin_lastname"; 
+        $mail_query = $db->Execute($sql);
+        $mail_sent_to = TEXT_NEWSLETTER_USER;
         break;
       default:
-        $customers_email_address = tep_db_prepare_input($_POST['customers_email_address']);
-
-        $mail_query = tep_db_query("SELECT customers_firstname, customers_lastname, customers_email_address FROM " . TABLE_CUSTOMERS . " WHERE customers_email_address = '" . tep_db_input($customers_email_address) . "'");
-        $mail_sent_to = $_POST['customers_email_address'];
+        $sql = "SELECT admin_gender, admin_firstname, admin_lastname, admin_email_address 
+                FROM " . $owpDBTable['administrators'] . " 
+                WHERE admin_email_address = '" . owpDBInput($user_email_address) . "'";
+        $mail_query = $db->Execute($sql);
+        $mail_sent_to = $user_email_address;
         break;
     }
 
-    $FROM = tep_db_prepare_input($_POST['FROM']);
-    $subject = tep_db_prepare_input($_POST['subject']);
-    $message = tep_db_prepare_input($_POST['message']);
+    // Let's build a message object using the email class
+    $send_mail = new phpmailer();
 
-    //Let's build a message object using the email class
-    $mimemessage = new email(array('X-Mailer: osCommerce bulk mailer'));
-    // add the message to the object
-    $mimemessage->add_text($message);
-    $mimemessage->build_message();
-    while ($mail = tep_db_fetch_array($mail_query)) {
-      $mimemessage->send($mail['customers_firstname'] . ' ' . $mail['customers_lastname'], $mail['customers_email_address'], '', $FROM, $subject);
+    $send_mail->From = $_POST['from_mail'];
+    $send_mail->FromName = $_POST['from_name'];
+    $send_mail->Subject = $subject;
+
+    while ($mail = $mail_query->fields) {
+      if ($mail['admin_gender'] == 'm') {
+        $body = EMAIL_GREET_MR . $mail['admin_lastname'] . ',' . "\n\n";
+      } else {
+        $body = EMAIL_GREET_MS . $mail['admin_lastname'] . ',' . "\n\n";
+      }    
+      $body .= $message. "\n\n";
+      $body .= EMAIL_FOOT; 
+      $send_mail->Body = $body;
+      $send_mail->AddAddress($mail['admin_email_address'], $mail['admin_firstname'] . ' ' . $mail['admin_lastname']);
+      $send_mail->Send();
+      // Clear all addresses and attachments for next loop
+      $send_mail->ClearAddresses();
+      $send_mail->ClearAttachments();
+      $mail_query->MoveNext();
     }
 
     owpRedirect(owpLink($owpFilename['mail'], 'mail_sent_to=' . urlencode($mail_sent_to)));
   }
 
-  if ( ($_GET['action'] == 'preview') && (!$_POST['customers_email_address']) ) {
-    $messageStack->add(ERROR_NO_CUSTOMER_SELECTED, 'error');
+  if ( ($_GET['action'] == 'preview') && (!$_POST['user_email_address']) ) {
+    $messageStack->add(ERROR_NO_USER_SELECTED, 'error');
   }
 
   if ($_GET['mail_sent_to']) {
     $messageStack->add(sprintf(NOTICE_EMAIL_SENT_TO, $_GET['mail_sent_to']), 'notice');
   }
+
+  if ( ($_GET['action'] == 'preview') && ($_POST['from_name'] == '') ) {
+    $messageStack->add(ERROR_NO_FROM_NAME, 'error');
+  }
+
+  if ( ($_GET['action'] == 'preview') && ($_POST['from_mail'] == '') ) {
+    $messageStack->add(ERROR_NO_FROM_MAIL, 'error');
+  }
+ 
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -104,50 +133,58 @@
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
-  if ( ($_GET['action'] == 'preview') && ($_POST['customers_email_address']) ) {
-    switch ($_POST['customers_email_address']) {
+  if ( ($_GET['action'] == 'preview') && ($_POST['user_email_address']) ) {
+    switch ($_POST['user_email_address']) {
       case '***':
-        $mail_sent_to = TEXT_ALL_CUSTOMERS;
+        $mail_sent_to = TEXT_ALL_USER;
         break;
       case '**D':
-        $mail_sent_to = TEXT_NEWSLETTER_CUSTOMERS;
+        $mail_sent_to = TEXT_NEWSLETTER_USER;
         break;
       default:
-        $mail_sent_to = $_POST['customers_email_address'];
+        $mail_sent_to = $_POST['user_email_address'];
         break;
     }
 ?>
           <tr><?php echo owpDrawForm('mail', $owpFilename['mail'], 'action=send_email_to_user'); ?>
-            <td><table border="0" width="100%" cellpadding="0" cellspacing="2">
+            <td><table border="0" cellpadding="0" cellspacing="2">
               <tr>
-                <td><?php echo owpTransLine('1', '10'); ?></td>
+                <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
-                <td class="smallText"><b><?php echo TEXT_CUSTOMER; ?></b><br><?php echo $mail_sent_to; ?></td>
+                <td class="smallText"><b><?php echo TEXT_USER; ?></b></td>
+                <td colspan="2" class="smallText">&nbsp;&nbsp;<?php echo $mail_sent_to; ?></td>
               </tr>
               <tr>
-                <td><?php echo owpTransLine('1', '10'); ?></td>
+                <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
+              </tr>            
+              <tr>
+                <td class="smallText"><b><?php echo TEXT_FROM_NAME; ?></b></td>
+                <td colspan="2" class="smallText">&nbsp;&nbsp;<?php echo htmlspecialchars(stripslashes($_POST['from_name'])); ?></td>
               </tr>
               <tr>
-                <td class="smallText"><b><?php echo TEXT_FROM; ?></b><br><?php echo htmlspecialchars(stripslashes($_POST['FROM'])); ?></td>
+                <td class="smallText"><b><?php echo TEXT_FROM_MAIL; ?></b></td>
+                <td colspan="2" class="smallText">&nbsp;&nbsp;<?php echo htmlspecialchars(stripslashes($_POST['from_mail'])); ?></td>
+              </tr>                            
+              <tr>
+                <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
-                <td><?php echo owpTransLine('1', '10'); ?></td>
+                <td class="smallText"><b><?php echo TEXT_SUBJECT; ?></b></td>
+                <td colspan="2" class="smallText">&nbsp;&nbsp;<?php echo htmlspecialchars(stripslashes($_POST['subject'])); ?></td>
               </tr>
               <tr>
-                <td class="smallText"><b><?php echo TEXT_SUBJECT; ?></b><br><?php echo htmlspecialchars(stripslashes($_POST['subject'])); ?></td>
+                <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
-                <td><?php echo owpTransLine('1', '10'); ?></td>
+                <td class="smallText"><b><?php echo TEXT_MESSAGE; ?></b></td>
+                <td colspan="2" class="smallText">&nbsp;&nbsp;<?php echo nl2br(htmlspecialchars(stripslashes($_POST['message']))); ?></td>
               </tr>
               <tr>
-                <td class="smallText"><b><?php echo TEXT_MESSAGE; ?></b><br><?php echo nl2br(htmlspecialchars(stripslashes($_POST['message']))); ?></td>
+                <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
-                <td><?php echo owpTransLine('1', '10'); ?></td>
-              </tr>
-              <tr>
-                <td>
+                <td colspan="3">
 <?php
 /* Re-Post all POST'ed variables */
     reset($_POST);
@@ -159,8 +196,9 @@
 ?>
                 <table border="0" width="100%" cellpadding="0" cellspacing="2">
                   <tr>
-                    <td><?php echo owpImageSubmit('button_back.gif', IMAGE_BACK, 'name="back"'); ?></td>
-                    <td align="right"><?php echo '<a href="' . owpLink($owpFilename['mail']) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a> ' . owpImageSubmit('button_send_mail.gif', IMAGE_SEND_EMAIL); ?></td>
+                    <td valign="top" align="left"><?php echo owpImageSubmit('button_back.gif', IMAGE_BACK, 'name="back"'); ?></td>
+                    <td><?php echo owpTransLine('20', '1'); ?></td>
+                    <td align="right"><?php echo '<a href="' . owpLink($owpFilename['mail']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a> ' . owpImageSubmit('button_send_mail.gif', IMAGE_SEND_EMAIL); ?></td>
                   </tr>
                 </table></td>
               </tr>
@@ -172,49 +210,57 @@
           <tr><?php echo owpDrawForm('mail', $owpFilename['mail'], 'action=preview'); ?>
             <td><table border="0" cellpadding="0" cellspacing="2">
               <tr>
-                <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>
+                <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
 <?php
-    $customers = array();
-    $customers[] = array('id' => '', 'text' => TEXT_SELECT_CUSTOMER);
-    $customers[] = array('id' => '***', 'text' => TEXT_ALL_CUSTOMERS);
-    $customers[] = array('id' => '**D', 'text' => TEXT_NEWSLETTER_CUSTOMERS);
-    $mail_query = tep_db_query("SELECT customers_email_address, customers_firstname, customers_lastname FROM " . TABLE_CUSTOMERS . " order by customers_lastname");
-    while($customers_values = tep_db_fetch_array($mail_query)) {
-      $customers[] = array('id' => $customers_values['customers_email_address'],
-                           'text' => $customers_values['customers_lastname'] . ', ' . $customers_values['customers_firstname'] . ' (' . $customers_values['customers_email_address'] . ')');
+    $user = array();
+    $user[] = array('id' => '', 'text' => TEXT_SELECT_USER);
+    $user[] = array('id' => '***', 'text' => TEXT_ALL_USER);
+    $user[] = array('id' => '**D', 'text' => TEXT_NEWSLETTER_USER);
+
+    $sql = "SELECT admin_gender, admin_firstname, admin_lastname, admin_email_address 
+            FROM " . $owpDBTable['administrators'] . " 
+            ORDER BY admin_lastname";
+    $mail_query = $db->Execute($sql);
+    while($user_values = $mail_query->fields) {
+      $user[] = array('id' => $user_values['admin_email_address'], 'text' => $user_values['admin_lastname'] . ', ' . $user_values['admin_firstname'] . ' (' . $user_values['admin_email_address'] . ')');
+      $mail_query->MoveNext();
     }
 ?>
               <tr>
-                <td class="main"><?php echo TEXT_CUSTOMER; ?></td>
-                <td><?php echo owpPullDownMenu('customers_email_address', $customers, $_GET['customer']);?></td>
+                <td class="main"><?php echo TEXT_USER; ?></td>
+                <td><?php echo owpPullDownMenu('user_email_address', $user, $_GET['customer']);?></td>
               </tr>
               <tr>
-                <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>
+                <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
-                <td class="main"><?php echo TEXT_FROM; ?></td>
-                <td><?php echo owpInputField('FROM', EMAIL_FROM); ?></td>
+                <td class="main"><?php echo TEXT_FROM_NAME; ?></td>
+                <td><?php echo owpInputField('from_name', OWP_OWNER); ?></td>
               </tr>
               <tr>
-                <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>
+                <td class="main"><?php echo TEXT_FROM_MAIL; ?></td>
+                <td><?php echo owpInputField('from_mail', OWP_OWNER_EMAIL_ADDRESS); ?></td>
+              </tr>
+              <tr>
+                <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
                 <td class="main"><?php echo TEXT_SUBJECT; ?></td>
                 <td><?php echo owpInputField('subject'); ?></td>
               </tr>
               <tr>
-                <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>
+                <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
                 <td valign="top" class="main"><?php echo TEXT_MESSAGE; ?></td>
                 <td><?php echo owpTextareaField('message', 'soft', '60', '15'); ?></td>
               </tr>
               <tr>
-                <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>
+                <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
-                <td colspan="2" align="right"><?php echo owpImageSubmit('button_send_mail.gif', IMAGE_SEND_EMAIL); ?></td>
+                <td colspan="3" align="right"><?php echo owpImageSubmit('button_send_mail.gif', IMAGE_SEND_EMAIL); ?></td>
               </tr>
             </table></td>
           </form></tr>
