@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.8 2003/04/20 07:08:17 r23 Exp $
+   $Id: index.php,v 1.9 2003/04/20 16:07:18 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,6 +23,8 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
+  
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['index']);
 
   $cat = array(array('title' => BOX_HEADING_CONFIGURATION,
                      'image' => 'configuration.gif',
@@ -52,10 +54,10 @@
                                          array('title' => REPORTS_ORDERS, 'link' => owpLink(FILENAME_STATS_CUSTOMERS, 'selected_box=reports')))),
                array('title' => BOX_HEADING_TOOLS,
                      'image' => 'tools.gif',
-                     'href' => owpLink(FILENAME_BACKUP, 'selected_box=tools'),
-                     'children' => array(array('title' => TOOLS_BACKUP, 'link' => owpLink(FILENAME_BACKUP, 'selected_box=tools')),
+                     'href' => owpLink($owpFilename['backup'], 'selected_box=tools'),
+                     'children' => array(array('title' => TOOLS_BACKUP, 'link' => owpLink($owpFilename['backup'], 'selected_box=tools')),
                                          array('title' => TOOLS_BANNERS, 'link' => owpLink(FILENAME_BANNER_MANAGER, 'selected_box=tools')),
-                                         array('title' => TOOLS_FILES, 'link' => owpLink(FILENAME_FILE_MANAGER, 'selected_box=tools')))));
+                                         array('title' => TOOLS_FILES, 'link' => owpLink($owpFilename['file_manager'], 'selected_box=tools')))));
 
   $languages = tep_get_languages();
   $languages_array = array();
@@ -67,8 +69,12 @@
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
 <title><?php echo TITLE; ?></title>
+<META NAME="AUTHOR" CONTENT="OSIS GmbH">
+<META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
+<META NAME="ROBOTS" content="NOFOLLOW">
+<link rel="StyleSheet" href="style/style.css" type="text/css" />
 <style type="text/css"><!--
 a { color:#080381; text-decoration:none; }
 a:hover { color:#aabbdd; text-decoration:underline; }
@@ -192,7 +198,7 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
                 <td width="460"><table border="0" width="460" height="390" cellspacing="0" cellpadding="2">
                   <tr>
                     <td colspan="2"><table border="0" width="100%" cellspacing="0" cellpadding="2">
-                      <tr><?php # echo# tep_draw_form('languages', 'index.php', '', 'get'); ?>
+                      <tr><?php # echo# owpDrawForm('languages', 'index.php', '', 'get'); ?>
                         <td class="heading"><?php echo HEADING_TITLE; ?></td>
                         <td align="right"><?php #echo tep_draw_pull_down_menu('language', $languages_array, ($_GET['language'] ? $_GET['language'] : DEFAULT_LANGUAGE), 'onChange="this.form.submit();"'); ?></td>
                       </form></tr>

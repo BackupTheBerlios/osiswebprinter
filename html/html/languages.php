@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.9 2003/04/20 07:09:15 r23 Exp $
+   $Id: languages.php,v 1.10 2003/04/20 16:07:18 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,6 +23,8 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
+  
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['languages']);
 
   switch ($_GET['action']) {
     case 'insert':
@@ -106,12 +108,15 @@
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
 <title><?php echo TITLE; ?></title>
-<link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
+<META NAME="AUTHOR" CONTENT="OSIS GmbH">
+<META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
+<META NAME="ROBOTS" content="NOFOLLOW">
+<link rel="StyleSheet" href="style/style.css" type="text/css" />
 <script language="javascript" src="includes/general.js"></script>
 </head>
-<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF" onload="SetFocus();">
+<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" onload="SetFocus();">
 <!-- header //-->
 <?php require(OWP_INCLUDES_DIR . 'header.php'); ?>
 <!-- header_eof //-->
@@ -200,7 +205,7 @@
     case 'new':
       $heading[] = array('text' => '<b>' . TEXT_INFO_HEADING_NEW_LANGUAGE . '</b>');
 
-      $contents = array('form' => tep_draw_form('languages', FILENAME_LANGUAGES, 'action=insert'));
+      $contents = array('form' => owpDrawForm('languages', FILENAME_LANGUAGES, 'action=insert'));
       $contents[] = array('text' => TEXT_INFO_INSERT_INTRO);
       $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_NAME . '<br>' . tep_draw_input_field('name'));
       $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_CODE . '<br>' . tep_draw_input_field('code'));
@@ -213,7 +218,7 @@
     case 'edit':
       $heading[] = array('text' => '<b>' . TEXT_INFO_HEADING_EDIT_LANGUAGE . '</b>');
 
-      $contents = array('form' => tep_draw_form('languages', FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=save'));
+      $contents = array('form' => owpDrawForm('languages', FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=save'));
       $contents[] = array('text' => TEXT_INFO_EDIT_INTRO);
       $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_NAME . '<br>' . tep_draw_input_field('name', $lInfo->name));
       $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_CODE . '<br>' . tep_draw_input_field('code', $lInfo->code));

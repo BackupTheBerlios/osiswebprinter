@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: whos_online.php,v 1.8 2003/04/20 07:09:15 r23 Exp $
+   $Id: whos_online.php,v 1.9 2003/04/20 16:07:18 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -25,6 +25,8 @@
   $xx_mins_ago = (time() - 900);
 
   require('includes/system.php');
+  
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['whos_online']);
 
   require(OWP_CLASSES_DIR . 'currencies.php');
   $currencies = new currencies();
@@ -35,11 +37,14 @@
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
 <title><?php echo TITLE; ?></title>
-<link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
+<META NAME="AUTHOR" CONTENT="OSIS GmbH">
+<META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
+<META NAME="ROBOTS" content="NOFOLLOW">
+<link rel="StyleSheet" href="style/style.css" type="text/css" />
 </head>
-<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF">
+<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <!-- header //-->
 <?php require(OWP_INCLUDES_DIR . 'header.php'); ?>
 <!-- header_eof //-->
@@ -85,7 +90,7 @@
     if ($whos_online['session_id'] == $info) {
       echo '              <tr class="dataTableRowSelected">' . "\n";
     } else {
-      echo '              <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . owpLink(FILENAME_WHOS_ONLINE, owpGetAllGetParameters(array('info', 'action')) . 'info=' . $whos_online['session_id'], 'NONSSL') . '\'">' . "\n";
+      echo '              <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . owpLink($owpFilename['whos_online'], owpGetAllGetParameters(array('info', 'action')) . 'info=' . $whos_online['session_id'], 'NONSSL') . '\'">' . "\n";
     }
 ?>
                 <td class="dataTableContent"><?php echo gmdate('H:i:s', $time_online); ?></td>

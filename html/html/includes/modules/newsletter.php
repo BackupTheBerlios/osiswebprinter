@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletter.php,v 1.3 2003/04/20 07:08:17 r23 Exp $
+   $Id: newsletter.php,v 1.4 2003/04/20 16:06:10 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -36,7 +36,7 @@
     }
 
     function confirm() {
-      global $HTTP_GET_VARS;
+      global $_GET;
 
       $mail_query = tep_db_query("select count(*) as count from " . TABLE_CUSTOMERS . " where customers_newsletter = '1'");
       $mail = tep_db_fetch_array($mail_query);
@@ -61,7 +61,7 @@
                         '    <td>' . owpTransLine('1', '10') . '</td>' . "\n" .
                         '  </tr>' . "\n" .
                         '  <tr>' . "\n" .
-                        '    <td align="right"><a href="' . owpLink(FILENAME_NEWSLETTERS, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'] . '&action=confirm_send') . '">' . owpImage_button('button_send.gif', IMAGE_SEND) . '</a> <a href="' . owpLink(FILENAME_NEWSLETTERS, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a></td>' . "\n" .
+                        '    <td align="right"><a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID'] . '&action=confirm_send') . '">' . owpImage_button('button_send.gif', IMAGE_SEND) . '</a> <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a></td>' . "\n" .
                         '  </tr>' . "\n" .
                         '</table>';
 

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: html_output.php,v 1.4 2003/04/20 07:08:17 r23 Exp $
+   $Id: html_output.php,v 1.5 2003/04/20 16:06:10 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -29,12 +29,12 @@
       die('</td></tr></table></td></tr></table><br><br><font color="#ff0000"><b>Error!</b></font><br><br><b>Unable to determine the page link!<br><br>Function used:<br><br>owpLink(\'' . $page . '\', \'' . $parameters . '\', \'' . $connection . '\')</b>');
     }
     if ($connection == 'NONSSL') {
-      $link = HTTP_SERVER . DIR_WS_ADMIN;
+      $link = OWP_HTTP_SERVER . '/';
     } elseif ($connection == 'SSL') {
       if (ENABLE_SSL == 'true') {
-        $link = HTTPS_SERVER . DIR_WS_ADMIN;
+        $link = HTTPS_SERVER . '/';
       } else {
-        $link = HTTP_SERVER . DIR_WS_ADMIN;
+        $link = OWP_HTTP_SERVER . '/';
       }
     } else {
       die('</td></tr></table></td></tr></table><br><br><font color="#ff0000"><b>Error!</b></font><br><br><b>Unable to determine connection method on a link!<br><br>Known methods: NONSSL SSL<br><br>Function used:<br><br>owpLink(\'' . $page . '\', \'' . $parameters . '\', \'' . $connection . '\')</b>');
@@ -75,7 +75,7 @@
 ////
 // The HTML form submit button wrapper function
 // Outputs a button in the selected language
-  function tep_image_submit($image, $alt, $params = '') {
+  function owpImageSubmit($image, $alt, $params = '') {
     global $language;
 
     return '<input type="image" src="' . OWP_LANGUAGES_DIR . $language . '/images/buttons/' . $image . '" border="0" alt="' . $alt . '"' . (($params) ? ' ' . $params : '') . '>';
@@ -134,7 +134,7 @@
 
 ////
 // Output a form
-  function tep_draw_form($name, $action, $parameters = '', $method = 'post', $params = '') {
+  function owpDrawForm($name, $action, $parameters = '', $method = 'post', $params = '') {
     $form = '<form name="' . $name . '" action="';
     if ($parameters) {
       $form .= owpLink($action, $parameters);
@@ -230,7 +230,7 @@
 
 ////
 // Output a form hidden field
-  function tep_draw_hidden_field($name, $value = '') {
+  function owpDrawHiddenField($name, $value = '') {
     $field = '<input type="hidden" name="' . $name . '" value="';
     if ($value != '') {
       $field .= trim($value);

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.1 2003/03/28 03:25:28 r23 Exp $
+   $Id: global.php,v 1.2 2003/04/20 16:06:10 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -48,6 +48,8 @@ setlocale(LC_TIME, 'ge');
 define('DATE_SHORT', '%d.%m.%Y');  // this is used for strftime()
 define('DATE_LONG', '%A, %d. %B %Y'); // this is used for strftime()
 
+define('HTML_PARAMS','dir="LTR" lang="de"');
+define('CHARSET', 'iso-8859-1');
   
 define('_ABOUTPOSTING','About posting');
 define('_ACCESS_ADD','Add');

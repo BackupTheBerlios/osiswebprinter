@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_split_page_results.php,v 1.3 2003/04/20 07:07:07 r23 Exp $
+   $Id: owp_split_page_results.php,v 1.4 2003/04/20 16:05:18 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -69,10 +69,10 @@
       }
 
       if ($num_pages > 1) {
-        $display_links = tep_draw_form('pages', basename($PHP_SELF), '', 'get');
+        $display_links = owpDrawForm('pages', basename($_SERVER['PHP_SELF']), '', 'get');
 
         if ($current_page_number > 1) {
-          $display_links .= '<a href="' . owpLink(basename($PHP_SELF), $parameters . $page_name . '=' . ($current_page_number - 1), 'NONSSL') . '" class="splitPageLink">' . PREVNEXT_BUTTON_PREV . '</a>&nbsp;&nbsp;';
+          $display_links .= '<a href="' . owpLink(basename($_SERVER['PHP_SELF']), $parameters . $page_name . '=' . ($current_page_number - 1), 'NONSSL') . '" class="splitPageLink">' . PREVNEXT_BUTTON_PREV . '</a>&nbsp;&nbsp;';
         } else {
           $display_links .= PREVNEXT_BUTTON_PREV . '&nbsp;&nbsp;';
         }
@@ -80,7 +80,7 @@
         $display_links .= sprintf(TEXT_RESULT_PAGE, tep_draw_pull_down_menu($page_name, $pages_array, '', 'onChange="this.form.submit();"'), $num_pages);
 
         if (($current_page_number < $num_pages) && ($num_pages != 1)) {
-          $display_links .= '&nbsp;&nbsp;<a href="' . owpLink(basename($PHP_SELF), $parameters . $page_name . '=' . ($current_page_number + 1), 'NONSSL') . '" class="splitPageLink">' . PREVNEXT_BUTTON_NEXT . '</a>';
+          $display_links .= '&nbsp;&nbsp;<a href="' . owpLink(basename($_SERVER['PHP_SELF']), $parameters . $page_name . '=' . ($current_page_number + 1), 'NONSSL') . '" class="splitPageLink">' . PREVNEXT_BUTTON_NEXT . '</a>';
         } else {
           $display_links .= '&nbsp;&nbsp;' . PREVNEXT_BUTTON_NEXT;
         }
@@ -90,11 +90,11 @@
           $pairs = explode('&', $parameters);
           while (list(, $pair) = each($pairs)) {
             list($key,$value) = explode('=', $pair);
-            $display_links .= tep_draw_hidden_field(rawurldecode($key), rawurldecode($value));
+            $display_links .= owpDrawHiddenField(rawurldecode($key), rawurldecode($value));
           }
         }
 
-        if (SID) $display_links .= tep_draw_hidden_field(tep_session_name(), tep_session_id());
+        if (SID) $display_links .= owpDrawHiddenField(owpSessionName(), tep_session_id());
 
         $display_links .= '</form>';
       } else {

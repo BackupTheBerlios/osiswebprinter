@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: define_language.php,v 1.9 2003/04/20 07:05:02 r23 Exp $
+   $Id: define_language.php,v 1.10 2003/04/20 16:04:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,6 +23,8 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
+  
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['define_language']);
 
   switch ($_GET['action']) {
     case 'save':
@@ -42,7 +44,7 @@
           fwrite($new_file, $file_contents, strlen($file_contents));
           fclose($new_file);
         }
-        owpRedirect(owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']));
+        owpRedirect(owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']));
       }
       break;
   }
@@ -63,11 +65,14 @@
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
 <title><?php echo TITLE; ?></title>
-<link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
+<META NAME="AUTHOR" CONTENT="OSIS GmbH">
+<META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
+<META NAME="ROBOTS" content="NOFOLLOW">
+<link rel="StyleSheet" href="style/style.css" type="text/css" />
 </head>
-<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF">
+<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <!-- header //-->
 <?php require(OWP_INCLUDES_DIR . 'header.php'); ?>
 <!-- header_eof //-->
@@ -84,7 +89,7 @@
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
-          <tr><?php echo tep_draw_form('lng', FILENAME_DEFINE_LANGUAGE, '', 'get'); ?>
+          <tr><?php echo owpDrawForm('lng', $owpFilename['define_language'], '', 'get'); ?>
             <td class="pageHeading"><?php echo HEADING_TITLE; ?></td>
             <td class="pageHeading" align="right"><?php echo owpTransLine('1', HEADING_IMAGE_HEIGHT); ?></td>
             <td class="pageHeading" align="right"><?php echo tep_draw_pull_down_menu('lngdir', $languages_array, '', 'onChange="this.form.submit();"'); ?></td>
@@ -113,7 +118,7 @@
       }
 
 ?>
-          <tr><?php echo tep_draw_form('language', FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir'] . '&filename=' . $_GET['filename'] . '&action=save'); ?>
+          <tr><?php echo owpDrawForm('language', $owpFilename['define_language'], 'lngdir=' . $_GET['lngdir'] . '&filename=' . $_GET['filename'] . '&action=save'); ?>
             <td><table border="0" cellspacing="0" cellpadding="2">
               <tr>
                 <td class="main"><b><?php echo $_GET['filename']; ?></b></td>
@@ -125,7 +130,7 @@
                 <td><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
-                <td align="right"><?php if ($file_writeable) { echo owpImage_submit('button_save.gif', IMAGE_SAVE) . '&nbsp;<a href="' . owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>'; } else { echo '<a href="' . owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_back.gif', IMAGE_BACK) . '</a>'; } ?></td>
+                <td align="right"><?php if ($file_writeable) { echo owpImage_submit('button_save.gif', IMAGE_SAVE) . '&nbsp;<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>'; } else { echo '<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_back.gif', IMAGE_BACK) . '</a>'; } ?></td>
               </tr>
             </table></td>
           </form></tr>
@@ -139,7 +144,7 @@
             <td><?php echo owpTransLine('1', '10'); ?></td>
           </tr>
           <tr>
-            <td><?php echo '<a href="' . owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
+            <td><?php echo '<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
           </tr>
 <?php
     }
@@ -149,7 +154,7 @@
           <tr>
             <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td class="smallText"><a href="<?php echo owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir'] . '&filename=' . $filename); ?>"><b><?php echo $filename; ?></b></a></td>
+                <td class="smallText"><a href="<?php echo owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir'] . '&filename=' . $filename); ?>"><b><?php echo $filename; ?></b></a></td>
 <?php
     $dir = dir(DIR_FS_CATALOG_LANGUAGES . $_GET['lngdir']);
     $left = false;
@@ -157,7 +162,7 @@
       $file_extension = substr($PHP_SELF, strrpos($PHP_SELF, '.'));
       while ($file = $dir->read()) {
         if (substr($file, strrpos($file, '.')) == $file_extension) {
-          echo '                <td class="smallText"><a href="' . owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir'] . '&filename=' . $file) . '">' . $file . '</a></td>' . "\n";
+          echo '                <td class="smallText"><a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir'] . '&filename=' . $file) . '">' . $file . '</a></td>' . "\n";
           if (!$left) {
             echo '              </tr>' . "\n" .
                  '              <tr>' . "\n";

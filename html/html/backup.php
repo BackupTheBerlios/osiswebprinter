@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: backup.php,v 1.9 2003/04/20 07:05:02 r23 Exp $
+   $Id: backup.php,v 1.10 2003/04/20 16:04:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,13 +23,15 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
+  
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['backup']);
 
   if ($_GET['action']) {
     switch ($_GET['action']) {
       case 'forget':
         tep_db_query("delete from " . TABLE_CONFIGURATION . " where configuration_key = 'DB_LAST_RESTORE'");
         $messageStack->add_session(SUCCESS_LAST_RESTORE_CLEARED, 'success');
-        owpRedirect(owpLink(FILENAME_BACKUP));
+        owpRedirect(owpLink($owpFilename['backup']));
         break;
       case 'backupnow':
         owpSetTimeLimit(0);
@@ -166,7 +168,7 @@
           }
           $messageStack->add_session(SUCCESS_DATABASE_SAVED, 'success');
         }
-        owpRedirect(owpLink(FILENAME_BACKUP));
+        owpRedirect(owpLink($owpFilename['backup']));
         break;
       case 'restorenow':
       case 'restorelocalnow':
@@ -270,7 +272,7 @@
         }
 
         $messageStack->add_session(SUCCESS_DATABASE_RESTORED, 'success');
-        owpRedirect(owpLink(FILENAME_BACKUP));
+        owpRedirect(owpLink($owpFilename['backup']));
         break;
       case 'download':
         $extension = substr($_GET['file'], -3);
@@ -288,12 +290,12 @@
         }
         break;
       case 'deleteconfirm':
-        if (strstr($_GET['file'], '..')) owpRedirect(owpLink(FILENAME_BACKUP));
+        if (strstr($_GET['file'], '..')) owpRedirect(owpLink($owpFilename['backup']));
 
         owpRemove(DIR_FS_BACKUP . '/' . $_GET['file']);
         if (!$owpRemoveError) {
           $messageStack->add_session(SUCCESS_BACKUP_DELETED, 'success');
-          owpRedirect(owpLink(FILENAME_BACKUP));
+          owpRedirect(owpLink($owpFilename['backup']));
         }
         break;
     }
@@ -311,11 +313,14 @@
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
 <title><?php echo TITLE; ?></title>
-<link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
+<META NAME="AUTHOR" CONTENT="OSIS GmbH">
+<META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
+<META NAME="ROBOTS" content="NOFOLLOW">
+<link rel="StyleSheet" href="style/style.css" type="text/css" />
 </head>
-<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF">
+<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <!-- header //-->
 <?php require(OWP_INCLUDES_DIR . 'header.php'); ?>
 <!-- header_eof //-->
@@ -386,10 +391,10 @@
         $onclick_link = 'file=' . $entry;
       }
 ?>
-                <td class="dataTableContent" onclick="document.location.href='<?php echo owpLink(FILENAME_BACKUP, $onclick_link); ?>'"><?php echo '<a href="' . owpLink(FILENAME_BACKUP, 'action=download&file=' . $entry) . '">' . owpImage(OWP_ICONS_DIR . 'file_download.gif', ICON_FILE_DOWNLOAD) . '</a>&nbsp;' . $entry; ?></td>
-                <td class="dataTableContent" align="center" onclick="document.location.href='<?php echo owpLink(FILENAME_BACKUP, $onclick_link); ?>'"><?php echo date(PHP_DATE_TIME_FORMAT, filemtime(DIR_FS_BACKUP . $entry)); ?></td>
-                <td class="dataTableContent" align="right" onclick="document.location.href='<?php echo owpLink(FILENAME_BACKUP, $onclick_link); ?>'"><?php echo number_format(filesize(DIR_FS_BACKUP . $entry)); ?> bytes</td>
-                <td class="dataTableContent" align="right"><?php if ( (is_object($buInfo)) && ($entry == $buInfo->file) ) { echo owpImage(OWP_INCLUDES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . owpLink(FILENAME_BACKUP, 'file=' . $entry) . '">' . owpImage(OWP_INCLUDES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" onclick="document.location.href='<?php echo owpLink($owpFilename['backup'], $onclick_link); ?>'"><?php echo '<a href="' . owpLink($owpFilename['backup'], 'action=download&file=' . $entry) . '">' . owpImage(OWP_ICONS_DIR . 'file_download.gif', ICON_FILE_DOWNLOAD) . '</a>&nbsp;' . $entry; ?></td>
+                <td class="dataTableContent" align="center" onclick="document.location.href='<?php echo owpLink($owpFilename['backup'], $onclick_link); ?>'"><?php echo date(PHP_DATE_TIME_FORMAT, filemtime(DIR_FS_BACKUP . $entry)); ?></td>
+                <td class="dataTableContent" align="right" onclick="document.location.href='<?php echo owpLink($owpFilename['backup'], $onclick_link); ?>'"><?php echo number_format(filesize(DIR_FS_BACKUP . $entry)); ?> bytes</td>
+                <td class="dataTableContent" align="right"><?php if ( (is_object($buInfo)) && ($entry == $buInfo->file) ) { echo owpImage(OWP_INCLUDES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . owpLink($owpFilename['backup'], 'file=' . $entry) . '">' . owpImage(OWP_INCLUDES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
     }
@@ -398,13 +403,13 @@
 ?>
               <tr>
                 <td class="smallText" colspan="3"><?php echo TEXT_BACKUP_DIRECTORY . ' ' . DIR_FS_BACKUP; ?></td>
-                <td align="right" class="smallText"><?php if ( ($_GET['action'] != 'backup') && ($dir) ) echo '<a href="' . owpLink(FILENAME_BACKUP, 'action=backup') . '">' . owpImage_button('button_backup.gif', IMAGE_BACKUP) . '</a>'; if ( ($_GET['action'] != 'restorelocal') && ($dir) ) echo '&nbsp;&nbsp;<a href="' . owpLink(FILENAME_BACKUP, 'action=restorelocal') . '">' . owpImage_button('button_restore.gif', IMAGE_RESTORE) . '</a>'; ?></td>
+                <td align="right" class="smallText"><?php if ( ($_GET['action'] != 'backup') && ($dir) ) echo '<a href="' . owpLink($owpFilename['backup'], 'action=backup') . '">' . owpImage_button('button_backup.gif', IMAGE_BACKUP) . '</a>'; if ( ($_GET['action'] != 'restorelocal') && ($dir) ) echo '&nbsp;&nbsp;<a href="' . owpLink($owpFilename['backup'], 'action=restorelocal') . '">' . owpImage_button('button_restore.gif', IMAGE_RESTORE) . '</a>'; ?></td>
               </tr>
 <?php
   if (defined('DB_LAST_RESTORE')) {
 ?>
               <tr>
-                <td class="smallText" colspan="4"><?php echo TEXT_LAST_RESTORATION . ' ' . DB_LAST_RESTORE . ' <a href="' . owpLink(FILENAME_BACKUP, 'action=forget') . '">' . TEXT_FORGET . '</a>'; ?></td>
+                <td class="smallText" colspan="4"><?php echo TEXT_LAST_RESTORATION . ' ' . DB_LAST_RESTORE . ' <a href="' . owpLink($owpFilename['backup'], 'action=forget') . '">' . TEXT_FORGET . '</a>'; ?></td>
               </tr>
 <?php
   }
@@ -417,7 +422,7 @@
     case 'backup':
       $heading[] = array('text' => '<b>' . TEXT_INFO_HEADING_NEW_BACKUP . '</b>');
 
-      $contents = array('form' => tep_draw_form('backup', FILENAME_BACKUP, 'action=backupnow'));
+      $contents = array('form' => owpDrawForm('backup', $owpFilename['backup'], 'action=backupnow'));
       $contents[] = array('text' => TEXT_INFO_NEW_BACKUP);
 
       if ($messageStack->size > 0) {
@@ -430,36 +435,36 @@
         $contents[] = array('text' => '<br>' . tep_draw_checkbox_field('download', 'yes') . ' ' . TEXT_INFO_DOWNLOAD_ONLY . '*<br><br>*' . TEXT_INFO_BEST_THROUGH_HTTPS);
       }
 
-      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_backup.gif', IMAGE_BACKUP) . '&nbsp;<a href="' . owpLink(FILENAME_BACKUP) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_backup.gif', IMAGE_BACKUP) . '&nbsp;<a href="' . owpLink($owpFilename['backup']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'restore':
       $heading[] = array('text' => '<b>' . $buInfo->date . '</b>');
 
       $contents[] = array('text' => owpBreakString(sprintf(TEXT_INFO_RESTORE, DIR_FS_BACKUP . (($buInfo->compression != TEXT_NO_EXTENSION) ? substr($buInfo->file, 0, strrpos($buInfo->file, '.')) : $buInfo->file), ($buInfo->compression != TEXT_NO_EXTENSION) ? TEXT_INFO_UNPACK : ''), 35, ' '));
-      $contents[] = array('align' => 'center', 'text' => '<br><a href="' . owpLink(FILENAME_BACKUP, 'file=' . $buInfo->file . '&action=restorenow') . '">' . owpImage_button('button_restore.gif', IMAGE_RESTORE) . '</a>&nbsp;<a href="' . owpLink(FILENAME_BACKUP, 'file=' . $buInfo->file) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br><a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file . '&action=restorenow') . '">' . owpImage_button('button_restore.gif', IMAGE_RESTORE) . '</a>&nbsp;<a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'restorelocal':
       $heading[] = array('text' => '<b>' . TEXT_INFO_HEADING_RESTORE_LOCAL . '</b>');
 
-      $contents = array('form' => tep_draw_form('restore', FILENAME_BACKUP, 'action=restorelocalnow', 'post', 'enctype="multipart/form-data"'));
+      $contents = array('form' => owpDrawForm('restore', $owpFilename['backup'], 'action=restorelocalnow', 'post', 'enctype="multipart/form-data"'));
       $contents[] = array('text' => TEXT_INFO_RESTORE_LOCAL . '<br><br>' . TEXT_INFO_BEST_THROUGH_HTTPS);
       $contents[] = array('text' => '<br>' . tep_draw_file_field('sql_file'));
       $contents[] = array('text' => TEXT_INFO_RESTORE_LOCAL_RAW_FILE);
-      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_restore.gif', IMAGE_restore) . '&nbsp;<a href="' . owpLink(FILENAME_BACKUP) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_restore.gif', IMAGE_restore) . '&nbsp;<a href="' . owpLink($owpFilename['backup']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'delete':
       $heading[] = array('text' => '<b>' . $buInfo->date . '</b>');
 
-      $contents = array('form' => tep_draw_form('delete', FILENAME_BACKUP, 'file=' . $buInfo->file . '&action=deleteconfirm'));
+      $contents = array('form' => owpDrawForm('delete', $owpFilename['backup'], 'file=' . $buInfo->file . '&action=deleteconfirm'));
       $contents[] = array('text' => TEXT_DELETE_INTRO);
       $contents[] = array('text' => '<br><b>' . $buInfo->file . '</b>');
-      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_delete.gif', IMAGE_DELETE) . ' <a href="' . owpLink(FILENAME_BACKUP, 'file=' . $buInfo->file) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_delete.gif', IMAGE_DELETE) . ' <a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     default:
       if (is_object($buInfo)) {
         $heading[] = array('text' => '<b>' . $buInfo->date . '</b>');
 
-        $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink(FILENAME_BACKUP, 'file=' . $buInfo->file . '&action=restore') . '">' . owpImage_button('button_restore.gif', IMAGE_RESTORE) . '</a> <a href="' . owpLink(FILENAME_BACKUP, 'file=' . $buInfo->file . '&action=delete') . '">' . owpImage_button('button_delete.gif', IMAGE_DELETE) . '</a>');
+        $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file . '&action=restore') . '">' . owpImage_button('button_restore.gif', IMAGE_RESTORE) . '</a> <a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file . '&action=delete') . '">' . owpImage_button('button_delete.gif', IMAGE_DELETE) . '</a>');
         $contents[] = array('text' => '<br>' . TEXT_INFO_DATE . ' ' . $buInfo->date);
         $contents[] = array('text' => TEXT_INFO_SIZE . ' ' . $buInfo->size);
         $contents[] = array('text' => '<br>' . TEXT_INFO_COMPRESSION . ' ' . $buInfo->compression);

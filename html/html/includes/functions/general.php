@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.4 2003/04/20 07:08:17 r23 Exp $
+   $Id: general.php,v 1.5 2003/04/20 16:06:09 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -81,7 +81,7 @@
 
     reset($_GET);
     while (list($key, $value) = each($_GET)) {
-      if (($key != tep_session_name()) && ($key != 'error') && (!tep_in_array($key, $exclude_array))) $get_url .= $key . '=' . $value . '&';
+      if (($key != owpSessionName()) && ($key != 'error') && (!tep_in_array($key, $exclude_array))) $get_url .= $key . '=' . $value . '&';
     }
 
     return $get_url;
@@ -1080,5 +1080,12 @@
                  'db_version' => 'MySQL ' . (function_exists('mysql_get_server_info') ? mysql_get_server_info() : ''),
                  'db_date' => tep_datetime_short($db['datetime']));
   }
-
+  
+  function owpSessionName($name = '') {
+    if ($name != '') {
+      return session_name($name);
+    } else {
+      return session_name();
+    }
+  }
 ?>

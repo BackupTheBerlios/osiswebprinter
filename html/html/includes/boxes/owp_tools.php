@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_tools.php,v 1.3 2003/04/20 07:07:07 r23 Exp $
+   $Id: owp_tools.php,v 1.4 2003/04/20 16:05:18 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -30,18 +30,16 @@
   $contents = array();
 
   $heading[] = array('text'  => BOX_HEADING_TOOLS,
-                     'link'  => owpLink(basename($PHP_SELF), owpGetAllGetParameters(array('selected_box')) . 'selected_box=tools'));
+                     'link'  => owpLink(basename($_SERVER['PHP_SELF']), owpGetAllGetParameters(array('selected_box')) . 'selected_box=tools'));
 
   if ($selected_box == 'tools') {
-    $contents[] = array('text'  => '<a href="' . owpLink(FILENAME_BACKUP) . '" class="menuBoxContentLink">' . BOX_TOOLS_BACKUP . '</a><br>' .
-                                   '<a href="' . owpLink(FILENAME_BANNER_MANAGER) . '" class="menuBoxContentLink">' . BOX_TOOLS_BANNER_MANAGER . '</a><br>' .
-                                   '<a href="' . owpLink(FILENAME_CACHE) . '" class="menuBoxContentLink">' . BOX_TOOLS_CACHE . '</a><br>' .
-                                   '<a href="' . owpLink(FILENAME_DEFINE_LANGUAGE) . '" class="menuBoxContentLink">' . BOX_TOOLS_DEFINE_LANGUAGE . '</a><br>' .
-                                   '<a href="' . owpLink(FILENAME_FILE_MANAGER) . '" class="menuBoxContentLink">' . BOX_TOOLS_FILE_MANAGER . '</a><br>' .
-                                   '<a href="' . owpLink(FILENAME_MAIL) . '" class="menuBoxContentLink">' . BOX_TOOLS_MAIL . '</a><br>' .
-                                   '<a href="' . owpLink(FILENAME_NEWSLETTERS) . '" class="menuBoxContentLink">' . BOX_TOOLS_NEWSLETTER_MANAGER . '</a><br>' .
-                                   '<a href="' . owpLink(FILENAME_SERVER_INFO) . '" class="menuBoxContentLink">' . BOX_TOOLS_SERVER_INFO . '</a><br>' .
-                                   '<a href="' . owpLink(FILENAME_WHOS_ONLINE) . '" class="menuBoxContentLink">' . BOX_TOOLS_WHOS_ONLINE . '</a>');
+    $contents[] = array('text'  => '<a href="' . owpLink($owpFilename['backup']) . '" class="menuBoxContentLink">' . BOX_TOOLS_BACKUP . '</a><br>' .
+                                   '<a href="' . owpLink($owpFilename['define_language']) . '" class="menuBoxContentLink">' . BOX_TOOLS_DEFINE_LANGUAGE . '</a><br>' .
+                                   '<a href="' . owpLink($owpFilename['file_manager']) . '" class="menuBoxContentLink">' . BOX_TOOLS_FILE_MANAGER . '</a><br>' .
+                                   '<a href="' . owpLink($owpFilename['mail']) . '" class="menuBoxContentLink">' . BOX_TOOLS_MAIL . '</a><br>' .
+                                   '<a href="' . owpLink($owpFilename['newsletters']) . '" class="menuBoxContentLink">' . BOX_TOOLS_NEWSLETTER_MANAGER . '</a><br>' .
+                                   '<a href="' . owpLink($owpFilename['server_info']) . '" class="menuBoxContentLink">' . BOX_TOOLS_SERVER_INFO . '</a><br>' .
+                                   '<a href="' . owpLink($owpFilename['whos_online']) . '" class="menuBoxContentLink">' . BOX_TOOLS_WHOS_ONLINE . '</a>');
   }
 
   $box = new box;

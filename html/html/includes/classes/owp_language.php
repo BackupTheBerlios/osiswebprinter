@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_language.php,v 1.2 2003/04/20 06:23:12 r23 Exp $
+   $Id: owp_language.php,v 1.3 2003/04/20 16:05:18 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -26,10 +26,12 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  class language {
-    var $languages, $catalog_languages, $browser_languages, $language;
+  class owpLanguage {
+    var $languages, $owp_languages, $browser_languages, $language;
 
-    function language($lng = '') {
+    function owpLanguage($lng = '') {
+      GLOBAL $db; 
+      
       $this->languages = array('ar' => array('ar([-_][[:alpha:]]{2})?|arabic', 'arabic', 'ar'),
                                'bg-win1251' => array('bg|bulgarian', 'bulgarian-win1251', 'bg'),
                                'bg-koi8r' => array('bg|bulgarian', 'bulgarian-koi8', 'bg'),
@@ -37,7 +39,7 @@
                                'cs-iso' => array('cs|czech', 'czech-iso', 'cs'),
                                'cs-win1250' => array('cs|czech', 'czech-win1250', 'cs'),
                                'da' => array('da|danish', 'danish', 'da'),
-                               'de' => array('de([-_][[:alpha:]]{2})?|german', 'german', 'de'),
+                               'de' => array('de([-_][[:alpha:]]{2})?|deu', 'deu', 'de'),
                                'el' => array('el|greek',  'greek', 'el'),
                                'en' => array('en([-_][[:alpha:]]{2})?|english', 'english', 'en'),
                                'es' => array('es([-_][[:alpha:]]{2})?|spanish', 'spanish', 'es'),
@@ -73,23 +75,29 @@
                                'zh-tw' => array('zh[-_]tw|chinese traditional', 'chinese_big5', 'zh-TW'),
                                'zh' => array('zh|chinese simplified', 'chinese_gb', 'zh'));
 
-
-      $this->catalog_languages = array();
-      $languages_query = tep_db_query("select languages_id, name, code, image, directory from " . TABLE_LANGUAGES . " order by sort_order");
-      while ($languages = tep_db_fetch_array($languages_query)) {
-        $this->catalog_languages[$languages['code']] = array('id' => $languages['languages_id'],
+      $this->owp_languages = array();
+      
+      $owpDBTable = owpDBGetTables();
+      
+      $sql = "SELECT languages_id, name, code, image, directory 
+              FROM " . $owpDBTable['languages'] . " 
+              ODER BY sort_order";
+      $languages_query = $db->Execute($sql);
+      while ($languages = $languages_query->fields) {
+        $this->owp_languages[$languages['code']] = array('id' => $languages['languages_id'],
                                                              'name' => $languages['name'],
                                                              'image' => $languages['image'],
                                                              'directory' => $languages['directory']);
+      	$languages_query->MoveNext();
       }
 
       $this->browser_languages = '';
       $this->language = '';
 
-      if ( ($lng != '') && ($this->catalog_languages[$lng]) ) {
-        $this->language = $this->catalog_languages[$lng];
+      if ( ($lng != '') && ($this->owp_languages[$lng]) ) {
+        $this->language = $this->owp_languages[$lng];
       } else {
-        $this->language = $this->catalog_languages[DEFAULT_LANGUAGE];
+        $this->language = $this->owp_languages[DEFAULT_LANGUAGE];
       }
     }
 
@@ -99,8 +107,8 @@
       for ($i=0; $i<sizeof($this->browser_languages); $i++) {
         reset($this->languages);
         while (list($key, $value) = each($this->languages)) {
-          if ( (eregi('^(' . $value[0] . ')(;q=[0-9]\\.[0-9])?$', $this->browser_languages[$i])) && ($this->catalog_languages[$key]) ) {
-            $this->language = $this->catalog_languages[$key];
+          if ( (eregi('^(' . $value[0] . ')(;q=[0-9]\\.[0-9])?$', $this->browser_languages[$i])) && ($this->owp_languages[$key]) ) {
+            $this->language = $this->owp_languages[$key];
             break 2;
           }
         }
