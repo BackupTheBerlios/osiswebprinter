@@ -1,9 +1,29 @@
-<?php // File: $Id: global.php,v 1.1 2003/03/28 00:49:57 r23 Exp $ $Name:  $
-// ----------------------------------------------------------------------
-// Original Author of file: Gregor J. Rothfuss
-// Purpose of file: Installer language defines.
-// ----------------------------------------------------------------------
-//
+<?php 
+/* ----------------------------------------------------------------------
+   $Id: global.php,v 1.2 2003/03/28 02:06:47 r23 Exp $
+
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+
+   File: global.php,v 1.17.2.1 2002/04/03 21:03:19 jgm 
+   ----------------------------------------------------------------------
+   POST-NUKE Content Management System
+   Copyright (C) 2001 by the Post-Nuke Development Team.
+   http://www.postnuke.com/
+   ---------------------------------------------------------------------- 
+   Original Author of file: Gregor J. Rothfuss
+   Purpose of file: Installer language defines.
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
+  
 define('_ADMIN_EMAIL','Admin Email');
 define('_ADMIN_LOGIN','Admin Login');
 define('_ADMIN_NAME','Admin Name');

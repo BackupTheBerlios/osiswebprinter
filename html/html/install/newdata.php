@@ -1,5 +1,25 @@
 <?php
-// File: $Id: newdata.php,v 1.1 2003/03/28 00:49:57 r23 Exp $ $Name:  $
+/* ----------------------------------------------------------------------
+   $Id: newdata.php,v 1.2 2003/03/28 02:06:47 r23 Exp $
+
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: newdata.php,v 1.73.2.4 2002/05/14 18:18:05 byronmhome 
+   ----------------------------------------------------------------------
+   POST-NUKE Content Management System
+   Copyright (C) 2001 by the Post-Nuke Development Team.
+   http://www.postnuke.com/
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
 $result = $dbconn->Execute("INSERT INTO ".$prefix."_blocks VALUES (1,'menu','Main Menu',
 'style:=1\ndisplaymodules:=0\ndisplaywaiting:=0\ncontent:=index.php|Home|Back to the home page.LINESPLITuser.php|My Account|Administer your personal account.LINESPLITadmin.php|Administration|Administer your PostNuked site.LINESPLITuser.php?module=NS-User&op=logout|Logout|Logout of your account.LINESPLIT|Modules|LINESPLIT[AvantGo]|AvantGo|Stories formatted for PDAs.LINESPLIT[Downloads]|Downloads|Find downloads listed on this website.LINESPLIT[FAQ]|FAQ|Frequently Asked QuestionsLINESPLIT[Members_List]|Members List|Listing of registered users on this site.LINESPLIT[News]|News|Latest News on this site.LINESPLIT[Recommend_Us]|Recommend Us|Recommend this website to a friend.LINESPLIT[Reviews]|Reviews|Reviews Section on this website.LINESPLIT[Search]|Search|Search our website.LINESPLIT[Sections]|Sections|Other content on this website.LINESPLIT[Stats]|Stats|Detailed traffic statistics.LINESPLIT[Submit_News]|Submit News|Submit an article.LINESPLIT[Topics]|Topics|Listing of news topics on this website.LINESPLIT[Top_List]|Top List|Top 10list.LINESPLIT[Web_Links]|Web Links|Links to other sites.','',0, 'l','1.0',1,'',20011122090726,'')")

@@ -1,8 +1,30 @@
-<?php // File: $Id: check.php,v 1.1 2003/03/28 00:49:57 r23 Exp $ $Name:  $
-//
-// Original Author of file: Gregor J. Rothfuss
-// Purpose of file: Provide checks for the installer.
-//
+<?php
+/* ----------------------------------------------------------------------
+   $Id: check.php,v 1.2 2003/03/28 02:06:47 r23 Exp $
+
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: check.php,v 1.6 2002/02/04 18:51:32 voll 
+   ----------------------------------------------------------------------
+   POST-NUKE Content Management System
+   Copyright (C) 2001 by the Post-Nuke Development Team.
+   http://www.postnuke.com/
+   ----------------------------------------------------------------------   
+   Original Author of file: Gregor J. Rothfuss
+   Purpose of file: Provide checks for the installer.
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
+
+
 /** Checks various php settings **/
 /** by Bob Herald **/
 function do_check_php() {

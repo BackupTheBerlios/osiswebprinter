@@ -1,5 +1,27 @@
 <?php
-// File: $Id: newtables.php,v 1.1 2003/03/28 00:51:14 r23 Exp $ $Name:  $
+/* ----------------------------------------------------------------------
+   $Id: newtables.php,v 1.2 2003/03/28 02:08:09 r23 Exp $
+
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+
+   File: $Id: newtables.php,v 1.40.2.1 2002/04/03 21:02:06 jgm 
+   ----------------------------------------------------------------------
+   POST-NUKE Content Management System
+   Copyright (C) 2001 by the Post-Nuke Development Team.
+   http://www.postnuke.com/
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
+
+
 function dosql($table,$sql) {
    GLOBAL $dbconn;
    $result = $dbconn->Execute($sql);
