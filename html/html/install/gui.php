@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: gui.php,v 1.4 2003/03/28 17:42:03 r23 Exp $
+   $Id: gui.php,v 1.5 2003/03/29 00:03:48 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -285,7 +285,6 @@ _FORUM_INFO_1."<br /><br /><ul>
 function print_default() {
 
    echo  "
-<br /><img src=\"images/trans.gif\" width=\"1%\" height=\"3\" border=\"0\" alt=\" \"><br />
 <font class=\"ow-normal\">" . DEFAULT_1 ."</font><br /><br />
 <font class=\"ow-normal\">" . DEFAULT_2 ."</font><br /><br />
 <font class=\"ow-normal\">" . DEFAULT_3 ."</font><br /><br />
@@ -303,7 +302,7 @@ function print_default() {
    echo "
 <input type=\"hidden\" name=\"op\" value=\"Check\">
 <input type=\"submit\" value=\"" . NEXT . "\"></center>
-</form></font><br /><br />";
+</form>";
 }
 
 

@@ -1,6 +1,6 @@
 <?php 
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.3 2003/03/28 03:03:36 r23 Exp $
+   $Id: global.php,v 1.4 2003/03/29 00:03:48 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -32,16 +32,12 @@ define('GREAT_1', 'Die Komplettlösung zur schnellen Anbindung von Webanwendungen
 define('SELECT_LANGUAGE_1', 'Auswahl Ihrer Sprache.');
 define('SELECT_LANGUAGE_2', 'Sprachen: ');
 define('BTN_SET_LANGUAGE', 'Sprache festlegen');
-define('FOOTER', 'Copyright (c) 2003 OSIS GmbH : <a href="http://www.r23.de/" target="_blank">Ralf Zschemisch</a><br>Powered by <a href="http://www.osisnet.de/shop.php" target="_blank">OSIS GmbH</a>');
 define('DEFAULT_1', 'OSIS Web Printer ist eine allumfassende L&ouml;sung f&uuml;r das Drucken aus Ihrer Web-Anwendung per e-Mail, FTP und XML. Mit der F&uuml;lle von Werkzeugen,  die Ihnen zur Verf&uuml;gung stehen, k&ouml;nnen Sie praktisch &uuml;ber das  Internet drucken. Diese Anwendung installiert die OSIS Web Printer Datenbank  und hilft Ihnen bei der Konfiguration.');
 define('DEFAULT_2', 'Dieses Programm ist freie Software. Sie k&ouml;nnen es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation ver&ouml;ffentlicht, weitergeben und/oder modifizieren, entweder gem&auml;&szlig; Version 2 der Lizenz  oder (nach Ihrer Option) jeder sp&auml;teren Version.');
 define('DEFAULT_3', 'Die Ver&ouml;ffentlichung dieses Programms erfolgt in der Hoffnung, da&szlig; es Ihnen von Nutzen sein wird, aber ohne irgendeine Garantie, sogar ohne die implizite Garantie der Marktreife oder der Verwendbarkeit f&uuml;r einen bestimmten Zweck.');
 define('DEFAULT_4', 'Bitte lesen ');
 define('DEFAULT_5', 'Sie die GNU General Public License.');
 define('NEXT','Weiter');
-
-define('_DEFAULT_2','Our License');
-define('_DEFAULT_3','Please read through the GNU General Public License. PostNuke is developed as free software, but there are certain requirements for distributing and editing.');
 
 define('_ADMIN_EMAIL','Admin Email');
 define('_ADMIN_LOGIN','Admin Login');
