@@ -1,14 +1,29 @@
 <?php
-/*
-  $Id: mail.php,v 1.1 2003/04/22 07:12:17 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: mail.php,v 1.2 2003/04/22 07:17:24 r23 Exp $
+
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: whos_online.php,v 1.28 2002/08/13 20:37:48 dgw_
+   ----------------------------------------------------------------------
+  $Id: mail.php,v 1.2 2003/04/22 07:17:24 r23 Exp $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
   Copyright (c) 2002 osCommerce
 
-  Released under the GNU General Public License
-*/
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
 define('HEADING_TITLE', 'eMail an Kunden versenden');
 
