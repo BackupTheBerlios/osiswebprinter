@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: form_check.php,v 1.4 2003/05/05 16:51:37 r23 Exp $
+   $Id: form_check.php,v 1.5 2003/05/06 13:28:28 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -41,7 +41,7 @@ function check_form() {
   var email_address = document.account_edit.email_address.value;  
   var telephone = document.account_edit.telephone.value;
 <?php
-  if (JS_PASSWORD == 'true') {
+  if (JS_PASSWORD_CHECK == 'true') {
 ?>
   var password = document.account_edit.password.value;
   var confirmation = document.account_edit.confirmation.value;
@@ -85,7 +85,7 @@ function check_form() {
     }
   }
 <?php
-  if (JS_PASSWORD == 'true') {
+  if (JS_PASSWORD_CHECK == 'true') {
 ?>
   if (document.account_edit.elements['password'].type != "hidden") {
     if ((password != confirmation) || (password == '' || password.length < <?php echo PASSWORD_MIN_LENGTH; ?>)) {

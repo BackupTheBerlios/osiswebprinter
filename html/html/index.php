@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.14 2003/04/29 06:27:17 r23 Exp $
+   $Id: index.php,v 1.15 2003/05/06 13:28:28 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,11 +24,6 @@
 
   require('includes/system.php');
   
-  if (!isset($_SESSION['user_id'])) {
-    $_SESSION['navigation']->set_snapshot();
-    owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
-  } 
-   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['index']);
 
   $cat = array(array('title' => BOX_HEADING_CONFIGURATION,
@@ -37,16 +32,6 @@
                      'children' => array(array('title' => BOX_CONFIGURATION_MYSTORE, 'link' => owpLink(FILENAME_CONFIGURATION, 'SELECTed_box=configuration&gID=1')),
                                          array('title' => BOX_CONFIGURATION_LOGGING, 'link' => owpLink(FILENAME_CONFIGURATION, 'SELECTed_box=configuration&gID=10')),
                                          array('title' => BOX_CONFIGURATION_CACHE, 'link' => owpLink(FILENAME_CONFIGURATION, 'SELECTed_box=configuration&gID=11')))),
-               array('title' => BOX_HEADING_MODULES,
-                     'image' => 'modules.gif',
-                     'href' => owpLink(FILENAME_MODULES, 'SELECTed_box=modules&set=payment'),
-                     'children' => array(array('title' => BOX_MODULES_PAYMENT, 'link' => owpLink(FILENAME_MODULES, 'SELECTed_box=modules&set=payment')),
-                                         array('title' => BOX_MODULES_SHIPPING, 'link' => owpLink(FILENAME_MODULES, 'SELECTed_box=modules&set=shipping')))),
-               array('title' => BOX_HEADING_CATALOG,
-                     'image' => 'catalog.gif',
-                     'href' => owpLink(FILENAME_CATEGORIES, 'SELECTed_box=catalog'),
-                     'children' => array(array('title' => CATALOG_CONTENTS, 'link' => owpLink(FILENAME_CATEGORIES, 'SELECTed_box=catalog')),
-                                         array('title' => BOX_CATALOG_MANUFACTURERS, 'link' => owpLink(FILENAME_MANUFACTURERS, 'SELECTed_box=catalog')))),
                array('title' => BOX_HEADING_LOCALIZATION,
                      'image' => 'localization.gif',
                      'href' => owpLink(FILENAME_CURRENCIES, 'SELECTed_box=localization'),
@@ -98,29 +83,48 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
 .smallText { font-family: Verdana, Arial, sans-serif; font-size: 10px; }
 //--></style>
 </head>
-<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF">
-
-<table border="0" width="600" height="100%" cellspacing="0" cellpadding="0" align="center" valign="middle">
+<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#F6F7EB">
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="#F6F7EB" width="100%">
   <tr>
-    <td><table border="0" width="600" height="440" cellspacing="0" cellpadding="1" align="center" valign="middle">
-      <tr bgcolor="#000000">
-        <td><table border="0" width="600" height="440" cellspacing="0" cellpadding="0">
-          <tr bgcolor="#ffffff" height="50">
-            <td height="50"><?php echo owpImage(OWP_INCLUDES_DIR . 'oscommerce.gif', 'osCommerce', '204', '50'); ?></td>
-            <td align="right" class="text" nowrap><?php echo '<a href="' . owpLink($owpFilename['index']) . '">' . HEADER_TITLE_ADMINISTRATION . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="' . tep_catalog_href_link() . '">' . HEADER_TITLE_ONLINE_CATALOG . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.oscommerce.com" target="_blank">' . HEADER_TITLE_SUPPORT_SITE . '</a>'; ?>&nbsp;&nbsp;</td>
-          </tr>
-          <tr bgcolor="#080381">
-            <td colspan="2"><table border="0" width="460" height="390" cellspacing="0" cellpadding="2">
-              <tr>
-                <td width="140" valign="top"><table border="0" width="140" height="390" cellspacing="0" cellpadding="2">
-                  <tr>
-                    <td valign="top"><br>
+    <td align="left" valign="middle"><table width="100%" border="0" cellspacing="0" cellpadding="4">
+      <tr>
+        <td valign="top" align="left"><a href="index.php"><?php echo owpTextTool::heading(OWP_NAME); ?></a></td>
+        <td width="50%" valign="top" align="right"><br />&nbsp;&nbsp;<font class="owp-date"><?php echo strftime(DATE_FORMAT_LONG); ?></font>&nbsp;&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td width="100%" bgcolor="#000000"><?php echo owpTransLine(); ?></td>
+  </tr>
+  <tr>
+    <td bgcolor="#E1E4CE" align="center" valign="middle"><table width="100%" border="0" cellspacing="0" cellpadding="2">
+      <tr>
+        <td align="right" valign="middle"><span class="owp-sub">
+         <a href="http://developer.berlios.de/projects/osiswebprinter/" target="_blank"><?php echo DEVELOPER_SITE; ?></a>&nbsp;::&nbsp;
+	 <a href="http://developer.berlios.de/forum/?group_id=752" target="_blank"><?php echo SUPPORT_FORUMS; ?></a>&nbsp;::&nbsp;
+	 <a href="https://lists.berlios.de/mailman/listinfo/osiswebprinter-users" target="_blank"><?php echo MAILING_LISTS; ?></a>&nbsp;
+	 </span></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td width="100%" bgcolor="#000000"><?php echo owpTransLine(); ?></td>
+  </tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="#F6F7EB" width="100%">
+  <tr>
+    <td><table border="0" cellspacing="0" cellpadding="0" bgcolor="#F6F7EB" width="80%">
+  <tr>
+    <td><?php echo owpTransLine('1', '390'); ?></td> 
+    <td align="left" valign="top"><table border="0" width="140" height="390" cellspacing="0" cellpadding="2">
+          <tr>
+            <td valign="top"><br>
 <?php
   $heading = array();
   $contents = array();
 
   $heading[] = array('params' => 'class="menuBoxHeading"',
-                     'text'  => 'osCommerce');
+                     'text'  => 'OSIS Web Printer');
 
   $contents[] = array('params' => 'class="infoBox"',
                       'text'  => '<a href="http://www.oscommerce.com" target="_blank">' . BOX_ENTRY_SUPPORT_SITE . '</a><br>' .
@@ -135,37 +139,15 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
   $box = new box;
   echo $box->menuBox($heading, $contents);
 
-  echo '<br>';
-
-  $orders_contents = '';
-  $orders_status_query = tep_db_query("SELECT orders_status_name, orders_status_id FROM " . TABLE_ORDERS_STATUS . " WHERE language_id = '" . $languages_id . "'");
-  while ($orders_status = tep_db_fetch_array($orders_status_query)) {
-    $orders_pending_query = tep_db_query("SELECT count(*) as count FROM " . TABLE_ORDERS . " WHERE orders_status = '" . $orders_status['orders_status_id'] . "'");
-    $orders_pending = tep_db_fetch_array($orders_pending_query);
-    $orders_contents .= '<a href="' . owpLink(FILENAME_ORDERS, 'SELECTed_box=customers&status=' . $orders_status['orders_status_id']) . '">' . $orders_status['orders_status_name'] . '</a>: ' . $orders_pending['count'] . '<br>';
-  }
-  $orders_contents = substr($orders_contents, 0, -4);
-
-  $heading = array();
-  $contents = array();
-
-  $heading[] = array('params' => 'class="menuBoxHeading"',
-                     'text'  => BOX_TITLE_ORDERS);
-
-  $contents[] = array('params' => 'class="infoBox"',
-                      'text'  => $orders_contents);
-
-  $box = new box;
-  echo $box->menuBox($heading, $contents);
 
   echo '<br>';
 
-  $customers_query = tep_db_query("SELECT count(*) as count FROM " . TABLE_CUSTOMERS);
-  $customers = tep_db_fetch_array($customers_query);
-  $products_query = tep_db_query("SELECT count(*) as count FROM " . TABLE_PRODUCTS . " WHERE products_status = '1'");
-  $products = tep_db_fetch_array($products_query);
-  $reviews_query = tep_db_query("SELECT count(*) as count FROM " . TABLE_REVIEWS);
-  $reviews = tep_db_fetch_array($reviews_query);
+ # $customers_query = tep_db_query("SELECT count(*) as count FROM " . $owpDBTable['administrators']);
+ # $customers = tep_db_fetch_array($customers_query);
+ # $products_query = tep_db_query("SELECT count(*) as count FROM " . $owpDBTable['administrators'] . " WHERE products_status = '1'");
+ # $products = tep_db_fetch_array($products_query);
+ # $reviews_query = tep_db_query("SELECT count(*) as count FROM " . $owpDBTable['administrators']);
+ # $reviews = tep_db_fetch_array($reviews_query);
 
   $heading = array();
   $contents = array();
@@ -203,9 +185,9 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
                 <td width="460"><table border="0" width="460" height="390" cellspacing="0" cellpadding="2">
                   <tr>
                     <td colspan="2"><table border="0" width="100%" cellspacing="0" cellpadding="2">
-                      <tr><?php # echo# owpDrawForm('languages', 'index.php', '', 'get'); ?>
+                      <tr><?php echo owpDrawForm('languages', 'index.php', '', 'get'); ?>
                         <td class="heading"><?php echo HEADING_TITLE; ?></td>
-                        <td align="right"><?php #echo owpPullDownMenu('language', $languages_array, ($_GET['language'] ? $_GET['language'] : DEFAULT_LANGUAGE), 'onChange="this.form.submit();"'); ?></td>
+                        <td align="right"><?php echo owpPullDownMenu('language', $languages_array, ($_GET['language'] ? $_GET['language'] : DEFAULT_LANGUAGE), 'onChange="this.form.submit();"'); ?></td>
                       </form></tr>
                     </table></td>
                   </tr>
@@ -249,15 +231,12 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
                 </table></td>
               </tr>
             </table></td>
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td><?php require(OWP_INCLUDES_DIR . 'footer.php'); ?></td>
-      </tr>
-    </table></td>
-  </tr>
-</table>
+           </tr>
+          </table>
+<!-- footer //-->
+<?php require(OWP_INCLUDES_DIR . 'footer.php'); ?>
+<!-- footer_eof //-->
+<br>
 </body>
 </html>
 <?php require(OWP_INCLUDES_DIR . 'nice_exit.php'); ?>

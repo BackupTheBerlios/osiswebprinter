@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: administrators.php,v 1.5 2003/05/02 17:00:39 r23 Exp $
+   $Id: administrators.php,v 1.6 2003/05/06 13:28:28 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -49,6 +49,7 @@ define('TABLE_HEADING_LASTNAME', 'Nachname');
 define('TABLE_HEADING_FIRSTNAME', 'Vorname');
 define('TABLE_ADMIN_HAS_ACCESS_TO', 'Zugriffsrechte');
 define('TABLE_HEADING_ACCOUNT_CREATED', 'Datum');
+define('TABLE_HEADING_ACCOUNT_LOGIN', 'Zugang');
 define('TABLE_HEADING_ACTION', 'Aktion');
 
 define('TEXT_DATE_ACCOUNT_CREATED', 'Zugang erstellt am:');
@@ -58,24 +59,16 @@ define('TEXT_INFO_NUMBER_OF_LOGONS', 'Anzahl der Anmeldungen:');
 define('TEXT_INFO_HEADING_DELETE_USER', 'Anwender l&ouml;schen');
 define('TEXT_INFO_DELETE_INTRO', 'Sind Sie sicher, dass Sie diesen Anwender l&ouml;schen m&ouml;chten?');
 
-define('CATEGORY_PERSONAL', 'Pers&ouml;nliche Daten');
-define('CATEGORY_ADDRESS', 'Adresse');
-define('CATEGORY_CONTACT', 'Kontakt');
+define('EMAIL_SUBJECT', 'Zugangsberechtigung für ' . OWP_NAME);
+define('EMAIL_GREET_MR', 'Sehr geehrter Herr ');
+define('EMAIL_GREET_MS', 'Sehr geehrte Frau ');
 
-define('GENDER', 'Anrede:');
-define('FIRST_NAME', 'Vorname:');
-define('LAST_NAME', 'Nachname:');
-define('EMAIL_ADDRESS', 'E-Mail Adresse:');
+define('EMAIL_WELCOME', 'willkommen bei ' . OWP_NAME . '. ' . "\n\n");
+define('EMAIL_TEXT', 'Sie können jetzt unser ' . OWP_NAME . '-Service nutzen.' . "\n\n");
+define('EMAIL_CONTACT', 'Ihre Fragen und Meinungen sind uns wichtig. Wenn Sie also ' . "\n" . 'einen Vorschlag haben, wie wir ' . OWP_NAME . ' noch anregender,' . "\n" . 'praktischer oder persönlicher gestalten können, zögern Sie'  . "\n" . 'nicht, sich mit uns in Verbindung zu setzen:' . "\n\n" . DEVELOPER_SITE . ': http://developer.berlios.de/projects/osiswebprinter/' . "\n" . SUPPORT_FORUMS . ': http://developer.berlios.de/forum/?group_id=752' . "\n" . MAILING_LISTS . ': https://lists.berlios.de/mailman/listinfo/osiswebprinter-users' . "\n\n\n");
+define('EMAIL_PASSWORD_REMINDER_BODY', 'Ihr Passwort lautet:' . "\n\n" . '   %s' . "\n\n");
+define('EMAIL_FOOT', 'Mit den besten Grüssen,' . "\n" . 'Ihr ' . OWP_NAME . ' Team' . "\n\n\n" . OWP_HTTP_SERVER . "\n\n");
 
-define('TELEPHONE_NUMBER', 'Telefonnummer:');
-define('FAX_NUMBER', 'Faxnummer:');
-define('NEWSLETTER', 'Rundschreiben:');
-define('NEWSLETTER_YES', 'abonniert');
-define('NEWSLETTER_NO', 'nicht abonniert');
-define('TEXT_SELECT', 'CTRL+Click to select multiple.');
-define('PASSWORD', 'Passwort:');
-define('PASSWORD_CONFIRMATION', 'Passwortbest&auml;tigung:');
-define('PASSWORD_HIDDEN', '--VERSTECKT--');
 
 define('TEXT_ADMINISTRATOR_PASSWORD', 'Passwort:');
 define('TEXT_ADMINISTRATOR_CONFPWD', 'Passwortbest&auml;tigung:');

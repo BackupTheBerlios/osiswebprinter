@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: login.php,v 1.8 2003/05/05 16:51:37 r23 Exp $
+   $Id: login.php,v 1.9 2003/05/06 13:28:28 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -60,7 +60,7 @@
       if (!owpValidatePasword($password, $check_admin['admin_password'])) {
         $messageStack->add(ERROR_LOGIN_ERROR, 'error');
       } else {
-        if ($check_admin['admin_id'] == '1') {
+        if ($check_admin['admin_login'] == '1') {
           $_SESSION['user_id'] = $check_admin['admin_id'];
           $_SESSION['gender'] = $check_admin['admin_gender'];
           $_SESSION['firstname'] = $check_admin['admin_firstname'];
