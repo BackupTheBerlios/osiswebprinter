@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: gui.php,v 1.3 2003/03/28 02:54:52 r23 Exp $
+   $Id: gui.php,v 1.4 2003/03/28 17:42:03 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -39,39 +39,6 @@
    Original Author of file:  Gregor J. Rothfuss
    Purpose of file: Provide gui rendering functions for the installer.
    ---------------------------------------------------------------------- */
-
-//header
-function print_header() {
-
-echo "
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">
-<html " . HTML_PARAMS . ">
-<head>
-<title>" . INSTALLATION . "</title>
-<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=" . CHARSET . "\">
-<META NAME=\"AUTHOR\" CONTENT=\"OSIS GmbH\">
-<META NAME=\"GENERATOR\" CONTENT=\"OSIS GmbH -- http://www.osisnet.de\">
-<META NAME=\"ROBOTS\" content=\"NOFOLLOW\">
-<link rel=\"StyleSheet\" href=\"style/style.css\" type=\"text/css\" />
-</head>
-<body>
-<table width=\"670\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">
-  <tr> 
-    <td rowspan=\"4\"><img src=\"images/trans.gif\" width=\"1\" height=\"460\" border=\"0\" alt=\" \"></td>   
-    <td align=\"left\" valign=\"top\" class=\"ow-main\"><font class=\"ow-pageTitle\">" . owTextTool::heading(INSTALLATION) . "</font>
-       <br /><img src=\"images/trans.gif\" width=\"1%\" height=\"6\" border=\"0\" alt=\" \"></td>
-  </tr>
-  <tr>
-    <td align=\"left\" valign=\"top\" class=\"ow-main\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\" align=\"center\">
-      <tr class=\"ow-footer\">
-        <td class=\"ow-footer\">&nbsp;&nbsp;" . strftime(DATE_LONG) . "&nbsp;&nbsp;</td>
-      </tr>
-    </table></td>
-  </tr>
- <tr> 
-    <td align=\"left\" valign=\"top\">
-  ";
-}
 
 /*** This function prints the "This is your setting" area ***/
 function print_form_text($border=0) {
@@ -159,7 +126,7 @@ function print_CHM_check() {
 
    echo   "<input type=\"hidden\" NAME=\"currentlang\" value=\"$currentlang\">
 <input type=\"hidden\" name=\"op\" value=\"Submit\">
-<input type=\"submit\" value=\""._BTN_SUBMIT."\"></table></center></form></font>";
+<input type=\"submit\" value=\""._BTN_SUBMIT."\"></center></form></font>";
 
 }
 
@@ -322,7 +289,7 @@ function print_default() {
 <font class=\"ow-normal\">" . DEFAULT_1 ."</font><br /><br />
 <font class=\"ow-normal\">" . DEFAULT_2 ."</font><br /><br />
 <font class=\"ow-normal\">" . DEFAULT_3 ."</font><br /><br />
-<font class=\"ow-title\">".  DEFAULT_4 . "</font>
+<font class=\"ow-title\">" . DEFAULT_4 . "</font>
 <font class=\"ow-normal\">" . DEFAULT_5 . "<br /><br />
 <form action=\"index.php\" method=\"post\"><center>
 <textarea name=\"license\" cols=60 rows=10>";
@@ -354,20 +321,6 @@ function print_select_language() {
 <input type=\"hidden\" name=\"op\" value=\"Set Language\">
 <input type=\"submit\" value=\"" . BTN_SET_LANGUAGE . "\"></td></tr>
 </table></form></font><p><img src=\"images/trans.gif\" width=\"1%\" height=\"160\" border=\"0\" alt=\" \"></p>";
-}
-
-// footer
-function print_footer() {
-
-   echo  "
-   </td>
- </tr>
-   <tr>
-     <td class=\"ow-footer\"><img src=\"images/trans.gif\" width=\"1\" height=\"4\" border=\"0\" alt=\" \"></td>
-  </tr>
-</table>
-
-<center><br /><br /><font class=\"pn-sub\">" . FOOTER . "</font></center></body></html>";
 }
 
 ?>
