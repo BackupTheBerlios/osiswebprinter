@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.6 2003/04/21 21:08:31 r23 Exp $
+   $Id: system.php,v 1.7 2003/04/21 21:52:11 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,8 +23,8 @@
    ---------------------------------------------------------------------- */
 
 // Set the level of error reporting
-  error_reporting(E_ALL & ~E_NOTICE);
- # error_reporting(E_ALL);
+ # error_reporting(E_ALL & ~E_NOTICE);
+  error_reporting(E_ALL);
 
 // Disable use_trans_sid as owpLink() does this manually
   if (function_exists('ini_set')) {
@@ -66,22 +66,22 @@
   $owpDBTable = array();
 
   $owpDBTable['languages'] = $prefix_table . 'languages';
-  
+  $owpDBTable['session'] = $prefix_table . 'sessions';
 
-// customization for the design layout
-  require_once(OWP_FUNCTIONS_DIR . 'general.php');
+//session
+  require_once(OWP_FUNCTIONS_DIR . 'owp_session.php');
 
 
 // include the database functions
   include(OWP_FUNCTIONS_DIR . 'owp_api.php');
   include(OWP_ADODB_DIR . 'adodb.inc.php');
-
 	
 // make a connection to the database... now
   if (!owpDBInit()) {
     die('Unable to connect to database server!');
   }
 
+  
 define('DEFAULT_LANGUAGE', 'deu');
 
 define('OWP_IMAGE_REQUIRE_ONED', 'false');
@@ -107,17 +107,6 @@ define('EMAIL_TRANSPORT', 'sendmail');
 
 */
 // lets start our session
-  GLOBAL $_SESSION;
-  $ADODB_SESSION_DRIVER='mysql';
-  $ADODB_SESSION_CONNECT='localhost';
-  $ADODB_SESSION_USER ='root';
-  $ADODB_SESSION_PWD ='';
-  $ADODB_SESSION_DB ='web_lang';
-  $ADODB_SESSION_TBL = 'sessions';  
-  
-  include(OWP_ADODB_DIR . 'adodb-session.php');
-  session_name('owpSid');
-  session_start();
 
   if (isset($HTTP_COOKIE_VARS[owpSessionName()])) {
     session_id($HTTP_COOKIE_VARS[owpSessionName()]);
@@ -182,6 +171,7 @@ define('EMAIL_TRANSPORT', 'sendmail');
 
 // define our general functions used application-wide
   require_once(OWP_FUNCTIONS_DIR . 'html_output.php');
+  require_once(OWP_FUNCTIONS_DIR . 'general.php');
   
   if (EMAIL_TRANSPORT == 'sendmail') include(OWP_MAILER_DIR . 'class.phpmailer.php');
   if (EMAIL_TRANSPORT == 'smtp') include(OWP_MAILER_DIR . 'class.smtp.php');

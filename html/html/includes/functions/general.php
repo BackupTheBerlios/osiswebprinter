@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.5 2003/04/20 16:06:09 r23 Exp $
+   $Id: general.php,v 1.6 2003/04/21 21:52:11 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -1081,11 +1081,4 @@
                  'db_date' => tep_datetime_short($db['datetime']));
   }
   
-  function owpSessionName($name = '') {
-    if ($name != '') {
-      return session_name($name);
-    } else {
-      return session_name();
-    }
-  }
 ?>

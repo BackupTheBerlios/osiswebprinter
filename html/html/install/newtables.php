@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newtables.php,v 1.10 2003/04/21 21:08:31 r23 Exp $
+   $Id: newtables.php,v 1.11 2003/04/21 21:52:11 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -35,6 +35,24 @@ function dosql($table, $sql) {
 
 owp_DBInit($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
 
+$table = $prefix.'_administrators';
+$sql = "
+CREATE TABLE ".$prefix."_administrators (
+  owp_admin_id int(11) NOT NULL auto_increment,
+  owp_admin_gender char(1) NOT NULL default '',
+  owp_admin_firstname varchar(32) NOT NULL default '',
+  owp_admin_lastname varchar(32) NOT NULL default '',
+  owp_admin_email_address varchar(96) NOT NULL default '                                                                                                ',
+  owp_admin_telephone varchar(32) NOT NULL default '                                                                                                         ',
+  owp_admin_fax varchar(32) default NULL,
+  owp_admin_password varchar(40) NOT NULL default '',
+  owp_last_modified datetime default NULL,
+  owp_date_added datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY (owp_admin_id)
+)
+";
+dosql($table,$sql);
+
 $table = $prefix.'_configuration';
 $sql = "
 CREATE TABLE ".$prefix."_configuration (
@@ -68,23 +86,6 @@ $sql = "
 ";
 dosql($table,$sql);
 
-$table = $prefix.'_administrators';
-$sql = "
-CREATE TABLE ".$prefix."_administrators (
-  owp_admin_id int(11) NOT NULL auto_increment,
-  owp_admin_gender char(1) NOT NULL default '',
-  owp_admin_firstname varchar(32) NOT NULL default '',
-  owp_admin_lastname varchar(32) NOT NULL default '',
-  owp_admin_email_address varchar(96) NOT NULL default '                                                                                                ',
-  owp_admin_telephone varchar(32) NOT NULL default '                                                                                                         ',
-  owp_admin_fax varchar(32) default NULL,
-  owp_admin_password varchar(40) NOT NULL default '',
-  owp_last_modified datetime default NULL,
-  owp_date_added datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY (owp_admin_id)
-)
-";
-dosql($table,$sql);
 
 $table = $prefix.'_languages';
 $sql = "
@@ -101,3 +102,16 @@ CREATE TABLE ".$prefix."_languages (
 )
 ";
 dosql($table,$sql);
+
+$table = $prefix.'_sessions';
+$sql = "
+CREATE TABLE ".$prefix."_sessions (
+  SESSKEY char(32) not null,
+  EXPIRY int(11) unsigned not null,
+  DATA text not null,
+  PRIMARY KEY (sesskey)
+)
+";
+dosql($table,$sql);
+
+?>
