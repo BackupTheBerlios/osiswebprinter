@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: login.php,v 1.2 2003/04/22 07:17:24 r23 Exp $
+   $Id: login.php,v 1.3 2003/04/22 07:25:51 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -43,5 +43,10 @@
    ---------------------------------------------------------------------- */
 
 define('TOP_BAR_TITLE', 'Logon');
-define('HEADING_TITLE', 'Log In To Administer');
+define('HEADING_TITLE', 'LogIn To Administer');
+
+
+define('TEXT_INFO_USER_NAME', 'eMail Adresse:');
+define('TEXT_INFO_PASSWORD', 'Passwort:');
+define('TEXT_LOGIN_ERROR', 'Incorrect UserName Or Password');
 ?>

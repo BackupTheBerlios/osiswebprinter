@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.13 2003/04/09 22:50:24 r23 Exp $
+   $Id: index.php,v 1.14 2003/04/22 07:25:51 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -59,7 +59,7 @@
 
   define('ADODB_DIR', '../includes/adodb');
   require_once ('../includes/adodb/adodb.inc.php');
-  require_once ('../includes/classes/osis_text_tool.php');
+  require_once ('../includes/classes/owp_text_tool.php');
  
   include_once 'modify_config.php'; 
   include_once 'newinstall.php'; 

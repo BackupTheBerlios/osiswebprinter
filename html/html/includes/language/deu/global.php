@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.3 2003/04/21 21:08:31 r23 Exp $
+   $Id: global.php,v 1.4 2003/04/22 07:25:51 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -50,7 +50,16 @@ define('DATE_LONG', '%A, %d. %B %Y'); // this is used for strftime()
 
 define('HTML_PARAMS','dir="LTR" lang="de"');
 define('CHARSET', 'iso-8859-1');
-  
+
+define('OWP_PAGE_TITLE', 'OSIS Web Printer');
+
+define('DATE_FORMAT_LONG', '%A, %d. %B %Y'); 
+define('DATE_FORMAT', 'd.m.Y');  // this is used for strftime()
+define('PHP_DATE_TIME_FORMAT', 'd.m.Y H:i:s'); 
+define('DATE_TIME_FORMAT', DATE_SHORT . ' %H:%M:%S');
+
+
+
 define('_ABOUTPOSTING','About posting');
 define('_ACCESS_ADD','Add');
 define('_ACCESS_ADMIN','Admin');
@@ -330,5 +339,140 @@ define('_DAY_OF_WEEK_SHORT','Sun Mon Tue Wed Thu Fri Sat');
 define('_MONTH_LONG','January February March April May June July August September October November December');
 define('_MONTH_SHORT','Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec');
 
+
+
+// header text in includes/header.php
+define('HEADER_TITLE_TOP', 'Administration');
+define('HEADER_TITLE_SUPPORT_SITE', 'Supportseite');
+define('HEADER_TITLE_ONLINE_CATALOG', 'Online Katalog');
+define('HEADER_TITLE_ADMINISTRATION', 'Administration');
+
+// text for gender
+define('MALE', 'Herr');
+define('FEMALE', 'Frau');
+
+
+// configuration box text in includes/boxes/configuration.php
+define('BOX_HEADING_CONFIGURATION', 'Konfiguration');
+define('BOX_CONFIGURATION_MYSTORE', 'My Store');
+define('BOX_CONFIGURATION_LOGGING', 'Logging');
+define('BOX_CONFIGURATION_CACHE', 'Cache');
+
+// customers box text in includes/boxes/customers.php
+define('BOX_HEADING_CUSTOMERS', 'Kunden');
+define('BOX_CUSTOMERS_CUSTOMERS', 'Kunden');
+define('BOX_CUSTOMERS_ORDERS', 'Bestellungen');
+
+// taxes box text in includes/boxes/taxes.php
+define('BOX_HEADING_LOCATION_AND_TAXES', 'Land / Steuer');
+define('BOX_TAXES_COUNTRIES', 'Land');
+define('BOX_TAXES_ZONES', 'Bundesl&auml;nder');
+define('BOX_TAXES_GEO_ZONES', 'Steuerzonen');
+define('BOX_TAXES_TAX_CLASSES', 'Steuerklassen');
+define('BOX_TAXES_TAX_RATES', 'Steuers&auml;tze');
+
+// tools text in includes/boxes/tools.php
+define('BOX_HEADING_TOOLS', 'Programme');
+define('BOX_TOOLS_BACKUP', 'Datenbanksicherung');
+define('BOX_TOOLS_CACHE', 'Cache Steuerung');
+define('BOX_TOOLS_DEFINE_LANGUAGE', 'Sprachen definieren');
+define('BOX_TOOLS_FILE_MANAGER', 'Datei-Manager');
+define('BOX_TOOLS_MAIL', 'eMail versenden');
+define('BOX_TOOLS_NEWSLETTER_MANAGER', 'Rundschreiben Manager');
+define('BOX_TOOLS_SERVER_INFO', 'Server Info');
+define('BOX_TOOLS_WHOS_ONLINE', 'Wer ist Online');
+
+// localizaion box text in includes/boxes/localization.php
+define('BOX_LOCALIZATION_LANGUAGES', 'Sprachen');
+define('BOX_LOCALIZATION_ORDERS_STATUS', 'Bestellstatus');
+
+// javascript messages
+// images
+define('IMAGE_ANI_SEND_EMAIL', 'eMail versenden');
+define('IMAGE_BACK', 'Zur&uuml;ck');
+define('IMAGE_BACKUP', 'Datensicherung');
+define('IMAGE_CANCEL', 'Abbruch');
+define('IMAGE_CONFIRM', 'Best&auml;tigen');
+define('IMAGE_COPY', 'Kopieren');
+define('IMAGE_COPY_TO', 'Kopieren nach');
+define('IMAGE_DEFINE', 'Definieren');
+define('IMAGE_DELETE', 'L&ouml;schen');
+define('IMAGE_EDIT', 'Bearbeiten');
+define('IMAGE_EMAIL', 'eMail versenden');
+define('IMAGE_FILE_MANAGER', 'Datei-Manager');
+define('IMAGE_ICON_STATUS_GREEN', 'aktiv');
+define('IMAGE_ICON_STATUS_GREEN_LIGHT', 'aktivieren');
+define('IMAGE_ICON_STATUS_RED', 'inaktiv');
+define('IMAGE_ICON_STATUS_RED_LIGHT', 'deaktivieren');
+define('IMAGE_ICON_INFO', 'Information');
+define('IMAGE_INSERT', 'Einf&uuml;gen');
+define('IMAGE_LOCK', 'Sperren');
+define('IMAGE_MOVE', 'Verschieben');
+define('IMAGE_NEW_BANNER', 'neuen Banner aufnehmen');
+define('IMAGE_NEW_CATEGORY', 'neue Kategorie erstellen');
+define('IMAGE_NEW_COUNTRY', 'neues Land aufnehmen');
+define('IMAGE_NEW_CURRENCY', 'neue W&auml;hrung einf&uuml;gen');
+define('IMAGE_NEW_FILE', 'Neue Datei');
+define('IMAGE_NEW_FOLDER', 'Neues Verzeichnis');
+define('IMAGE_NEW_LANGUAGE', 'neue Sprache anlegen');
+define('IMAGE_NEW_NEWSLETTER', 'Neues Rundschreiben');
+define('IMAGE_NEW_PRODUCT', 'neuen Artikel aufnehmen');
+define('IMAGE_NEW_TAX_CLASS', 'neue Steuerklasse erstellen');
+define('IMAGE_NEW_TAX_RATE', 'neuen Steuersatz anlegen');
+define('IMAGE_NEW_TAX_ZONE', 'neue Steuerzone erstellen');
+define('IMAGE_NEW_ZONE', 'neues Bundesland einf&uuml;gen');
+define('IMAGE_ORDERS', 'Bestellungen');
+define('IMAGE_ORDERS_INVOICE', 'Invoice');
+define('IMAGE_ORDERS_PACKINGSLIP', 'Packing Slip');
+define('IMAGE_PREVIEW', 'Vorschau');
+define('IMAGE_RESET', 'Zur&uuml;cksetzen');
+define('IMAGE_RESTORE', 'Zur&uuml;cksichern');
+define('IMAGE_SAVE', 'Speichern');
+define('IMAGE_SEARCH', 'Suchen');
+define('IMAGE_SELECT', 'Ausw&auml;hlen');
+define('IMAGE_SEND', 'Versenden');
+define('IMAGE_UNLOCK', 'Entsperren');
+define('IMAGE_UPDATE', 'Aktualisieren');
+define('IMAGE_UPDATE_CURRENCIES', 'Wechselkurs aktualisieren');
+define('IMAGE_UPLOAD', 'Hochladen');
+
+define('ICON_CROSS', 'Falsch');
+define('ICON_CURRENT_FOLDER', 'aktueller Ordner');
+define('ICON_DELETE', 'L&ouml;schen');
+define('ICON_ERROR', 'Fehler');
+define('ICON_FILE', 'Datei');
+define('ICON_FILE_DOWNLOAD', 'Herunterladen');
+define('ICON_FOLDER', 'Ordner');
+define('ICON_LOCKED', 'Gesperrt');
+define('ICON_PREVIOUS_LEVEL', 'Vorherige Ebene');
+define('ICON_PREVIEW', 'Vorschau');
+define('ICON_STATISTICS', 'Statistics');
+define('ICON_SUCCESS', 'Erfolg');
+define('ICON_TICK', 'Wahr');
+define('ICON_UNLOCKED', 'Entsperrt');
+define('ICON_WARNING', 'Warnung');
+
+// constants for use in tep_prev_next_display function
+define('TEXT_RESULT_PAGE', 'Seite %s von %d');
+define('TEXT_DISPLAY_NUMBER_OF_BANNERS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Bannern)');
+define('TEXT_DISPLAY_NUMBER_OF_COUNTRIES', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> L&auml;ndern)');
+define('TEXT_DISPLAY_NUMBER_OF_CUSTOMERS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Kunden)');
+define('TEXT_DISPLAY_NUMBER_OF_CURRENCIES', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> W&auml;hrungen)');
+define('TEXT_DISPLAY_NUMBER_OF_LANGUAGES', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Sprachen)');
+define('TEXT_DISPLAY_NUMBER_OF_MANUFACTURERS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Herstellern)');
+define('TEXT_DISPLAY_NUMBER_OF_NEWSLETTERS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Rundschreiben)');
+define('TEXT_DISPLAY_NUMBER_OF_ORDERS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Bestellungen)');
+define('TEXT_DISPLAY_NUMBER_OF_ORDERS_STATUS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Bestellstatus)');
+define('TEXT_DISPLAY_NUMBER_OF_PRODUCTS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Artikeln)');
+define('TEXT_DISPLAY_NUMBER_OF_PRODUCTS_EXPECTED', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> erwarteten Artikeln)');
+define('TEXT_DISPLAY_NUMBER_OF_REVIEWS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Bewertungen)');
+define('TEXT_DISPLAY_NUMBER_OF_SPECIALS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Sonderangeboten)');
+define('TEXT_DISPLAY_NUMBER_OF_TAX_CLASSES', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Steuerklassen)');
+define('TEXT_DISPLAY_NUMBER_OF_TAX_ZONES', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Steuerzonen)');
+define('TEXT_DISPLAY_NUMBER_OF_TAX_RATES', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Steuers&auml;tzen)');
+define('TEXT_DISPLAY_NUMBER_OF_ZONES', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Bundesl&auml;ndern)');
+
+define('PREVNEXT_BUTTON_PREV', '&lt;&lt;');
+define('PREVNEXT_BUTTON_NEXT', '&gt;&gt;');
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_tools.php,v 1.4 2003/04/20 16:05:18 r23 Exp $
+   $Id: owp_tools.php,v 1.5 2003/04/22 07:23:42 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -30,7 +30,7 @@
   $contents = array();
 
   $heading[] = array('text'  => BOX_HEADING_TOOLS,
-                     'link'  => owpLink(basename($_SERVER['PHP_SELF']), owpGetAllGetParameters(array('selected_box')) . 'selected_box=tools'));
+                     'link'  => owpLink(basename($owpSelf), owpGetAllGetParameters(array('selected_box')) . 'selected_box=tools'));
 
   if ($selected_box == 'tools') {
     $contents[] = array('text'  => '<a href="' . owpLink($owpFilename['backup']) . '" class="menuBoxContentLink">' . BOX_TOOLS_BACKUP . '</a><br>' .

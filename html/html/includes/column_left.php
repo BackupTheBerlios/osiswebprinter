@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: column_left.php,v 1.5 2003/04/20 07:08:17 r23 Exp $
+   $Id: column_left.php,v 1.6 2003/04/22 07:24:16 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -26,4 +26,5 @@
   require(OWP_BOXES_DIR . 'owp_customers.php');
   require(OWP_BOXES_DIR . 'owp_localization.php');
   require(OWP_BOXES_DIR . 'owp_tools.php');
+  require(OWP_BOXES_DIR . 'owp_administrators.php');
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_navigation_history.php,v 1.2 2003/04/22 07:16:46 r23 Exp $
+   $Id: owp_navigation_history.php,v 1.3 2003/04/22 07:24:16 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -35,50 +35,27 @@
     }
 
     function add_current_page() {
-      global $PHP_SELF, $HTTP_GET_VARS, $HTTP_POST_VARS, $HTTP_SERVER_VARS, $cPath;
+      global $owpSelf, $_GET, $_POST, $_SERVER, $cPath;
 
       $set = 'true';
       for ($i=0; $i<sizeof($this->path); $i++) {
-        if ( ($this->path[$i]['page'] == basename($PHP_SELF)) ) {
-          if ($cPath) {
-            if (!$this->path[$i]['get']['cPath']) {
-              continue;
-            } else {
-              if ($this->path[$i]['get']['cPath'] == $cPath) {
-                array_splice($this->path, ($i+1));
-                $set = 'false';
-                break;
-              } else {
-                $old_cPath = explode('_', $this->path[$i]['get']['cPath']);
-                $new_cPath = explode('_', $cPath);
-
-                for ($j=0; $j<sizeof($old_cPath); $j++) {
-                  if ($old_cPath[$j] != $new_cPath[$j]) {
-                    array_splice($this->path, ($i));
-                    $set = 'true';
-                    break 2;
-                  }
-                }
-              }
-            }
-          } else {
-            array_splice($this->path, ($i));
-            $set = 'true';
-            break;
-          }
+        if ( ($this->path[$i]['page'] == basename($owpSelf)) ) {
+          array_splice($this->path, ($i));
+          $set = 'true';
+          break;
         }
       }
 
       if ($set == 'true') {
-        $this->path[] = array('page' => basename($PHP_SELF),
-                              'mode' => (($HTTP_SERVER_VARS['HTTPS'] == 'on') ? 'SSL' : 'NONSSL'),
-                              'get' => $HTTP_GET_VARS,
-                              'post' => $HTTP_POST_VARS);
+        $this->path[] = array('page' => basename($owpSelf),
+                              'mode' => (($_SERVER['HTTPS'] == 'on') ? 'SSL' : 'NONSSL'),
+                              'get' => $_GET,
+                              'post' => $_POST);
       }
     }
 
     function set_snapshot($page = '') {
-      global $PHP_SELF, $HTTP_GET_VARS, $HTTP_POST_VARS, $HTTP_SERVER_VARS;
+      global $owpSelf, $_GET, $_POST, $_SERVER;
 
       if (is_array($page)) {
         $this->snapshot = array('page' => $page['page'],
@@ -86,10 +63,10 @@
                                 'get' => $page['get'],
                                 'post' => $page['post']);
       } else {
-        $this->snapshot = array('page' => basename($PHP_SELF),
-                                'mode' => (($HTTP_SERVER_VARS['HTTPS'] == 'on') ? 'SSL' : 'NONSSL'),
-                                'get' => $HTTP_GET_VARS,
-                                'post' => $HTTP_POST_VARS);
+        $this->snapshot = array('page' => basename($owpSelf),
+                                'mode' => (($_SERVER['HTTPS'] == 'on') ? 'SSL' : 'NONSSL'),
+                                'get' => $_GET,
+                                'post' => $_POST);
       }
     }
 
@@ -123,14 +100,6 @@
         echo '<br><br>';
 
         echo $this->snapshot['mode'] . ' ' . $this->snapshot['page'] . '?' . tep_array_to_string($this->snapshot['get'], array(tep_session_name())) . '<br>';
-      }
-    }
-
-    function unserialize($broken) {
-      for(reset($broken);$kv=each($broken);) {
-        $key=$kv['key'];
-        if (gettype($this->$key)!="user function")
-        $this->$key=$kv['value'];
       }
     }
   }

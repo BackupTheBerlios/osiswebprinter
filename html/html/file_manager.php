@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: file_manager.php,v 1.10 2003/04/20 16:04:29 r23 Exp $
+   $Id: file_manager.php,v 1.11 2003/04/22 07:22:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,6 +23,11 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
+  
+  if (!isset($_SESSION['user_id'])) {
+    $_SESSION['navigation']->set_snapshot();
+    owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
+  } 
   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['file_manager']);
 
@@ -155,9 +160,9 @@
       <tr>
         <td width="100%"><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr><?php echo owpDrawForm('goto', $owpFilename['file_manager'], '', 'get'); ?>
-            <td class="pageHeading"><?php echo HEADING_TITLE . '<br><span class="smallText">' . $current_path . '</span>'; ?></td>
-            <td class="pageHeading" align="right"><?php echo owpTransLine('1', HEADING_IMAGE_HEIGHT); ?></td>
-            <td class="pageHeading" align="right"><?php echo tep_draw_pull_down_menu('goto', $goto_array, $current_path, 'onChange="this.form.submit();"'); ?></td>
+            <td class="owp-title"><?php echo HEADING_TITLE . '<br><span class="smallText">' . $current_path . '</span>'; ?></td>
+            <td class="owp-title" align="right"><?php echo owpTransLine('1', HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="owp-title" align="right"><?php echo tep_draw_pull_down_menu('goto', $goto_array, $current_path, 'onChange="this.form.submit();"'); ?></td>
           </form></tr>
         </table></td>
       </tr>

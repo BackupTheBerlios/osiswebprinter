@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_text_tool.php,v 1.1 2003/04/22 07:14:52 r23 Exp $
+   $Id: owp_text_tool.php,v 1.2 2003/04/22 07:24:16 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -13,7 +13,7 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  class owTextTool {
+  class owpTextTool {
     function &nrFormat($number) {
       if (($number < 10) && (substr($number, 0, 1) != '0')) $number = '0' . $number;
 

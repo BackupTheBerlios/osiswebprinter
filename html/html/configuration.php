@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: configuration.php,v 1.10 2003/04/20 16:04:29 r23 Exp $
+   $Id: configuration.php,v 1.11 2003/04/22 07:22:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,6 +23,11 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
+  
+  if (!isset($_SESSION['user_id'])) {
+    $_SESSION['navigation']->set_snapshot();
+    owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
+  } 
   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['configuration']);
 
@@ -50,7 +55,7 @@
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">
 <link rel="StyleSheet" href="style/style.css" type="text/css" />
-<script language="javascript" src="includes/general.js"></script>
+<script type="text/javascript" src="javascript/general.php"></script>
 </head>
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" onload="SetFocus();">
 <!-- header //-->
@@ -70,8 +75,8 @@
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr>
-            <td class="pageHeading"><?php echo $cfg_group['configuration_group_title']; ?></td>
-            <td class="pageHeading" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="owp-title"><?php echo $cfg_group['configuration_group_title']; ?></td>
+            <td class="owp-title" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
           </tr>
         </table></td>
       </tr>

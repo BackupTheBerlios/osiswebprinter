@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: administrators.php,v 1.2 2003/04/22 07:16:46 r23 Exp $
+   $Id: administrators.php,v 1.3 2003/04/22 07:22:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -42,7 +42,15 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  require('includes/application_top.php');
+  require('includes/system.php');
+  
+  if (!isset($_SESSION['user_id'])) {
+    $_SESSION['navigation']->set_snapshot();
+    owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
+  } 
+
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['server_info']);
+
 
   $aErrors = '';
   if ( $REQUEST_METHOD == 'POST' ) 
@@ -81,49 +89,43 @@
     tep_db_query( $aSQL );
   }
 ?>
-<html>
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html <?php echo HTML_PARAMS; ?>>
 <head>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
 <title><?php echo TITLE; ?></title>
-<link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
+<META NAME="AUTHOR" CONTENT="OSIS GmbH">
+<META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
+<META NAME="ROBOTS" content="NOFOLLOW">
+<link rel="StyleSheet" href="style/style.css" type="text/css" />
 </head>
-<body>
+<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <!-- header //-->
-<?php require(DIR_WS_INCLUDES . 'header.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'header.php'); ?>
 <!-- header_eof //-->
 
-<!-- body //-->
-<table border="0" width="100%" cellspacing="5" cellpadding="5">
+<table border="0" width="100%" cellspacing="2" cellpadding="2">
   <tr>
-    <td width="<?php echo BOX_WIDTH; ?>" valign="top"><table border="0" width="<?php echo BOX_WIDTH; ?>" cellspacing="0" cellpadding="0">
-      <tr>
-        <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
+    <td width="<?php echo BOX_WIDTH; ?>" valign="top"><table border="0" width="<?php echo BOX_WIDTH; ?>" cellspacing="1" cellpadding="1" class="columnLeft">
 <!-- left_navigation //-->
-<?php require(DIR_WS_INCLUDES . 'column_left.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'column_left.php'); ?>
 <!-- left_navigation_eof //-->
-        </table></td>
-      </tr>
     </table></td>
 <!-- body_text //-->
-    <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="0">
+    <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td><table border="0" width="100%" cellspacing="0" cellpadding="2" class="topBarTitle">
+        <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr>
-            <td class="topBarTitle">&nbsp;<?php echo TOP_BAR_TITLE; ?>&nbsp;</td>
+            <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
+            <td class="owp-title" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
           </tr>
         </table></td>
       </tr>
       <tr>
-        <td width="100%"><table border="0" width="100%" cellspacing="0" cellpadding="0">
-          <tr>
-            <td class="pageHeading">&nbsp;<?php echo HEADING_TITLE; ?>&nbsp;</td>
-            <td align="right">&nbsp;<?php echo tep_image(DIR_WS_IMAGES . 'pixel_trans.gif', HEADING_TITLE, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?>&nbsp;</td>
-          </tr>
-        </table></td>
-      </tr>
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
-            <td><?php echo tep_black_line(); ?></td>
+            <td bgcolor="#000000"><?php echo owpTransLine(); ?></td>
           </tr>
           <tr class="subBar">
             <td class="subBar">&nbsp;<?php echo SUB_BAR_TITLE; ?>&nbsp;</td>
@@ -178,7 +180,7 @@
                                             &nbsp;
                                         </td>
                                         <td class="main">
-                                            <a href="<?php print( $PHP_SELF ); ?>?action=delete&admin_id=<?php print( $aAdminID ); ?>" class="bluelink"><?php print( TEXT_ADMIN_DELETE ); ?></a>
+                                            <a href="<?php print( $owpSelf ); ?>?action=delete&admin_id=<?php print( $aAdminID ); ?>" class="bluelink"><?php print( TEXT_ADMIN_DELETE ); ?></a>
                                         </td>
                                         <td class="main">
                                             <?php echo $aUserID; ?>
@@ -208,14 +210,12 @@
             </td>
           </tr>
           <tr>
-            <td>
-                <?php echo tep_black_line(); ?>
-            </td>
+            <td bgcolor="#000000"><?php echo owpTransLine(); ?></td>
           </tr>
           <tr>
             <td>
                 <table>
-                    <form action="<?php print( $PHP_SELF ); ?>" method="post">
+                    <form action="<?php print( $owpSelf ); ?>" method="post">
                     <tr>
                         <td width="10">
                             &nbsp;
@@ -301,16 +301,19 @@
                 </table>
             </td>
           </tr>
-<!-- body_text_eof //-->
-        </table></td>
+      <tr>
+        <td><?php echo owpTransLine('1', '10'); ?></td>
       </tr>
     </table></td>
+<!-- body_text_eof //-->
   </tr>
 </table>
 <!-- body_eof //-->
+
 <!-- footer //-->
-<?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'footer.php'); ?>
 <!-- footer_eof //-->
+<br>
 </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'application_bottom.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'nice_exit.php'); ?>

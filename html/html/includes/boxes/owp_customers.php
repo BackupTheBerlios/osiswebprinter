@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_customers.php,v 1.4 2003/04/20 16:04:29 r23 Exp $
+   $Id: owp_customers.php,v 1.5 2003/04/22 07:23:42 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -30,7 +30,7 @@
   $contents = array();
 
   $heading[] = array('text'  => BOX_HEADING_CUSTOMERS,
-                     'link'  => owpLink(basename($_SERVER['PHP_SELF']), owpGetAllGetParameters(array('selected_box')) . 'selected_box=customers'));
+                     'link'  => owpLink(basename($owpSelf), owpGetAllGetParameters(array('selected_box')) . 'selected_box=customers'));
 
   if ($selected_box == 'customers') {
     $contents[] = array('text'  => '<a href="' . owpLink(FILENAME_CUSTOMERS, '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_CUSTOMERS_CUSTOMERS . '</a><br>' .

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: define_language.php,v 1.10 2003/04/20 16:04:29 r23 Exp $
+   $Id: define_language.php,v 1.11 2003/04/22 07:22:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,6 +23,11 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
+  
+  if (!isset($_SESSION['user_id'])) {
+    $_SESSION['navigation']->set_snapshot();
+    owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
+  } 
   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['define_language']);
 
@@ -90,9 +95,9 @@
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr><?php echo owpDrawForm('lng', $owpFilename['define_language'], '', 'get'); ?>
-            <td class="pageHeading"><?php echo HEADING_TITLE; ?></td>
-            <td class="pageHeading" align="right"><?php echo owpTransLine('1', HEADING_IMAGE_HEIGHT); ?></td>
-            <td class="pageHeading" align="right"><?php echo tep_draw_pull_down_menu('lngdir', $languages_array, '', 'onChange="this.form.submit();"'); ?></td>
+            <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
+            <td class="owp-title" align="right"><?php echo owpTransLine('1', HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="owp-title" align="right"><?php echo tep_draw_pull_down_menu('lngdir', $languages_array, '', 'onChange="this.form.submit();"'); ?></td>
           </form></tr>
         </table></td>
       </tr>
@@ -159,7 +164,7 @@
     $dir = dir(DIR_FS_CATALOG_LANGUAGES . $_GET['lngdir']);
     $left = false;
     if ($dir) {
-      $file_extension = substr($PHP_SELF, strrpos($PHP_SELF, '.'));
+      $file_extension = substr($owpSelf, strrpos($owpSelf, '.'));
       while ($file = $dir->read()) {
         if (substr($file, strrpos($file, '.')) == $file_extension) {
           echo '                <td class="smallText"><a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir'] . '&filename=' . $file) . '">' . $file . '</a></td>' . "\n";

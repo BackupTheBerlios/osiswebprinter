@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.7 2003/04/21 21:52:11 r23 Exp $
+   $Id: system.php,v 1.8 2003/04/22 07:25:51 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,8 +23,8 @@
    ---------------------------------------------------------------------- */
 
 // Set the level of error reporting
- # error_reporting(E_ALL & ~E_NOTICE);
-  error_reporting(E_ALL);
+  error_reporting(E_ALL & ~E_NOTICE);
+ # error_reporting(E_ALL);
 
 // Disable use_trans_sid as owpLink() does this manually
   if (function_exists('ini_set')) {
@@ -42,46 +42,62 @@
 // define the filenames used in the project
   $prefix_filename = '';
 
-  if (!$prefix_filename == '') $prefix_filename = '_' . $prefix_filename;
+  if (!$prefix_filename == '') $prefix_filename =  $prefix_filename . '_';
 
   $owpFilename = array();
-
+  $owpFilename['administrators'] = $prefix_filename . 'administrators.php';
   $owpFilename['backup'] = $prefix_filename . 'backup.php';
   $owpFilename['configuration'] = $prefix_filename . 'configuration.php';
-  $owpFilename['index'] = $prefix_filename . 'index.php';
   $owpFilename['define_language'] = $prefix_filename . 'define_language.php';
   $owpFilename['file_manager'] = $prefix_filename . 'file_manager.php';
+  $owpFilename['index'] = $prefix_filename . 'index.php';
   $owpFilename['languages'] = $prefix_filename . 'languages.php';
+  $owpFilename['login'] = $prefix_filename . 'login.php';
   $owpFilename['mail'] = $prefix_filename . 'mail.php';
   $owpFilename['newsletters'] = $prefix_filename . 'newsletters.php';
+  $owpFilename['password_crypt'] = $prefix_filename . 'password_funcs.php';
   $owpFilename['server_info'] = $prefix_filename . 'server_info.php';
   $owpFilename['whos_online'] = $prefix_filename . 'whos_online.php';
 
 
 // define the database table names used in the project
-  $prefix_table = OWP_DB_PREFIX;;
+  $prefix_table = OWP_DB_PREFIX;
 
   if (!$prefix_table == '') $prefix_table = $prefix_table . '_';
 
   $owpDBTable = array();
-
+  $owpDBTable['administrators'] = $prefix_table . 'administrators';
+  $owpDBTable['configuration'] = $prefix_table . 'configuration';
+  $owpDBTable['configuration_group'] = $prefix_table . 'configuration_group';
   $owpDBTable['languages'] = $prefix_table . 'languages';
   $owpDBTable['session'] = $prefix_table . 'sessions';
 
+  
+  
+  $owpSelf = (! empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : $_SERVER['SCRIPT_NAME'];
+
+
+
 //session
+  require_once(OWP_CLASSES_DIR . 'owp_navigation_history.php');
   require_once(OWP_FUNCTIONS_DIR . 'owp_session.php');
 
+  owpSessionName('owpSid');
+  session_start();
 
 // include the database functions
-  include(OWP_FUNCTIONS_DIR . 'owp_api.php');
-  include(OWP_ADODB_DIR . 'adodb.inc.php');
-	
+  include_once(OWP_FUNCTIONS_DIR . 'owp_api.php');
+  define('ADODB_ERROR_LOG_TYPE',3);
+  define('ADODB_ERROR_LOG_DEST','d:/tmp/errors.log');
+  include_once(OWP_ADODB_DIR .'adodb-errorhandler.inc.php');
+  include_once(OWP_ADODB_DIR . 'adodb.inc.php');
+  include_once(OWP_ADODB_DIR . 'tohtml.inc.php');
+
 // make a connection to the database... now
   if (!owpDBInit()) {
     die('Unable to connect to database server!');
   }
 
-  
 define('DEFAULT_LANGUAGE', 'deu');
 
 define('OWP_IMAGE_REQUIRE_ONED', 'false');
@@ -89,29 +105,30 @@ define('CONFIG_CALCULATE_IMAGE_SIZE', 'true');
 
 define('LAYOUT_XHTML', 'true');
 define('BOX_WIDTH', 125); // how wide the boxes should be in pixels (default: 125)
+define('HEADING_IMAGE_WIDTH', '100%');
+define('HEADING_IMAGE_HEIGHT', '6');
+
 
 define('EMAIL_TRANSPORT', 'sendmail');
 
-/*!
 // set the application parameters (can be modified through the administration tool)
-  $configuration_query = tep_db_query('select configuration_key as cfgKey, configuration_value as cfgValue from ' . TABLE_CONFIGURATION . '');
-  while ($configuration = tep_db_fetch_array($configuration_query)) {
+  $configuration_query = $db->Execute('SELECT configuration_key as cfgKey, configuration_value as cfgValue FROM ' . $owpDBTable['configuration'] . '');
+  while ($configuration = $configuration_query->fields) {
     define($configuration['cfgKey'], $configuration['cfgValue']);
+    $configuration_query->MoveNext();
   }
 
-// include navigation history class
-  require_once(OWP_CLASSES_DIR . 'navigation_history.php');
+/*!
 
 // some code to solve compatibility issues
   require_once(OWP_FUNCTIONS_DIR . 'compatibility.php');
 
 */
-// lets start our session
 
-  if (isset($HTTP_COOKIE_VARS[owpSessionName()])) {
-    session_id($HTTP_COOKIE_VARS[owpSessionName()]);
+  if (isset($_COOKIE[owpSessionName()])) {
+    session_id($_COOKIE[owpSessionName()]);
   } else if ($_POST[owpSessionName()]) {   
-    session_id($HTTP_POST_VARS[owpSessionName()]);   
+    session_id($_POST[owpSessionName()]);   
   } else {
     $_SESSION = array();
     session_destroy();
@@ -122,25 +139,18 @@ define('EMAIL_TRANSPORT', 'sendmail');
   if (!empty($_SERVER['HTTP_USER_AGENT'])) {
     $HTTP_USER_AGENT = $_SERVER['HTTP_USER_AGENT'];
   } 
+  
 
 // language
   if ( (!isset($_SESSION['language'])) || (!empty($_GET['language'])) ) {
     if ($_GET['language']) {
       $_SESSION['language'] = $_GET['language'];
-      $languages_query = $db->Execute("SELECT iso_639_2, iso_639_1, text_direction FROM " . $owpDBTable['languages'] . " WHERE iso_639_2 = '" . $_SESSION['language'] . "'");
-            if ($languages_query === false) {
-              echo '<br /><font class="owp-error">' .  $db->ErrorMsg() . $sql . '</font>';
-      }
-      
+      $languages_query = $db->Execute("SELECT iso_639_2, iso_639_1, text_direction FROM " . $owpDBTable['languages'] . " WHERE iso_639_2 = '" . $_GET['language'] . "'");      
       $language_browser = $languages_query->fields['iso_639_1'];
       $language_text_direction = $languages_query->fields['text_direction'];  
     } else {
       $language_browser = strtok($HTTP_ACCEPT_LANGUAGE, ',');
       $languages_query = $db->Execute("SELECT iso_639_2, iso_639_1, text_direction FROM " . $owpDBTable['languages'] . " WHERE active = '1' ORDER BY sort_order");
-            if ($languages_query === false) {
-              echo '<br /><font class="owp-error">' .  $db->ErrorMsg() . $sql . '</font>';
-      }
-
       while ($languages = $languages_query->fields) {
         if ($language_browser == $languages['iso_639_1']) {
           $_SESSION['language'] = $languages['iso_639_2'];
@@ -165,13 +175,33 @@ define('EMAIL_TRANSPORT', 'sendmail');
     $language = DEFAULT_LANGUAGE;
   }
 
+// navigation history
+  if (!isset($_SESSION['navigation'])) {
+    $_SESSION['navigation'] = new navigationHistory;
+  }
+  $_SESSION['navigation']->add_current_page();
+
+// default open navigation box
+  if (!isset($_SESSION['selected_box'])) {
+    $_SESSION['selected_box'] = 'tools';
+  }
+  if (!empty($_GET['selected_box'])) {
+    $_SESSION['selected_box'] = $_GET['selected_box'];
+  } 
+  $selected_box =& $_SESSION['selected_box'];
+  
+
 // include the language translations
   require_once(OWP_LANGUAGES_DIR . $language . '/global.php');
-
 
 // define our general functions used application-wide
   require_once(OWP_FUNCTIONS_DIR . 'html_output.php');
   require_once(OWP_FUNCTIONS_DIR . 'general.php');
+
+  require_once(OWP_CLASSES_DIR . 'owp_text_tool.php');
+  require_once(OWP_CLASSES_DIR . 'owp_split_page_results.php');
+  require_once(OWP_CLASSES_DIR . 'owp_table_block.php');
+  require_once(OWP_CLASSES_DIR . 'owp_box.php');
   
   if (EMAIL_TRANSPORT == 'sendmail') include(OWP_MAILER_DIR . 'class.phpmailer.php');
   if (EMAIL_TRANSPORT == 'smtp') include(OWP_MAILER_DIR . 'class.smtp.php');
@@ -183,42 +213,22 @@ define('EMAIL_TRANSPORT', 'sendmail');
     }
   }
 /*!  
-// navigation history
-  if (tep_session_is_registered('navigation')) {
-    if (PHP_VERSION < 4) {
-      $broken_navigation = $navigation;
-      $navigation = new navigationHistory;
-      $navigation->unserialize($broken_navigation);
-    }
-  } else {
-    tep_session_register('navigation');
-    $navigation = new navigationHistory;
-  }
-  $navigation->add_current_page();
-
 
 // include the who's online functions
   require_once(OWP_FUNCTIONS_DIR . 'whos_online.php');
   tep_update_whos_online();
 
 // Include the password crypto functions
-  require_once(OWP_FUNCTIONS_DIR . FILENAME_PASSWORD_CRYPT);
+
 
 // Include validation functions (right now only email address)
   require_once(OWP_FUNCTIONS_DIR . 'validations.php');
 */
 // split-page-results
-  require_once(OWP_CLASSES_DIR . 'owp_split_page_results.php');
 
-// infobox
-// setup our boxes
-  require_once(OWP_CLASSES_DIR . 'owp_table_block.php');
-  require_once(OWP_CLASSES_DIR . 'owp_box.php');
-  
 
-  
 /*!
-  require_once(OWP_CLASSES_DIR . 'breadcrumb.php');
+  require_once(OWP_CLASSES_DIR . 'owp_breadcrumb.php');
   $breadcrumb = new breadcrumb;
 
   $breadcrumb->add(HEADER_TITLE_TOP, HTTP_SERVER);

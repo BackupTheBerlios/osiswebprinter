@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newinstall.php,v 1.8 2003/04/21 21:08:31 r23 Exp $
+   $Id: newinstall.php,v 1.9 2003/04/22 07:27:37 r23 Exp $
 
    OSIS GMBH
    http://www.osisnet.de/
@@ -69,14 +69,14 @@ function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone
     $today = date("Y-m-d H:i:s");
 
     $sql = "INSERT INTO ".$prefix."_administrators
-            (owp_admin_gender,
-             owp_admin_firstname,
-             owp_admin_lastname,
-             owp_admin_email_address,
-             owp_admin_telephone,
-             owp_admin_fax,
-             owp_admin_password,
-             owp_date_added)
+            (admin_gender,
+             admin_firstname,
+             admin_lastname,
+             admin_email_address,
+             admin_telephone,
+             admin_fax,
+             admin_password,
+             date_added)
              VALUES ("
              . $db->qstr($gender) . ','
              . $db->qstr($firstname) . ','

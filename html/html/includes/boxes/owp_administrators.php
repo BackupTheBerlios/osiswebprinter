@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_administrators.php,v 1.2 2003/04/22 07:16:46 r23 Exp $
+   $Id: owp_administrators.php,v 1.3 2003/04/22 07:22:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -34,25 +34,24 @@
    ----------------------------------------------------------------------
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
+?>
 <!-- administrators //-->
           <tr>
             <td>
 <?php
-  $info_box_contents = array();
-  $info_box_contents[] = array('align' => 'left',
-                               'params' => 'class="menuBoxHeading"',
-                               'text'  => BOX_HEADING_ADMINISTRATORS,
-                               'link'  => tep_href_link(basename($PHP_SELF), tep_get_all_get_params(array('selected_box')) . 'selected_box=administrators')
-                              );
-  new infoBoxHeading($info_box_contents);
+  $heading = array();
+  $contents = array();
+  
+  $heading[] = array('text'  => BOX_HEADING_ADMINISTRATORS,
+                     'link'  => owpLink(basename($owpSelf), owpGetAllGetParameters(array('selected_box')) . 'selected_box=administrators'));
+
 
   if ($selected_box == 'administrators') {
-    $info_box_contents = array();
-    $info_box_contents[] = array('align' => 'left',
-                                 'text'  => '<a href="' . tep_href_link(FILENAME_ADMINISTRATORS, '', 'NONSSL') . '">' . BOX_ADMINISTRATORS_SETUP . '</a>'
-                                );
-    new infoBox($info_box_contents);
+    $contents[] = array('text'  => '<a href="' . owpLink($owpFilename['administrators'], '', 'NONSSL') . '">' . BOX_ADMINISTRATORS_SETUP . '</a>');
   }
+  
+  $box = new box;
+  echo $box->menuBox($heading, $contents);
 ?>
             </td>
           </tr>

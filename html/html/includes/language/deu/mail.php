@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.2 2003/04/22 07:17:24 r23 Exp $
+   $Id: mail.php,v 1.3 2003/04/22 07:25:51 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -14,7 +14,7 @@
    
    File: whos_online.php,v 1.28 2002/08/13 20:37:48 dgw_
    ----------------------------------------------------------------------
-  $Id: mail.php,v 1.2 2003/04/22 07:17:24 r23 Exp $
+  $Id: mail.php,v 1.3 2003/04/22 07:25:51 r23 Exp $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_breadcrumb.php,v 1.2 2003/04/22 07:16:46 r23 Exp $
+   $Id: owp_breadcrumb.php,v 1.3 2003/04/22 07:23:42 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: header.php,v 1.4 2003/04/01 02:30:23 r23 Exp $
+   $Id: header.php,v 1.5 2003/04/22 07:25:51 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -16,8 +16,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
 <head>
-<title><?php  echo INSTALLATION; ?></title>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php  echo CHARSET; ?>">
+<title><?php echo INSTALLATION; ?></title>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
 <META NAME="AUTHOR" CONTENT="OSIS GmbH">
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">
@@ -26,13 +26,13 @@
 <body>
 <table width="670" border="0" cellspacing="0" cellpadding="1" align="center">
   <tr>  
-    <td align="left" valign="top" class="owp-main"><font class="owp-pageTitle"><?php  echo owTextTool::heading(INSTALLATION); ?></font></td>
+    <td align="left" valign="top" class="owp-main"><font class="owp-pageTitle"><?php echo owpTextTool::heading(INSTALLATION); ?></font></td>
   </tr>
   <tr>
     <td><img src="images/trans.gif" width="100%" height="6" border="0" alt=" "></td>
   </tr>
   <tr>
-    <td align="left" valign="top" class="owp-footer">&nbsp;&nbsp;<?php  echo strftime(DATE_LONG); ?>&nbsp;&nbsp;</td>
+    <td align="left" valign="top" class="owp-footer">&nbsp;&nbsp;<?php echo strftime(DATE_LONG); ?>&nbsp;&nbsp;</td>
   </tr>
   <tr>
     <td><img src="images/trans.gif" width="100%" height="7" border="0" alt=" "></td>

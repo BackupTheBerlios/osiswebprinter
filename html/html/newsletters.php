@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletters.php,v 1.10 2003/04/20 16:07:18 r23 Exp $
+   $Id: newsletters.php,v 1.11 2003/04/22 07:27:37 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,7 +23,12 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
-  
+ 
+  if (!isset($_SESSION['user_id'])) {
+    $_SESSION['navigation']->set_snapshot();
+    owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
+  } 
+ 
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['newsletters']);
 
   if ($_GET['action']) {
@@ -129,8 +134,8 @@
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr>
-            <td class="pageHeading"><?php echo HEADING_TITLE; ?></td>
-            <td class="pageHeading" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
+            <td class="owp-title" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -151,7 +156,7 @@
       $nInfo = new objectInfo(array());
     }
 
-    $file_extension = substr($PHP_SELF, strrpos($PHP_SELF, '.'));
+    $file_extension = substr($owpSelf, strrpos($owpSelf, '.'));
     $directory_array = array();
     if ($dir = dir(OWP_MODULES_DIR . 'newsletters/')) {
       while ($file = $dir->read()) {
@@ -231,8 +236,8 @@
 
     $nInfo = new objectInfo($newsletter);
 
-    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
-    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
+    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
+    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
     $module_name = $nInfo->module;
     $module = new $module_name($nInfo->title, $nInfo->content);
 ?>
@@ -248,8 +253,8 @@
 
     $nInfo = new objectInfo($newsletter);
 
-    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
-    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
+    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
+    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
     $module_name = $nInfo->module;
     $module = new $module_name($nInfo->title, $nInfo->content);
 ?>
@@ -265,8 +270,8 @@
 
     $nInfo = new objectInfo($newsletter);
 
-    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
-    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
+    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
+    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
     $module_name = $nInfo->module;
     $module = new $module_name($nInfo->title, $nInfo->content);
 ?>
