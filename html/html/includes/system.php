@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.5 2003/04/20 16:07:18 r23 Exp $
+   $Id: system.php,v 1.6 2003/04/21 21:08:31 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,6 +24,7 @@
 
 // Set the level of error reporting
   error_reporting(E_ALL & ~E_NOTICE);
+ # error_reporting(E_ALL);
 
 // Disable use_trans_sid as owpLink() does this manually
   if (function_exists('ini_set')) {
@@ -58,9 +59,9 @@
 
 
 // define the database table names used in the project
-  $prefix_table = 'owp';
+  $prefix_table = OWP_DB_PREFIX;;
 
-  if (!$prefix_table == '') $prefix_table = '_' . $prefix_table;
+  if (!$prefix_table == '') $prefix_table = $prefix_table . '_';
 
   $owpDBTable = array();
 
@@ -68,17 +69,13 @@
   
 
 // customization for the design layout
+  require_once(OWP_FUNCTIONS_DIR . 'general.php');
 
 
 // include the database functions
   include(OWP_FUNCTIONS_DIR . 'owp_api.php');
   include(OWP_ADODB_DIR . 'adodb.inc.php');
 
-// session 	
-  GLOBAL $_SESSION;
-  include(OWP_ADODB_DIR . 'adodb-session.php');
-  session_name('owpSid');
-  session_start();
 	
 // make a connection to the database... now
   if (!owpDBInit()) {
@@ -108,21 +105,28 @@ define('EMAIL_TRANSPORT', 'sendmail');
 // some code to solve compatibility issues
   require_once(OWP_FUNCTIONS_DIR . 'compatibility.php');
 
-// lets start our session
-   if ($HTTP_POST_VARS[tep_session_name()]) {   
-     tep_session_id($HTTP_POST_VARS[tep_session_name()]);   
-   }   
-   if ( (getenv('HTTPS') == 'on') && ($_GET[tep_session_name()]) ) {   
-     tep_session_id($_GET[tep_session_name()]);   
-   } 
-   if (function_exists('session_set_cookie_params')) {
-    session_set_cookie_params(0, substr(DIR_WS_CATALOG, 0, -1));
-  }
-
-  tep_session_start();
-
 */
+// lets start our session
+  GLOBAL $_SESSION;
+  $ADODB_SESSION_DRIVER='mysql';
+  $ADODB_SESSION_CONNECT='localhost';
+  $ADODB_SESSION_USER ='root';
+  $ADODB_SESSION_PWD ='';
+  $ADODB_SESSION_DB ='web_lang';
+  $ADODB_SESSION_TBL = 'sessions';  
+  
+  include(OWP_ADODB_DIR . 'adodb-session.php');
+  session_name('owpSid');
+  session_start();
 
+  if (isset($HTTP_COOKIE_VARS[owpSessionName()])) {
+    session_id($HTTP_COOKIE_VARS[owpSessionName()]);
+  } else if ($_POST[owpSessionName()]) {   
+    session_id($HTTP_POST_VARS[owpSessionName()]);   
+  } else {
+    $_SESSION = array();
+    session_destroy();
+  }
   if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     $HTTP_ACCEPT_LANGUAGE = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
   } 
@@ -131,21 +135,52 @@ define('EMAIL_TRANSPORT', 'sendmail');
   } 
 
 // language
-  if ( (!isset($_SESSION['language'])) || (isset($_GET) && !empty($_GET['language'])) ) { 
-    include(OWP_CLASSES_DIR . 'owp_language.php');
-    $lng = new owpLanguage($_GET['language']);
+  if ( (!isset($_SESSION['language'])) || (!empty($_GET['language'])) ) {
+    if ($_GET['language']) {
+      $_SESSION['language'] = $_GET['language'];
+      $languages_query = $db->Execute("SELECT iso_639_2, iso_639_1, text_direction FROM " . $owpDBTable['languages'] . " WHERE iso_639_2 = '" . $_SESSION['language'] . "'");
+            if ($languages_query === false) {
+              echo '<br /><font class="owp-error">' .  $db->ErrorMsg() . $sql . '</font>';
+      }
+      
+      $language_browser = $languages_query->fields['iso_639_1'];
+      $language_text_direction = $languages_query->fields['text_direction'];  
+    } else {
+      $language_browser = strtok($HTTP_ACCEPT_LANGUAGE, ',');
+      $languages_query = $db->Execute("SELECT iso_639_2, iso_639_1, text_direction FROM " . $owpDBTable['languages'] . " WHERE active = '1' ORDER BY sort_order");
+            if ($languages_query === false) {
+              echo '<br /><font class="owp-error">' .  $db->ErrorMsg() . $sql . '</font>';
+      }
 
-    if (!isset($_GET['language'])) $lng->get_browser_language();
-
-    $_SESSION['language'] = $lng->language['directory'];
-  } 
+      while ($languages = $languages_query->fields) {
+        if ($language_browser == $languages['iso_639_1']) {
+          $_SESSION['language'] = $languages['iso_639_2'];
+          $language_browser = $languages['iso_639_2'];
+          $language_text_direction = $languages['text_direction'];
+          break;
+        }
+        $languages_query->MoveNext();
+      }
+    }
+    if (!isset($_SESSION['language'])) {
+      $_SESSION['language'] = DEFAULT_LANGUAGE;
+      $languages_query = $db->Execute("SELECT iso_639_2, iso_639_1, text_direction FROM " . $owpDBTable['languages'] . " WHERE iso_639_2 = '" . $language . "'");
+      $language_browser = $languages_query->fields['iso_639_1'];
+      $language_text_direction = $languages_query->fields['text_direction'];   
+    }
+  }
+  
+  if (isset($_SESSION['language'])) {
+    $language =& $_SESSION['language'];
+  } else {
+    $language = DEFAULT_LANGUAGE;
+  }
 
 // include the language translations
   require_once(OWP_LANGUAGES_DIR . $language . '/global.php');
 
 
 // define our general functions used application-wide
-  require_once(OWP_FUNCTIONS_DIR . 'general.php');
   require_once(OWP_FUNCTIONS_DIR . 'html_output.php');
   
   if (EMAIL_TRANSPORT == 'sendmail') include(OWP_MAILER_DIR . 'class.phpmailer.php');

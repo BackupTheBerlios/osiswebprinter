@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newinstall.php,v 1.7 2003/04/09 22:50:24 r23 Exp $
+   $Id: newinstall.php,v 1.8 2003/04/21 21:08:31 r23 Exp $
 
    OSIS GMBH
    http://www.osisnet.de/
@@ -63,7 +63,7 @@ function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone
     echo "<center>";
  
     // Put basic information in first
-    #include('newdata.php');
+    include('newdata.php');
     include ('../includes/functions/password_funcs.php');
     $owp_pwd = crypt_password($pwd);
     $today = date("Y-m-d H:i:s");

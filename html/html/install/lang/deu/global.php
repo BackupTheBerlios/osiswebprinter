@@ -1,6 +1,6 @@
 <?php 
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.11 2003/04/09 22:50:24 r23 Exp $
+   $Id: global.php,v 1.12 2003/04/21 21:08:31 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -27,7 +27,6 @@
 define('HTML_PARAMS','dir="LTR" lang="de"');
 define('CHARSET', 'iso-8859-1');
 define('INSTALLATION', 'OSIS Web Printer Installation');
-
 
 define('BTN_CONTINUE', 'Weiter');
 define('BTN_NEXT' ,'Weiter');
@@ -133,5 +132,51 @@ define('FINISH_1', 'Danksagung');
 define('FINISH_2', 'Bei dieser Gelegenheit m&ouml;chten wir allen danken, die zur Entwicklung von OSIS Web Printer beigetragen haben. Unser spezieller Dank geb&uuml;hrt den Entwicklern  von PHP. ');
 define('FINISH_3', 'Sie haben OSIS Web Printer erfolgreich installiert. Bitte l&ouml;schen Sie nun das Installations Verzeichnis');
 define('FINISH_4', 'OSIS Web Printer Homepage');
+define('NOTUPDATED', 'nicht Installiert:');
+// All entries use ISO 639-2/T
+// http://www.loc.gov/standards/iso639-2/langcodes.html
+define('LANGUAGE_DEU', 'Deutsch');
+define('LANGUAGE_ENG', 'English');
 
+define('LANGUAGE_ARA', 'Arabic');
+define('LANGUAGE_BUL', 'Bulgarian');
+define('LANGUAGE_CES', 'Czech');
+define('LANGUAGE_CRO','Croatian');
+define('LANGUAGE_DAN', 'Danish');
+define('LANGUAGE_ELL', 'Greek');
+define('LANGUAGE_EPO', 'Esperanto');
+define('LANGUAGE_EST', 'Estonian');
+define('LANGUAGE_FIN', 'Finnish');
+define('LANGUAGE_FRA', 'French');
+define('LANGUAGE_HEB', 'Hebrew');
+define('LANGUAGE_HUN', 'Hungarian');
+define('LANGUAGE_IND', 'Indonesian');
+define('LANGUAGE_ISL', 'Icelandic');
+define('LANGUAGE_ITA', 'Italian');
+define('LANGUAGE_JPN', 'Japanese');
+define('LANGUAGE_KOR', 'Korean');
+define('LANGUAGE_LAV', 'Latvian');
+define('LANGUAGE_LIT', 'Lithuanian');
+define('LANGUAGE_MAS', 'Malay');
+define('LANGUAGE_NLD', 'Dutch');
+define('LANGUAGE_NOR', 'Norwegian');
+define('LANGUAGE_POL', 'Polish');
+define('LANGUAGE_POR', 'Portuguese');
+define('LANGUAGE_RON', 'Romanian');
+define('LANGUAGE_RUS', 'Russian');
+define('LANGUAGE_SLV', 'Slovenian');
+define('LANGUAGE_SPA', 'Spanish');
+define('LANGUAGE_SWE', 'Swedish');
+define('LANGUAGE_THA', 'Thai');
+define('LANGUAGE_TUR', 'Turkish');
+define('LANGUAGE_UKR', 'Ukrainian');
+define('LANGUAGE_X_RUS_KOI8R', 'Russian KOI8-R');
+define('LANGUAGE_YID', 'Yiddish');
+define('LANGUAGE_ZHO', 'Chinese');
+define('LANGUAGE_CAT', 'Catalan');
+
+// Non-ISO entries are written as x_[language name]
+
+define('LANGUAGE_X_BRAZILIAN_PORTUGUESE', 'Brazilian Portuguese');
+define('LANGUAGE_X_KLINGON', 'Klingon');
 ?>

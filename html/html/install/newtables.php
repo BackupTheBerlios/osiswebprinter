@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newtables.php,v 1.9 2003/04/09 22:50:24 r23 Exp $
+   $Id: newtables.php,v 1.10 2003/04/21 21:08:31 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -86,3 +86,18 @@ CREATE TABLE ".$prefix."_administrators (
 ";
 dosql($table,$sql);
 
+$table = $prefix.'_languages';
+$sql = "
+CREATE TABLE ".$prefix."_languages (
+  languages_id int(11) NOT NULL auto_increment,
+  name varchar(32) NOT NULL default '',
+  iso_639_2 char(3) NOT NULL default '',
+  iso_639_1 char(2) NOT NULL default '',
+  charset varchar(16) NOT NULL default '',
+  text_direction char(3) NOT NULL default 'ltr',
+  active int(1) default NULL,
+  sort_order int(3) default NULL,
+  PRIMARY KEY  (languages_id)
+)
+";
+dosql($table,$sql);

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.2 2003/04/20 16:06:10 r23 Exp $
+   $Id: global.php,v 1.3 2003/04/21 21:08:31 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -330,50 +330,5 @@ define('_DAY_OF_WEEK_SHORT','Sun Mon Tue Wed Thu Fri Sat');
 define('_MONTH_LONG','January February March April May June July August September October November December');
 define('_MONTH_SHORT','Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec');
 
-// All entries use ISO 639-2/T
-// http://www.loc.gov/standards/iso639-2/langcodes.html
-define('LANGUAGE_DEU', 'Deutsch');
-define('LANGUAGE_ENG', 'English');
 
-define('LANGUAGE_ARA', 'Arabic');
-define('LANGUAGE_BUL', 'Bulgarian');
-define('LANGUAGE_CES', 'Czech');
-define('LANGUAGE_CRO','Croatian');
-define('LANGUAGE_DAN', 'Danish');
-define('LANGUAGE_ELL', 'Greek');
-define('LANGUAGE_EPO', 'Esperanto');
-define('LANGUAGE_EST', 'Estonian');
-define('LANGUAGE_FIN', 'Finnish');
-define('LANGUAGE_FRA', 'French');
-define('LANGUAGE_HEB', 'Hebrew');
-define('LANGUAGE_HUN', 'Hungarian');
-define('LANGUAGE_IND', 'Indonesian');
-define('LANGUAGE_ISL', 'Icelandic');
-define('LANGUAGE_ITA', 'Italian');
-define('LANGUAGE_JPN', 'Japanese');
-define('LANGUAGE_KOR', 'Korean');
-define('LANGUAGE_LAV', 'Latvian');
-define('LANGUAGE_LIT', 'Lithuanian');
-define('LANGUAGE_MAS', 'Malay');
-define('LANGUAGE_NLD', 'Dutch');
-define('LANGUAGE_NOR', 'Norwegian');
-define('LANGUAGE_POL', 'Polish');
-define('LANGUAGE_POR', 'Portuguese');
-define('LANGUAGE_RON', 'Romanian');
-define('LANGUAGE_RUS', 'Russian');
-define('LANGUAGE_SLV', 'Slovenian');
-define('LANGUAGE_SPA', 'Spanish');
-define('LANGUAGE_SWE', 'Swedish');
-define('LANGUAGE_THA', 'Thai');
-define('LANGUAGE_TUR', 'Turkish');
-define('LANGUAGE_UKR', 'Ukrainian');
-define('LANGUAGE_X_RUS_KOI8R', 'Russian KOI8-R');
-define('LANGUAGE_YID', 'Yiddish');
-define('LANGUAGE_ZHO', 'Chinese');
-define('LANGUAGE_CAT', 'Catalan');
-
-// Non-ISO entries are written as x_[language name]
-
-define('LANGUAGE_X_BRAZILIAN_PORTUGUESE', 'Brazilian Portuguese');
-define('LANGUAGE_X_KLINGON', 'Klingon');
 ?>
