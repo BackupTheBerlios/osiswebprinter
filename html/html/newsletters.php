@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletters.php,v 1.14 2003/04/26 06:41:11 r23 Exp $
+   $Id: newsletters.php,v 1.15 2003/04/29 17:02:07 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,61 +24,76 @@
 
   require('includes/system.php');
  
+ /*
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
- 
+ */
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['newsletters']);
 
   if ($_GET['action']) {
     switch ($_GET['action']) {
       case 'lock':
       case 'unlock':
-        $newsletter_id = tep_db_prepare_input($_GET['nID']);
         $status = (($_GET['action'] == 'lock') ? '1' : '0');
-
-        tep_db_query("update " . TABLE_NEWSLETTERS . " set locked = '" . $status . "' WHERE newsletters_id = '" . tep_db_input($newsletter_id) . "'");
-
+        $db->Execute("UPDATE " . $owpDBTable['newsletters'] . " 
+                         SET locked = " . $db->qstr($status) . "
+                       WHERE newsletters_id = '" . owpDBInput($_GET['nID']) . "'");
         owpRedirect(owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']));
         break;
       case 'insert':
       case 'update':
-        $newsletter_error = false;
+        $check_newsletter = true;
         if (empty($title)) {
           $messageStack->add(ERROR_NEWSLETTER_TITLE, 'error');
-          $newsletter_error = true;
+          $check_newsletter = false;
         }
         if (empty($module)) {
           $messageStack->add(ERROR_NEWSLETTER_MODULE, 'error');
-          $newsletter_error = true;
+          $check_newsletter = false;
         }
 
-        if (!$newsletter_error) {
-          $sql_data_array = array('title' => $title,
-                                  'content' => $content,
-                                  'module' => $newsletter_module);
-
+        if ($check_newsletter == 'true') {
           if ($_GET['action'] == 'insert') {
-            $sql_data_array['date_added'] = 'now()';
-            $sql_data_array['status'] = '0';
-            $sql_data_array['locked'] = '0';
-
-            tep_db_perform(TABLE_NEWSLETTERS, $sql_data_array);
-            $newsletter_id = tep_db_insert_id();
+            $today = date("Y-m-d H:i:s");
+            $status = '0';
+            $locked = '0';
+            $news_sequence = OWP_DB_PREFIX . '_sequence_newsletter';
+            $news_id = $db->GenID($news_sequence);      
+            $sql = "INSERT INTO " . $owpDBTable['newsletters'] . " 
+                    (newsletters_id,
+                     title,
+                     content,
+                     module,
+                     date_added,
+                     status,
+                     locked)
+                     VALUES (" . $db->qstr($news_id) . ','
+                               . $db->qstr($title) . ','
+                               . $db->qstr($content) . ','
+                               . $db->qstr($module) . ','
+                               . $db->DBTimeStamp($today) . ','
+                               . $db->qstr($status) . ','
+                               . $db->qstr(locked) . ")";
+            $db->Execute($sql);
+            $newsletter_id = $news_id;
           } elseif ($_GET['action'] == 'update') {
-            tep_db_perform(TABLE_NEWSLETTERS, $sql_data_array, 'update', 'newsletters_id = \'' . tep_db_input($newsletter_id) . '\'');
+            $db->Execute("UPDATE " . $owpDBTable['newsletters'] . " 
+	  	             SET title = " . $db->qstr($title) . ",
+	  	                 content = " . $db->qstr($content) . ",
+	  	                 module = " . $db->qstr($module) . "
+                           WHERE newsletters_id = '" . owpDBInput($newsletter_id) . "'");
           }
-
           owpRedirect(owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $newsletter_id));
         } else {
           $_GET['action'] = 'new';
         }
         break;
       case 'deleteconfirm':
-        $newsletter_id = tep_db_prepare_input($_GET['nID']);
+        $newsletter_id = owpPrepareInput($_GET['nID']);
 
-        tep_db_query("delete FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($newsletter_id) . "'");
+        $db->Execute("DELETE FROM " . $owpDBTable['newsletters'] . " WHERE newsletters_id = '" . owpDBInput($newsletter_id) . "'");
 
         owpRedirect(owpLink($owpFilename['newsletters'], 'page=' . $_GET['page']));
         break;
@@ -86,10 +101,12 @@
       case 'new': if (!$_GET['nID']) break;
       case 'send':
       case 'confirm_send':
-        $newsletter_id = tep_db_prepare_input($_GET['nID']);
+        $newsletter_id = owpPrepareInput($_GET['nID']);
 
-        $check_query = tep_db_query("SELECT locked FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($newsletter_id) . "'");
-        $check = tep_db_fetch_array($check_query);
+        $check_query = $db->Execute("SELECT locked 
+                                     FROM " . $owpDBTable['newsletters'] . " 
+                                     WHERE newsletters_id = '" . owpDBInput($newsletter_id) . "'");
+        $check = $check_query->fields;
 
         if ($check['locked'] < 1) {
           switch ($_GET['action']) {
@@ -138,11 +155,11 @@
   if ($_GET['action'] == 'new') {
     $form_action = 'insert';
     if ($_GET['nID']) {
-      $nID = tep_db_prepare_input($_GET['nID']);
+      $nID = owpPrepareInput($_GET['nID']);
       $form_action = 'update';
 
-      $newsletter_query = tep_db_query("SELECT title, content, module FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($nID) . "'");
-      $newsletter = tep_db_fetch_array($newsletter_query);
+      $newsletter_query = $db->Execute("SELECT title, content, module FROM " . $owpDBTable['newsletters'] . " WHERE newsletters_id = '" . owpDBInput($_GET['nID']) . "'");
+      $newsletter = $newsletter_query->fields;
 
       $nInfo = new objectInfo($newsletter);
     } elseif ($_POST) {
@@ -151,11 +168,11 @@
       $nInfo = new objectInfo(array());
     }
 
-    $file_extension = substr($owpSelf, strrpos($owpSelf, '.'));
+    $file_extension = '.php';
     $directory_array = array();
-    if ($dir = dir(OWP_MODULES_DIR . 'newsletters/')) {
+    if ($dir = dir(OWP_MODULES_DIR)) {
       while ($file = $dir->read()) {
-        if (!is_dir(OWP_MODULES_DIR . 'newsletters/' . $file)) {
+        if (!is_dir(OWP_MODULES_DIR . $file)) {
           if (substr($file, strrpos($file, '.')) == $file_extension) {
             $directory_array[] = $file;
           }
@@ -205,11 +222,12 @@
         </table></td>
       </form></tr>
 <?php
-  } elseif ($_GET['action'] == 'preview') {
-    $nID = tep_db_prepare_input($_GET['nID']);
-
-    $newsletter_query = tep_db_query("SELECT title, content, module FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($nID) . "'");
-    $newsletter = tep_db_fetch_array($newsletter_query);
+  } elseif ($_GET['action'] == 'preview') {   
+    $sql = "SELECT title, content, module 
+            FROM " . $owpDBTable['newsletters'] . " 
+            WHERE newsletters_id = '" . owpDBInput($_GET['nID']) . "'";
+    $newsletter_query = $db->Execute($sql);
+    $newsletter = $newsletter_query->fields;
 
     $nInfo = new objectInfo($newsletter);
 ?>
@@ -224,15 +242,16 @@
       </tr>
 <?php
   } elseif ($_GET['action'] == 'send') {
-    $nID = tep_db_prepare_input($_GET['nID']);
-
-    $newsletter_query = tep_db_query("SELECT title, content, module FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($nID) . "'");
-    $newsletter = tep_db_fetch_array($newsletter_query);
+    $sql = "SELECT title, content, module 
+            FROM " . $owpDBTable['newsletters'] . " 
+            WHERE newsletters_id = '" . owpDBInput($_GET['nID']) . "'";
+    $newsletter_query = $db->Execute($sql);
+    $newsletter = $newsletter_query->fields;
 
     $nInfo = new objectInfo($newsletter);
 
-    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
-    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
+    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . '.php');
+    include(OWP_MODULES_DIR . $nInfo->module . '.php');
     $module_name = $nInfo->module;
     $module = new $module_name($nInfo->title, $nInfo->content);
 ?>
@@ -241,15 +260,14 @@
       </tr>
 <?php
   } elseif ($_GET['action'] == 'confirm') {
-    $nID = tep_db_prepare_input($_GET['nID']);
+    $sql = "SELECT title, content, module 
+            FROM " . $owpDBTable['newsletters'] . " 
+            WHERE newsletters_id = '" . owpDBInput($_GET['nID']) . "'";
+    $newsletter_query = $db->Execute($sql);
+    $newsletter = $newsletter_query->fields;
 
-    $newsletter_query = tep_db_query("SELECT title, content, module FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($nID) . "'");
-    $newsletter = tep_db_fetch_array($newsletter_query);
-
-    $nInfo = new objectInfo($newsletter);
-
-    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
-    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
+    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . '.php');
+    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . '.php');
     $module_name = $nInfo->module;
     $module = new $module_name($nInfo->title, $nInfo->content);
 ?>
@@ -258,15 +276,16 @@
       </tr>
 <?php
   } elseif ($_GET['action'] == 'confirm_send') {
-    $nID = tep_db_prepare_input($_GET['nID']);
-
-    $newsletter_query = tep_db_query("SELECT newsletters_id, title, content, module FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($nID) . "'");
-    $newsletter = tep_db_fetch_array($newsletter_query);
+    $sql = "SELECT newsletters_id, title, content, module 
+            FROM " . $owpDBTable['newsletters'] . " 
+            WHERE newsletters_id = '" . owpDBInput($_GET['nID']) . "'";
+    $newsletter_query = $db->Execute($sql);
+    $newsletter = $newsletter_query->fields;
 
     $nInfo = new objectInfo($newsletter);
 
-    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
-    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($owpSelf, strrpos($owpSelf, '.')));
+    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . '.php');
+    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . '.php');
     $module_name = $nInfo->module;
     $module = new $module_name($nInfo->title, $nInfo->content);
 ?>
@@ -311,10 +330,10 @@
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
-    $newsletters_query_raw = "SELECT newsletters_id, title, length(content) as content_length, module, date_added, date_sent, status, locked FROM " . TABLE_NEWSLETTERS . " order by date_added desc";
-    $newsletters_split = new owpSplitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $newsletters_query_raw, $newsletters_query_numrows);
-    $newsletters_query = tep_db_query($newsletters_query_raw);
-    while ($newsletters = tep_db_fetch_array($newsletters_query)) {
+    $newsletters_query_raw = "select newsletters_id, title, length(content) as content_length, module, date_added, date_sent, status, locked from " . $owpDBTable['newsletters'] . " order by date_added desc";
+    $newsletters_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $newsletters_query_raw, $newsletters_query_numrows);
+    $newsletters_query = $db->Execute($newsletters_query_raw);
+    while ($newsletters = $newsletters_query->fields) {
       if (((!$_GET['nID']) || (@$_GET['nID'] == $newsletters['newsletters_id'])) && (!$nInfo) && (substr($_GET['action'], 0, 3) != 'new')) {
         $nInfo = new objectInfo($newsletters);
       }
@@ -333,6 +352,7 @@
                 <td class="dataTableContent" align="right"><?php if ( (is_object($nInfo)) && ($newsletters['newsletters_id'] == $nInfo->newsletters_id) ) { echo owpImage(OWP_IMAGES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $newsletters['newsletters_id']) . '">' . owpImage(OWP_IMAGES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
+      $newsletters_query->MoveNext();
     }
 ?>
               <tr>
@@ -374,7 +394,7 @@
       break;
   }
 
-  if ( (tep_not_null($heading)) && (tep_not_null($contents)) ) {
+  if ( (owpNotNull($heading)) && (owpNotNull($contents)) ) {
     echo '            <td width="25%" valign="top">' . "\n";
 
     $box = new box;

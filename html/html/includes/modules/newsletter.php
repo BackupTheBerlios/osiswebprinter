@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletter.php,v 1.5 2003/04/23 07:07:22 r23 Exp $
+   $Id: newsletter.php,v 1.6 2003/04/29 17:02:07 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -36,10 +36,13 @@
     }
 
     function confirm() {
-      global $_GET;
+      GLOBAL $db, $_GET, $owpFilename;
 
-      $mail_query = tep_db_query("select count(*) as count from " . TABLE_CUSTOMERS . " where customers_newsletter = '1'");
-      $mail = tep_db_fetch_array($mail_query);
+      $owpDBTable = owpDBGetTables();
+      $sql = "SELECT count(*) as count 
+              FROM " . $owpDBTable['administrators'] . " 
+              WHERE admin_newsletter = '1'";
+      $mail = $db->Execute($sql);
 
       $confirm_string = '<table border="0" cellspacing="0" cellpadding="2">' . "\n" .
                         '  <tr>' . "\n" .
@@ -69,17 +72,29 @@
     }
 
     function send($newsletter_id) {
-      $mail_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from " . TABLE_CUSTOMERS . " where customers_newsletter = '1'");
+      GLOBAL $db;
 
-      $mimemessage = new email(array('X-Mailer: osCommerce bulk mailer'));
-      $mimemessage->add_text($this->content);
-      $mimemessage->build_message();
-      while ($mail = tep_db_fetch_array($mail_query)) {
-        $mimemessage->send($mail['customers_firstname'] . ' ' . $mail['customers_lastname'], $mail['customers_email_address'], '', EMAIL_FROM, $this->title);
+      $owpDBTable = owpDBGetTables();
+
+      $send_mail = new phpmailer();
+
+      $send_mail->From = EMAIL_FROM;
+      $send_mail->FromName = '';
+      $send_mail->Subject = $this->title;
+
+      $mail_values = $db->Execute("select customers_firstname, customers_lastname, customers_email_address from " . $owpDBTable['administrators'] . " where customers_newsletter = '1'");
+      while ($mail = $mail_values->fields) {
+      	$send_mail->Body = $this->content;
+      	$send_mail->AddAdress($mail['customers_email_address'], $mail['customers_firstname'] . ' ' . $mail['customers_lastname']);
+        $send_mail->Send();
+        // Clear all addresses and attachments for next loop
+        $send_mail->ClearAddresses();
+        $send_mail->ClearAttachments();
+        $mail->MoveNext();
       }
 
-      $newsletter_id = tep_db_prepare_input($newsletter_id);
-      tep_db_query("update " . TABLE_NEWSLETTERS . " set date_sent = now(), status = '1' where newsletters_id = '" . tep_db_input($newsletter_id) . "'");
+      $newsletter_id = owp_db_prepare_input($newsletter_id);
+      $db->Execute("update " . $owpDBTable['newsletters'] . " set date_sent = now(), status = '1' where newsletters_id = '" . owpDBInput($newsletter_id) . "'");
     }
   }
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.7 2003/04/26 06:39:31 r23 Exp $
+   $Id: mail.php,v 1.8 2003/04/29 17:02:07 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -62,7 +62,7 @@
       $mimemessage->send($mail['customers_firstname'] . ' ' . $mail['customers_lastname'], $mail['customers_email_address'], '', $FROM, $subject);
     }
 
-    tep_redirect(owpLink($owpFilename['mail'], 'mail_sent_to=' . urlencode($mail_sent_to)));
+    owpRedirect(owpLink($owpFilename['mail'], 'mail_sent_to=' . urlencode($mail_sent_to)));
   }
 
   if ( ($_GET['action'] == 'preview') && (!$_POST['customers_email_address']) ) {

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.14 2003/04/29 16:59:21 r23 Exp $
+   $Id: system.php,v 1.15 2003/04/29 17:02:07 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -68,6 +68,7 @@
   $owpDBTable['configuration_group'] = $prefix_table . 'configuration_group';
   $owpDBTable['countries'] = $prefix_table . 'countries';
   $owpDBTable['languages'] = $prefix_table . 'languages';
+  $owpDBTable['newsletters'] = $prefix_table . 'newsletters';
   $owpDBTable['session'] = $prefix_table . 'sessions';
   $owpDBTable['whos_online'] = $prefix_table . 'whos_online';
   $owpDBTable['zones'] = $prefix_table . 'zones';

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: html_output.php,v 1.8 2003/04/26 06:35:58 r23 Exp $
+   $Id: html_output.php,v 1.9 2003/04/29 17:02:07 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -32,7 +32,7 @@
       $link = OWP_HTTP_SERVER . '/';
     } elseif ($connection == 'SSL') {
       if (ENABLE_SSL == 'true') {
-        $link = HTTPS_SERVER . '/';
+        $link = OWP_HTTP_SERVER . '/';
       } else {
         $link = OWP_HTTP_SERVER . '/';
       }
@@ -43,54 +43,11 @@
       $link = $link . $page . '?' . SID;
     } else {
       $link = $link . $page . '?' . $parameters . '&' . SID;
-    }
+    }  
 
     while ( (substr($link, -1) == '&') || (substr($link, -1) == '?') ) $link = substr($link, 0, -1);
 
     return $link;
-  }
-
-
-////
-// The HTML image wrapper function
-  function tep_image($src, $alt = '', $width = '', $height = '', $params = '') {
-    $image = '<img src="' . $src . '" border="0" alt="' . $alt . '"';
-    if ($alt) {
-      $image .= ' title=" ' . $alt . ' "';
-    }
-    if ($width) {
-      $image .= ' width="' . $width . '"';
-    }
-    if ($height) {
-      $image .= ' height="' . $height . '"';
-    }
-    if ($params) {
-      $image .= ' ' . $params;
-    }
-    $image .= '>';
-
-    return $image;
-  }
-
-////
-// The HTML form submit button wrapper function
-// Outputs a button in the selected language
-  function owpImageSubmit($image, $alt, $params = '') {
-    global $language;
-
-    return '<input type="image" src="' . OWP_LANGUAGES_DIR . $language . '/buttons/' . $image . '" border="0" alt="' . $alt . '"' . (($params) ? ' ' . $params : '') . '>';
-  }
-
-////
-// Draw a 1 pixel black line
-  function tep_black_line() {
-    return tep_image(OWP_INCLUDES_DIR . 'pixel_black.gif', '', '100%', '1');
-  }
-
-////
-// Output a separator either through whitespace, or with an image
-  function tep_draw_separator($image = 'pixel_black.gif', $width = '100%', $height = '1') {
-    return tep_image(OWP_INCLUDES_DIR . $image, '', $width, $height);
   }
 
 ////
@@ -98,40 +55,17 @@
   function owpImageButton($image, $alt = '', $params = '') {
     global $language;
 
-    return tep_image(OWP_LANGUAGES_DIR . $language . '/buttons/' . $image, $alt, '', '', $params);
+    return owpImage(OWP_LANGUAGES_DIR . $language . '/buttons/' . $image, $alt, '', '', $params);
   }
-
-////
-// javascript to dynamically update the states/provinces list when the country is changed
-// TABLES: zones
-  function tep_js_zone_list($country, $form, $field) {
-    $countries_query = tep_db_query("select distinct zone_country_id from " . TABLE_ZONES . " order by zone_country_id");
-    $num_country = 1;
-    $output_string = '';
-    while ($countries = tep_db_fetch_array($countries_query)) {
-      if ($num_country == 1) {
-        $output_string .= '  if (' . $country . ' == "' . $countries['zone_country_id'] . '") {' . "\n";
-      } else {
-        $output_string .= '  } else if (' . $country . ' == "' . $countries['zone_country_id'] . '") {' . "\n";
-      }
-
-      $states_query = tep_db_query("select zone_name, zone_id from " . TABLE_ZONES . " where zone_country_id = '" . $countries['zone_country_id'] . "' order by zone_name");
-
-      $num_state = 1;
-      while ($states = tep_db_fetch_array($states_query)) {
-        if ($num_state == '1') $output_string .= '    ' . $form . '.' . $field . '.options[0] = new Option("' . PLEASE_SELECT . '", "");' . "\n";
-        $output_string .= '    ' . $form . '.' . $field . '.options[' . $num_state . '] = new Option("' . $states['zone_name'] . '", "' . $states['zone_id'] . '");' . "\n";
-        $num_state++;
-      }
-      $num_country++;
-    }
-    $output_string .= '  } else {' . "\n" .
-                      '    ' . $form . '.' . $field . '.options[0] = new Option("' . TYPE_BELOW . '", "");' . "\n" .
-                      '  }' . "\n";
-
-    return $output_string;
+ 
+ ////
+ // Outputs a button in the selected language
+   function owpImageSubmit($image, $alt, $params = '') {
+     global $language;
+ 
+     return '<input type="image" src="' . OWP_LANGUAGES_DIR . $language . '/buttons/' . $image . '" border="0" alt="' . $alt . '"' . (($params) ? ' ' . $params : '') . '>';
   }
-
+ 
 ////
 // Output a form
   function owpDrawForm($name, $action, $parameters = '', $method = 'post', $params = '') {
@@ -170,14 +104,6 @@
   }
 
 ////
-// Output a form password field
-  function tep_draw_password_field($name, $value = '', $required = false) {
-    $field = owpInputField($name, $value, 'maxlength="40"', $required, 'password', false);
-
-    return $field;
-  }
-
-////
 // Output a form filefield
   function owpFileField($name, $required = false) {
     $field = owpInputField($name, '', '', $required, 'file');
@@ -186,8 +112,8 @@
   }
 
 ////
-// Output a selection field - alias function for owpCheckboxField() and tep_draw_radio_field()
-  function tep_draw_selection_field($name, $type, $value = '', $checked = false, $compare = '') {
+// Output a selection field - alias function for owpCheckboxField() and owpRadioField()
+  function owpSelectionField($name, $type, $value = '', $checked = false, $compare = '') {
     $selection = '<input type="' . $type . '" name="' . $name . '"';
     if ($value != '') {
       $selection .= ' value="' . $value . '"';
@@ -203,13 +129,13 @@
 ////
 // Output a form checkbox field
   function owpCheckboxField($name, $value = '', $checked = false, $compare = '') {
-    return tep_draw_selection_field($name, 'checkbox', $value, $checked, $compare);
+    return owpSelectionField($name, 'checkbox', $value, $checked, $compare);
   }
 
 ////
 // Output a form radio field
-  function tep_draw_radio_field($name, $value = '', $checked = false, $compare = '') {
-    return tep_draw_selection_field($name, 'radio', $value, $checked, $compare);
+  function owpRadioField($name, $value = '', $checked = false, $compare = '') {
+    return owpSelectionField($name, 'radio', $value, $checked, $compare);
   }
 
 ////
