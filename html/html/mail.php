@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.4 2003/04/23 07:08:25 r23 Exp $
+   $Id: mail.php,v 1.5 2003/04/24 06:04:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -99,12 +99,7 @@
 <!-- body_text //-->
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="100%"><table border="0" width="100%" cellspacing="0" cellpadding="0">
-          <tr>
-            <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
-            <td class="owp-title" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
-          </tr>
-        </table></td>
+        <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
       </tr>
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -192,7 +187,7 @@
 ?>
               <tr>
                 <td class="main"><?php echo TEXT_CUSTOMER; ?></td>
-                <td><?php echo tep_draw_pull_down_menu('customers_email_address', $customers, $_GET['customer']);?></td>
+                <td><?php echo owpPullDownMenu('customers_email_address', $customers, $_GET['customer']);?></td>
               </tr>
               <tr>
                 <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>

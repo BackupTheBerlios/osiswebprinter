@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.8 2003/04/23 16:28:24 r23 Exp $
+   $Id: general.php,v 1.9 2003/04/24 06:03:13 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -659,11 +659,11 @@
 ////
 // Alias function for Store configuration values in the Administration Tool
   function owpCfgPullDownCountryList($country_id) {
-    return tep_draw_pull_down_menu('configuration_value', owpGetCountries(), $country_id);
+    return owpPullDownMenu('configuration_value', owpGetCountries(), $country_id);
   }
 
   function owpCfgPullDownZoneList($zone_id) {
-    return tep_draw_pull_down_menu('configuration_value', owpGetCountryZones(STORE_COUNTRY), $zone_id);
+    return owpPullDownMenu('configuration_value', owpGetCountryZones(OWP_COUNTRY), $zone_id);
   }
 
   function tep_cfg_pull_down_tax_classes($tax_class_id, $key = '') {
@@ -676,7 +676,7 @@
                                  'text' => $tax_class['tax_class_title']);
     }
 
-    return tep_draw_pull_down_menu($name, $tax_class_array, $tax_class_id);
+    return owpPullDownMenu($name, $tax_class_array, $tax_class_id);
   }
 
 ////

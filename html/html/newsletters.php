@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletters.php,v 1.12 2003/04/23 07:08:25 r23 Exp $
+   $Id: newsletters.php,v 1.13 2003/04/24 06:04:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -132,12 +132,7 @@
 <!-- body_text //-->
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
-          <tr>
-            <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
-            <td class="owp-title" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
-          </tr>
-        </table></td>
+        <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
       </tr>
 <?php
   if ($_GET['action'] == 'new') {
@@ -181,7 +176,7 @@
         <td><table border="0" cellspacing="0" cellpadding="2">
           <tr>
             <td class="main"><?php echo TEXT_NEWSLETTER_MODULE; ?></td>
-            <td class="main"><?php echo tep_draw_pull_down_menu('module', $modules_array, $nInfo->module); ?></td>
+            <td class="main"><?php echo owpPullDownMenu('module', $modules_array, $nInfo->module); ?></td>
           </tr>
           <tr>
             <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>

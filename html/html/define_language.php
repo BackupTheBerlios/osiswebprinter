@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: define_language.php,v 1.12 2003/04/23 07:04:35 r23 Exp $
+   $Id: define_language.php,v 1.13 2003/04/24 06:03:13 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -97,7 +97,7 @@
           <tr><?php echo owpDrawForm('lng', $owpFilename['define_language'], '', 'get'); ?>
             <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
             <td class="owp-title" align="right"><?php echo owpTransLine('1', HEADING_IMAGE_HEIGHT); ?></td>
-            <td class="owp-title" align="right"><?php echo tep_draw_pull_down_menu('lngdir', $languages_array, '', 'onChange="this.form.submit();"'); ?></td>
+            <td class="owp-title" align="right"><?php echo owpPullDownMenu('lngdir', $languages_array, '', 'onChange="this.form.submit();"'); ?></td>
           </form></tr>
         </table></td>
       </tr>
@@ -135,7 +135,7 @@
                 <td><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
-                <td align="right"><?php if ($file_writeable) { echo owpImage_submit('button_save.gif', IMAGE_SAVE) . '&nbsp;<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>'; } else { echo '<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImageButton('button_back.gif', IMAGE_BACK) . '</a>'; } ?></td>
+                <td align="right"><?php if ($file_writeable) { echo owpImageSubmit('button_save.gif', IMAGE_SAVE) . '&nbsp;<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>'; } else { echo '<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImageButton('button_back.gif', IMAGE_BACK) . '</a>'; } ?></td>
               </tr>
             </table></td>
           </form></tr>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.10 2003/04/23 16:28:24 r23 Exp $
+   $Id: system.php,v 1.11 2003/04/24 06:04:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: configuration.php,v 1.12 2003/04/23 07:04:35 r23 Exp $
+   $Id: configuration.php,v 1.13 2003/04/24 06:03:13 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,10 +24,10 @@
 
   require('includes/system.php');
   
-  if (!isset($_SESSION['user_id'])) {
-    $_SESSION['navigation']->set_snapshot();
-    owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
-  } 
+ # if (!isset($_SESSION['user_id'])) {
+ #   $_SESSION['navigation']->set_snapshot();
+ #   owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
+ # } 
   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['configuration']);
   $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['configuration'], 'gID=1', 'NONSSL'));
@@ -78,12 +78,7 @@
 <!-- body_text //-->
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
-          <tr>
-            <td class="owp-title"><?php echo $cfg_group['configuration_group_title']; ?></td>
-            <td class="owp-title" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
-          </tr>
-        </table></td>
+        <td class="owp-title"><?php echo $cfg_group['configuration_group_title']; ?></td>
       </tr>
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">

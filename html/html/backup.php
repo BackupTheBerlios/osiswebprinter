@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: backup.php,v 1.13 2003/04/23 16:28:23 r23 Exp $
+   $Id: backup.php,v 1.14 2003/04/24 06:03:13 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -43,11 +43,11 @@
         $schema = '# OSIS WebPrinter for your Homepage' . "\n" .
                   '# http://www.osisnet.de' . "\n" .
                   '#' . "\n" .
-                  '# Database Backup For ' . STORE_NAME . "\n" . 
-                  '# Copyright (c) ' . date('Y') . ' ' . STORE_OWNER . "\n" .
+                  '# Database Backup For ' . OWP_NAME . "\n" . 
+                  '# Copyright (c) ' . date('Y') . ' ' . OWP_OWNER . "\n" .
                   '#' . "\n" .
-                  '# Database: ' . DB_DATABASE . "\n" .
-                  '# Database Server: ' . DB_SERVER . "\n" . 
+                  '# Database: ' . OWP_DB_DATABASE . "\n" .
+                  '# Database Server: ' . OWP_DB_SERVER . "\n" . 
                   '#' . "\n" .
                   '# Backup Date: ' . date(PHP_DATE_TIME_FORMAT) . "\n\n";
         $tables_query = $db->Execute('show tables');
@@ -343,12 +343,7 @@
 <!-- body_text //-->
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
-          <tr>
-            <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
-            <td class="owp-title" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
-          </tr>
-        </table></td>
+        <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
       </tr>
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">

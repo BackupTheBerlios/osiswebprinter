@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: html_output.php,v 1.6 2003/04/23 07:05:54 r23 Exp $
+   $Id: html_output.php,v 1.7 2003/04/24 06:03:13 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -244,7 +244,7 @@
 
 ////
 // Output a form pull down menu
-  function tep_draw_pull_down_menu($name, $values, $default = '', $params = '', $required = false) {
+  function owpPullDownMenu($name, $values, $default = '', $params = '', $required = false) {
     $field = '<select name="' . $name . '"';
     if ($params) $field .= ' ' . $params;
     $field .= '>';
@@ -328,9 +328,9 @@
    * @version    1.0
    * @param      $width, $height, $image
    * @return     ruft die funktion owpImage auf 
-   * @return     <img src="images/trans.gif" width="100%" height="1" alt=" " />
+   * @return     <img src="images/trans.gif" width="1" height="1" alt=" " />
    */
-   function owpTransLine($width = '100%', $height = '1', $image = 'trans.gif') {
-     return owpImage(OWP_INCLUDES_DIR . $image, '', $width, $height);
+   function owpTransLine($width = '1', $height = '1', $image = 'trans.gif') {
+     return owpImage(OWP_IMAGES_DIR . $image, '', $width, $height);
    }
 ?>
