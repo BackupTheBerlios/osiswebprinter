@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: server_info.php,v 1.11 2003/04/26 06:41:11 r23 Exp $
+   $Id: server_info.php,v 1.12 2003/04/29 06:28:58 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,12 +23,12 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
-  
+
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
-  
+ 
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['server_info']);
   
   $system = owpGetSystemInformation();

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: backup.php,v 1.16 2003/04/26 06:35:58 r23 Exp $
+   $Id: backup.php,v 1.17 2003/04/29 06:24:52 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -28,7 +28,7 @@
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
-  
+   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['backup']);
 
   if ($_GET['action']) {

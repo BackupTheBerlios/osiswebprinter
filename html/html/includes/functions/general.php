@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.11 2003/04/26 06:35:58 r23 Exp $
+   $Id: general.php,v 1.12 2003/04/29 06:24:52 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -25,14 +25,14 @@
 ////
 // Redirect to another page or site
   function owpRedirect($url) {
-    global $logger;
+   # global $logger;
 
     header('Location: ' . $url);
 
-    if (STORE_PAGE_PARSE_TIME == 'true') {
-      if (!is_object($logger)) $logger = new logger;
-      $logger->timer_stop();
-    }
+ #   if (STORE_PAGE_PARSE_TIME == 'true') {
+ #     if (!is_object($logger)) $logger = new logger;
+ #     $logger->timer_stop();
+ #   }
 
     exit;
   }
@@ -1065,23 +1065,29 @@
 
 
 
-  function tep_mail($to_name, $to_email_address, $email_subject, $email_text, $from_email_name, $from_email_address) {
+  function owpMail($to_name, $to_email_address, $email_subject, $email_text, $from_email_name, $from_email_address) {
     if (SEND_EMAILS != 'true') return false;
 
     // Instantiate a new mail object
-    $message = new email(array('X-Mailer: osC mailer'));
+    $mail = new phpmailer;
 
+    $mail->AddAddress($to_email_address, $to_name);
+    $mail->Subject = $email_subject;
+    $mail->From = $from_email_address;
+    $mail->FromName = $from_email_name;
     // Build the text version
     $text = strip_tags($email_text);
     if (EMAIL_USE_HTML == 'true') {
-      $message->add_html($email_text, $text);
+      $mail->Body = $email_text;
+      $mail->AltBody = $text;
     } else {
-      $message->add_text($text);
+      $mail->Body = $text;
     }
-
+    
+    // $mail->AddAttachment("c:/temp/11-10-00.zip", "new_name.zip");  // optional name
+    
     // Send message
-    $message->build_message();
-    $message->send($to_name, $to_email_address, $from_email_name, $from_email_address, $email_subject);
+    $mail->Send();
   }
 
 

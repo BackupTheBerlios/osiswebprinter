@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: password_funcs.php,v 1.1 2003/04/04 07:53:41 r23 Exp $
+   $Id: password_funcs.php,v 1.2 2003/04/29 06:27:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -35,6 +35,9 @@
    ----------------------------------------------------------------------
     
    $Log: password_funcs.php,v $
+   Revision 1.2  2003/04/29 06:27:17  r23
+   login
+
    Revision 1.1  2003/04/04 07:53:41  r23
    initial import
 
@@ -52,7 +55,7 @@
    My PHP did not like TRUE/FALSE, changed to 1 or 0
  
    Revision 1.3  2000/10/18 14:28:25  dmcclelland
-   Made a change in validate_password() to allow
+   Made a change in owpValidatePasword() to allow
    allow it to work on an unencrypted password
    database or with NULL passwords.
  
@@ -71,51 +74,63 @@
 *   $db_pass is the contents of the customer_password field
 *   in the customer table. $db_pass has this structure:
 *   hash:salt Hash is an MD5 hash of the password + salt
-*   and salt is a two character 'salt'.*/
+*   and salt is a two character 'salt'.
+*/
 
-function validate_password($plain_pass, $db_pass){
+function owpValidatePasword($plain_pass, $db_pass){
+  /*Quick test to let this work on unencrypted passwords and NULL
+   Passwords*/
+  if ($plain_pass == $db_pass){
+    return(true);
+  }
      
-     /*Quick test to let this work on unencrypted passwords and NULL
-     Passwords*/
-     if($plain_pass == $db_pass){
-     	return(true);
-     }
-     
-     /* split apart the hash / salt*/
-     if(!($subbits = split(":", $db_pass, 2))){
-     	return(false);
-    }
+  /* split apart the hash / salt*/
+  if (!($subbits = split(":", $db_pass, 2))){
+     return(false);
+  }
     
-    $dbpassword = $subbits[0];
-    $salt = $subbits[1];
+  $dbpassword = $subbits[0];
+  $salt = $subbits[1];
     
-    $passtring = $salt . $plain_pass;
+  $passtring = $salt . $plain_pass;
     
-    $encrypted = md5($passtring);
-    if(strcmp($dbpassword, $encrypted) == 0)
-    {
-	return(true);
-    }else{
-	return(false);
-    }
-} // function validate_password($plain_pass, $db_pass)
+  $encrypted = md5($passtring);
+  if (strcmp($dbpassword, $encrypted) == 0) {
+    return(true);
+  } else {
+    return(false);
+  }
+} 
 
 /*  This function makes a new password from a plaintext password. An
-*   encrypted password + salt is returned */
+ *   encrypted password + salt is returned 
+ */
 
-function crypt_password($plain_pass){
-    /* create a semi random salt */
-    mt_srand ((double) microtime() * 1000000);
-    for($i=0;$i<10;$i++){
-     $tstring	.= mt_rand();
-    }
+function owpCryptPassword($plain_pass){
+  /* create a semi random salt */
+  mt_srand ((double) microtime() * 1000000);
+  for($i=0;$i<10;$i++){
+    $tstring	.= mt_rand();
+  }
     
-    $salt = substr(md5($tstring),0, 2);
+  $salt = substr(md5($tstring),0, 2);
     
-    $passtring = $salt . $plain_pass;
+  $passtring = $salt . $plain_pass;
     
-    $encrypted = md5($passtring);
+  $encrypted = md5($passtring);
     
-    return($encrypted . ":" . $salt);
-} // function crypt_password($plain_pass)
+  return($encrypted . ":" . $salt);
+} 
+
+
+function owpCreatePassword($pass_len = '8'){
+  mt_srand ((double) microtime() * 1000000);
+  $allchar = "abcdefghijklnmpqrstuvwxyzABCDEFGHKLNMPQRSTUVWXYZ2345679";
+  $password = "" ;
+  for ($i = 0; $i<$pass_len ; $i++){
+    $password .= substr( $allchar, mt_rand (0,55), 1 ) ;
+  }
+  return($password);
+}
+
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: configuration.php,v 1.14 2003/04/25 15:56:55 r23 Exp $
+   $Id: configuration.php,v 1.15 2003/04/29 06:24:52 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,11 +24,11 @@
 
   require('includes/system.php');
   
- # if (!isset($_SESSION['user_id'])) {
- #   $_SESSION['navigation']->set_snapshot();
- #   owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
- # } 
-  
+  if (!isset($_SESSION['user_id'])) {
+    $_SESSION['navigation']->set_snapshot();
+    owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
+  } 
+   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['configuration']);
   $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['configuration'], 'gID=1', 'NONSSL'));
   

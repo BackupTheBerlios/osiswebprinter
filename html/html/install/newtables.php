@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newtables.php,v 1.13 2003/04/23 06:49:55 r23 Exp $
+   $Id: newtables.php,v 1.14 2003/04/29 06:28:58 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -48,7 +48,7 @@ owp_DBInit($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
 $table = $prefix.'_administrators';
 $sql = "
 CREATE TABLE ".$prefix."_administrators (
-  admin_id int(11) NOT NULL auto_increment,
+  admin_id int(11) NOT NULL,
   admin_gender char(1) NOT NULL default '',
   admin_firstname varchar(32) NOT NULL default '',
   admin_lastname varchar(32) NOT NULL default '',
@@ -56,10 +56,21 @@ CREATE TABLE ".$prefix."_administrators (
   admin_telephone varchar(32) NOT NULL default '                                                                                                         ',
   admin_fax varchar(32) default NULL,
   admin_password varchar(40) NOT NULL default '',
-  allowed_pages varchar(255) DEFAULT '*' NOT NULL,
-  last_modified datetime default NULL,
-  date_added datetime NOT NULL default '0000-00-00 00:00:00',
+  admin_allowed_pages varchar(255) DEFAULT '*' NOT NULL,
   PRIMARY KEY (admin_id)
+)
+";
+dosql($table,$sql);
+
+$table = $prefix.'_administrators_info';
+$sql = "
+CREATE TABLE ".$prefix."_administrators_info (
+  admin_info_id int NOT NULL,
+  admin_info_date_of_last_logon datetime,
+  admin_info_number_of_logons int(5),
+  admin_info_date_account_created datetime,
+  admin_info_date_account_last_modified datetime,
+  PRIMARY KEY (admin_info_id)
 )
 ";
 dosql($table,$sql);
@@ -113,7 +124,7 @@ dosql($table,$sql);
 $table = $prefix.'_languages';
 $sql = "
 CREATE TABLE ".$prefix."_languages (
-  languages_id int(11) NOT NULL auto_increment,
+  languages_id int(11) NOT NULL,
   name varchar(32) NOT NULL default '',
   iso_639_2 char(3) NOT NULL default '',
   iso_639_1 char(2) NOT NULL default '',
@@ -159,6 +170,14 @@ CREATE TABLE ".$prefix."_zones (
   zone_code varchar(32) NOT NULL,
   zone_name varchar(32) NOT NULL,
   PRIMARY KEY (zone_id)
+)
+";
+dosql($table,$sql);
+
+$table = $prefix.'_sequence_languages';
+$sql = "
+CREATE TABLE ".$prefix."_sequence_languages (
+  id int(11) NOT NULL default '0'
 )
 ";
 dosql($table,$sql);

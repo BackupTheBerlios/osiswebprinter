@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_message_stack.php,v 1.5 2003/04/25 07:10:04 r23 Exp $
+   $Id: owp_message_stack.php,v 1.6 2003/04/29 06:24:52 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -33,20 +33,17 @@
     var $size = 0;
 
     function messageStack() {
-      global $_SESSION;
+      global $messageToStack;
 
       $this->errors = array();
     
       if (isset($_SESSION['messageToStack'])) {
-        for ($i=0; $i<sizeof($_SESSION['messageToStack']); $i++) {
-          $this->add($_SESSION['messageToStack'][$i]['text'], $_SESSION['messageToStack'][$i]['type']);
-        }
-        if (phpversion() < '4.3.0') {
-          session_unregister('messageToStack');
-        } else {
-          unset($_SESSION['messageToStack']);
-        }
+         $messageToStack =& $_SESSION['messageToStack'];
       }
+      for ($i=0; $i<sizeof($messageToStack); $i++) {
+        $this->add($messageToStack[$i]['text'], $messageToStack[$i]['type']);
+      }
+      unset($_SESSION['messageToStack']);
     }
 
     function add($message, $type = 'error') {
@@ -64,13 +61,14 @@
     }
 
     function add_session($message, $type = 'error') {
-      global $_SESSION;
+      global $messageToStack;
 
       if (!isset($_SESSION['messageToStack'])) {
         $_SESSION['messageToStack'] = array();
       }
 
-      $_SESSION['messageToStack'] = array('text' => $message, 'type' => $type);
+      $_SESSION['messageToStack'][] = array('text' => $message, 'type' => $type);
+    
     }
 
     function reset() {

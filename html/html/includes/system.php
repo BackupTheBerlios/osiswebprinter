@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.12 2003/04/25 16:00:04 r23 Exp $
+   $Id: system.php,v 1.13 2003/04/29 06:27:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,15 +24,9 @@
 
 // Set the level of error reporting
   error_reporting(E_ALL & ~E_NOTICE);
- # error_reporting(E_ALL);
-
-// Disable use_trans_sid as owpLink() does this manually
-  if (function_exists('ini_set')) {
-    ini_set('session.use_trans_sid', 0);
-  }
 
 // include server parameters
-  require_once('includes/config.php');
+  require_once('includes/config.php');  
 
 // Start the clock
   require_once(OWP_CLASSES_DIR . 'owp_parse_time.php');
@@ -69,6 +63,7 @@
 
   $owpDBTable = array();
   $owpDBTable['administrators'] = $prefix_table . 'administrators';
+  $owpDBTable['administrators_info'] = $prefix_table . 'administrators_info';
   $owpDBTable['configuration'] = $prefix_table . 'configuration';
   $owpDBTable['configuration_group'] = $prefix_table . 'configuration_group';
   $owpDBTable['countries'] = $prefix_table . 'countries';
@@ -76,15 +71,27 @@
   $owpDBTable['session'] = $prefix_table . 'sessions';
   $owpDBTable['whos_online'] = $prefix_table . 'whos_online';
   $owpDBTable['zones'] = $prefix_table . 'zones';
+  
+  
   $owpSelf = (! empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : $_SERVER['SCRIPT_NAME'];
-
 
 //session
   require_once(OWP_CLASSES_DIR . 'owp_navigation_history.php');
   require_once(OWP_FUNCTIONS_DIR . 'owp_session.php');
-
-  owpSessionName('owpSid');
-  session_start();
+  
+  if (isset($_COOKIE[owpSessionName()])) {
+    owpSessionID($_COOKIE[owpSessionName()]);
+  } else if ($_POST[owpSessionName()]) {   
+    owpSessionID($_POST[owpSessionName()]);   
+  } else if ($_GET[owpSessionName()]) {   
+    owpSessionID($_GET[owpSessionName()]); 
+  } 
+  owpSessIni();
+  
+  if (!isset($_SESSION)) {
+    $_SESSION = array();
+    session_destroy();
+  } 
 
 // include the database functions
   include_once(OWP_FUNCTIONS_DIR . 'owp_api.php');
@@ -108,29 +115,13 @@
     $configuration_query->MoveNext();
   }
 
-/*!
-
-// some code to solve compatibility issues
-  require_once(OWP_FUNCTIONS_DIR . 'compatibility.php');
-
-*/
-
-  if (isset($_COOKIE[owpSessionName()])) {
-    session_id($_COOKIE[owpSessionName()]);
-  } else if ($_POST[owpSessionName()]) {   
-    session_id($_POST[owpSessionName()]);   
-  } else {
-    $_SESSION = array();
-    session_destroy();
-  }
   if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     $HTTP_ACCEPT_LANGUAGE = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
   } 
   if (!empty($_SERVER['HTTP_USER_AGENT'])) {
     $HTTP_USER_AGENT = $_SERVER['HTTP_USER_AGENT'];
   } 
-  
-define('DEFAULT_LANGUAGE', 'deu');
+ 
 // language
   if ( (!isset($_SESSION['language'])) || (!empty($_GET['language'])) ) {
     if ($_GET['language']) {
@@ -179,7 +170,6 @@ define('DEFAULT_LANGUAGE', 'deu');
     $_SESSION['selected_box'] = $_GET['selected_box'];
   } 
   $selected_box =& $_SESSION['selected_box'];
-  
 
 // include the language translations
   require_once(OWP_LANGUAGES_DIR . $language . '/global.php');
@@ -187,7 +177,6 @@ define('DEFAULT_LANGUAGE', 'deu');
 // define our general functions used application-wide
   require_once(OWP_FUNCTIONS_DIR . 'html_output.php');
   require_once(OWP_FUNCTIONS_DIR . 'general.php');
-
   require_once(OWP_CLASSES_DIR . 'owp_object_info.php');
   require_once(OWP_CLASSES_DIR . 'owp_split_page_results.php');
   require_once(OWP_CLASSES_DIR . 'owp_table_block.php');
@@ -205,8 +194,8 @@ define('DEFAULT_LANGUAGE', 'deu');
       $$k = owpPrepareInput($v);
     }
   }
-/*!  
 
+/*
 // include the who's online functions
   require_once(OWP_FUNCTIONS_DIR . 'whos_online.php');
   tep_update_whos_online();

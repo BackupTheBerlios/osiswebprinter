@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newdata.php,v 1.6 2003/04/23 06:49:55 r23 Exp $
+   $Id: newdata.php,v 1.7 2003/04/29 06:28:58 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -271,7 +271,7 @@ $result = $db->Execute("INSERT INTO ".$prefix."_countries VALUES (237,'Zaire','Z
 $result = $db->Execute("INSERT INTO ".$prefix."_countries VALUES (238,'Zambia','ZM','ZMB','1')") or die ("<b>"._NOTUPDATED.$prefix."_countries</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_countries VALUES (239,'Zimbabwe','ZW','ZWE','1')") or die ("<b>"._NOTUPDATED.$prefix."_countries</b>");
 
-echo '<br /><font class="owp-title">' . $prefix."_languages" . UPDATED .'</font>';
+echo '<br /><font class="owp-title">' . $prefix."_countries" . UPDATED .'</font>';
 
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (1, 'Abkhazian', 'abk', 'ab', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (2, 'Achinese', 'ace', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
@@ -339,7 +339,7 @@ $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (63, 'Buriat', 
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (64, 'Burmese', 'mya', 'my', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (65, 'Caddo', 'cad', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (66, 'Carib', 'car', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
-$result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (67, 'Spanish', 'spa', 'es', 'iso-8859-1', 'ltr', 1, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
+$result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (67, 'Spanish', 'spa', 'es', 'iso-8859-1', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (68, 'Catalan', 'cat', 'ca', 'iso-8859-1', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (69, 'Caucasian (Other)', 'cau', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (70, 'Cebuano', 'ceb', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
@@ -390,7 +390,7 @@ $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (114, 'Efik', '
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (115, 'Egyptian (Ancient)', 'egy', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (116, 'Ekajuk', 'eka', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (117, 'Elamite', 'elx', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
-$result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (118, 'English', 'eng', 'en', '', 'ltr', 1, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
+$result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (118, 'English', 'eng', 'en', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (119, 'Esperanto', 'epo', 'eo', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (120, 'Estonian', 'est', 'et', 'iso-8859-1', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (121, 'Ewe', 'ewe', 'ee', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
@@ -402,7 +402,7 @@ $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (126, 'Fijian',
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (127, 'Finnish', 'fin', 'fi', 'iso-8859-1', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (128, 'Finno-Ugrian (Other)', 'fiu', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (129, 'Fon', 'fon', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
-$result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (130, 'French', 'fra', 'fr', 'iso-8859-1', 'ltr', 1, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
+$result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (130, 'French', 'fra', 'fr', 'iso-8859-1', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (131, 'Frisian', 'fry', 'fy', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (132, 'Friulian', 'fur', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (133, 'Fulah', 'ful', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
@@ -721,6 +721,7 @@ $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (445, 'Zhuang',
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (446, 'Zulu', 'zul', 'zu', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (447, 'Zuni', 'zun', '', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_languages VALUES (448, 'Klingon', 'klingon', 'x_klingon', '', 'ltr', 0, 0)") or die ("<b>"._NOTUPDATED.$prefix."_languages</b>");
+$result = $db->Execute("INSERT INTO ".$prefix."_sequence_languages VALUES (448)") or die ("<b>"._NOTUPDATED.$prefix."_sequence_languages</b>");
 
 echo '<br /><font class="owp-title">' . $prefix."_languages" . UPDATED .'</font>';
 

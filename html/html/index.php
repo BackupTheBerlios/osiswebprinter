@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.13 2003/04/25 16:00:04 r23 Exp $
+   $Id: index.php,v 1.14 2003/04/29 06:27:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -28,7 +28,7 @@
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
-  
+   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['index']);
 
   $cat = array(array('title' => BOX_HEADING_CONFIGURATION,
@@ -106,7 +106,7 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
       <tr bgcolor="#000000">
         <td><table border="0" width="600" height="440" cellspacing="0" cellpadding="0">
           <tr bgcolor="#ffffff" height="50">
-            <td height="50"><?php echo owpImage(OWP_IMAGES_DIR . 'oscommerce.gif', 'osCommerce', '204', '50'); ?></td>
+            <td height="50"><?php echo owpImage(OWP_INCLUDES_DIR . 'oscommerce.gif', 'osCommerce', '204', '50'); ?></td>
             <td align="right" class="text" nowrap><?php echo '<a href="' . owpLink($owpFilename['index']) . '">' . HEADER_TITLE_ADMINISTRATION . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="' . tep_catalog_href_link() . '">' . HEADER_TITLE_ONLINE_CATALOG . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.oscommerce.com" target="_blank">' . HEADER_TITLE_SUPPORT_SITE . '</a>'; ?>&nbsp;&nbsp;</td>
           </tr>
           <tr bgcolor="#080381">
@@ -220,7 +220,7 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
 
     echo '                    <td><table border="0" cellspacing="0" cellpadding="2">' . "\n" .
          '                      <tr>' . "\n" .
-         '                        <td><a href="' . $cat[$i]['href'] . '">' . owpImage(OWP_IMAGES_DIR . 'categories/' . $cat[$i]['image'], $cat[$i]['title'], '32', '32') . '</a></td>' . "\n" .
+         '                        <td><a href="' . $cat[$i]['href'] . '">' . owpImage(OWP_INCLUDES_DIR . 'categories/' . $cat[$i]['image'], $cat[$i]['title'], '32', '32') . '</a></td>' . "\n" .
          '                        <td><table border="0" cellspacing="0" cellpadding="2">' . "\n" .
          '                          <tr>' . "\n" .
          '                            <td class="main"><a href="' . $cat[$i]['href'] . '" class="main">' . $cat[$i]['title'] . '</a></td>' . "\n" .

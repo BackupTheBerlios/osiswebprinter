@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: login.php,v 1.5 2003/04/25 16:01:18 r23 Exp $
+   $Id: login.php,v 1.6 2003/04/29 06:28:58 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -45,36 +45,44 @@
 
   require('includes/system.php');  
 
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['login']);
+  
   if ($_GET['action'] == 'process') {
     include_once(OWP_FUNCTIONS_DIR . $owpFilename['password_crypt']);
     $sql = "SELECT admin_id, admin_gender, admin_firstname, admin_lastname,
-                   admin_email_address, admin_password 
+                   admin_email_address, admin_password, admin_allowed_pages 
             FROM " . $owpDBTable['administrators'] . " 
             WHERE admin_email_address = '" . owpDBInput($email_address) . "'";
-    $check_admin_query = $db->Execute($sql);     
+    $check_admin_query = $db->Execute($sql);
     if ($check_admin_query->RecordCount()) {
-      $check_admin = $check_admin->fields;
-      if (validate_password($password, $check_admin['admin_password'])) {
+      $check_admin = $check_admin_query->fields;
+      if (!owpValidatePasword($password, $check_admin['admin_password'])) {
+        $messageStack->add(ERROR_LOGIN_ERROR, 'error');
+      } else {
         $_SESSION['user_id'] = $check_admin['admin_id'];
         $_SESSION['gender'] = $check_admin['admin_gender'];
         $_SESSION['firstname'] = $check_admin['admin_firstname'];
-        $_SESSION['lastname'] = $check_admin['lastname'];
+        $_SESSION['lastname'] = $check_admin['admin_lastname'];
+        $_SESSION['allowed_pages'] = $check_admin['admin_allowed_pages'];
+        
+        $today = date("Y-m-d H:i:s");
+        $db->Execute("UPDATE " . $owpDBTable['administrators_info'] . " 
+	                 SET admin_info_date_of_last_logon = " . $db->DBTimeStamp($today) . ",
+	                     admin_info_number_of_logons = admin_info_number_of_logons+1 
+                       WHERE admin_info_id = '" . owpDBInput($check_admin['admin_id']) . "'");        
         if (sizeof($navigation->snapshot) > 0) {
           $origin_href = owpLink($navigation->snapshot['page'], owpArraytoString($_SESSION['navigation']->snapshot['get'], array(owpSessionName())), $_SESSION['navigation']->snapshot['mode']);
           $navigation->clear_snapshot();
           owpRedirect($origin_href);
         } else {
-          owpRedirect(owpLink($owpFilename['index']));
+          owpRedirect(owpLink($owpFilename['index'], '', 'NONSSL'));
         }
-      } else {
-        $login_error = TEXT_LOGIN_ERROR;
       }
     } else {
-        $login_error = TEXT_LOGIN_ERROR;
+      $messageStack->add(ERROR_LOGIN_NO_USER, 'error');
     }
   }
 
-  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['login']);
   $breadcrumb->add(NAVBAR_TITLE, owpLink($owpFilename['login'], '', 'SSL'));
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -104,20 +112,20 @@
 <!-- body_text //-->
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-            <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
+        <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
       </tr>
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr>
-            <td colspan="5" bgcolor="#000000"><?php echo owpTransLine(); ?></td>
+            <td colspan="3" bgcolor="#000000"><?php echo owpTransLine(); ?></td>
           </tr>
           <tr>
-            <td colspan="5">&nbsp;</td>
+            <td colspan="3"><?php echo owpTransLine('1', '5'); ?></td>
           </tr>
           <tr>
-            <td colspan="5"><?php echo owpDrawForm('login', $owpFilename['login'], 'action=process'); ?><table>
+            <td colspan="3"><?php echo owpDrawForm('login', $owpFilename['login'], 'action=process'); ?><table>
               <tr>
-                <td class="main"><?php echo TEXT_INFO_USER_NAME; ?>&nbsp;</td>
+                <td class="main"><?php echo TEXT_INFO_USER_EMAIL; ?>&nbsp;</td>
                 <td><input type="text" name="email_address"></td>
               </tr>
               <tr>
@@ -125,12 +133,15 @@
                 <td><input type="password" name="password"></td>
               </tr>
               <tr>
-                <td colspan="2">
-                         <input type="hidden" name="retpage" value="<?php echo $retpage; ?>">
-                            <input type="submit" name="Submit" value="Login">
-                  </td>
+                <td colspan="2"><input type="submit" name="Submit" value="Login"></td>
               </tr>
             </table></form></td>
+          </tr>
+          <tr>
+            <td colspan="3"><?php echo owpTransLine('1', '5'); ?></td>
+          </tr>
+          <tr>
+            <td colspan="2"><?php echo '<a href="' . owpLink($owpFilename['password_forgotten'], '', 'SSL') . '">' . TEXT_PASSWORD_FORGOTTEN . '</a>'; ?></td>
           </tr>
         </table></td>
       <tr>

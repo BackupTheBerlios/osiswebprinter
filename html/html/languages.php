@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.14 2003/04/26 06:39:31 r23 Exp $
+   $Id: languages.php,v 1.15 2003/04/29 06:28:58 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -37,12 +37,16 @@
       owpRedirect(owpLink($owpFilename['languages'], 'page=' . $_GET['page']));
       break;
     case 'insert':
+      $langsequence = OWP_DB_PREFIX . '_sequence_languages';
+      $langid = $db->GenID($langsequence);
       $sql = "INSERT INTO " . $owpDBTable['languages'] . " 
-             (name, 
+             (languages_id,
+              name, 
               iso_639_2, 
               iso_639_1, 
               sort_order) 
-              VALUES (" . $db->qstr($name) . ','
+              VALUES (" . $db->qstr($langid) . ','
+                        . $db->qstr($name) . ','
                         . $db->qstr($iso_639_2) . ','
                         . $db->qstr($iso_639_1) . ','
                         . $db->qstr($sort_order) . ")";
@@ -65,7 +69,7 @@
                        WHERE configuration_key = 'DEFAULT_LANGUAGE'");
       }
 
-      owpRedirect(owpLink($owpFilename['languages'], 'page=' . $_GET['page'] . '&lID=' . $insert_id));
+      owpRedirect(owpLink($owpFilename['languages'], 'page=' . $_GET['page'] . '&lID=' . $langid));
       break;
     case 'save':
       $db->Execute("UPDATE " . $owpDBTable['languages'] . " 

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: password_forgotten.php,v 1.2 2003/04/23 16:09:00 r23 Exp $
+   $Id: password_forgotten.php,v 1.3 2003/04/29 06:27:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -21,12 +21,23 @@
    ----------------------------------------------------------------------
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
-
+   
+define('TITLE', 'Passwort vergessen');
 define('NAVBAR_TITLE_1', 'Anmelden');
 define('NAVBAR_TITLE_2', 'Passwort vergessen');
 define('HEADING_TITLE', 'Wie war noch mal mein Passwort?');
-define('TEXT_NO_EMAIL_ADDRESS_FOUND', '<font color="#ff0000"><b>ACHTUNG:</b></font> Die eingegebene eMail-Adresse ist nicht registriert. Bitte versuchen Sie es noch einmal.');
-define('EMAIL_PASSWORD_REMINDER_SUBJECT', STORE_NAME . ' - Ihr neues Passwort.');
-define('EMAIL_PASSWORD_REMINDER_BODY', '&Uuml;ber die Adresse ' . $REMOTE_ADDR . ' haben wir eine Anfrage zur Passworterneuerung erhalten.' . "\n\n" . 'Ihr neues Passwort f&uuml;r \'' . STORE_NAME . '\' lautet ab sofort:' . "\n\n" . '   %s' . "\n\n");
-define('TEXT_PASSWORD_SENT', 'Ein neues Passwort wurde per eMail verschickt.');
+
+define('TEXT_INFO_USER_EMAIL', 'eMail Adresse:');
+
+define('EMAIL_PASSWORD_SUBJECT', OWP_NAME . ' - Ihr neues Passwort.');
+define('EMAIL_GREET_MR', 'Sehr geehrter Herr ');
+define('EMAIL_GREET_MS', 'Sehr geehrte Frau ');
+define('EMAIL_PASSWORD_INTRO', 'über die Adresse ' . $_SERVER['REMOTE_ADDR'] . ' haben wir eine' . "\n" . 'Anfrage zur Passworterneuerung erhalten.' . "\n\n");
+define('EMAIL_PASSWORD_BODY', 'Ihr Passwort lautet:' . "\n\n" . '   %s' . "\n\n");
+
+define('EMAIL_PASSWORD_FOOT', 'Mit den besten Grüssen,' . "\n" .  OWP_NAME . "\n\n\n" . OWP_HTTP_SERVER . '/' . "\n\n");
+
+define('SUCCESS_PASSWORD_SENT', 'Ein neues Passwort wurde per eMail verschickt.');
+define('ERROR_NO_USER', 'Fehler: Sie sind dem System unter der eingebenen \'eMail-Adresse\' nicht bekannt.');
+
 ?>

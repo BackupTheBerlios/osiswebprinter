@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newinstall.php,v 1.10 2003/04/23 06:49:55 r23 Exp $
+   $Id: newinstall.php,v 1.11 2003/04/29 06:28:58 r23 Exp $
 
    OSIS GMBH
    http://www.osisnet.de/
@@ -59,13 +59,16 @@ function make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake)
 function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone, $fax, $prefix) {
     global $currentlang, $db; 
     
+    $allowed_pages = '*';
+    $number_of_logons = '0';
+    $sequence = $prefix . '_sequence_admin';
     echo '<font class="owp-title">' . INPUT_DATA . '</font>';
     echo "<center>";
  
     // Put basic information in first
     include('newdata.php');
     include ('../includes/functions/password_funcs.php');
-    $owp_pwd = crypt_password($pwd);
+    $owp_pwd = owpCryptPassword($pwd);
     $today = date("Y-m-d H:i:s");
     
     if (!isset($currentlang)) {
@@ -73,29 +76,46 @@ function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone
     }
     if (file_exists($file="lang/$currentlang/newconfigdata.php"))
       include $file;
+      
+    $admin_id = $db->GenID($sequence);
     $sql = "INSERT INTO ".$prefix."_administrators
-            (admin_gender,
+            (admin_id,
+             admin_gender,
              admin_firstname,
              admin_lastname,
              admin_email_address,
              admin_telephone,
              admin_fax,
              admin_password,
-             date_added)
-             VALUES ("
-             . $db->qstr($gender) . ','
-             . $db->qstr($firstname) . ','
-             . $db->qstr($name) . ','
-             . $db->qstr($email) . ','
-             . $db->qstr($phone) . ','
-             . $db->qstr($fax) . ','
-             . $db->qstr($owp_pwd) . ','
-             . $db->DBTimeStamp($today) . ")";
+             admin_allowed_pages)
+             VALUES (" . $db->qstr($admin_id) . ','
+                       . $db->qstr($gender) . ','
+                       . $db->qstr($firstname) . ','
+                       . $db->qstr($name) . ','
+                       . $db->qstr($email) . ','
+                       . $db->qstr($phone) . ','
+                       . $db->qstr($fax) . ','
+                       . $db->qstr($owp_pwd) . ','
+                       . $db->qstr($allowed_pages) . ")";
     $result = $db->Execute($sql);
     if ($result === false) {
       echo '<br /><font class="owp-error">' .  $db->ErrorMsg() . NOTMADE . '</font>';
     } else {
       echo '<br /><font class="owp-title">' . $prefix . '_administrators&nbsp;'. UPDATED . '</font>';
     }
+    $sql = "INSERT INTO ".$prefix."_administrators_info
+            (admin_info_id,
+             admin_info_number_of_logons,
+             admin_info_date_account_created)
+             VALUES (" . $db->qstr($admin_id) . ','
+                       . $db->qstr($number_of_logons) . ','
+                       . $db->DBTimeStamp($today) . ")";
+    $result = $db->Execute($sql);
+    if ($result === false) {
+      echo '<br /><font class="owp-error">' .  $db->ErrorMsg() . NOTMADE . '</font>';
+    } else {
+      echo '<br /><font class="owp-title">' . $prefix . '_administrators&nbsp;'. UPDATED . '</font>';
+    }
+   
 }
 ?>
