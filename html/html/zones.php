@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: zones.php,v 1.8 2003/04/30 15:31:28 r23 Exp $
+   $Id: zones.php,v 1.9 2003/05/01 14:39:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -28,10 +28,8 @@
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
- 
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['zones']);
   $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['zones'], '', 'NONSSL'));
- 
   if ($_GET['action']) {
     switch ($_GET['action']) {
       case 'insert':
@@ -97,7 +95,6 @@
           $send_mail->AddAddress($mail_send_to['admin_email_address'], $mail_send_to['admin_firstname'] . ' ' . $mail_send_to['admin_lastname']);
           $send_mail->AddAttachment(OWP_CSV_TEMP . $db_table_file);
           $send_mail->Send();
-         // Clear all addresses and attachments for next loop
           $send_mail->ClearAddresses();
           $send_mail->ClearAttachments();
           $messageStack->add_session(sprintf(SUCCESS_CVS_ZONES_SENT, $mail_send_to['admin_email_address']), 'notice');          
@@ -114,13 +111,12 @@
 	  echo $buffer;
 	} 
 	if (CVS_DELETE_FILE == 'true') {
-	  @ unlink(OWP_CSV_TEMP . $db_table_file);
+	  @unlink(OWP_CSV_TEMP . $db_table_file);
 	}
         owpRedirect(owpLink($owpFilename['zones'], 'page=' . $_GET['page']));
         break;
     }
-  }
-  
+  } 
   if (OWP_CSV_EXCEL == 'true') {
     $dir_ok = false;
     if (is_dir(owpGetLocalPath(OWP_CSV_TEMP))) {

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.15 2003/04/29 17:02:07 r23 Exp $
+   $Id: system.php,v 1.16 2003/05/01 14:37:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -96,9 +96,6 @@
 
 // include the database functions
   include_once(OWP_FUNCTIONS_DIR . 'owp_api.php');
-  define('ADODB_ERROR_LOG_TYPE',3);
-  define('ADODB_ERROR_LOG_DEST','d:/tmp/errors.log');
-  $ADODB_CACHE_DIR = 'd:/tmp/ADODB_cache';
   include_once(OWP_ADODB_DIR . 'toexport.inc.php');
   include_once(OWP_ADODB_DIR . 'adodb-errorhandler.inc.php');
   include_once(OWP_ADODB_DIR . 'adodb.inc.php');

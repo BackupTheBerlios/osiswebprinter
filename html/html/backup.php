@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: backup.php,v 1.17 2003/04/29 06:24:52 r23 Exp $
+   $Id: backup.php,v 1.18 2003/05/01 14:37:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -34,7 +34,7 @@
   if ($_GET['action']) {
     switch ($_GET['action']) {
       case 'forget':
-        $db->Execute("delete from " . $owpDBTable['configuration'] . " where configuration_key = 'DB_LAST_RESTORE'");
+        $db->Execute("DELETE FROM " . $owpDBTable['configuration'] . " WHERE configuration_key = 'DB_LAST_RESTORE'");
         $messageStack->add_session(SUCCESS_LAST_RESTORE_CLEARED, 'success');
         owpRedirect(owpLink($owpFilename['backup']));
         break;
@@ -94,9 +94,9 @@
           $schema .= "\n" . ');' . "\n\n";
 
           // Dump the data
-          $rows_query = $db->Execute("select " . implode(',', $table_list) . " from " . $table);
+          $rows_query = $db->Execute("SELECT " . implode(',', $table_list) . " FROM " . $table);
           while ($rows = $rows_query->fields) {
-            $schema_insert = 'insert into ' . $table . ' (' . implode(', ', $table_list) . ') values (';
+            $schema_insert = 'INSERT INTO ' . $table . ' (' . implode(', ', $table_list) . ') VALUES (';
             reset($table_list);
             while (list(,$i) = each($table_list)) {
               if (!isset($rows[$i])) {
@@ -127,16 +127,16 @@
               exit;
               break;
             case 'gzip':
-              if ($fp = fopen(DIR_FS_BACKUP . $backup_file, 'w')) {
+              if ($fp = fopen(OWP_BACKUP_PATH . '/' . $backup_file, 'w')) {
                 fputs($fp, $schema);
                 fclose($fp);
-                exec(LOCAL_EXE_GZIP . ' ' . DIR_FS_BACKUP . $backup_file);
+                exec(LOCAL_EXE_GZIP . ' ' . OWP_BACKUP_PATH . '/' . $backup_file);
                 $backup_file .= '.gz';
               }
-              if ($fp = fopen(DIR_FS_BACKUP . $backup_file, 'rb')) {
-                $buffer = fread($fp, filesize(DIR_FS_BACKUP . $backup_file));
+              if ($fp = fopen(OWP_BACKUP_PATH . '/' . $backup_file, 'rb')) {
+                $buffer = fread($fp, filesize(OWP_BACKUP_PATH . '/' . $backup_file));
                 fclose($fp);
-                unlink(DIR_FS_BACKUP . $backup_file);
+                unlink(OWP_BACKUP_PATH . '/' . $backup_file);
                 header('Content-type: application/x-octet-stream');
                 header('Content-disposition: attachment; filename=' . $backup_file);
                 echo $buffer;
@@ -144,17 +144,17 @@
               }
               break;
             case 'zip':
-              if ($fp = fopen(DIR_FS_BACKUP . $backup_file, 'w')) {
+              if ($fp = fopen(OWP_BACKUP_PATH . '/' . $backup_file, 'w')) {
                 fputs($fp, $schema);
                 fclose($fp);
-                exec(LOCAL_EXE_ZIP . ' -j ' . DIR_FS_BACKUP . $backup_file . '.zip ' . DIR_FS_BACKUP . $backup_file);
-                unlink(DIR_FS_BACKUP . $backup_file);
+                exec(LOCAL_EXE_ZIP . ' -j ' . OWP_BACKUP_PATH . '/' . $backup_file . '.zip ' . OWP_BACKUP_PATH . '/' . $backup_file);
+                unlink(OWP_BACKUP_PATH . '/' . $backup_file);
                 $backup_file .= '.zip';
               }
-              if ($fp = fopen(DIR_FS_BACKUP . $backup_file, 'rb')) {
-                $buffer = fread($fp, filesize(DIR_FS_BACKUP . $backup_file));
+              if ($fp = fopen(OWP_BACKUP_PATH . '/' . $backup_file, 'rb')) {
+                $buffer = fread($fp, filesize(OWP_BACKUP_PATH . '/' . $backup_file));
                 fclose($fp);
-                unlink(DIR_FS_BACKUP . $backup_file);
+                unlink(OWP_BACKUP_PATH . '/' . $backup_file);
                 header('Content-type: application/x-octet-stream');
                 header('Content-disposition: attachment; filename=' . $backup_file);
                 echo $buffer;
@@ -162,7 +162,7 @@
               }
           }
         } else {
-          $backup_file = DIR_FS_BACKUP . 'db_' . DB_DATABASE . '-' . date('YmdHis') . '.sql';
+          $backup_file = OWP_BACKUP_PATH . '/db_' . DB_DATABASE . '-' . date('YmdHis') . '.sql';
           if ($fp = fopen($backup_file, 'w')) {
             fputs($fp, $schema);
             fclose($fp);
@@ -185,8 +185,8 @@
 
         if ($_GET['action'] == 'restorenow') {
           $read_from = $_GET['file'];
-          if (file_exists(DIR_FS_BACKUP . $_GET['file'])) {
-            $restore_file = DIR_FS_BACKUP . $_GET['file'];
+          if (file_exists(OWP_BACKUP_PATH . '/'. $_GET['file'])) {
+            $restore_file = OWP_BACKUP_PATH . '/'. $_GET['file'];
             $extension = substr($_GET['file'], -3);
             if ( ($extension == 'sql') || ($extension == '.gz') || ($extension == 'zip') ) {
               switch ($extension) {
@@ -201,7 +201,7 @@
                   break;
                 case 'zip':
                   $restore_from = substr($restore_file, 0, -4);
-                  exec(LOCAL_EXE_UNZIP . ' ' . $restore_file . ' -d ' . DIR_FS_BACKUP);
+                  exec(LOCAL_EXE_UNZIP . ' ' . $restore_file . ' -d ' . OWP_BACKUP_PATH);
                   $remove_raw = true;
               }
 
@@ -265,13 +265,24 @@
             }
           }
 
-          $db->Execute("drop table if exists address_book, address_format, banners, banners_history, categories, categories_description, configuration, configuration_group, counter, counter_history, countries, currencies, customers, customers_basket, customers_basket_attributes, customers_info, languages, manufacturers, manufacturers_info, orders, orders_products, orders_status, orders_status_history, orders_products_attributes, orders_products_download, products, products_attributes, products_attributes_download, prodcts_description, products_options, products_options_values, products_options_values_to_products_options, products_to_categories, reviews, reviews_description, sessions, specials, tax_class, tax_rates, geo_zones, whos_online, zones, zones_to_geo_zones");
+          $db->Execute("drop table if exists configuration, configuration_group, countries, languages, zones ");
           for ($i = 0, $n = sizeof($sql_array); $i < $n; $i++) {
             $db->Execute($sql_array[$i]);
           }
 
-          $db->Execute("delete from " . TABLE_CONFIGURATION . " where configuration_key = 'DB_LAST_RESTORE'");
-          $db->Execute("insert into " . TABLE_CONFIGURATION . " values ('', 'Last Database Restore', 'DB_LAST_RESTORE', '" . $read_from . "', 'Last database restore file', '6', '', '', now(), '', '')");
+          $db->Execute("DELETE FROM " . $owpDBTable['configuration'] . " where configuration_key = 'DB_LAST_RESTORE'");
+          $db->Execute("INSERT INTO " . $owpDBTable['configuration'] . " 
+                        values ('', 
+                                'Last Database Restore', 
+                                'DB_LAST_RESTORE', 
+                                '" . $read_from . "', 
+                                'Last database restore file', 
+                                '6', 
+                                '', 
+                                '', 
+                                now(), 
+                                '', 
+                                '')");
 
           if ($remove_raw) {
             unlink($restore_from);
@@ -284,8 +295,8 @@
       case 'download':
         $extension = substr($_GET['file'], -3);
         if ( ($extension == 'zip') || ($extension == '.gz') || ($extension == 'sql') ) {
-          if ($fp = fopen(DIR_FS_BACKUP . $_GET['file'], 'rb')) {
-            $buffer = fread($fp, filesize(DIR_FS_BACKUP . $_GET['file']));
+          if ($fp = fopen(OWP_BACKUP_PATH . '/' . $_GET['file'], 'rb')) {
+            $buffer = fread($fp, filesize(OWP_BACKUP_PATH . '/'. $_GET['file']));
             fclose($fp);
             header('Content-type: application/x-octet-stream');
             header('Content-disposition: attachment; filename=' . $_GET['file']);
@@ -299,7 +310,7 @@
       case 'deleteconfirm':
         if (strstr($_GET['file'], '..')) owpRedirect(owpLink($owpFilename['backup']));
 
-        owpRemove(DIR_FS_BACKUP . '/' . $_GET['file']);
+        owpRemove(OWP_BACKUP_PATH . '/' . $_GET['file']);
         if (!$owpRemoveError) {
           $messageStack->add_session(SUCCESS_BACKUP_DELETED, 'success');
           owpRedirect(owpLink($owpFilename['backup']));
@@ -310,9 +321,9 @@
 
 // check if the backup directory exists
   $dir_ok = false;
-  if (is_dir(owpGetLocalPath(DIR_FS_BACKUP))) {
+  if (is_dir(owpGetLocalPath(OWP_BACKUP_PATH))) {
     $dir_ok = true;
-    if (!is_writeable(owpGetLocalPath(DIR_FS_BACKUP))) $messageStack->add(ERROR_BACKUP_DIRECTORY_NOT_WRITEABLE, 'error');
+    if (!is_writeable(owpGetLocalPath(OWP_BACKUP_PATH))) $messageStack->add(ERROR_BACKUP_DIRECTORY_NOT_WRITEABLE, 'error');
   } else {
     $messageStack->add(ERROR_BACKUP_DIRECTORY_DOES_NOT_EXIST, 'error');
   }
@@ -357,10 +368,10 @@
               </tr>
 <?php
   if ($dir_ok) {
-    $dir = dir(DIR_FS_BACKUP);
+    $dir = dir(OWP_BACKUP_PATH);
     $contents = array();
     while ($file = $dir->read()) {
-      if (!is_dir(DIR_FS_BACKUP . $file)) {
+      if (!is_dir(OWP_BACKUP_PATH . '/' . $file)) {
         $contents[] = $file;
       }
     }
@@ -373,8 +384,8 @@
 
       if (((!$_GET['file']) || ($_GET['file'] == $entry)) && (!$buInfo) && ($_GET['action'] != 'backup') && ($_GET['action'] != 'restorelocal')) {
         $file_array['file'] = $entry;
-        $file_array['date'] = date(PHP_DATE_TIME_FORMAT, filemtime(DIR_FS_BACKUP . $entry));
-        $file_array['size'] = number_format(filesize(DIR_FS_BACKUP . $entry)) . ' bytes';
+        $file_array['date'] = date(PHP_DATE_TIME_FORMAT, filemtime(OWP_BACKUP_PATH . '/' . $entry));
+        $file_array['size'] = number_format(filesize(OWP_BACKUP_PATH . '/' . $entry)) . ' bytes';
         switch (substr($entry, -3)) {
           case 'zip': $file_array['compression'] = 'ZIP'; break;
           case '.gz': $file_array['compression'] = 'GZIP'; break;
@@ -393,8 +404,8 @@
       }
 ?>
                 <td class="dataTableContent" onclick="document.location.href='<?php echo owpLink($owpFilename['backup'], $onclick_link); ?>'"><?php echo '<a href="' . owpLink($owpFilename['backup'], 'action=download&file=' . $entry) . '">' . owpImage(OWP_ICONS_DIR . 'file_download.gif', ICON_FILE_DOWNLOAD) . '</a>&nbsp;' . $entry; ?></td>
-                <td class="dataTableContent" align="center" onclick="document.location.href='<?php echo owpLink($owpFilename['backup'], $onclick_link); ?>'"><?php echo date(PHP_DATE_TIME_FORMAT, filemtime(DIR_FS_BACKUP . $entry)); ?></td>
-                <td class="dataTableContent" align="right" onclick="document.location.href='<?php echo owpLink($owpFilename['backup'], $onclick_link); ?>'"><?php echo number_format(filesize(DIR_FS_BACKUP . $entry)); ?> bytes</td>
+                <td class="dataTableContent" align="center" onclick="document.location.href='<?php echo owpLink($owpFilename['backup'], $onclick_link); ?>'"><?php echo date(PHP_DATE_TIME_FORMAT, filemtime(OWP_BACKUP_PATH . '/' . $entry)); ?></td>
+                <td class="dataTableContent" align="right" onclick="document.location.href='<?php echo owpLink($owpFilename['backup'], $onclick_link); ?>'"><?php echo number_format(filesize(OWP_BACKUP_PATH . '/' . $entry)); ?> bytes</td>
                 <td class="dataTableContent" align="right"><?php if ( (is_object($buInfo)) && ($entry == $buInfo->file) ) { echo owpImage(OWP_IMAGES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . owpLink($owpFilename['backup'], 'file=' . $entry) . '">' . owpImage(OWP_IMAGES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
@@ -403,7 +414,7 @@
   }
 ?>
               <tr>
-                <td class="smallText" colspan="3"><?php echo TEXT_BACKUP_DIRECTORY . ' ' . DIR_FS_BACKUP; ?></td>
+                <td class="smallText" colspan="3"><?php echo TEXT_BACKUP_DIRECTORY . ' ' . OWP_BACKUP_PATH; ?></td>
                 <td align="right" class="smallText"><?php if ( ($_GET['action'] != 'backup') && ($dir) ) echo '<a href="' . owpLink($owpFilename['backup'], 'action=backup') . '">' . owpImageButton('button_backup.gif', IMAGE_BACKUP) . '</a>'; if ( ($_GET['action'] != 'restorelocal') && ($dir) ) echo '&nbsp;&nbsp;<a href="' . owpLink($owpFilename['backup'], 'action=restorelocal') . '">' . owpImageButton('button_restore.gif', IMAGE_RESTORE) . '</a>'; ?></td>
               </tr>
 <?php
@@ -427,12 +438,12 @@
       $contents[] = array('text' => TEXT_INFO_NEW_BACKUP);
 
       if ($messageStack->size > 0) {
-        $contents[] = array('text' => '<br>' . tep_draw_radio_field('compress', 'no', true) . ' ' . TEXT_INFO_USE_NO_COMPRESSION);
-        $contents[] = array('text' => '<br>' . tep_draw_radio_field('download', 'yes', true) . ' ' . TEXT_INFO_DOWNLOAD_ONLY . '*<br><br>*' . TEXT_INFO_BEST_THROUGH_HTTPS);
+        $contents[] = array('text' => '<br>' . owpRadioField('compress', 'no', true) . ' ' . TEXT_INFO_USE_NO_COMPRESSION);
+        $contents[] = array('text' => '<br>' . owpRadioField('download', 'yes', true) . ' ' . TEXT_INFO_DOWNLOAD_ONLY . '*<br><br>*' . TEXT_INFO_BEST_THROUGH_HTTPS);
       } else {
-        $contents[] = array('text' => '<br>' . tep_draw_radio_field('compress', 'gzip', true) . ' ' . TEXT_INFO_USE_GZIP);
-        $contents[] = array('text' => tep_draw_radio_field('compress', 'zip') . ' ' . TEXT_INFO_USE_ZIP);
-        $contents[] = array('text' => tep_draw_radio_field('compress', 'no') . ' ' . TEXT_INFO_USE_NO_COMPRESSION);
+        $contents[] = array('text' => '<br>' . owpRadioField('compress', 'gzip', true) . ' ' . TEXT_INFO_USE_GZIP);
+        $contents[] = array('text' => owpRadioField('compress', 'zip') . ' ' . TEXT_INFO_USE_ZIP);
+        $contents[] = array('text' => owpRadioField('compress', 'no') . ' ' . TEXT_INFO_USE_NO_COMPRESSION);
         $contents[] = array('text' => '<br>' . owpCheckboxField('download', 'yes') . ' ' . TEXT_INFO_DOWNLOAD_ONLY . '*<br><br>*' . TEXT_INFO_BEST_THROUGH_HTTPS);
       }
 
@@ -441,7 +452,7 @@
     case 'restore':
       $heading[] = array('text' => '<b>' . $buInfo->date . '</b>');
 
-      $contents[] = array('text' => owpBreakString(sprintf(TEXT_INFO_RESTORE, DIR_FS_BACKUP . (($buInfo->compression != TEXT_NO_EXTENSION) ? substr($buInfo->file, 0, strrpos($buInfo->file, '.')) : $buInfo->file), ($buInfo->compression != TEXT_NO_EXTENSION) ? TEXT_INFO_UNPACK : ''), 35, ' '));
+      $contents[] = array('text' => owpBreakString(sprintf(TEXT_INFO_RESTORE, OWP_BACKUP_PATH . (($buInfo->compression != TEXT_NO_EXTENSION) ? substr($buInfo->file, 0, strrpos($buInfo->file, '.')) : $buInfo->file), ($buInfo->compression != TEXT_NO_EXTENSION) ? TEXT_INFO_UNPACK : ''), 35, ' '));
       $contents[] = array('align' => 'center', 'text' => '<br><a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file . '&action=restorenow') . '">' . owpImageButton('button_restore.gif', IMAGE_RESTORE) . '</a>&nbsp;<a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'restorelocal':

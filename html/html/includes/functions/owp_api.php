@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_api.php,v 1.4 2003/04/23 07:05:54 r23 Exp $
+   $Id: owp_api.php,v 1.5 2003/05/01 14:37:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -15,7 +15,7 @@
    File: newsletters.php,v 1.14 2002/03/29 13:04:25 dgw_
    ----------------------------------------------------------------------
 
-   $Id: owp_api.php,v 1.4 2003/04/23 07:05:54 r23 Exp $
+   $Id: owp_api.php,v 1.5 2003/05/01 14:37:29 r23 Exp $
    ----------------------------------------------------------------------
    POST-NUKE Content Management System
    Copyright (C) 2001 by the Post-Nuke Development Team.
@@ -62,6 +62,7 @@
     global $db;
 
     // Start connection
+    $ADODB_CACHE_DIR = OWP_DB_CACHE_PATH;
     $db = ADONewConnection($dbtype);
     $dbh = $db->Connect($dbhost, $dbuname, $dbpass, $dbname);
     if (!$dbh) {
@@ -104,7 +105,5 @@
   
   function owpDBInput($string) {
     return addslashes($string);
-  }
-  
-  
+  }  
 ?>

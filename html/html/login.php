@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: login.php,v 1.6 2003/04/29 06:28:58 r23 Exp $
+   $Id: login.php,v 1.7 2003/05/01 14:39:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -46,6 +46,7 @@
   require('includes/system.php');  
 
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['login']);
+  $breadcrumb->add(NAVBAR_TITLE, owpLink($owpFilename['login'], '', 'SSL'));
   
   if ($_GET['action'] == 'process') {
     include_once(OWP_FUNCTIONS_DIR . $owpFilename['password_crypt']);
@@ -82,8 +83,6 @@
       $messageStack->add(ERROR_LOGIN_NO_USER, 'error');
     }
   }
-
-  $breadcrumb->add(NAVBAR_TITLE, owpLink($owpFilename['login'], '', 'SSL'));
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -126,7 +125,7 @@
             <td colspan="3"><?php echo owpDrawForm('login', $owpFilename['login'], 'action=process'); ?><table>
               <tr>
                 <td class="main"><?php echo TEXT_INFO_USER_EMAIL; ?>&nbsp;</td>
-                <td><input type="text" name="email_address"></td>
+                <td><?php echo owpInputField('email_address'); ?></td>
               </tr>
               <tr>
                 <td class="main"><?php echo TEXT_INFO_PASSWORD; ?>&nbsp;</td>

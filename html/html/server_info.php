@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: server_info.php,v 1.12 2003/04/29 06:28:58 r23 Exp $
+   $Id: server_info.php,v 1.13 2003/05/01 14:39:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -30,6 +30,7 @@
   } 
  
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['server_info']);
+  $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['server_info'], '', 'NONSSL'));
   
   $system = owpGetSystemInformation();
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.12 2003/04/29 06:24:52 r23 Exp $
+   $Id: general.php,v 1.13 2003/05/01 14:37:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -64,14 +64,6 @@
     }
   }
 
-  function tep_customers_name($customers_id) {
-    $customers = tep_db_query("select customers_firstname, customers_lastname from " . TABLE_CUSTOMERS . " where customers_id = '" . $customers_id . "'");
-    $customers_values = tep_db_fetch_array($customers);
-
-    return $customers_values['customers_firstname'] . ' ' . $customers_values['customers_lastname'];
-  }
-
-
   function owpGetAllGetParameters($exclude_array = '') {
     global $_GET;
 
@@ -81,7 +73,7 @@
 
     reset($_GET);
     while (list($key, $value) = each($_GET)) {
-      if (($key != owpSessionName()) && ($key != 'error') && (!tep_in_array($key, $exclude_array))) $get_url .= $key . '=' . $value . '&';
+      if (($key != owpSessionName()) && ($key != 'error') && (!owpInArray($key, $exclude_array))) $get_url .= $key . '=' . $value . '&';
     }
 
     return $get_url;
@@ -147,7 +139,7 @@
     return (array) $array_merged;
   }
 
-  function tep_in_array($lookup_value, $lookup_array) {
+  function owpInArray($lookup_value, $lookup_array) {
     if (function_exists('in_array')) {
       if (in_array($lookup_value, $lookup_array)) return true;
     } else {
@@ -177,66 +169,6 @@
     return $get_string;
   } 
 
-  function tep_get_category_tree($parent_id = '0', $spacing = '', $exclude = '', $category_tree_array = '', $include_itself = false) {
-    global $languages_id;
-
-    if (!is_array($category_tree_array)) $category_tree_array = array();
-    if ( (sizeof($category_tree_array) < 1) && ($exclude != '0') ) $category_tree_array[] = array('id' => '0', 'text' => TEXT_TOP);
-
-    if ($include_itself) {
-      $category_query = tep_db_query("select cd.categories_name from " . TABLE_CATEGORIES_DESCRIPTION . " cd where cd.language_id = '" . $languages_id . "' and cd.categories_id = '" . $parent_id . "'");
-      $category = tep_db_fetch_array($category_query);
-      $category_tree_array[] = array('id' => $parent_id, 'text' => $category['categories_name']);
-    }
-
-    $categories_query = tep_db_query("select c.categories_id, cd.categories_name, c.parent_id from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.categories_id = cd.categories_id and cd.language_id = '" . $languages_id . "' and c.parent_id = '" . $parent_id . "' order by c.sort_order, cd.categories_name");
-    while ($categories = tep_db_fetch_array($categories_query)) {
-      if ($exclude != $categories['categories_id']) $category_tree_array[] = array('id' => $categories['categories_id'], 'text' => $spacing . $categories['categories_name']);
-      $category_tree_array = tep_get_category_tree($categories['categories_id'], $spacing . '&nbsp;&nbsp;&nbsp;', $exclude, $category_tree_array);
-    }
-
-    return $category_tree_array;
-  }
-
-  function tep_draw_products_pull_down($name, $parameters = '', $exclude = '') {
-    global $currencies, $languages_id;
-
-    if ($exclude == '') {
-      $exclude = array();
-    }
-    $select_string = '<select name="' . $name . '"';
-    if ($parameters) {
-      $select_string .= ' ' . $parameters;
-    }
-    $select_string .= '>';
-    $products_query = tep_db_query("select p.products_id, pd.products_name, p.products_price from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where p.products_id = pd.products_id and pd.language_id = '" . $languages_id . "' order by products_name");
-    while ($products = tep_db_fetch_array($products_query)) {
-      if (!tep_in_array($products['products_id'], $exclude)) {
-        $select_string .= '<option value="' . $products['products_id'] . '">' . $products['products_name'] . ' (' . $currencies->format($products['products_price']) . ')</option>';
-      }
-    }
-    $select_string .= '</select>';
-
-    return $select_string;
-  }
-
-  function tep_options_name($options_id) {
-    global $languages_id;
-
-    $options = tep_db_query("select products_options_name from " . TABLE_PRODUCTS_OPTIONS . " where products_options_id = '" . $options_id . "' and language_id = '" . $languages_id . "'");
-    $options_values = tep_db_fetch_array($options);
-
-    return $options_values['products_options_name'];
-  }
-
-  function tep_values_name($values_id) {
-    global $languages_id;
-
-    $values = tep_db_query("select products_options_values_name from " . TABLE_PRODUCTS_OPTIONS_VALUES . " where products_options_values_id = '" . $values_id . "' and language_id = '" . $languages_id . "'");
-    $values_values = tep_db_fetch_array($values);
-
-    return $values_values['products_options_values_name'];
-  }
 
   function owpBreakString($string, $len, $break_char = '-') {
     $l = 0;
@@ -325,46 +257,7 @@
   }
 
 
-  function tep_tax_classes_pull_down($parameters, $selected = '') {
-    $select_string = '<select ' . $parameters . '>';
-    $classes_query = tep_db_query("select tax_class_id, tax_class_title from " . TABLE_TAX_CLASS . " order by tax_class_title");
-    while ($classes = tep_db_fetch_array($classes_query)) {
-      $select_string .= '<option value="' . $classes['tax_class_id'] . '"';
-      if ($selected == $classes['tax_class_id']) $select_string .= ' SELECTED';
-      $select_string .= '>' . $classes['tax_class_title'] . '</option>';
-    }
-    $select_string .= '</select>';
-
-    return $select_string;
-  }
-
-  function tep_geo_zones_pull_down($parameters, $selected = '') {
-    $select_string = '<select ' . $parameters . '>';
-    $zones_query = tep_db_query("select geo_zone_id, geo_zone_name from " . TABLE_GEO_ZONES . " order by geo_zone_name");
-    while ($zones = tep_db_fetch_array($zones_query)) {
-      $select_string .= '<option value="' . $zones['geo_zone_id'] . '"';
-      if ($selected == $zones['geo_zone_id']) $select_string .= ' SELECTED';
-      $select_string .= '>' . $zones['geo_zone_name'] . '</option>';
-    }
-    $select_string .= '</select>';
-
-    return $select_string;
-  }
-
-  function tep_get_geo_zone_name($geo_zone_id) {
-    $zones_query = tep_db_query("select geo_zone_name from " . TABLE_GEO_ZONES . " where geo_zone_id = '" . $geo_zone_id . "'");
-
-    if (!tep_db_num_rows($zones_query)) {
-      $geo_zone_name = $geo_zone_id;
-    } else {
-      $zones = tep_db_fetch_array($zones_query);
-      $geo_zone_name = $zones['geo_zone_name'];
-    }
-
-    return $geo_zone_name;
-  }
-
-
+  
 //////////////////////////////////////////////////////////////////////////////////////////
 //
 // Function	: tep_format_address
@@ -462,31 +355,17 @@
     return $state_prov_code;
   }
 
-  function tep_get_uprid($prid, $params) {
-    $uprid = $prid;
-    if ( (is_array($params)) && (!strstr($prid, '{')) ) {
-      while (list($option, $value) = each($params)) {
-        $uprid = $uprid . '{' . $option . '}' . $value;
-      }
-    }
-
-    return $uprid;
-  }
-
-  function tep_get_prid($uprid) {
-    $pieces = explode ('{', $uprid);
-
-    return $pieces[0];
-  }
 
 ////
-// in use: categories.php, customers_status.php, define_language.php, index.php, manufacturers.php, meta_tags.php, orders_status.php, products_attributes.php, includes\system.php, includes\general.php, functions\languages.php
+// 
   function owpGetLanguages() {
     GLOBAL $db;
 
     $owpDBTable = owpDBGetTables();
-
-    $languages_query = $db->Execute("select languages_id, name, iso_639_2, iso_639_1 from " . $owpDBTable['languages'] . " where active = '1' order by sort_order");
+    $sql = "SELECT languages_id, name, iso_639_2, iso_639_1 
+            FROM " . $owpDBTable['languages'] . " 
+            WHERE active = '1' ORDER BY sort_order";
+    $languages_query = $db->Execute($sql);
     while ($languages = $languages_query->fields) {
       $languages_array[] = array('name' => $languages['name'],
                                  'iso_639_2' => $languages['iso_639_2'],
@@ -498,70 +377,6 @@
     return $languages_array;
   }
 
-  function tep_get_category_name($category_id, $language_id) {
-    $category_query = tep_db_query("select categories_name from " . TABLE_CATEGORIES_DESCRIPTION . " where categories_id = '" . $category_id . "' and language_id = '" . $language_id . "'");
-    $category = tep_db_fetch_array($category_query);
-
-    return $category['categories_name'];
-  }
-
-  function tep_get_orders_status_name($orders_status_id, $language_id = '') {
-    global $languages_id;
-
-    if (!$language_id) $language_id = $languages_id;
-    $orders_status_query = tep_db_query("select orders_status_name from " . TABLE_ORDERS_STATUS . " where orders_status_id = '" . $orders_status_id . "' and language_id = '" . $language_id . "'");
-    $orders_status = tep_db_fetch_array($orders_status_query);
-
-    return $orders_status['orders_status_name'];
-  }
-
-  function tep_get_orders_status() {
-    global $languages_id;
-
-    $orders_status_array = array();
-    $orders_status_query = tep_db_query("select orders_status_id, orders_status_name from " . TABLE_ORDERS_STATUS . " where language_id = '" . $languages_id . "' order by orders_status_id");
-    while ($orders_status = tep_db_fetch_array($orders_status_query)) {
-      $orders_status_array[] = array('id' => $orders_status['orders_status_id'],
-                                     'text' => $orders_status['orders_status_name']
-                                    );
-    }
-
-    return $orders_status_array;
-  }
-
-  function tep_get_products_name($product_id, $language_id = 0) {
-    global $languages_id;
-
-    if ($language_id == 0) $language_id = $languages_id;
-    $product_query = tep_db_query("select products_name from " . TABLE_PRODUCTS_DESCRIPTION . " where products_id = '" . $product_id . "' and language_id = '" . $language_id . "'");
-    $product = tep_db_fetch_array($product_query);
-
-    return $product['products_name'];
-  }
-
-  function tep_get_products_description($product_id, $language_id) {
-    $product_query = tep_db_query("select products_description from " . TABLE_PRODUCTS_DESCRIPTION . " where products_id = '" . $product_id . "' and language_id = '" . $language_id . "'");
-    $product = tep_db_fetch_array($product_query);
-
-    return $product['products_description'];
-  }
-
-  function tep_get_products_url($product_id, $language_id) {
-    $product_query = tep_db_query("select products_url from " . TABLE_PRODUCTS_DESCRIPTION . " where products_id = '" . $product_id . "' and language_id = '" . $language_id . "'");
-    $product = tep_db_fetch_array($product_query);
-
-    return $product['products_url'];
-  }
-
-////
-// Return the manufacturers URL in the needed language
-// TABLES: manufacturers_info
-  function tep_get_manufacturer_url($manufacturer_id, $language_id) {
-    $manufacturer_query = tep_db_query("select manufacturers_url from " . TABLE_MANUFACTURERS_INFO . " where manufacturers_id = '" . $manufacturer_id . "' and languages_id = '" . $language_id . "'");
-    $manufacturer = tep_db_fetch_array($manufacturer_query);
-
-    return $manufacturer['manufacturers_url'];
-  }
 
 ////
 // Wrapper for class_exists() function
@@ -574,50 +389,10 @@
     }
   }
 
-////
-// Count how many products exist in a category
-// TABLES: products, products_to_categories, categories
-  function tep_products_in_category_count($categories_id, $include_deactivated = false) {
-    $products_count = 0;
 
-    if ($include_deactivated) {
-      $products_query = tep_db_query("select count(*) as total from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c where p.products_id = p2c.products_id and p2c.categories_id = '" . $categories_id . "'");
-    } else {
-      $products_query = tep_db_query("select count(*) as total from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c where p.products_id = p2c.products_id and p.products_status = 1 and p2c.categories_id = '" . $categories_id . "'");
-    }
-
-    $products = tep_db_fetch_array($products_query);
-
-    $products_count += $products['total'];
-
-    $childs_query = tep_db_query("select categories_id from " . TABLE_CATEGORIES . " where parent_id = '" . $categories_id . "'");
-    if (tep_db_num_rows($childs_query)) {
-      while ($childs = tep_db_fetch_array($childs_query)) {
-        $products_count += tep_products_in_category_count($childs['categories_id'], $include_deactivated);
-      }
-    }
-
-    return $products_count;
-  }
-
-////
-// Count how many subcategories exist in a category
-// TABLES: categories
-  function tep_childs_in_category_count($categories_id) {
-    $categories_count = 0;
-
-    $categories_query = tep_db_query("select categories_id from " . TABLE_CATEGORIES . " where parent_id = '" . $categories_id . "'");
-    while ($categories = tep_db_fetch_array($categories_query)) {
-      $categories_count++;
-      $categories_count += tep_childs_in_category_count($categories['categories_id']);
-    }
-
-    return $categories_count;
-  }
 
 ////
 // Returns an array with countries
-// TABLES: countries
   function owpGetCountries($default = '') {
     GLOBAL $db;
 
@@ -686,18 +461,6 @@
     return owpPullDownMenu('configuration_value', owpGetCountryZones(OWP_COUNTRY), $zone_id);
   }
 
-  function tep_cfg_pull_down_tax_classes($tax_class_id, $key = '') {
-    $name = (($key) ? 'configuration[' . $key . ']' : 'configuration_value');
-
-    $tax_class_array = array(array('id' => '0', 'text' => TEXT_NONE));
-    $tax_class_query = tep_db_query("select tax_class_id, tax_class_title from " . TABLE_TAX_CLASS . " order by tax_class_title");
-    while ($tax_class = tep_db_fetch_array($tax_class_query)) {
-      $tax_class_array[] = array('id' => $tax_class['tax_class_id'],
-                                 'text' => $tax_class['tax_class_title']);
-    }
-
-    return owpPullDownMenu($name, $tax_class_array, $tax_class_id);
-  }
 
 ////
 // Function to read in text area in admin
@@ -807,34 +570,6 @@
     }
   }
 
-  function tep_generate_category_path($id, $from = 'category', $categories_array = '', $index = 0) {
-    global $languages_id;
-
-    if (!is_array($categories_array)) $categories_array = array();
-
-    if ($from == 'product') {
-      $categories_query = tep_db_query("select categories_id from " . TABLE_PRODUCTS_TO_CATEGORIES . " where products_id = '" . $id . "'");
-      while ($categories = tep_db_fetch_array($categories_query)) {
-        if ($categories['categories_id'] == '0') {
-          $categories_array[$index][] = array('id' => '0', 'text' => TEXT_TOP);
-        } else {
-          $category_query = tep_db_query("select cd.categories_name, c.parent_id from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.categories_id = '" . $categories['categories_id'] . "' and c.categories_id = cd.categories_id and cd.language_id = '" . $languages_id . "'");
-          $category = tep_db_fetch_array($category_query);
-          $categories_array[$index][] = array('id' => $categories['categories_id'], 'text' => $category['categories_name']);
-          if ( (owpNotNull($category['parent_id'])) && ($category['parent_id'] != '0') ) $categories_array = tep_generate_category_path($category['parent_id'], 'category', $categories_array, $index);
-          $categories_array[$index] = tep_array_reverse($categories_array[$index]);
-        }
-        $index++;
-      }
-    } elseif ($from == 'category') {
-      $category_query = tep_db_query("select cd.categories_name, c.parent_id from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.categories_id = '" . $id . "' and c.categories_id = cd.categories_id and cd.language_id = '" . $languages_id . "'");
-      $category = tep_db_fetch_array($category_query);
-      $categories_array[$index][] = array('id' => $id, 'text' => $category['categories_name']);
-      if ( (owpNotNull($category['parent_id'])) && ($category['parent_id'] != '0') ) $categories_array = tep_generate_category_path($category['parent_id'], 'category', $categories_array, $index);
-    }
-
-    return $categories_array;
-  }
 
   function tep_output_generated_category_path($id, $from = 'category') {
     $calculated_category_path_string = '';
@@ -852,77 +587,7 @@
     return $calculated_category_path_string;
   }
 
-  function owpRemove_category($category_id) {
-    $category_image_query = tep_db_query("select categories_image from " . TABLE_CATEGORIES . " where categories_id = '" . tep_db_input($category_id) . "'");
-    $category_image = tep_db_fetch_array($category_image_query);
-
-    $duplicate_image_query = tep_db_query("select count(*) as total from " . TABLE_CATEGORIES . " where categories_image = '" . tep_db_input($category_image['categories_image']) . "'");
-    $duplicate_image = tep_db_fetch_array($duplicate_image_query);
-
-    if ($duplicate_image['total'] < 2) {
-      if (file_exists(DIR_FS_CATALOG_IMAGES . $category_image['categories_image'])) {
-        @unlink(DIR_FS_CATALOG_IMAGES . $category_image['categories_image']);
-      }
-    }
-
-    tep_db_query("delete from " . TABLE_CATEGORIES . " where categories_id = '" . tep_db_input($category_id) . "'");
-    tep_db_query("delete from " . TABLE_CATEGORIES_DESCRIPTION . " where categories_id = '" . tep_db_input($category_id) . "'");
-    tep_db_query("delete from " . TABLE_PRODUCTS_TO_CATEGORIES . " where categories_id = '" . tep_db_input($category_id) . "'");
-
-    if (USE_CACHE == 'true') {
-      tep_reset_cache_block('categories');
-      tep_reset_cache_block('also_purchased');
-    }
-  }
-
-  function owpRemove_product($product_id) {
-    $product_image_query = tep_db_query("select products_image from " . TABLE_PRODUCTS . " where products_id = '" . tep_db_input($product_id) . "'");
-    $product_image = tep_db_fetch_array($product_image_query);
-
-    $duplicate_image_query = tep_db_query("select count(*) as total from " . TABLE_PRODUCTS . " where products_image = '" . tep_db_input($product_image['products_image']) . "'");
-    $duplicate_image = tep_db_fetch_array($duplicate_image_query);
-
-    if ($duplicate_image['total'] < 2) {
-      if (file_exists(DIR_FS_CATALOG_IMAGES . $product_image['products_image'])) {
-        @unlink(DIR_FS_CATALOG_IMAGES . $product_image['products_image']);
-      }
-    }
-
-    tep_db_query("delete from " . TABLE_SPECIALS . " where products_id = '" . tep_db_input($product_id) . "'");
-    tep_db_query("delete from " . TABLE_PRODUCTS . " where products_id = '" . tep_db_input($product_id) . "'");
-    tep_db_query("delete from " . TABLE_PRODUCTS_TO_CATEGORIES . " where products_id = '" . tep_db_input($product_id) . "'");
-    tep_db_query("delete from " . TABLE_PRODUCTS_DESCRIPTION . " where products_id = '" . tep_db_input($product_id) . "'");
-    tep_db_query("delete from " . TABLE_PRODUCTS_ATTRIBUTES . " where products_id = '" . tep_db_input($product_id) . "'");
-    tep_db_query("delete from " . TABLE_CUSTOMERS_BASKET . " where products_id = '" . tep_db_input($product_id) . "'");
-    tep_db_query("delete from " . TABLE_CUSTOMERS_BASKET_ATTRIBUTES . " where products_id = '" . tep_db_input($product_id) . "'");
-
-    $product_reviews_query = tep_db_query("select reviews_id from " . TABLE_REVIEWS . " where products_id = '" . tep_db_input($product_id) . "'");
-    while ($product_reviews = tep_db_fetch_array($product_reviews_query)) {
-      tep_db_query("delete from " . TABLE_REVIEWS_DESCRIPTION . " where reviews_id = '" . $product_reviews['reviews_id'] . "'");
-    }
-    tep_db_query("delete from " . TABLE_REVIEWS . " where products_id = '" . tep_db_input($product_id) . "'");
-
-    if (USE_CACHE == 'true') {
-      tep_reset_cache_block('categories');
-      tep_reset_cache_block('also_purchased');
-    }
-  }
-
-  function owpRemove_order($order_id, $restock = false) {
-    if ($restock == 'on') {
-      $order_query = tep_db_query("select products_id, products_quantity from " . TABLE_ORDERS_PRODUCTS . " where orders_id = '" . tep_db_input($order_id) . "'");
-      while ($order = tep_db_fetch_array($order_query)) {
-        tep_db_query("update " . TABLE_PRODUCTS . " set products_quantity = products_quantity + " . $order['products_quantity'] . " where products_id = '" . $order['products_id'] . "'");
-      }
-    }
-
-    tep_db_query("delete from " . TABLE_ORDERS . " where orders_id = '" . tep_db_input($order_id) . "'");
-    tep_db_query("delete from " . TABLE_ORDERS_PRODUCTS . " where orders_id = '" . tep_db_input($order_id) . "'");
-    tep_db_query("delete from " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . " where orders_id = '" . tep_db_input($order_id) . "'");
-    tep_db_query("delete from " . TABLE_ORDERS_STATUS_HISTORY . " where orders_id = '" . tep_db_input($order_id) . "'");
-    tep_db_query("delete from " . TABLE_ORDERS_TOTAL . " where orders_id = '" . tep_db_input($order_id) . "'");
-  }
-
+ 
   function tep_reset_cache_block($cache_block) {
     global $cache_blocks;
 

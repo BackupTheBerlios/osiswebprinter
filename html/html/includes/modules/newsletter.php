@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletter.php,v 1.8 2003/04/30 15:30:32 r23 Exp $
+   $Id: newsletter.php,v 1.9 2003/05/01 14:37:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -78,7 +78,7 @@
 
       $send_mail = new phpmailer();
 
-      $send_mail->From = OWP_EMAIL_ADDRESS
+      $send_mail->From = OWP_EMAIL_ADDRESS;
       $send_mail->FromName = OWP_NAME;
       $send_mail->Subject = $this->title;
       
@@ -89,12 +89,12 @@
       $mail_values = $db->Execute($sql);
       while ($mail = $mail_values->fields) {
       	$send_mail->Body = $this->content;
-      	$send_mail->AddAdress($mail['admin_email_address'], $mail['admin_firstname'] . ' ' . $mail['admin_lastname']);
+      	$send_mail->AddAddress($mail['admin_email_address'], $mail['admin_firstname'] . ' ' . $mail['admin_lastname']);
         $send_mail->Send();
         // Clear all addresses and attachments for next loop
         $send_mail->ClearAddresses();
         $send_mail->ClearAttachments();
-        $mail->MoveNext();
+        $mail_values->MoveNext();
       }
       
       $today = date("Y-m-d H:i:s");

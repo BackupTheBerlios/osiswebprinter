@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletters.php,v 1.16 2003/04/30 07:13:43 r23 Exp $
+   $Id: newsletters.php,v 1.17 2003/05/01 14:39:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,13 +24,13 @@
 
   require('includes/system.php');
  
- /*
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
- */
+
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['newsletters']);
+  $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['newsletters'], '', 'NONSSL'));
 
   if ($_GET['action']) {
     switch ($_GET['action']) {
@@ -100,12 +100,11 @@
       case 'send':
       case 'confirm_send':
         $newsletter_id = owpPrepareInput($_GET['nID']);
-
-        $check_query = $db->Execute("SELECT locked 
-                                     FROM " . $owpDBTable['newsletters'] . " 
-                                     WHERE newsletters_id = '" . owpDBInput($newsletter_id) . "'");
+        $sql = "SELECT locked 
+                FROM " . $owpDBTable['newsletters'] . " 
+                WHERE newsletters_id = '" . owpDBInput($newsletter_id) . "'";
+        $check_query = $db->Execute($sql);
         $check = $check_query->fields;
-
         if ($check['locked'] < 1) {
           switch ($_GET['action']) {
             case 'delete': $error = ERROR_REMOVE_UNLOCKED_NEWSLETTER; break;

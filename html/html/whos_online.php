@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: whos_online.php,v 1.13 2003/04/29 16:59:21 r23 Exp $
+   $Id: whos_online.php,v 1.14 2003/05/01 14:39:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -30,7 +30,7 @@
   } 
   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['whos_online']);
-
+  $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['whos_online'], '', 'NONSSL'));
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -78,7 +78,6 @@
                  time_entry, time_last_click, last_page_url 
           FROM " . $owpDBTable['whos_online'];
   $whos_online_query = $db->Execute($sql);  
-  
   while ($whos_online = $whos_online_query->fields) {
     $time_online = (time() - $whos_online['time_entry']);
     if ( ((!$_GET['info']) || (@$_GET['info'] == $whos_online['session_id'])) && (!$info) ) {

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: password_forgotten.php,v 1.7 2003/04/30 15:30:32 r23 Exp $
+   $Id: password_forgotten.php,v 1.8 2003/05/01 14:39:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -101,7 +101,7 @@
             <td colspan="3"><?php echo owpDrawForm('password_forgotten', password_forgotten, 'action=process'); ?><table>
               <tr>
                 <td class="main"><?php echo TEXT_INFO_USER_EMAIL; ?>&nbsp;</td>
-                <td><input type="text" name="email_address"></td>
+                <td><?php echo owpInputField('email_address'); ?></td>
               </tr>
               <tr>
                 <td colspan="2"><?php echo owpTransLine('1', '5'); ?></td>

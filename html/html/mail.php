@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.10 2003/04/30 15:30:32 r23 Exp $
+   $Id: mail.php,v 1.11 2003/05/01 14:39:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,12 +23,12 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
-/* 
+
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
-*/ 
+
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['mail']);
   $breadcrumb->add(NAVBAR_TITLE, owpLink($owpFilename['mail']));
 
@@ -60,7 +60,6 @@
 
     // Let's build a message object using the email class
     $send_mail = new phpmailer();
-
     $send_mail->From = $_POST['from_mail'];
     $send_mail->FromName = $_POST['from_name'];
     $send_mail->Subject = $subject;
@@ -76,29 +75,39 @@
       $send_mail->Body = $body;
       $send_mail->AddAddress($mail['admin_email_address'], $mail['admin_firstname'] . ' ' . $mail['admin_lastname']);
       $send_mail->Send();
-      // Clear all addresses and attachments for next loop
       $send_mail->ClearAddresses();
       $send_mail->ClearAttachments();
       $mail_query->MoveNext();
     }
-
     owpRedirect(owpLink($owpFilename['mail'], 'mail_sent_to=' . urlencode($mail_sent_to)));
-  }
-
-  if ( ($_GET['action'] == 'preview') && (!$_POST['user_email_address']) ) {
-    $messageStack->add(ERROR_NO_USER_SELECTED, 'error');
   }
 
   if ($_GET['mail_sent_to']) {
     $messageStack->add(sprintf(NOTICE_EMAIL_SENT_TO, $_GET['mail_sent_to']), 'notice');
   }
 
-  if ( ($_GET['action'] == 'preview') && ($_POST['from_name'] == '') ) {
-    $messageStack->add(ERROR_NO_FROM_NAME, 'error');
-  }
-
-  if ( ($_GET['action'] == 'preview') && ($_POST['from_mail'] == '') ) {
-    $messageStack->add(ERROR_NO_FROM_MAIL, 'error');
+  if ($_GET['action'] == 'preview') {
+    $noerror = true;
+    if (!$_POST['user_email_address']) {
+      $messageStack->add(ERROR_NO_USER_SELECTED, 'error');
+      $noerror = false;
+    }
+    if ($_POST['from_name'] == '') {
+      $messageStack->add(ERROR_NO_FROM_NAME, 'error');
+      $noerror = false;
+    }
+    if ($_POST['from_mail'] == '') {
+      $messageStack->add(ERROR_NO_FROM_MAIL, 'error');
+      $noerror = false;
+    }
+    if ($_POST['subject'] == '') {
+      $messageStack->add(ERROR_NO_SUBJECT, 'error');
+      $noerror = false;
+    }
+    if ($_POST['message'] == '') {
+      $messageStack->add(ERROR_NO_BODY, 'error');
+      $noerror = false;
+    }
   }
   
   if ( ($_GET['action'] == 'preview') && ($_POST['user_email_address']) ) {
@@ -152,7 +161,7 @@
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
-  if ( ($_GET['action'] == 'preview') && ($_POST['user_email_address']) ) {
+  if ( (($_GET['action'] == 'preview') && ($_POST['user_email_address'])) && ($noerror == 'false') ) {
 ?>
           <tr><?php echo owpDrawForm('mail', $owpFilename['mail'], 'action=send_email_to_user'); ?>
             <td><table border="0" cellpadding="0" cellspacing="2">
@@ -228,6 +237,12 @@
           </form></tr>
 <?php
   } else {
+    $sql = "SELECT admin_firstname, admin_lastname, admin_email_address 
+            FROM " . $owpDBTable['administrators'] . " 
+            WHERE admin_id = '" . owpDBInput($_SESSION['user_id']) . "'";
+    $db->cacheSecs = 900; 
+    $admin_send_query = $db->CacheExecute($sql);
+    $admin_send = $admin_send_query->fields;
 ?>
           <tr><?php echo owpDrawForm('mail', $owpFilename['mail'], 'action=preview'); ?>
             <td><table border="0" cellpadding="0" cellspacing="2">
@@ -239,7 +254,6 @@
     $user[] = array('id' => '', 'text' => TEXT_SELECT_USER);
     $user[] = array('id' => '***', 'text' => TEXT_ALL_USER);
     $user[] = array('id' => '**D', 'text' => TEXT_NEWSLETTER_USER);
-
     $sql = "SELECT admin_gender, admin_firstname, admin_lastname, admin_email_address 
             FROM " . $owpDBTable['administrators'] . " 
             ORDER BY admin_lastname";
@@ -251,18 +265,18 @@
 ?>
               <tr>
                 <td class="main"><?php echo TEXT_USER; ?></td>
-                <td><?php echo owpPullDownMenu('user_email_address', $user, $_GET['customer']);?></td>
+                <td><?php echo owpPullDownMenu('user_email_address', $user);?></td>
               </tr>
               <tr>
                 <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
                 <td class="main"><?php echo TEXT_FROM_NAME; ?></td>
-                <td><?php echo owpInputField('from_name', OWP_OWNER); ?></td>
+                <td><?php echo owpInputField('from_name', $admin_send['admin_firstname'] .' '. $admin_send['admin_lastname'] ); ?></td>
               </tr>
               <tr>
                 <td class="main"><?php echo TEXT_FROM_MAIL; ?></td>
-                <td><?php echo owpInputField('from_mail', OWP_OWNER_EMAIL_ADDRESS); ?></td>
+                <td><?php echo owpInputField('from_mail', $admin_send['admin_email_address']); ?></td>
               </tr>
               <tr>
                 <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
