@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: administrators.php,v 1.9 2003/05/05 16:47:38 r23 Exp $
+   $Id: administrators.php,v 1.10 2003/05/06 13:48:11 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -51,39 +51,82 @@
 
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['administrators']);
   require_once(OWP_FUNCTIONS_DIR . 'owp_administrators.php');
- 
-  switch ($_GET['action']) {
-    case 'update':
-      $sPages = $_POST['adm_pages'];       
-      if ( $adm_type == 'all' ) {
-        $aPages = '*';
-      } else {
-        $aPages = implode( '|', $sPages ); 
-      }
-      $db->Execute("UPDATE " . $owpDBTable['administrators'] . " 
-	               SET admin_gender = " . $db->qstr($admin_gender) . ", 
-                           admin_firstname = " . $db->qstr($admin_firstname) . ", 
-                           admin_lastname = " . $db->qstr($admin_lastname) . ",
-                           admin_email_address = " . $db->qstr($admin_email_address) . ", 
-                           admin_telephone = " . $db->qstr($admin_telephone) . ",
-                           admin_fax = " . $db->qstr($admin_fax) . ",
-                           admin_allowed_pages = " . $db->qstr($aPages) . ", 
-                           admin_newsletter = " . $db->qstr($admin_newsletter) . " 
-                     WHERE admin_id = '" . $_GET['aID'] . "'");
-      $today = date("Y-m-d H:i:s");
-      $db->Execute("UPDATE " . $owpDBTable['administrators_info'] . " 
-	               SET admin_info_date_account_last_modified = " . $db->DBTimeStamp($today) . "
-                     WHERE admin_info_id = '" . $_GET['aID'] . "'");
- 
-      owpRedirect(owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $_GET['aID']));
-      break;  
-    case 'deleteconfirm':
-      $db->Execute("DELETE FROM " . $owpDBTable['administrators'] . " WHERE admin_id = '" . $_GET['aID'] . "'");
-      $db->Execute("DELETE FROM " . $owpDBTable['administrators_info'] . " WHERE admin_info_id = '" . $_GET['aID'] . "'");
+  if ($_GET['action']) {
+    switch ($_GET['action']) {
+      case 'loginflag':
+        if ( ($_GET['flag'] == '0') || ($_GET['flag'] == '1') ) {
+          if ($_GET['aID']) {
+            if ($_GET['flag'] == '0') {
+              $db->Execute("UPDATE " . $owpDBTable['administrators'] . " 
+	                       SET admin_login = '0' 
+                             WHERE admin_id = '" . $_GET['aID'] . "'");
+            } elseif ($_GET['flag'] == '1') {
+	      $db->Execute("UPDATE " . $owpDBTable['administrators'] . " 
+		               SET admin_login = '1'  
+                             WHERE admin_id = '" . $_GET['aID'] . "'");
+	      $sql = "SELECT admin_id, admin_gender, admin_firstname, admin_lastname,
+                             admin_email_address, admin_password, admin_allowed_pages, admin_login 
+                      FROM " . $owpDBTable['administrators'] . " 
+                      WHERE admin_id = '" . $_GET['aID'] . "'";
+              $check_admin_query = $db->Execute($sql);
+              if ($check_admin_query->RecordCount()) {
+                $check_admin = $check_admin_query->fields;
+                $name = $check_admin['admin_firstname'] . " " . $check_admin['admin_lastname'];
+                if ($check_admin['admin_gender'] == 'm') {
+		  $email_text = EMAIL_GREET_MR . $check_admin['admin_lastname'] . ',' . "\n\n";
+		} else {
+		  $email_text = EMAIL_GREET_MS . $check_admin['admin_lastname'] . ',' . "\n\n";
+		}
+                $email_text .= EMAIL_WELCOME . EMAIL_TEXT;
+                if ($check_admin['admin_password'] == '') {
+                  include_once(OWP_FUNCTIONS_DIR . $owpFilename['password_crypt']);
+                  $newpass = owpCreatePassword(PASSWORD_MIN_LENGTH);
+                  $crpted_password = owpCryptPassword($newpass);
+                  $db->Execute("UPDATE " . $owpDBTable['administrators'] . " 
+                                   SET admin_password = " . $db->qstr($crpted_password) . "
+                                  WHERE admin_id = '" . $_GET['aID'] . "'");
+                  $email_text .= sprintf(EMAIL_PASSWORD_REMINDER_BODY, $newpass);
+                }
+                $email_text .= EMAIL_CONTACT . EMAIL_FOOT;
+                owpMail($name, $check_admin['admin_email_address'], EMAIL_SUBJECT, nl2br($email_text), OWP_OWNER, OWP_OWNER_EMAIL_ADDRESS); 
+                owpRedirect(owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $_GET['aID']));
+              }
+            }            
+          }    
+        } 
+        break; 
+      case 'update':
+        $sPages = $_POST['adm_pages'];       
+        if ( $adm_type == 'all' ) {
+          $aPages = '*';
+        } else {
+          $aPages = implode( '|', $sPages ); 
+        }
+        $db->Execute("UPDATE " . $owpDBTable['administrators'] . " 
+	                 SET admin_gender = " . $db->qstr($admin_gender) . ", 
+                             admin_firstname = " . $db->qstr($admin_firstname) . ", 
+                             admin_lastname = " . $db->qstr($admin_lastname) . ",
+                             admin_email_address = " . $db->qstr($admin_email_address) . ", 
+                             admin_telephone = " . $db->qstr($admin_telephone) . ",
+                             admin_fax = " . $db->qstr($admin_fax) . ",
+                             admin_allowed_pages = " . $db->qstr($aPages) . ", 
+                             admin_newsletter = " . $db->qstr($admin_newsletter) . " 
+                       WHERE admin_id = '" . $_GET['aID'] . "'");
+        $today = date("Y-m-d H:i:s");
+        $db->Execute("UPDATE " . $owpDBTable['administrators_info'] . " 
+	                 SET admin_info_date_account_last_modified = " . $db->DBTimeStamp($today) . "
+                       WHERE admin_info_id = '" . $_GET['aID'] . "'");
+  
+        owpRedirect(owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $_GET['aID']));
+        break;  
+      case 'deleteconfirm':
+        $db->Execute("DELETE FROM " . $owpDBTable['administrators'] . " WHERE admin_id = '" . $_GET['aID'] . "'");
+        $db->Execute("DELETE FROM " . $owpDBTable['administrators_info'] . " WHERE admin_info_id = '" . $_GET['aID'] . "'");
       
-      $messageStack->add_session(SUCCESS_DELETE_USER, 'success');
-      owpRedirect(owpLink($owpFilename['administrators'], 'page=' . $_GET['page']));
-      break;
+        $messageStack->add_session(SUCCESS_DELETE_USER, 'success');
+        owpRedirect(owpLink($owpFilename['administrators'], 'page=' . $_GET['page']));
+        break;
+    }
   }
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -224,10 +267,11 @@
                 <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_FIRSTNAME; ?></td>
                 <td class="dataTableHeadingContent"><?php echo TABLE_ADMIN_HAS_ACCESS_TO; ?></td>
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACCOUNT_CREATED; ?></td>
+                <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACCOUNT_LOGIN; ?></td>
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
-    $admin_query_raw = "select admin_id, admin_gender, admin_firstname, admin_lastname, admin_email_address, admin_password, admin_allowed_pages from " . $owpDBTable['administrators'] . "  order by admin_lastname, admin_firstname";
+    $admin_query_raw = "select admin_id, admin_gender, admin_firstname, admin_lastname, admin_email_address, admin_password, admin_allowed_pages, admin_login from " . $owpDBTable['administrators'] . "  order by admin_lastname, admin_firstname";
     $admin_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $admin_query_raw, $admin_query_numrows);
     $admin_query = $db->Execute($admin_query_raw);
     while ($admin = $admin_query->fields) { 
@@ -270,6 +314,14 @@
       print( $aTextAccessTo );
 ?>
                 <td class="dataTableContent" align="right"><?php echo owpDateShort($info['date_account_created']); ?></td>
+                <td class="dataTableContent" align="right">
+<?php
+      if ($admin['admin_login'] == '1') {
+        echo '<a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&action=loginflag&flag=0&aID=' . $admin['admin_id']) . '">' . owpImage(OWP_ICONS_DIR . 'icon_status_green.gif', IMAGE_ICON_STATUS_RED_LIGHT, 10, 10) . '</a>';
+      } else {
+        echo '<a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&action=loginflag&flag=1&aID=' . $admin['admin_id']) . '">' . owpImage(OWP_ICONS_DIR . 'icon_status_red.gif', IMAGE_ICON_STATUS_GREEN_LIGHT, 10, 10) . '</a>';
+      }
+?></td>                
                 <td class="dataTableContent" align="right"><?php if ((is_object($aInfo)) && ($admin['admin_id'] == $aInfo->admin_id)) { echo owpImage(OWP_ICONS_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . owpLink($owpFilename['administrators'], owpGetAllGetParameters(array('aID')) . 'aID=' . $admin['admin_id']) . '">' . owpImage(OWP_ICONS_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: account_edit_process.php,v 1.4 2003/05/05 16:47:38 r23 Exp $
+   $Id: account_edit_process.php,v 1.5 2003/05/06 13:48:11 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -32,20 +32,9 @@
   if ($_POST['action'] != 'process') {
     owpRedirect(owpLink($owpFilename['account_edit'], '', 'SSL'));
   }
-
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['account_edit_process']);
   require_once(OWP_FUNCTIONS_DIR . 'owp_validations.php');
 
-/*
-  $gender = tep_db_prepare_input($HTTP_POST_VARS['gender']);
-  $firstname = tep_db_prepare_input($HTTP_POST_VARS['firstname']);
-  $lastname = tep_db_prepare_input($HTTP_POST_VARS['lastname']);
-  $email_address = tep_db_prepare_input($HTTP_POST_VARS['email_address']);
-  $telephone = tep_db_prepare_input($HTTP_POST_VARS['telephone']);
-  $fax = tep_db_prepare_input($HTTP_POST_VARS['fax']);
-  $newsletter = tep_db_prepare_input($HTTP_POST_VARS['newsletter']);
-  $password = tep_db_prepare_input($HTTP_POST_VARS['password']);
-  $confirmation = tep_db_prepare_input($HTTP_POST_VARS['confirmation']);
-*/
   $error = false; // reset error flag
 
   if (($gender == 'm') || ($gender == 'f')) {
@@ -75,14 +64,14 @@
   } else {
     $entry_email_address_error = false;
   }
-
+/*
   if (!owpValidateEmail($email_address)) {
     $error = true;
     $entry_email_address_check_error = true;
   } else {
     $entry_email_address_check_error = false;
   }
-
+*/
 
   if (strlen($telephone) < TELEPHONE_MIN_LENGTH) {
     $error = true;
@@ -103,8 +92,11 @@
     $entry_password_error = true;
   }
 
-  $check_email_query = tep_db_query("select count(*) as total from " . TABLE_CUSTOMERS . " where customers_email_address = '" . tep_db_input($email_address) . "' and customers_id != '" . tep_db_input($customer_id) . "'");
-  $check_email = tep_db_fetch_array($check_email_query);
+  $check_email_query = $db->Execute("SELECT count(*) as total 
+                                     FROM " . $owpDBTable['administrators'] . " 
+                                     WHERE admin_email_address = '" . owpDBInput($email_address) . "'
+                                       AND admin_id != '" . $_SESSION['user_id'] . "'");                            
+  $check_email = $check_email_query->fields;
   if ($check_email['total'] > 0) {
     $error = true;
     $entry_email_address_exists = true;
@@ -115,8 +107,7 @@
   if ($error == true) {
     $processed = true;
 
-    include(DIR_WS_LANGUAGES . $language . '/' . $owpFilename['account_edit_process']);
-
+    define('JS_PASSWORD_CHECK', 'true');
     $breadcrumb->add(NAVBAR_TITLE_1, owpLink($owpFilename['account'], '', 'SSL'));
     $breadcrumb->add(NAVBAR_TITLE_2, owpLink($owpFilename['account_edit'], '', 'SSL'));
 ?>
@@ -129,6 +120,7 @@
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">
 <link rel="StyleSheet" href="style/style.css" type="text/css" />
+<?php require('javascript/form_check.php'); ?>
 </head>
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <!-- header //-->
@@ -179,49 +171,61 @@
 </html>
 <?php
   } else {
-    $sql_data_array = array('customers_firstname' => $firstname,
-                            'customers_lastname' => $lastname,
-                            'customers_email_address' => $email_address,
-                            'customers_telephone' => $telephone,
-                            'customers_fax' => $fax,
-                            'customers_newsletter' => $newsletter,
-                            'customers_password' => crypt_password($password));
+    include_once(OWP_FUNCTIONS_DIR . $owpFilename['password_crypt']);
+    $owp_pwd = owpCryptPassword($password);
+    $login = DEFAULT_ADMIN_LOGIN;
+    $db->Execute("UPDATE " . $owpDBTable['administrators'] . " 
+	             SET admin_gender = " . $db->qstr($gender) . ",
+                         admin_firstname = " . $db->qstr($firstname) . ",
+                         admin_lastname = " . $db->qstr($lastname) . ",
+                         admin_email_address = " . $db->qstr($email_address) . ",
+                         admin_telephone = " . $db->qstr($telephone) . ",
+                         admin_fax = " . $db->qstr($fax) . ",
+                         admin_password = " . $db->qstr($owp_pwd) . ",
+                         admin_login = " . $db->qstr(login) . "
+                   WHERE admin_id = '" . $_SESSION['user_id'] . "'");         
+    $today = date("Y-m-d H:i:s");
+    $db->Execute("UPDATE " . $owpDBTable['administrators_info'] . " 
+	             SET admin_info_date_account_last_modified = " . $db->DBTimeStamp($today) . "
+                   WHERE admin_info_id = '" . $_SESSION['user_id'] . "'");
+    // build the message content
+    $name = $firstname . " " . $lastname;
 
-    if (ACCOUNT_GENDER == 'true') $sql_data_array['customers_gender'] = $gender;
-    if (ACCOUNT_DOB == 'true') $sql_data_array['customers_dob'] = tep_date_raw($dob);
-
-    tep_db_perform(TABLE_CUSTOMERS, $sql_data_array, 'update', "customers_id = '" . tep_db_input($customer_id) . "'");
-
-    $sql_data_array = array('entry_street_address' => $street_address,
-                            'entry_firstname' => $firstname,
-                            'entry_lastname' => $lastname,
-                            'entry_postcode' => $postcode,
-                            'entry_city' => $city,
-                            'entry_country_id' => $country);
-
-    if (ACCOUNT_GENDER == 'true') $sql_data_array['entry_gender'] = $gender;
-    if (ACCOUNT_COMPANY == 'true') $sql_data_array['entry_company'] = $company;
-    if (ACCOUNT_SUBURB == 'true') $sql_data_array['entry_suburb'] = $suburb;
-    if (ACCOUNT_STATE == 'true') {
-      if ($zone_id > 0) {
-        $sql_data_array['entry_zone_id'] = $zone_id;
-        $sql_data_array['entry_state'] = '';
-      } else {
-        $sql_data_array['entry_zone_id'] = '0';
-        $sql_data_array['entry_state'] = $state;
-      }
+    if ($_POST['gender'] == 'm') {
+      $email_text = EMAIL_GREET_MR . $_POST['lastname'] . ',' . "\n\n";
+    } else {
+      $email_text = EMAIL_GREET_MS . $_POST['lastname'] . ',' . "\n\n";
     }
 
-    tep_db_perform(TABLE_ADDRESS_BOOK, $sql_data_array, 'update', "customers_id = '" . tep_db_input($customer_id) . "' and address_book_id = '" . tep_db_input($customer_default_address_id) . "'");
+    $email_text .= EMAIL_UPDATE . EMAIL_TEXT . EMAIL_CONTACT . EMAIL_FOOT;
 
-    tep_db_query("update " . TABLE_CUSTOMERS_INFO . " set customers_info_date_account_last_modified = now() where customers_info_id = '" . tep_db_input($customer_id) . "'");
+    owpMail($name, $email_address, EMAIL_SUBJECT, nl2br($email_text), OWP_OWNER, OWP_OWNER_EMAIL_ADDRESS);
+   
+    $email_owner = OWNER_EMAIL_SUBJECT . "\n" . 
+                   EMAIL_SEPARATOR . "\n" . 
+                   OWNER_EMAIL_NUMBER . ' ' . $admin_id . "\n" .
+                   OWNER_EMAIL_URL .  "\n" . OWP_HTTP_SERVER . '/' . $owpFilename['administrators'] . '?selected_box=administrators&page=1&aID=' . $admin_id . '&action=edit' . "\n" . 
+                   OWNER_EMAIL_DATE . ' ' . strftime(DATE_FORMAT_LONG) . "\n\n" .
+                   EMAIL_SEPARATOR . "\n";
 
-    $customer_first_name = $firstname;
-    if ($HTTP_COOKIE_VARS['first_name']) setcookie('first_name', $customer_first_name, time()+2592000, substr(DIR_WS_CATALOG, 0, -1));
-    $customer_country_id = $country;
-    $customer_zone_id = $zone_id;
+              
+    $email_owner .= OWNER_EMAIL_FIRST_NAME . ' ' . $firstname . "\n" .
+                    OWNER_EMAIL_LAST_NAME . ' ' . $lastname . "\n\n" .      
+                    OWNER_EMAIL_CONTACT. "\n" . 
+                    OWNER_EMAIL_TELEPHONE_NUMBER . ' ' . $telephone . "\n" .
+                    OWNER_EMAIL_FAX_NUMBER . ' ' . $fax . "\n" .
+                    OWNER_EMAIL_ADDRESS . ' ' . $email_address . "\n" .
+                    EMAIL_SEPARATOR . "\n\n" . 
+                    OWNER_EMAIL_OPTIONS . "\n";
+    if ($newsletter == '1') {
+      $email_owner .= OWNER_EMAIL_NEWSLETTER . ENTRY_NEWSLETTER_YES . "\n";
+    } else {
+      $email_owner .= OWNER_EMAIL_NEWSLETTER . ENTRY_NEWSLETTER_NO . "\n";
+    }
+   
+    owpMail(OWP_OWNER, OWP_OWNER_EMAIL_ADDRESS, EMAIL_SUBJECT, nl2br($email_owner),$name, $email_address );
 
-    owpRedirect(owpLink($owpFilename['account'], '', 'SSL'));
+    owpRedirect(owpLink($owpFilename['logoff'], '', 'SSL'));
   }
 
   require(OWP_INCLUDES_DIR . 'nice_exit.php');

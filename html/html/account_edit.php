@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: account_edit.php,v 1.4 2003/05/05 16:47:38 r23 Exp $
+   $Id: account_edit.php,v 1.5 2003/05/06 13:48:11 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -28,7 +28,7 @@
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   }
-
+  define('JS_PASSWORD_CHECK', 'true');
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['account_edit']);
   $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['account_edit'], '', 'NONSSL'));
 ?>
@@ -41,6 +41,7 @@
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">
 <link rel="StyleSheet" href="style/style.css" type="text/css" />
+<?php require('javascript/form_check.php'); ?>
 </head>
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <!-- header //-->

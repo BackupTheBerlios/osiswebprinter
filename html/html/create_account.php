@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: create_account.php,v 1.4 2003/05/05 16:47:38 r23 Exp $
+   $Id: create_account.php,v 1.5 2003/05/06 13:48:11 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -27,7 +27,7 @@
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['create_account']);
   $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['create_account'], '', 'NONSSL'));
   
-  define('JS_PASSWORD', 'false');
+  define('JS_PASSWORD_CHECK', 'false');
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: create_account_process.php,v 1.4 2003/05/05 16:47:38 r23 Exp $
+   $Id: create_account_process.php,v 1.5 2003/05/06 13:48:11 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -88,7 +88,7 @@
 */
   if ($error == true) {
     $processed = true;
-    define('JS_PASSWORD', 'false');
+    define('JS_PASSWORD_CHECK', 'false');
     $breadcrumb->add(NAVBAR_TITLE_1, owpLink($owpFilename['create_account'], '', 'NONSSL'));
     $breadcrumb->add(NAVBAR_TITLE_2);
 ?>
@@ -189,7 +189,7 @@
              VALUES (" . $db->qstr($admin_id) . ','
                        . $db->qstr($number_of_logons) . ','
                        . $db->DBTimeStamp($today) . ")";
-  
+    $db->Execute($sql);
     // build the message content
     $name = $firstname . " " . $lastname;
 
@@ -198,8 +198,6 @@
     } else {
       $email_text = EMAIL_GREET_MS . $_POST['lastname'] . ',' . "\n\n";
     }
-
-    // $email_text .= EMAIL_WELCOME . EMAIL_TEXT . EMAIL_CONTACT . EMAIL_WARNING;
     $email_text .= EMAIL_WELCOME . EMAIL_TEXT . EMAIL_CONTACT . EMAIL_FOOT;
 
     owpMail($name, $email_address, EMAIL_SUBJECT, nl2br($email_text), OWP_OWNER, OWP_OWNER_EMAIL_ADDRESS);
@@ -210,7 +208,6 @@
                    OWNER_EMAIL_URL .  "\n" . OWP_HTTP_SERVER . '/' . $owpFilename['administrators'] . '?selected_box=administrators&page=1&aID=' . $admin_id . '&action=edit' . "\n" . 
                    OWNER_EMAIL_DATE . ' ' . strftime(DATE_FORMAT_LONG) . "\n\n" .
                    EMAIL_SEPARATOR . "\n";
-
               
     $email_owner .= OWNER_EMAIL_FIRST_NAME . ' ' . $firstname . "\n" .
                     OWNER_EMAIL_LAST_NAME . ' ' . $lastname . "\n\n" .      
