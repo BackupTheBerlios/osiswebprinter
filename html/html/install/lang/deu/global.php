@@ -1,6 +1,6 @@
 <?php 
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.7 2003/03/31 16:40:09 r23 Exp $
+   $Id: global.php,v 1.8 2003/04/01 05:15:34 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -35,8 +35,8 @@ define('BTN_RECHECK', 'wiederholen');
 define('BTN_SET_LANGUAGE', 'Sprache festlegen');
 define('BTN_START','Start');
 define('BTN_SUBMIT','best&auml;tigen');
-# define('BTN_NEW_INSTALL', 'Installation');
-# define('BTN_CHANGE_INFO', 'Daten &auml;ndern');
+define('BTN_NEW_INSTALL', 'Installation');
+define('BTN_CHANGE_INFO', 'Daten &auml;ndern');
 
 define('GREAT', 'Willkommen bei OSIS Web Printer.');
 define('GREAT_1', 'Die Komplettlösung zur schnellen Anbindung von Webanwendungen an Toshiba Tec Web Printer.'); 
@@ -72,7 +72,7 @@ define('CHM_CHECK_1', 'Bitte geben Sie die Zugangsdaten Ihrer Datenbank an. Soll
 define('DBHOST', 'Datenbank Host');
 define('DBINFO', 'Datenbank Information');
 define('DBNAME', 'Datenbank Name');
-define('DBPASS', 'Datenbank Password');
+define('DBPASS', 'Datenbank Passwort');
 define('DBPREFIX', 'Tabellen Pr&auml;fix (f&uuml;r Tabellen Sharing)');
 define('DBTYPE', 'Datenbank Type');
 define('DBUNAME', 'Datenbank Anwendername');

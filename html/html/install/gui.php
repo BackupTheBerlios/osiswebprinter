@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: gui.php,v 1.10 2003/04/01 02:30:23 r23 Exp $
+   $Id: gui.php,v 1.11 2003/04/01 05:15:34 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -146,16 +146,22 @@ function owp_submit() {
             '<br /><font class="owp-normal">' . SUBMIT_2 . '</font><br /><br />' . "\n" .
             '<center>';               
   $submit .= owp_form_text();
-  $submit .= '<form action="index.php" method="post">' . "\n" .
-             '<input type="submit" name="op" value="Change Info"><br />' . "\n" .
-             '</center>' . "\n" .
+  $submit .= '<form name="change info" action="index.php" method="post">' . "\n";
+  $submit .= owp_form_hidden();
+  $submit .= '<input type="hidden" name="op" value="Change Info">' . "\n" . 
+             '<input type="submit" value="' . BTN_CHANGE_INFO . '"><br />' . "\n" .
+             '</form></center>' . "\n" .
              '<br /><br />' . "\n" .
              '<font class="owp-normal">' . SUBMIT_3 . '</font><br />' . "\n" .
              '<table width="50%" align="center">' . "\n" .
              ' <tr align="right">' . "\n" .
              '  <td>' . "\n";
+  $submit .= '<form name="new install" action="index.php" method="post">' . "\n";
   $submit .= owp_form_hidden();
-  $submit .= '<input type="submit" name="op" value="New Install"></td>' . "\n" .
+  $submit .= '<input type="hidden" name="op" value="New Install">' . "\n" .
+             '<input type="submit" value="' . BTN_NEW_INSTALL . '">' . "\n" .
+             '</form>' . "\n" .
+             '  </td>' . "\n" .
 #            '  <td><input type="submit" name="op" value="Upgrade"></td>' . "\n" .
              ' </tr>' . "\n" .
              '</table></form>' . "\n";
@@ -334,7 +340,7 @@ function owp_default() {
 
    include("../docs/LICENSE.txt");
 
-   echo  '</textarea></form><br /><br />';  
+   echo  '</textarea></form><br />';  
    echo '<form name="next" action="index.php" method="post"><center>';
    echo '<input type="hidden" name="currentlang" value="' . $currentlang . '">';
    echo '<input type="hidden" name="op" value="PHP_Check">';
