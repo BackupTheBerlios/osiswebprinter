@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: html_output.php,v 1.10 2003/05/03 15:58:30 r23 Exp $
+   $Id: html_output.php,v 1.11 2003/05/05 16:49:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -188,6 +188,14 @@
 
     return $field;
   }
+
+////
+// Output a form password field
+  function owpPasswordField($name, $value = '', $parameters = 'maxlength="40"') {
+    return owpInputField($name, $value, $parameters, 'password', false);
+  }
+
+
   
   /**
    * owpImage : liefert image mit tags zurück

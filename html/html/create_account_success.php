@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: create_account_success.php,v 1.3 2003/05/05 08:52:34 r23 Exp $
+   $Id: create_account_success.php,v 1.4 2003/05/05 16:47:38 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,17 +24,11 @@
 
   require('includes/system.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/' . $owpFilename['create_account_success']);
-
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['create_account_success']);
+  
   $breadcrumb->add(NAVBAR_TITLE_1);
   $breadcrumb->add(NAVBAR_TITLE_2);
 
-  if (sizeof($navigation->snapshot) > 0) {
-    $origin_href = owpLink($navigation->snapshot['page'], tep_array_to_string($navigation->snapshot['get'], array(tep_session_name())), $navigation->snapshot['mode']);
-    $navigation->clear_snapshot();
-  } else {
-    $origin_href = owpLink(FILENAME_DEFAULT);
-  }
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -62,10 +56,15 @@
 <!-- body_text //-->
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
+        <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
+          <tr>
+            <td><?php echo owpImage(OWP_IMAGES_DIR . 'table_background_man_on_board.gif', HEADING_TITLE); ?></td>
+            <td valign="top" class="main"><div align="center" class="pageHeading"><?php echo HEADING_TITLE; ?></div><br><?php echo TEXT_ACCOUNT_CREATED; ?></td>
+          </tr>
+        </table></td>
       </tr>
       <tr>
-
+        <td align="right"><br><?php echo '<a href="' . owpLink($owpFilename['index']) . '">' . owpImageButton('button_continue.gif', IMAGE_BUTTON_CONTINUE) . '</a>'; ?></td>
       </tr>
     </table></td>
 <!-- body_text_eof //-->

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.7 2003/05/03 15:58:30 r23 Exp $
+   $Id: global.php,v 1.8 2003/05/05 16:50:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -75,7 +75,14 @@ define('SUPPOORT', 'Support-Zentren');
 define('BUGS', 'Bug?');
 
 define('BOX_HEADING_LOGIN', 'Login');
+define('TEXT_INFO_USER_EMAIL', 'eMail Adresse:');
+define('TEXT_INFO_PASSWORD', 'Passwort:');
+define('BOX_CREATE_ACCOUNT', 'Neuer Anwender?');
 define('BOX_PASSWORD_FORGOTTEN', 'Passwort vergessen?');
+
+define('BOX_HEADING_ACCOUNT', 'Mein Konto');
+define('BOX_ACCOUNT_LOGOFF', 'Abmelden');
+define('BOX_ACCOUNT_INFO', 'Meine Daten');
 
 define('BOX_HEADING_CONFIGURATION', 'Konfiguration');
 
@@ -98,218 +105,24 @@ define('BOX_TOOLS_WHOS_ONLINE', 'Wer ist Online');
 define('BOX_HEADING_ADMINISTRATORS', 'Anwender');
 define('BOX_ADMINISTRATORS_SETUP', 'Zugriffsrechte');
 
-define('_ABOUTPOSTING','About posting');
-define('_ACCESS_ADD','Add');
-define('_ACCESS_ADMIN','Admin');
-define('_ACCESS_COMMENT','Comment');
-define('_ACCESS_DELETE','Delete');
-define('_ACCESS_EDIT','Edit');
-define('_ACCESS_MODERATE','Moderate');
-define('_ACCESS_NONE','None');
-define('_ACCESS_OVERVIEW','Overview');
-define('_ACCESS_READ','Read');
-define('_ADMIN_MESSAGES','Admin Messages');
-define('_AIM','AIM number');
-define('_ALL','All');
-define('_ALLAUTHORS','All authors');
-define('_ALLOWEDHTML','Allowed HTML:');
-define('_ALLOWEMAILVIEW','Allow other users to view my e-mail address');
-define('_ALLREGCANPOST','');
-define('_ALLTOPICS','All topics');
-define('_ARTICLES','Articles');
-define('_AT','at');
-define('_ATTACHART','Attached to article');
-define('_AUTOMATEDARTICLES','Programmed articles');
-define('_AVAILABLEAVATARS','Available avatar\'s list');
-define('_AVATAR','Avatar');
-define('_BADAUTHKEY','No authorisation to carry out operation');
-define('_BANNERS','Banners');
-define('_BY','by');
-define('_CANCEL','Cancel');
-define('_CANCELREPLY','Cancel reply');
-define('_CANCELSEND','Cancel send');
-define('_CHARLONG','characters long');
-define('_CHARSET','ISO-8859-1');
-define('_CHECKALL','Check all');
-define('_CHECKTHISOPTION','(Check this option and the following text will appear on the homepage)');
-define('_CLEAR','Clear');
-define('_CLICK','Please click ');
-define('_COMESFROM','This article comes from');
-define('_COMMENT','Comment');
-define('_COMMENTS','Comments');
-define('_COMMENTSWARNING','Comments are owned by the poster. We aren\'t responsible for their content.');
-define('_CONFIGURE','Configure');
-define('_CONTRIBUTEDBY','Contributed by');
-define('_COOKIEWARNING','NOTICE: Account preferences are cookie based.');
-define('_CURRENTPOLL','Current Poll');
-define('_DATE','Date');
-define('_DELETE','Delete');
-define('_DISPLAYMODE','Display mode');
-define('_DUPLICATE','Duplicate. Did you submit twice?');
-define('_EDIT','Edit');
-define('_EDITARTICLE','Edit Article');
-define('_EMAIL','E-mail');
-define('_EMAILNOTPUBLIC','(This e-mail will not be public but is required.  It will be used to send your password if you lose it)');
-define('_EMAILPUBLIC','(This e-mail will be public. Type what you\'d like. Spam proof)');
-define('_EMAILREGISTERED','ERROR: E-mail address already registered');
-define('_EXPIREIN','Expiration in');
-define('_EXPIRELESSHOUR','EXPIRATION: Less than 1 hour');
-define('_EXTRANS','Extrans (html tags to text)');
-define('_FLAT','Flat');
-define('_FOLLOWINGMEM','The following is the member information:');
-define('_FRIEND','Send this story to a friend');
-define('_FROM','From');
-define('_GOBACK','[ <a href=\'javascript:history.go(-1)\'>Back</a> ]');
-define('_GROUPS','Groups');
-define('_HASREQUESTED','has just requested that a password be sent.');
-define('_HASTHISEMAIL','has this e-mail associated with it.');
-define('_HELLO','Hello');
-define('_HERE','here');
-define('_HIDDESCORES','(Hide scores: They still apply, you just don\'t see them.)');
-define('_HIGHEST','Highest scores first');
-define('_HOMECONFIG','Homepage configuration');
-define('_HOURS','Hours');
-define('_HTML','HTML');
-define('_HTMLDISSABLE','Disable HTML on this post');
-define('_HTMLFORMATED','HTML formated');
-define('_ICQ','ICQ number');
-define('_INDEX','Index');
-define('_INSECTION','Article in the section');
-define('_INTERESTS','Interests');
-define('_LAST','Last');
-define('_LIST','List');
-define('_LOCATION','Location');
-define('_LOGIN','Login');
-define('_LOGINCREATE','Login/Create an account');
-define('_LOGININCOR','Incorrect login. Please try again...');
-define('_LOGINSITE','Login.');
-define('_LOGOUT','Logout');
-define('_LOGOUTEXIT','Logout/Exit');
-define('_MAILED','mailed.');
-define('_MAX127','(max. 127):');
-define('_MODARGSERROR','Bad arguments for API function');
-define('_DBSELECTERROR','Database select error');
-define('_DBUPDATEERROR','Database update error');
-define('_DBINSERTERROR','Database insert error');
-define('_DBDELETEERROR','Database delete error');
-define('_DBCREATETABLEERROR','Database create table error');
-define('_MONTH','Month');
-define('_MONTHS','Months');
-define('_MOREABOUT','More about');
-define('_MOSTREAD','Most read story in');
-define('_MPROBLEM','A Problem occurred!');
-define('_MSNM','MSNM number');
-define('_MVIEWADMIN','VIEW: Administrators only');
-define('_MVIEWALL','VIEW: All visitors');
-define('_MVIEWANON','VIEW: Anonymous users only');
-define('_MVIEWUSERS','VIEW: Registered users only');
-define('_MYEMAIL','My e-mail:');
-define('_MYHOMEPAGE','My homepage:');
-define('_NAME','Name');
-define('_NAMERESERVED','ERROR: This username is reserved');
-define('_NESTED','Nested');
-define('_NEWEST','Newest first');
-define('_NEWSBY','News by');
-define('_NEWSINHOME','Number of stories on homepage');
-define('_NEXTMATCHES','next matches');
-define('_NICKNAME','Username');
-define('_NO','No');
-define('_NOAUTOARTICLES','There are no programmed articles');
-define('_NOCOMMENTS','No comments');
-define('_NOFUNCTIONS','---------');
-define('_NOMATCHES','No matches found to your query');
-define('_NONAME','No name entered');
-define('_NOSCORES','Do not display scores');
-define('_NOSUBJECT','No subject');
-define('_NOTE','Note:');
-define('_NOTREAD','Not read');
-define('_NOTRIGHT','Something is not right with passing a variable to this function. This message is just to keep things from messing up down the road');
-define('_OCCUPATION','Occupation');
-define('_OFF','off');
-define('_OK','OK');
-define('_OLDEST','Oldest first');
-define('_ON','on');
-define('_ONN','on...');
-define('_OPTION','Option');
-define('_OPTIONAL','(optional)');
-define('_OPTIONS','Options');
-define('_PAGE','Page');
-define('_PAGES','Pages');
-define('_PARENT','Parent');
-define('_PASSWORD','Password');
-define('_PERMISSIONS','Permissions');
-define('_PLAINTEXT','Plain Old Text');
-define('_POSTANON','Post anonymously');
-define('_POSTEDBY','Posted by');
-if (!defined('_POSTEDON')) {
-    define('_POSTEDON','Posted on');
-}
-define('_PREVIEW','Preview');
-define('_PREVMATCHES','previous matches');
-define('_PRINTER','Printer friendly page');
-define('_PROFILE','Profile');
-define('_QOTDNQ','No quotes found');
-define('_RE','Re');
-define('_READREST','Read the rest of this comment...');
-define('_READS','Reads');
-define('_READSTORIES','most read stories');
-define('_REFERERS','Site Popularity');
-define('_REFRESH','Refresh');
-define('_REGISTER','Register.');
-define('_REGISTERNOW','Register now! It\'s free!');
-define('_REGISTRATION','registration area.');
-define('_RELATED','Related links');
-define('_REMOVECOMMENTS','Delete comments');
-define('_REPLIES','Replies to this');
-define('_REPLY','Reply to this');
-define('_REPLYMAIN','Post comment');
-define('_REQUIRED','(required)');
-define('_RETURN','to return to the main page.');
-define('_REVIEWS','Reviews');
-define('_REVIEWSCORE','Score for this review');
-define('_ROOT','Root');
-define('_SAVECHANGES','Save Changes');
-define('_SCORE','Score:');
-define('_SCORENOTE','Anonymous posts start at 0, logged in posts start at 1. Moderators add and subtract points.');
-define('_SEARCH','Search');
-define('_SECTIONS','Sections');
-define('_SELECTOPTION','Please select an option from the menu below:');
-define('_SELECTTOPIC','Select topic');
-define('_SENDAMSG','Send a Message');
-define('_SENT','Sent');
-define('_SETTINGS','Site Settings');
-define('_SIGNATURE','Signature');
-define('_SOMETHINGWRONG','Something screwed up... don\'t you hate that?');
-define('_SORRY','Sorry.');
-define('_SORTORDER','Sort order');
-define('_STORIES','Stories');
-define('_STORYID','Story ID');
-define('_SUBJECT','Subject');
-define('_SUBMIT','Submit');
-define('_SURETODELCOMMENTS','Are you sure you want to delete the selected comment and all its replies?');
-define('_THEURL','The URL for this story is:');
-define('_THREAD','Thread');
-define('_THRESHOLD','Threshold');
-define('_TO','To');
-define('_TOPIC','Topic');
-define('_TRUNCATES','(Truncates long comments, and adds a \'Read More\' link. Set really big to disable)');
-define('_UNLIMITED','Unlimited');
-define('_URL','URL');
-define('_USERINFO','User info');
-define('_USERS','Users');
-define('_WEBSITE','Website');
-define('_WEB_LINKS','Web Links');
-define('_WEEK','Week');
-define('_WEEKS','Weeks');
-define('_WELCOMETO','Welcome to');
-define('_WITHTHISCODE','With this code you can now create a new password at');
-define('_WRITES','writes');
-define('_WROTE','wrote');
-define('_YES','Yes');
-define('_YOUARELOGGEDOUT','You are now logged out!');
-define('_YOUCANUSEHTML','(You can use HTML code for links as an example)');
+define('CATEGORY_PERSONAL', 'Pers&ouml;nliche Daten');
+define('CATEGORY_ADDRESS', 'Adresse');
+define('CATEGORY_CONTACT', 'Kontakt');
 
+define('GENDER', 'Anrede:');
+define('FIRST_NAME', 'Vorname:');
+define('LAST_NAME', 'Nachname:');
+define('EMAIL_ADDRESS', 'E-Mail Adresse:');
 
+define('TELEPHONE_NUMBER', 'Telefonnummer:');
+define('FAX_NUMBER', 'Faxnummer:');
+define('NEWSLETTER', 'Rundschreiben:');
+define('NEWSLETTER_YES', 'abonniert');
+define('NEWSLETTER_NO', 'nicht abonniert');
+define('TEXT_SELECT', 'CTRL+Click to select multiple.');
+define('PASSWORD', 'Passwort:');
+define('PASSWORD_CONFIRMATION', 'Passwortbest&auml;tigung:');
+define('PASSWORD_HIDDEN', '--VERSTECKT--');
 
 // header text in includes/header.php
 define('HEADER_TITLE_TOP', 'Administration');
@@ -328,18 +141,28 @@ define('BOX_CONFIGURATION_MYSTORE', 'My Store');
 define('BOX_CONFIGURATION_LOGGING', 'Logging');
 define('BOX_CONFIGURATION_CACHE', 'Cache');
 
-// customers box text in includes/boxes/customers.php
-define('BOX_HEADING_CUSTOMERS', 'Kunden');
-define('BOX_CUSTOMERS_CUSTOMERS', 'Kunden');
-define('BOX_CUSTOMERS_ORDERS', 'Bestellungen');
-
-
-
-
-// localizaion box text in includes/boxes/localization.php
-
-
 // javascript messages
+define('JS_ERROR', 'Notwendige Angaben fehlen!\nBitte richtig ausfüllen.\n\n');
+
+define('JS_REVIEW_TEXT', '* Der Text muss mindestens aus ' . REVIEW_TEXT_MIN_LENGTH . ' Buchstaben bestehen.\n');
+define('JS_REVIEW_RATING', '* Geben Sie Ihre Bewertung ein.\n');
+
+define('JS_GENDER', '* Anredeform festlegen.\n');
+define('JS_FIRST_NAME', '* Der \'Vornname\' muss mindestens aus ' . FIRST_NAME_MIN_LENGTH . ' Buchstaben bestehen.\n');
+define('JS_LAST_NAME', '* Der \'Nachname\' muss mindestens aus ' . LAST_NAME_MIN_LENGTH . ' Buchstaben bestehen.\n');
+define('JS_DOB', '* Die \'Geburtsdaten\' im Format xx.xx.xxxx (Tag.Monat.Jahr) eingeben.\n');
+define('JS_EMAIL_ADDRESS', '* Die \'eMail-Adresse\' muss mindestens aus ' . EMAIL_ADDRESS_MIN_LENGTH . ' Buchstaben bestehen.\n');
+define('JS_ADDRESS', '* Die \'Strasse/Nr.\' muss mindestens aus ' . STREET_ADDRESS_MIN_LENGTH . ' Buchstaben bestehen.\n');
+define('JS_POST_CODE', '* Die \'Postleitzahl\' muss mindestens aus ' . POSTCODE_MIN_LENGTH . ' Buchstaben bestehen.\n');
+define('JS_CITY', '* Die \'Stadt\' muss mindestens aus ' . CITY_MIN_LENGTH . ' Buchstaben bestehen.\n');
+define('JS_STATE', '* Das \'Bundesland\' muss ausgewählt werden.\n');
+define('JS_STATE_SELECT', '-wählen sie oberhalb-');
+define('JS_ZONE', ' * Das Bundesland muss aus der Liste für dieses Land ausgewählt werden.\n');
+define('JS_COUNTRY', '* Das \'Land\' muss ausgewählt werden.\n');
+define('JS_TELEPHONE', '* Die \'Telefonnummer\' muss mindestens aus ' . TELEPHONE_MIN_LENGTH . ' Zahlen bestehen.\n');
+define('JS_PASSWORD', '* Das \'Passwort\' und die \'Bestätigung\' müssen übereinstimmen und mindestens ' . PASSWORD_MIN_LENGTH . ' Buchstaben enthalten.\n');
+
+
 // images
 define('IMAGE_ANI_SEND_EMAIL', 'eMail versenden');
 define('IMAGE_BACK', 'Zur&uuml;ck');

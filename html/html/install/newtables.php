@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newtables.php,v 1.17 2003/05/02 17:00:39 r23 Exp $
+   $Id: newtables.php,v 1.18 2003/05/05 16:51:37 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -57,7 +57,8 @@ CREATE TABLE ".$prefix."_administrators (
   admin_fax varchar(32) default NULL,
   admin_password varchar(40) NOT NULL default '',
   admin_allowed_pages varchar(255) default '*' NOT NULL,
-  admin_newsletter char(1) default '1',
+  admin_newsletter tinyint(1) NOT NULL default '1',
+  admin_login tinyint(1) NOT NULL default '0',
   PRIMARY KEY (admin_id)
 )
 ";

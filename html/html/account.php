@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: account.php,v 1.3 2003/05/05 08:52:34 r23 Exp $
+   $Id: account.php,v 1.4 2003/05/05 16:47:38 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -63,18 +63,29 @@
       <tr>
         <td><?php echo owpTransLine('1', '10'); ?></td>
       </tr>
+      <tr>
+        <td>
 <?php
   $is_read_only = true;
-
-  $account_query = tep_db_query("select c.customers_gender, c.customers_firstname, c.customers_lastname, c.customers_dob, c.customers_email_address, a.entry_company, a.entry_street_address, a.entry_suburb, a.entry_postcode, a.entry_city, a.entry_zone_id, a.entry_state, a.entry_country_id, c.customers_telephone, c.customers_fax, c.customers_newsletter from " . TABLE_CUSTOMERS . " c, " . TABLE_ADDRESS_BOOK . " a where c.customers_id = '" . $customer_id . "' and a.customers_id = c.customers_id and a.address_book_id = '" . $customer_default_address_id . "'");
-  $account = tep_db_fetch_array($account_query);
+  $new_account = true;
+  $sql = "SELECT admin_id, admin_gender, admin_firstname, admin_lastname,
+                 admin_email_address, admin_telephone, admin_fax, admin_newsletter
+          FROM " . $owpDBTable['administrators'] . " 
+         WHERE admin_id = '" . $_SESSION['user_id'] . "'";             
+  $account_query = $db->Execute($sql);
+  $account = $account_query->fields;
 
   require(OWP_ACCOUNT_DIR . 'account_details.php');
 ?>
+        </td>
+      </tr>
       <tr>
         <td><?php echo owpTransLine('1', '10'); ?></td>
       </tr>
-            </table></td>
+      <tr>
+        <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
+          <tr>
+             <td align="right" class="main"><?php echo '<a href="' . owpLink($owpFilename['account_edit'], '', 'SSL') . '">' . owpImageButton('button_edit_account.gif', IMAGE_BUTTON_EDIT_ACCOUNT) . '</a>'; ?></td>
           </tr>
         </table></td>
       </tr>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: login.php,v 1.7 2003/05/01 14:39:04 r23 Exp $
+   $Id: login.php,v 1.8 2003/05/05 16:51:37 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -51,7 +51,7 @@
   if ($_GET['action'] == 'process') {
     include_once(OWP_FUNCTIONS_DIR . $owpFilename['password_crypt']);
     $sql = "SELECT admin_id, admin_gender, admin_firstname, admin_lastname,
-                   admin_email_address, admin_password, admin_allowed_pages 
+                   admin_email_address, admin_password, admin_allowed_pages, admin_login 
             FROM " . $owpDBTable['administrators'] . " 
             WHERE admin_email_address = '" . owpDBInput($email_address) . "'";
     $check_admin_query = $db->Execute($sql);
@@ -60,23 +60,27 @@
       if (!owpValidatePasword($password, $check_admin['admin_password'])) {
         $messageStack->add(ERROR_LOGIN_ERROR, 'error');
       } else {
-        $_SESSION['user_id'] = $check_admin['admin_id'];
-        $_SESSION['gender'] = $check_admin['admin_gender'];
-        $_SESSION['firstname'] = $check_admin['admin_firstname'];
-        $_SESSION['lastname'] = $check_admin['admin_lastname'];
-        $_SESSION['allowed_pages'] = $check_admin['admin_allowed_pages'];
+        if ($check_admin['admin_id'] == '1') {
+          $_SESSION['user_id'] = $check_admin['admin_id'];
+          $_SESSION['gender'] = $check_admin['admin_gender'];
+          $_SESSION['firstname'] = $check_admin['admin_firstname'];
+          $_SESSION['lastname'] = $check_admin['admin_lastname'];
+          $_SESSION['allowed_pages'] = $check_admin['admin_allowed_pages'];
         
-        $today = date("Y-m-d H:i:s");
-        $db->Execute("UPDATE " . $owpDBTable['administrators_info'] . " 
-	                 SET admin_info_date_of_last_logon = " . $db->DBTimeStamp($today) . ",
-	                     admin_info_number_of_logons = admin_info_number_of_logons+1 
-                       WHERE admin_info_id = '" . owpDBInput($check_admin['admin_id']) . "'");        
-        if (sizeof($navigation->snapshot) > 0) {
-          $origin_href = owpLink($navigation->snapshot['page'], owpArraytoString($_SESSION['navigation']->snapshot['get'], array(owpSessionName())), $_SESSION['navigation']->snapshot['mode']);
-          $navigation->clear_snapshot();
-          owpRedirect($origin_href);
+          $today = date("Y-m-d H:i:s");
+          $db->Execute("UPDATE " . $owpDBTable['administrators_info'] . " 
+	                   SET admin_info_date_of_last_logon = " . $db->DBTimeStamp($today) . ",
+	                       admin_info_number_of_logons = admin_info_number_of_logons+1 
+                         WHERE admin_info_id = '" . owpDBInput($check_admin['admin_id']) . "'");        
+          if (sizeof($navigation->snapshot) > 0) {
+            $origin_href = owpLink($navigation->snapshot['page'], owpArraytoString($_SESSION['navigation']->snapshot['get'], array(owpSessionName())), $_SESSION['navigation']->snapshot['mode']);
+            $navigation->clear_snapshot();
+            owpRedirect($origin_href);
+          } else {
+            owpRedirect(owpLink($owpFilename['index'], '', 'NONSSL'));
+          }
         } else {
-          owpRedirect(owpLink($owpFilename['index'], '', 'NONSSL'));
+          $messageStack->add(ERROR_NO_USER_LOGIN, 'error');
         }
       }
     } else {

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newinstall.php,v 1.12 2003/04/30 15:30:32 r23 Exp $
+   $Id: newinstall.php,v 1.13 2003/05/05 16:51:37 r23 Exp $
 
    OSIS GMBH
    http://www.osisnet.de/
@@ -61,6 +61,8 @@ function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone
     
     $allowed_pages = '*';
     $number_of_logons = '0';
+    $login = '1';
+    $admin_name = $firstname . ' ' . $name;
     $sequence = $prefix . '_sequence_admin';
     echo '<font class="owp-title">' . INPUT_DATA . '</font>';
     echo "<center>";
@@ -87,7 +89,8 @@ function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone
              admin_telephone,
              admin_fax,
              admin_password,
-             admin_allowed_pages)
+             admin_allowed_pages,
+             admin_login)
              VALUES (" . $db->qstr($admin_id) . ','
                        . $db->qstr($gender) . ','
                        . $db->qstr($firstname) . ','
@@ -96,7 +99,8 @@ function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone
                        . $db->qstr($phone) . ','
                        . $db->qstr($fax) . ','
                        . $db->qstr($owp_pwd) . ','
-                       . $db->qstr($allowed_pages) . ")";
+                       . $db->qstr($allowed_pages) . ','
+                       . $db->qstr($login) . ")";
     $result = $db->Execute($sql);
     if ($result === false) {
       echo '<br /><font class="owp-error">' .  $db->ErrorMsg() . NOTMADE . '</font>';

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: logoff.php,v 1.3 2003/04/22 07:27:37 r23 Exp $
+   $Id: logoff.php,v 1.4 2003/05/05 16:53:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -42,7 +42,12 @@
    ----------------------------------------------------------------------
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
-  require('includes/application_top.php');
+   
+  require('includes/system.php');
 
-  tep_session_unregister( 'login_id' );
-  header( "Location: default.php\n" );
+  session_destroy();
+
+  owpRedirect(owpLink($owpFilename['index'], '', 'NONSSL'));
+
+  require(OWP_INCLUDES_DIR . 'nice_exit.php');
+?>

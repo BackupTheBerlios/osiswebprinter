@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_validations.php,v 1.2 2003/05/05 08:47:53 r23 Exp $
+   $Id: owp_validations.php,v 1.3 2003/05/05 16:49:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -27,10 +27,9 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //
-  // Function    : tep_validate_email
+  // Function    : owpValidateEmail
   //
   // Arguments   : email   email address to be checked
   //
@@ -58,7 +57,7 @@
   //    
   //
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  function tep_validate_email($email) {
+  function owpValidateEmail($email) {
     $valid_address = true;
     
     $mail_pat = '^(.+)@(.+)$';

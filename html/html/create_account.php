@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: create_account.php,v 1.3 2003/05/05 08:52:34 r23 Exp $
+   $Id: create_account.php,v 1.4 2003/05/05 16:47:38 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -26,6 +26,8 @@
 
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['create_account']);
   $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['create_account'], '', 'NONSSL'));
+  
+  define('JS_PASSWORD', 'false');
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -36,7 +38,7 @@
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">
 <link rel="StyleSheet" href="style/style.css" type="text/css" />
-<script type="text/javascript" src="javascript/form_check.php"></script>
+<?php require('javascript/form_check.php'); ?>
 </head>
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <!-- header //-->
@@ -62,7 +64,7 @@
       <tr>
         <td>
 <?php
-  $new_account = true;
+  $new_account = 'true';
   require(OWP_ACCOUNT_DIR . 'account_details.php');
 ?>
         </td>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: administrators.php,v 1.8 2003/05/03 15:58:29 r23 Exp $
+   $Id: administrators.php,v 1.9 2003/05/05 16:47:38 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -287,7 +287,7 @@
 ?>
               <tr>
               <td align="right"><?php if (OWP_CSV_EXCEL == 'true') { echo '<a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&action=download') . '">' . owpImageButton('excel_now.gif', IMAGE_CSV_DOWNLOAD) . '</a>'; } ?></td>
-              <td align="right"><?php echo '<a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&action=new') . '">' . owpImageButton('button_new_user.gif', IMAGE_NEW_USER) . '</a>'; ?></td>
+              <td align="right"><?php echo '<a href="' . owpLink($owpFilename['create_account']) . '">' . owpImageButton('button_new_user.gif', IMAGE_NEW_USER) . '</a>'; ?></td>
               </tr>
 <?php
   }

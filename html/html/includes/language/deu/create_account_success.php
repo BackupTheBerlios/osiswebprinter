@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: create_account_success.php,v 1.2 2003/05/05 08:49:12 r23 Exp $
+   $Id: create_account_success.php,v 1.3 2003/05/05 16:50:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -25,5 +25,5 @@
 define('NAVBAR_TITLE_1', 'Konto erstellen');
 define('NAVBAR_TITLE_2', 'Erfolg');
 define('HEADING_TITLE', 'Konto mit Erfolg er&ouml;ffnet!');
-define('TEXT_ACCOUNT_CREATED', 'Herzlichen Gl&uuml;ckwunsch! Ihr neues Konto ist erfolgreich er&ouml;ffnet! Sie k&ouml;nnen jetzt durch Ihre Mitgliedschaft unsere \'Member-Services\' nutzen. Wenn Sie Fragen zum diesem Online-Shop haben, wenden Sie sich bitte an den <a href="' . tep_href_link(FILENAME_CONTACT_US) . '">Vertrieb</a>.<br><br>Eine Best&auml;tigung &uuml;ber Ihr neues Konto wird Ihnen zugesendet. Falls Sie dieses eMail nicht innerhalb einer Stunde erhalten, wenden Sie sich bitte an den <a href="' . tep_href_link(FILENAME_CONTACT_US) . '">Vertrieb</a>.');
+define('TEXT_ACCOUNT_CREATED', 'Herzlichen Gl&uuml;ckwunsch! Ihr neues Konto ist erfolgreich er&ouml;ffnet! Ihre Zugangsdaten erhalten Sie per eMail.');
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: account_edit_process.php,v 1.3 2003/05/05 08:52:34 r23 Exp $
+   $Id: account_edit_process.php,v 1.4 2003/05/05 16:47:38 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -29,143 +29,69 @@
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   }
 
-  if ($HTTP_POST_VARS['action'] != 'process') {
-    tep_redirect(owpLink(FILENAME_ACCOUNT_EDIT, '', 'SSL'));
+  if ($_POST['action'] != 'process') {
+    owpRedirect(owpLink($owpFilename['account_edit'], '', 'SSL'));
   }
 
+  require_once(OWP_FUNCTIONS_DIR . 'owp_validations.php');
+
+/*
   $gender = tep_db_prepare_input($HTTP_POST_VARS['gender']);
   $firstname = tep_db_prepare_input($HTTP_POST_VARS['firstname']);
   $lastname = tep_db_prepare_input($HTTP_POST_VARS['lastname']);
-  $dob = tep_db_prepare_input($HTTP_POST_VARS['dob']);
   $email_address = tep_db_prepare_input($HTTP_POST_VARS['email_address']);
   $telephone = tep_db_prepare_input($HTTP_POST_VARS['telephone']);
   $fax = tep_db_prepare_input($HTTP_POST_VARS['fax']);
   $newsletter = tep_db_prepare_input($HTTP_POST_VARS['newsletter']);
   $password = tep_db_prepare_input($HTTP_POST_VARS['password']);
   $confirmation = tep_db_prepare_input($HTTP_POST_VARS['confirmation']);
-  $street_address = tep_db_prepare_input($HTTP_POST_VARS['street_address']);
-  $company = tep_db_prepare_input($HTTP_POST_VARS['company']);
-  $suburb = tep_db_prepare_input($HTTP_POST_VARS['suburb']);
-  $postcode = tep_db_prepare_input($HTTP_POST_VARS['postcode']);
-  $city = tep_db_prepare_input($HTTP_POST_VARS['city']);
-  $zone_id = tep_db_prepare_input($HTTP_POST_VARS['zone_id']);
-  $state = tep_db_prepare_input($HTTP_POST_VARS['state']);
-  $country = tep_db_prepare_input($HTTP_POST_VARS['country']);
-
+*/
   $error = false; // reset error flag
 
-  if (ACCOUNT_GENDER == 'true') {
-    if (($gender == 'm') || ($gender == 'f')) {
-      $entry_gender_error = false;
-    } else {
-      $error = true;
-      $entry_gender_error = true;
-    }
+  if (($gender == 'm') || ($gender == 'f')) {
+    $entry_gender_error = false;
+  } else {
+    $error = true;
+    $entry_gender_error = true;
   }
 
-  if (strlen($firstname) < ENTRY_FIRST_NAME_MIN_LENGTH) {
+  if (strlen($firstname) < FIRST_NAME_MIN_LENGTH) {
     $error = true;
     $entry_firstname_error = true;
   } else {
     $entry_firstname_error = false;
   }
 
-  if (strlen($lastname) < ENTRY_LAST_NAME_MIN_LENGTH) {
+  if (strlen($lastname) < LAST_NAME_MIN_LENGTH) {
     $error = true;
     $entry_lastname_error = true;
   } else {
     $entry_lastname_error = false;
   }
 
-  if (ACCOUNT_DOB == 'true') {
-    if (checkdate(substr(tep_date_raw($dob), 4, 2), substr(tep_date_raw($dob), 6, 2), substr(tep_date_raw($dob), 0, 4))) {
-      $entry_date_of_birth_error = false;
-    } else {
-      $error = true;
-      $entry_date_of_birth_error = true;
-    }
-  }
-
-  if (strlen($email_address) < ENTRY_EMAIL_ADDRESS_MIN_LENGTH) {
+  if (strlen($email_address) < EMAIL_ADDRESS_MIN_LENGTH) {
     $error = true;
     $entry_email_address_error = true;
   } else {
     $entry_email_address_error = false;
   }
 
-  if (!tep_validate_email($email_address)) {
+  if (!owpValidateEmail($email_address)) {
     $error = true;
     $entry_email_address_check_error = true;
   } else {
     $entry_email_address_check_error = false;
   }
 
-  if (strlen($street_address) < ENTRY_STREET_ADDRESS_MIN_LENGTH) {
-    $error = true;
-    $entry_street_address_error = true;
-  } else {
-    $entry_street_address_error = false;
-  }
 
-  if (strlen($postcode) < ENTRY_POSTCODE_MIN_LENGTH) {
-    $error = true;
-    $entry_post_code_error = true;
-  } else {
-    $entry_post_code_error = false;
-  }
-
-  if (strlen($city) < ENTRY_CITY_MIN_LENGTH) {
-    $error = true;
-    $entry_city_error = true;
-  } else {
-    $entry_city_error = false;
-  }
-
-  if (!is_numeric($country)) {
-    $error = true;
-    $entry_country_error = true;
-  } else {
-    $entry_country_error = false;
-  }
-
-  if (ACCOUNT_STATE == 'true') {
-    if ($entry_country_error) {
-      $entry_state_error = true;
-    } else {
-      $zone_id = 0;
-      $entry_state_error = false;
-      $country_check_query = tep_db_query("select count(*) as total from " . TABLE_ZONES . " where zone_country_id = '" . tep_db_input($country) . "'");
-      $country_check = tep_db_fetch_array($country_check_query);
-      if ($entry_state_has_zones = ($country_check['total'] > 0)) {
-        $match_zone_query = tep_db_query("select zone_id from " . TABLE_ZONES . " where zone_country_id = '" . tep_db_input($country) . "' and zone_name = '" . tep_db_input($state) . "'");
-        if (tep_db_num_rows($match_zone_query) == 1) {
-          $match_zone = tep_db_fetch_array($match_zone_query);
-          $zone_id = $match_zone['zone_id'];
-        } else {
-          $match_zone_query = tep_db_query("select zone_id from " . TABLE_ZONES . " where zone_country_id = '" . tep_db_input($country) . "' and zone_code = '" . tep_db_input($state) . "'");
-          if (tep_db_num_rows($match_zone_query) == 1) {
-            $match_zone = tep_db_fetch_array($match_zone_query);
-            $zone_id = $match_zone['zone_id'];
-          } else {
-            $error = true;
-            $entry_state_error = true;
-          }
-        }
-      } elseif (strlen($state) < ENTRY_STATE_MIN_LENGTH) {
-        $error = true;
-        $entry_state_error = true;
-      }
-    }
-  }
-
-  if (strlen($telephone) < ENTRY_TELEPHONE_MIN_LENGTH) {
+  if (strlen($telephone) < TELEPHONE_MIN_LENGTH) {
     $error = true;
     $entry_telephone_error = true;
   } else {
     $entry_telephone_error = false;
   }
 
-  if (strlen($password) < ENTRY_PASSWORD_MIN_LENGTH) {
+  if (strlen($password) < PASSWORD_MIN_LENGTH) {
     $error = true;
     $entry_password_error = true;
   } else {
@@ -218,7 +144,7 @@
 <!-- left_navigation_eof //-->
     </table></td>
 <!-- body_text //-->
-    <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
+    <td width="100%" valign="top"><?php echo owpDrawForm('account_edit', $owpFilename['account_edit_process'], '',  'post', 'onSubmit="return check_form();"') . owpDrawHiddenField('action', 'process'); ?><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
       </tr>
@@ -295,7 +221,7 @@
     $customer_country_id = $country;
     $customer_zone_id = $zone_id;
 
-    tep_redirect(owpLink($owpFilename['account'], '', 'SSL'));
+    owpRedirect(owpLink($owpFilename['account'], '', 'SSL'));
   }
 
   require(OWP_INCLUDES_DIR . 'nice_exit.php');

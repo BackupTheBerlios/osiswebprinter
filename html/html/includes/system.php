@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.18 2003/05/05 08:52:34 r23 Exp $
+   $Id: system.php,v 1.19 2003/05/05 16:50:30 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -54,6 +54,7 @@
   $owpFilename['index'] = $prefix_filename . 'index.php';
   $owpFilename['languages'] = $prefix_filename . 'languages.php';
   $owpFilename['login'] = $prefix_filename . 'login.php';
+  $owpFilename['logoff'] = $prefix_filename . 'logoff.php';
   $owpFilename['mail'] = $prefix_filename . 'mail.php';
   $owpFilename['newsletters'] = $prefix_filename . 'newsletters.php';
   $owpFilename['password_forgotten'] = $prefix_filename . 'password_forgotten.php';
@@ -201,10 +202,6 @@
 // include the who's online functions
   require_once(OWP_FUNCTIONS_DIR . 'owp_whos_online.php');
   opwUpdateWhosOnline();
-/*
-// Include validation functions (right now only email address)
-  require_once(OWP_FUNCTIONS_DIR . 'validations.php');
-*/
 
   require_once(OWP_CLASSES_DIR . 'owp_breadcrumb.php');
   $breadcrumb = new breadcrumb;

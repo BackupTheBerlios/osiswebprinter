@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: create_account_process.php,v 1.2 2003/05/05 08:48:39 r23 Exp $
+   $Id: create_account_process.php,v 1.3 2003/05/05 16:49:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -26,12 +26,36 @@ define('NAVBAR_TITLE_1', 'Konto erstellen');
 define('NAVBAR_TITLE_2', 'Bearbeitung');
 define('HEADING_TITLE', 'Meine Zugangsinformation');
 
-define('EMAIL_SUBJECT', 'Willkommen zu ' . STORE_NAME);
-define('EMAIL_GREET_MR', 'Sehr geehrter Herr ' . stripslashes($HTTP_POST_VARS['lastname']) . ',' . "\n\n");
-define('EMAIL_GREET_MS', 'Sehr geehrte Frau ' . stripslashes($HTTP_POST_VARS['lastname']) . ',' . "\n\n");
-define('EMAIL_GREET_NONE', 'Sehr geehrte ' . stripslashes($HTTP_POST_VARS['firstname']) . ',' . "\n\n");
-define('EMAIL_WELCOME', 'willkommen zu <b>' . STORE_NAME . '</b>.' . "\n\n");
-define('EMAIL_TEXT', 'Sie können jetzt unser <b>Mitglieder-Service</b> nutzen. Der Service bietet unter anderem:' . "\n\n" . '<li><b>Kundeneinkaufswagen</b> - Jeder Artikel bleibt registriert bis Sie zur Kasse gehen, oder die Produkte aus dem Warenkorb entfernen.' . "\n" . '<li><b>Adressbuch</b> - Wir können jetzt die Produkte zu der von Ihnen ausgesuchten Adresse senden. Der perfekte Weg ein Geburtstagsgeschenk zu versenden.' . "\n" . '<li><b>Vorherige Bestellung</b> - Sie können Ihre vorherigen Bestellungen überprüfen.' . "\n" . '<li><b>Meinungen über Produkte</b> - Teilen Sie Ihre Meinung mit anderen Kunden.' . "\n\n");
-define('EMAIL_CONTACT', 'Falls Sie Fragen über unserem Mitglieder-Service haben, wenden Sie sich bitte an den Vertrieb: ' . STORE_OWNER_EMAIL_ADDRESS . '.' . "\n\n");
-define('EMAIL_WARNING', '<b>Achtung:</b> Diese eMail-Adresse wurde uns von einem Kunden bekannt gegeben. Falls Sie sich nicht angemeldet haben, senden Sie bitte eine eMail an ' . STORE_OWNER_EMAIL_ADDRESS . '.' . "\n");
+define('EMAIL_ADDRESS_CHECK_ERROR', '&nbsp;<small><font color="#FF0000">Diese eMail-Adresse ist falsch und existiert nicht!</font></small>');
+
+define('EMAIL_SUBJECT', 'Willkommen bei ' . OWP_NAME);
+define('EMAIL_GREET_MR', 'Sehr geehrter Herr ');
+define('EMAIL_GREET_MS', 'Sehr geehrte Frau ');
+
+define('EMAIL_WELCOME', 'herzlich willkommen bei ' . OWP_NAME . '! Wir danken Ihnen, dass Sie' . "\n" . 'sich für ' . OWP_NAME . ' entschieden haben und freuen uns, Ihnen in' . "\n" . 'Zukunft alle Vorteile und Möglichkeiten anbieten zu können,' . "\n" . 'die ' . OWP_NAME . ' so angenhem machen. ' . "\n\n");
+define('EMAIL_TEXT', 'Mit ' . OWP_NAME . ' wird das Drucken zum Vergügen.' . "\n\n");
+define('EMAIL_CONTACT', 'Ihre Fragen und Meinungen sind uns wichtig. Wenn Sie also ' . "\n" . 'einen Vorschlag haben, wie wir ' . OWP_NAME . ' noch anregender,' . "\n" . 'praktischer oder persönlicher gestalten können, zögern Sie'  . "\n" . 'nicht, sich mit uns in Verbindung zu setzen:' . "\n\n" . DEVELOPER_SITE . ': http://developer.berlios.de/projects/osiswebprinter/' . "\n" . SUPPORT_FORUMS . ': http://developer.berlios.de/forum/?group_id=752' . "\n" . MAILING_LISTS . ': https://lists.berlios.de/mailman/listinfo/osiswebprinter-users' . "\n\n" . 'Ihre persönlichen Zugangsdaten senden wir Ihnen zu.' . "\n\n");
+
+define('EMAIL_FOOT', 'Mit den besten Grüssen,' . "\n" . 'Ihr ' . OWP_NAME . ' Team' . "\n\n\n" . OWP_HTTP_SERVER . "\n\n");
+
+define('EMAIL_SEPARATOR', '------------------------------------------------------');
+define('OWNER_EMAIL_NUMBER', 'Datensatz Nr.:');
+define('OWNER_EMAIL_URL', 'Zugang verwalten:');
+define('OWNER_EMAIL_DATE', 'Anmeldedatum:');
+define('OWNER_EMAIL_SUBJECT', 'Neuer Anwender');
+define('OWNER_EMAIL_PERSONAL', 'pers&ouml;nliche Daten');
+define('OWNER_EMAIL_CONTACT', 'Kontaktinformation');
+define('OWNER_EMAIL_OPTIONS', 'Optionen');
+
+define('OWNER_EMAIL_GENDER', 'Anrede ...........:');
+define('OWNER_EMAIL_FIRST_NAME', 'Vorname ..........:');
+define('OWNER_EMAIL_LAST_NAME','Nachname .........:');
+define('OWNER_EMAIL_ADDRESS', 'eMail-Adresse ....:');
+
+define('OWNER_EMAIL_TELEPHONE_NUMBER','Telefonnummer ....:');
+define('OWNER_EMAIL_FAX_NUMBER', 'Faxnummer ........:');
+define('OWNER_EMAIL_NEWSLETTER','Newsletter .......: ');
+define('ENTRY_NEWSLETTER_YES', 'abonniert');
+define('ENTRY_NEWSLETTER_NO', 'nicht abonniert');
+
 ?>

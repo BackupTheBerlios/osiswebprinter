@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_loginbox.php,v 1.1 2003/05/03 15:56:02 r23 Exp $
+   $Id: owp_loginbox.php,v 1.2 2003/05/05 16:47:38 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -40,7 +40,10 @@
                                  '  <tr>' . "\n" .
                                  '    <td><input type="submit" name="Submit" value="Login"></td>' . "\n" .
                                  '  </tr>' . "\n" .
-                                 '</form></table>');            
+                                 '</form></table><br />' . "\n" .
+                                 '<a href="' . owpLink($owpFilename['password_forgotten']) . '" class="menuBoxContentLink">' . BOX_PASSWORD_FORGOTTEN . '</a><br>' .
+                                 '<a href="' . owpLink($owpFilename['create_account']) . '" class="menuBoxContentLink">' . BOX_CREATE_ACCOUNT . '</a>');                                 
+                                  
   
   $box = new box;
   echo $box->menuBox($heading, $contents);

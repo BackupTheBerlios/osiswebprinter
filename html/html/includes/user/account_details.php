@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: account_details.php,v 1.3 2003/05/05 08:52:34 r23 Exp $
+   $Id: account_details.php,v 1.4 2003/05/05 16:51:37 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -36,15 +36,15 @@
       <tr>
         <td class="main"><table border="0" cellspacing="0" cellpadding="2">
 <?php
-  $male = ($account['customers_gender'] == 'm') ? true : false;
-  $female = ($account['customers_gender'] == 'f') ? true : false;
+  $male = ($account['admin_gender'] == 'm') ? true : false;
+  $female = ($account['admin_gender'] == 'f') ? true : false;
 ?>
           <tr>
             <td class="main">&nbsp;<?php echo GENDER; ?></td>
             <td class="main">&nbsp;
 <?php
   if ($is_read_only) {
-    echo ($account['customers_gender'] == 'm') ? MALE : FEMALE;
+    echo ($account['admin_gender'] == 'm') ? MALE : FEMALE;
   } elseif ($error) {
     if ($entry_gender_error) {
       echo owpRadioField('gender', 'm', $male) . '&nbsp;&nbsp;' . MALE . '&nbsp;&nbsp;' . owpRadioField('gender', 'f', $female) . '&nbsp;&nbsp;' . FEMALE . '&nbsp;' . GENDER_ERROR;
@@ -62,7 +62,7 @@
             <td class="main">&nbsp;
 <?php
   if ($is_read_only) {
-    echo $account['customers_firstname'];
+    echo $account['admin_firstname'];
   } elseif ($error) {
     if ($entry_firstname_error) {
       echo owpInputField('firstname') . '&nbsp;' . FIRST_NAME_ERROR;
@@ -70,7 +70,7 @@
       echo $firstname . owpDrawHiddenField('firstname');
     }
   } else {
-    echo owpInputField('firstname', $account['customers_firstname']) . '&nbsp;' . TEXT_FIELD_REQUIRED;
+    echo owpInputField('firstname', $account['admin_firstname']) . '&nbsp;' . TEXT_FIELD_REQUIRED;
   }
 ?></td>
           </tr>
@@ -79,7 +79,7 @@
             <td class="main">&nbsp;
 <?php
   if ($is_read_only) {
-    echo $account['customers_lastname'];
+    echo $account['admin_lastname'];
   } elseif ($error) {
     if ($entry_lastname_error) {
       echo owpInputField('lastname') . '&nbsp;' . LAST_NAME_ERROR;
@@ -87,7 +87,7 @@
       echo $lastname . owpDrawHiddenField('lastname');
     }
   } else {
-    echo owpInputField('lastname', $account['customers_lastname']) . '&nbsp;' . TEXT_FIELD_REQUIRED;
+    echo owpInputField('lastname', $account['admin_lastname']) . '&nbsp;' . TEXT_FIELD_REQUIRED;
   }
 ?></td>
           </tr>
@@ -96,7 +96,7 @@
             <td class="main">&nbsp;
 <?php
   if ($is_read_only) {
-    echo $account['customers_email_address'];
+    echo $account['admin_email_address'];
   } elseif ($error) {
     if ($entry_email_address_error) {
       echo owpInputField('email_address') . '&nbsp;' . EMAIL_ADDRESS_ERROR;
@@ -108,7 +108,7 @@
       echo $email_address . owpDrawHiddenField('email_address');
     }
   } else {
-    echo owpInputField('email_address', $account['customers_email_address']) . '&nbsp;' . TEXT_FIELD_REQUIRED;
+    echo owpInputField('email_address', $account['admin_email_address']) . '&nbsp;' . TEXT_FIELD_REQUIRED;
   }
 ?></td>
           </tr>
@@ -129,7 +129,7 @@
             <td class="main">&nbsp;
 <?php
   if ($is_read_only) {
-    echo $account['customers_telephone'];
+    echo $account['admin_telephone'];
   } elseif ($error) {
     if ($entry_telephone_error) {
       echo owpInputField('telephone') . '&nbsp;' . TELEPHONE_NUMBER_ERROR;
@@ -137,7 +137,7 @@
       echo $telephone . owpDrawHiddenField('telephone');
     }
   } else {
-    echo owpInputField('telephone', $account['customers_telephone']) . '&nbsp;' . TEXT_FIELD_REQUIRED;
+    echo owpInputField('telephone', $account['admin_telephone']) . '&nbsp;' . TEXT_FIELD_REQUIRED;
   }
 ?></td>
           </tr>
@@ -146,11 +146,11 @@
             <td class="main">&nbsp;
 <?php
   if ($is_read_only) {
-    echo $account['customers_fax'];
+    echo $account['admin_fax'];
   } elseif ($processed) {
     echo $fax . owpDrawHiddenField('fax');
   } else {
-    echo owpInputField('fax', $account['customers_fax']) . '&nbsp;' . FAX_NUMBER_TEXT;
+    echo owpInputField('fax', $account['admin_fax']) . '&nbsp;';
   }
 ?></td>
           </tr>
@@ -170,7 +170,7 @@
             <td class="main">&nbsp;
 <?php
   if ($is_read_only) {
-    if ($account['customers_newsletter'] == '1') {
+    if ($account['admin_newsletter'] == '1') {
       echo NEWSLETTER_YES;
     } else {
       echo NEWSLETTER_NO;
@@ -183,7 +183,7 @@
     }
     echo owpDrawHiddenField('newsletter');  
   } else {
-    echo owpPullDownMenu('newsletter', $newsletter_array, $account['customers_newsletter']) . '&nbsp;' . TEXT_FIELD_REQUIRED;
+    echo owpPullDownMenu('newsletter', $newsletter_array, $account['admin_newsletter']) . '&nbsp;' . TEXT_FIELD_REQUIRED;
   }
 ?></td>
           </tr>
@@ -207,12 +207,12 @@
 <?php
     if ($error) {
       if ($entry_password_error) {
-        echo tep_draw_password_field('password') . '&nbsp;' . PASSWORD_ERROR;
+        echo owpPasswordField('password') . '&nbsp;' . PASSWORD_ERROR;
       } else {
         echo PASSWORD_HIDDEN . owpDrawHiddenField('password') . owpDrawHiddenField('confirmation');
       }
     } else {
-      echo tep_draw_password_field('password') . '&nbsp;' . PASSWORD_TEXT;
+      echo owpPasswordField('password') . '&nbsp;';
     }
 ?></td>
           </tr>
@@ -223,7 +223,7 @@
             <td class="main">&nbsp;<?php echo PASSWORD_CONFIRMATION; ?></td>
             <td class="main">&nbsp;
 <?php
-      echo tep_draw_password_field('confirmation') . '&nbsp;' . PASSWORD_CONFIRMATION_TEXT;
+      echo owpPasswordField('confirmation') . '&nbsp;';
 ?></td>
           </tr>
 <?php

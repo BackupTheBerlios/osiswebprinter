@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: login.php,v 1.5 2003/04/29 06:27:17 r23 Exp $
+   $Id: login.php,v 1.6 2003/05/05 16:50:30 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -46,10 +46,9 @@ define('TITLE', 'Melden Sie sich an.');
 define('NAVBAR_TITLE', 'Anmelden');
 define('HEADING_TITLE', 'Melden Sie sich an');
 
-define('TEXT_INFO_USER_EMAIL', 'eMail Adresse:');
-define('TEXT_INFO_PASSWORD', 'Passwort:');
 define('TEXT_PASSWORD_FORGOTTEN', 'Sie haben Ihr Passwort vergessen? Dann klicken Sie <u>hier</u>');
 
 define('ERROR_LOGIN_ERROR', 'Fehler: Keine &Uuml;bereinstimmung der eingebenen \'eMail-Adresse\' und/oder dem \'Passwort\'.');
 define('ERROR_LOGIN_NO_USER', 'Fehler: Sie sind dem System unter der eingebenen \'eMail-Adresse\' nicht bekannt.');
+define('ERROR_NO_USER_LOGIN', 'Fehler: Sie haben noch keinen Zugang! Bitte warten Sie auf Ihre Zugangsbestätigung!');
 ?>

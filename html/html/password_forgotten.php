@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: password_forgotten.php,v 1.8 2003/05/01 14:39:04 r23 Exp $
+   $Id: password_forgotten.php,v 1.9 2003/05/05 16:53:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -35,7 +35,7 @@
       $check_admin = $check_admin_query->fields;
       // Crypted password mods - create a new password, update the database and mail it to them
       include_once(OWP_FUNCTIONS_DIR . $owpFilename['password_crypt']);
-      $newpass = owpCreatePassword();
+      $newpass = owpCreatePassword(PASSWORD_MIN_LENGTH);
       $crpted_password = owpCryptPassword($newpass);
       $db->Execute("UPDATE " . $owpDBTable['administrators'] . " 
                        SET admin_password = " . $db->qstr($crpted_password) . "
