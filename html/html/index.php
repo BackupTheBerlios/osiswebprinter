@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.4 2003/04/19 05:33:34 r23 Exp $
+   $Id: index.php,v 1.5 2003/04/19 09:13:25 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,7 +22,7 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  require('includes/application_top.php');
+  require('includes/system.php');
 
   $cat = array(array('title' => BOX_HEADING_CONFIGURATION,
                      'image' => 'configuration.gif',

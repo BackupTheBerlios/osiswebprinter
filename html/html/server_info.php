@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: server_info.php,v 1.3 2003/04/19 05:33:34 r23 Exp $
+   $Id: server_info.php,v 1.4 2003/04/19 09:14:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,7 +22,7 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  require('includes/application_top.php');
+  require('includes/system.php');
 
   $system = tep_get_system_information();
 ?>

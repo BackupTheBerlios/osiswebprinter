@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: whos_online.php,v 1.4 2003/04/19 05:33:34 r23 Exp $
+   $Id: whos_online.php,v 1.5 2003/04/19 09:14:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,7 +24,7 @@
 
   $xx_mins_ago = (time() - 900);
 
-  require('includes/application_top.php');
+  require('includes/system.php');
 
   require(DIR_WS_CLASSES . 'currencies.php');
   $currencies = new currencies();
