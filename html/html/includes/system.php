@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.13 2003/04/29 06:27:17 r23 Exp $
+   $Id: system.php,v 1.14 2003/04/29 16:59:21 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -195,11 +195,11 @@
     }
   }
 
-/*
-// include the who's online functions
-  require_once(OWP_FUNCTIONS_DIR . 'whos_online.php');
-  tep_update_whos_online();
 
+// include the who's online functions
+  require_once(OWP_FUNCTIONS_DIR . 'owp_whos_online.php');
+  opwUpdateWhosOnline();
+/*
 // Include validation functions (right now only email address)
   require_once(OWP_FUNCTIONS_DIR . 'validations.php');
 */

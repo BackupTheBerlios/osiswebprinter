@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.15 2003/04/29 06:28:58 r23 Exp $
+   $Id: languages.php,v 1.16 2003/04/29 16:59:21 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -51,7 +51,6 @@
                         . $db->qstr($iso_639_1) . ','
                         . $db->qstr($sort_order) . ")";
       $db->Execute($sql);
-
 
 /*!
  ?     $insert_id = tep_db_insert_id();
@@ -277,7 +276,7 @@
       $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_ISO_639_2 . '<br>' . owpInputField('iso_639_2'));
       $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_ISO_639_1 . '<br>' . owpInputField('iso_639_1'));
       $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_SORT_ORDER . '<br>' . owpInputField('sort_order'));
-      $contents[] = array('text' => '<br>' . tep_draw_checkbox_field('default') . ' ' . TEXT_SET_DEFAULT);
+      $contents[] = array('text' => '<br>' . owpCheckboxField('default') . ' ' . TEXT_SET_DEFAULT);
       $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_insert.gif', IMAGE_INSERT) . ' <a href="' . owpLink($owpFilename['languages'], 'page=' . $_GET['page'] . '&lID=' . $_GET['lID']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'edit':
@@ -289,7 +288,7 @@
       $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_ISO_639_2 . '<br>' . owpInputField('iso_639_2', $lInfo->iso_639_2));
       $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_ISO_639_1 . '<br>' . owpInputField('iso_639_1', $lInfo->iso_639_1));
       $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_SORT_ORDER . '<br>' . owpInputField('sort_order', $lInfo->sort_order));
-      if (DEFAULT_LANGUAGE != $lInfo->iso_639_2) $contents[] = array('text' => '<br>' . tep_draw_checkbox_field('default') . ' ' . TEXT_SET_DEFAULT);
+      if (DEFAULT_LANGUAGE != $lInfo->iso_639_2) $contents[] = array('text' => '<br>' . owpCheckboxField('default') . ' ' . TEXT_SET_DEFAULT);
       $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_update.gif', IMAGE_UPDATE) . ' <a href="' . owpLink($owpFilename['languages'], 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'delete':

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_whos_online.php,v 1.2 2003/04/29 16:54:58 r23 Exp $
+   $Id: owp_whos_online.php,v 1.3 2003/04/29 16:59:21 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -27,38 +27,59 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  function tep_update_whos_online() {
-    global $customer_id;
-
-    if (isset($customer_id)) {
-      $wo_customer_id = $customer_id;
-
-      $customer_query = tep_db_query("select customers_firstname, customers_lastname from " . TABLE_CUSTOMERS . " where customers_id = '" . $customer_id . "'");
-      $customer = tep_db_fetch_array($customer_query);
-
-      $wo_full_name = addslashes($customer['customers_firstname'] . ' ' . $customer['customers_lastname']);
+  function opwUpdateWhosOnline() {
+    global $db;
+    
+    if (isset($_SESSION['user_id'])) {
+      $wo_user_id =& $_SESSION['user_id'];
+      $wo_full_name = $_SESSION['firstname'] . ' ' . $_SESSION['lastname'];     
     } else {
-      $wo_customer_id = '';
+      $wo_user_id = '';
       $wo_full_name = 'Guest';
     }
 
-    $wo_session_id = tep_session_id();
-    $wo_ip_address = getenv('REMOTE_ADDR');
-    $wo_last_page_url = addslashes(getenv('REQUEST_URI'));
+    $wo_session_id = owpSessionID();
+    $wo_ip_address = $_SERVER['REMOTE_ADDR'];
+    $wo_last_page_url = addslashes($_SERVER['REQUEST_URI']);
 
     $current_time = time();
     $xx_mins_ago = ($current_time - 900);
 
-// remove entries that have expired
-    tep_db_query("delete from " . TABLE_WHOS_ONLINE . " where time_last_click < '" . $xx_mins_ago . "'");
+    $owpDBTable = owpDBGetTables();
+    // remove entries that have expired
+    $db->Execute("DELETE FROM " . $owpDBTable['whos_online'] . " WHERE time_last_click < '" . $xx_mins_ago . "'");
 
-    $stored_customer_query = tep_db_query("select count(*) as count from " . TABLE_WHOS_ONLINE . " where session_id = '" . $wo_session_id . "'");
-    $stored_customer = tep_db_fetch_array($stored_customer_query);
-
-    if ($stored_customer['count'] > 0) {
-      tep_db_query("update " . TABLE_WHOS_ONLINE . " set customer_id = '" . $wo_customer_id . "', full_name = '" . $wo_full_name . "', ip_address = '" . $wo_ip_address . "', time_last_click = '" . $current_time . "', last_page_url = '" . $wo_last_page_url . "' where session_id = '" . $wo_session_id . "'");
+    $sql = "SELECT count(*) as total 
+            FROM " . $owpDBTable['whos_online'] . " 
+            WHERE session_id = '" . $wo_session_id . "'";
+    $owp_user_query = $db->Execute($sql);
+    $owp_user = $owp_user_query->fields;
+    
+    if ($owp_user['total'] > 0) {
+      $db->Execute("UPDATE " . $owpDBTable['whos_online'] . " 
+      	                 SET user_id = " . $db->qstr($wo_user_id) . ",
+      	                     full_name = " . $db->qstr($wo_full_name) . ",
+      	                     ip_address = " . $db->qstr($wo_ip_address) . ",    	                     
+      	                     time_last_click = " . $db->qstr($current_time) . ",
+      	                     last_page_url = " . $db->qstr($wo_last_page_url) . "
+                       WHERE session_id = '" . $wo_session_id . "'");
     } else {
-      tep_db_query("insert into " . TABLE_WHOS_ONLINE . " (customer_id, full_name, session_id, ip_address, time_entry, time_last_click, last_page_url) values ('" . $wo_customer_id . "', '" . $wo_full_name . "', '" . $wo_session_id . "', '" . $wo_ip_address . "', '" . $current_time . "', '" . $current_time . "', '" . $wo_last_page_url . "')");
+      $sql = "INSERT INTO " . $owpDBTable['whos_online'] . " 
+             (user_id,
+              full_name, 
+              session_id, 
+              ip_address,
+              time_entry,
+              time_last_click,
+              last_page_url) 
+              VALUES (" . $db->qstr($wo_user_id) . ','
+                        . $db->qstr($wo_full_name) . ','
+                        . $db->qstr($wo_session_id) . ','
+                        . $db->qstr($wo_ip_address) . ','
+                        . $db->qstr($current_time) . ','
+                        . $db->qstr($current_time) . ','
+                        . $db->qstr($wo_last_page_url) . ")";
+      $db->Execute($sql);    
     }
   }
 ?>

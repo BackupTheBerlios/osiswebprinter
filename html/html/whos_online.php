@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: whos_online.php,v 1.12 2003/04/25 16:01:18 r23 Exp $
+   $Id: whos_online.php,v 1.13 2003/04/29 16:59:21 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,8 +22,6 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  $xx_mins_ago = (time() - 900);
-
   require('includes/system.php');
 
   if (!isset($_SESSION['user_id'])) {
@@ -33,11 +31,6 @@
   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['whos_online']);
 
-  require(OWP_CLASSES_DIR . 'currencies.php');
-  $currencies = new currencies();
-
-// remove entries that have expired
-  tep_db_query("delete FROM " . TABLE_WHOS_ONLINE . " WHERE time_last_click < '" . $xx_mins_ago . "'");
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -65,7 +58,7 @@
 <!-- body_text //-->
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-            <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
+        <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
       </tr>
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
@@ -81,20 +74,20 @@
                 <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_LAST_PAGE_URL; ?>&nbsp;</td>
               </tr>
 <?php
-  $whos_online_query = tep_db_query("SELECT customer_id, full_name, ip_address, time_entry, time_last_click, last_page_url, session_id FROM " . TABLE_WHOS_ONLINE);
-  while ($whos_online = tep_db_fetch_array($whos_online_query)) {
+  $sql = "SELECT user_id, full_name, session_id, ip_address, 
+                 time_entry, time_last_click, last_page_url 
+          FROM " . $owpDBTable['whos_online'];
+  $whos_online_query = $db->Execute($sql);  
+  
+  while ($whos_online = $whos_online_query->fields) {
     $time_online = (time() - $whos_online['time_entry']);
     if ( ((!$_GET['info']) || (@$_GET['info'] == $whos_online['session_id'])) && (!$info) ) {
       $info = $whos_online['session_id'];
     }
-    if ($whos_online['session_id'] == $info) {
-      echo '              <tr class="dataTableRowSelected">' . "\n";
-    } else {
-      echo '              <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . owpLink($owpFilename['whos_online'], owpGetAllGetParameters(array('info', 'action')) . 'info=' . $whos_online['session_id'], 'NONSSL') . '\'">' . "\n";
-    }
+    echo '              <tr class="dataTableRowSelected">' . "\n";
 ?>
                 <td class="dataTableContent"><?php echo gmdate('H:i:s', $time_online); ?></td>
-                <td class="dataTableContent" align="center"><?php echo $whos_online['customer_id']; ?></td>
+                <td class="dataTableContent" align="center"><?php echo $whos_online['user_id']; ?></td>
                 <td class="dataTableContent"><?php echo $whos_online['full_name']; ?></td>
                 <td class="dataTableContent" align="center"><?php echo $whos_online['ip_address']; ?></td>
                 <td class="dataTableContent"><?php echo date('H:i:s', $whos_online['time_entry']); ?></td>
@@ -102,72 +95,13 @@
                 <td class="dataTableContent"><?php if (eregi('^(.*)' . owpSessionName() . '=[a-f,0-9]+[&]*(.*)', $whos_online['last_page_url'], $array)) { echo $array[1] . $array[2]; } else { echo $whos_online['last_page_url']; } ?>&nbsp;</td>
               </tr>
 <?php
+    $whos_online_query->MoveNext();
   }
 ?>
               <tr>
-                <td class="smallText" colspan="7"><?php echo sprintf(TEXT_NUMBER_OF_CUSTOMERS, tep_db_num_rows($whos_online_query)); ?></td>
+                <td class="smallText" colspan="7"><?php echo sprintf(TEXT_NUMBER_OF_CUSTOMERS, $whos_online_query->RecordCount()); ?></td>
               </tr>
             </table></td>
-<?php
-  $heading = array();
-  $contents = array();
-  if ($info) {
-    $heading[] = array('text' => '<b>' . TABLE_HEADING_SHOPPING_CART . '</b>');
-
-    if (STORE_SESSIONS == 'mysql') {
-      $session_data = tep_db_query("SELECT value FROM " . TABLE_SESSIONS . " WHERE sesskey = '" . $info . "'");
-      $session_data = tep_db_fetch_array($session_data);
-      $session_data = trim($session_data['value']);
-    } else {
-      if (file_exists(tep_session_save_path() . '/sess_' . $info)) {
-        $session_data = @file(tep_session_save_path() . '/sess_' . $info);
-        $session_data = trim(implode('', $session_data));
-      }
-    }
-
-    if ($length = strlen($session_data)) {
-      $start_id = strpos($session_data, 'customer_id|s');
-      $start_currency = strpos($session_data, 'currency|s');
-      $start_country = strpos($session_data, 'customer_country_id|s');
-      $start_zone = strpos($session_data, 'customer_zone_id|s');
-
-      $session_data_id = substr($session_data, $start_id, (strpos($session_data, ';', $start_id) - $start_id + 1));
-      $session_data_cart = substr($session_data, $start_cart, $i);
-      $session_data_currency = substr($session_data, $start_currency, (strpos($session_data, ';', $start_currency) - $start_currency + 1));
-      $session_data_country = substr($session_data, $start_country, (strpos($session_data, ';', $start_country) - $start_country + 1));
-      $session_data_zone = substr($session_data, $start_zone, (strpos($session_data, ';', $start_zone) - $start_zone + 1));
-
-      session_decode($session_data_id);
-      session_decode($session_data_currency);
-      session_decode($session_data_country);
-      session_decode($session_data_zone);
-      session_decode($session_data_cart);
-
-      if (is_object($cart)) {
-        $products = $cart->get_products();
-        for ($i=0; $i<sizeof($products); $i++) {
-          $contents[] = array('text' => $products[$i]['quantity'] . ' x ' . $products[$i]['name']);
-        }
-
-        if (sizeof($products) > 0) {
-          $contents[] = array('text' => owpTransLine());
-          $contents[] = array('align' => 'right', 'text'  => TEXT_SHOPPING_CART_SUBTOTAL . ' ' . $currencies->format($cart->show_total(), true, $currency));
-        } else {
-          $contents[] = array('text' => '&nbsp;');
-        }
-      }
-    }
-  }
-
-  if ( (owpNotNull($heading)) && (owpNotNull($contents)) ) {
-    echo '            <td width="25%" valign="top">' . "\n";
-
-    $box = new box;
-    echo $box->infoBox($heading, $contents);
-
-    echo '            </td>' . "\n";
-  }
-?>
           </tr>
         </table></td>
       </tr>
