@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newtables.php,v 1.2 2003/03/28 02:08:09 r23 Exp $
+   $Id: newtables.php,v 1.3 2003/03/28 02:55:43 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -978,3 +978,4 @@ CREATE TABLE ".$prefix."_users (
 ";
 dosql($table,$sql);
 ?>
+

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: language.php,v 1.2 2003/03/28 02:06:47 r23 Exp $
+   $Id: language.php,v 1.3 2003/03/28 02:54:52 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -41,93 +41,85 @@
    ---------------------------------------------------------------------- */
 
 /** Loads the required language file for the installer **/
-function installer_get_language() {
-   global $currentlang;
-   if (!isset($currentlang)) {
-      $currentlang = 'eng'; // english is the fallback
-   }
-   if (file_exists($file="install/lang/$currentlang/global.php"))
+  function installer_get_language() {
+     global $currentlang;
+     if (!isset($currentlang)) {
+        $currentlang = 'deu'; 
+     }
+     if (file_exists($file="lang/$currentlang/global.php"))
+       include $file;
+     elseif (file_exists($file="lang/$language/global.php"))
        @include $file;
-   elseif (file_exists($file="install/lang/$language/global.php"))
+     if (file_exists($file="../includes/language/$currentlang/global.php"))
        @include $file;
-   if (file_exists($file="language/$currentlang/global.php"))
+     elseif (file_exists($file="../includes/language/$language/global.php"))
        @include $file;
-   elseif (file_exists($file="language/$language/global.php"))
-       @include $file;
-}
+  }
 
 // Make common language selection dropdown (from Tim Litwiller)
-// =======================================
-   function lang_dropdown()
-   {
+   function lang_dropdown() {
       global $currentlang;
-      echo "<select name=\"alanguage\" class=\"pn-text\">";
+
+      echo "<select name=\"alanguage\" class=\"ow-text\">";
       $lang = languagelist();
-      $handle = opendir('install/lang');
-      while ($f = readdir($handle))
-      {
-         if (is_dir("install/lang/$f") && @$lang[$f])
-         {
-            $langlist[$f] = $lang[$f];
-         }
+      $handle = opendir('lang');
+      while ($f = readdir($handle)) {
+        if (is_dir("lang/$f") && @$lang[$f]) {
+          $langlist[$f] = $lang[$f];
+        }
       }
       asort($langlist);
-      foreach ($langlist as $k=>$v)
-      {
-         echo '<option value="'.$k.'"';
-         if ( $currentlang == $k)
-         {
-            echo ' selected';
-         }
-         echo '>'. $v . '</option> ';
+      foreach ($langlist as $k=>$v) {
+        echo '<option value="' . $k . '"';
+        if ( $currentlang == $k) {
+          echo ' selected';
+        }
+        echo '>'. $v . '</option> ';
       }
       echo "</select>";
    }
 // list of all availabe languages (from Patrick Kellum <webmaster@ctarl-ctarl.com>)
-// ==============================
-   function languagelist()
-   {
-//    All entries use ISO 639-2/T
-      $lang['ara'] = _LANGUAGE_ARA; // Arabic
-      $lang['bul'] = _LANGUAGE_BUL; // Bulgarian
-      $lang['zho'] = _LANGUAGE_ZHO; // Chinese
-      $lang['ces'] = _LANGUAGE_CES; // Czech
-      $lang['cro'] = _LANGUAGE_CRO; // Croatian
-      $lang['dan'] = _LANGUAGE_DAN; // Danish
-      $lang['nld'] = _LANGUAGE_NLD; // Dutch
-      $lang['eng'] = _LANGUAGE_ENG; // English
-      $lang['epo'] = _LANGUAGE_EPO; // Esperanto
-      $lang['est'] = _LANGUAGE_EST; // Estonian
-      $lang['fin'] = _LANGUAGE_FIN; // Finnish
-      $lang['fra'] = _LANGUAGE_FRA; // French
-      $lang['deu'] = _LANGUAGE_DEU; // German
-      $lang['ell'] = _LANGUAGE_ELL; // Greek, Modern (1453-)
-      $lang['heb'] = _LANGUAGE_HEB; // Hebrew
-      $lang['hun'] = _LANGUAGE_HUN; // Hungarian
-      $lang['isl'] = _LANGUAGE_ISL; // Icelandic
-      $lang['ind'] = _LANGUAGE_IND; // Indonesian
-      $lang['ita'] = _LANGUAGE_ITA; // Italian
-      $lang['jpn'] = _LANGUAGE_JPN; // Japanese
-      $lang['kor'] = _LANGUAGE_KOR; // Korean
-      $lang['lav'] = _LANGUAGE_LAV; // Latvian
-      $lang['lit'] = _LANGUAGE_LIT; // Lithuanian
-      $lang['mas'] = _LANGUAGE_MAS; // Malay
-      $lang['nor'] = _LANGUAGE_NOR; // Norwegian
-      $lang['pol'] = _LANGUAGE_POL; // Polish
-      $lang['por'] = _LANGUAGE_POR; // Portuguese
-      $lang['ron'] = _LANGUAGE_RON; // Romanian
-      $lang['rus'] = _LANGUAGE_RUS; // Russian
-      $lang['slv'] = _LANGUAGE_SLV; // Slovenian
-      $lang['spa'] = _LANGUAGE_SPA; // Spanish
-      $lang['swe'] = _LANGUAGE_SWE; // Swedish
-      $lang['tha'] = _LANGUAGE_THA; // Thai
-      $lang['tur'] = _LANGUAGE_TUR; // Turkish
-      $lang['ukr'] = _LANGUAGE_UKR; // Ukrainian
-      $lang['yid'] = _LANGUAGE_YID; // Yiddish
+   function languagelist() {
+      $lang['ara'] = LANGUAGE_ARA; // Arabic
+      $lang['bul'] = LANGUAGE_BUL; // Bulgarian
+      $lang['zho'] = LANGUAGE_ZHO; // Chinese
+      $lang['ces'] = LANGUAGE_CES; // Czech
+      $lang['cro'] = LANGUAGE_CRO; // Croatian
+      $lang['dan'] = LANGUAGE_DAN; // Danish
+      $lang['nld'] = LANGUAGE_NLD; // Dutch
+      $lang['eng'] = LANGUAGE_ENG; // English
+      $lang['epo'] = LANGUAGE_EPO; // Esperanto
+      $lang['est'] = LANGUAGE_EST; // Estonian
+      $lang['fin'] = LANGUAGE_FIN; // Finnish
+      $lang['fra'] = LANGUAGE_FRA; // French
+      $lang['deu'] = LANGUAGE_DEU; // German
+      $lang['ell'] = LANGUAGE_ELL; // Greek, Modern (1453-)
+      $lang['heb'] = LANGUAGE_HEB; // Hebrew
+      $lang['hun'] = LANGUAGE_HUN; // Hungarian
+      $lang['isl'] = LANGUAGE_ISL; // Icelandic
+      $lang['ind'] = LANGUAGE_IND; // Indonesian
+      $lang['ita'] = LANGUAGE_ITA; // Italian
+      $lang['jpn'] = LANGUAGE_JPN; // Japanese
+      $lang['kor'] = LANGUAGE_KOR; // Korean
+      $lang['lav'] = LANGUAGE_LAV; // Latvian
+      $lang['lit'] = LANGUAGE_LIT; // Lithuanian
+      $lang['mas'] = LANGUAGE_MAS; // Malay
+      $lang['nor'] = LANGUAGE_NOR; // Norwegian
+      $lang['pol'] = LANGUAGE_POL; // Polish
+      $lang['por'] = LANGUAGE_POR; // Portuguese
+      $lang['ron'] = LANGUAGE_RON; // Romanian
+      $lang['rus'] = LANGUAGE_RUS; // Russian
+      $lang['slv'] = LANGUAGE_SLV; // Slovenian
+      $lang['spa'] = LANGUAGE_SPA; // Spanish
+      $lang['swe'] = LANGUAGE_SWE; // Swedish
+      $lang['tha'] = LANGUAGE_THA; // Thai
+      $lang['tur'] = LANGUAGE_TUR; // Turkish
+      $lang['ukr'] = LANGUAGE_UKR; // Ukrainian
+      $lang['yid'] = LANGUAGE_YID; // Yiddish
 //    Non-ISO entries are written as x_[language name]
-      $lang['x_brazilian_portuguese'] = _LANGUAGE_X_BRAZILIAN_PORTUGUESE; // Brazilian Portuguese
-      $lang['x_klingon'] = _LANGUAGE_X_KLINGON; // Klingon
-      $lang['x_rus_koi8r'] = _LANGUAGE_X_RUS_KOI8R; // Russian KOI8-R
+      $lang['x_brazilian_portuguese'] = LANGUAGE_X_BRAZILIAN_PORTUGUESE; // Brazilian Portuguese
+      $lang['x_klingon'] = LANGUAGE_X_KLINGON; // Klingon
+      $lang['x_rus_koi8r'] = LANGUAGE_X_RUS_KOI8R; // Russian KOI8-R
 //    end of list
       return $lang;
 }

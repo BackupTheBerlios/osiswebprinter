@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------
-   $Id: style.css,v 1.2 2003/03/28 02:08:09 r23 Exp $
+   $Id: style.css,v 1.3 2003/03/28 02:55:43 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -19,82 +19,122 @@
    ---------------------------------------------------------------------- */
 
 BODY {
-BACKGROUND: #F6F7EB;
-COLOR: #000000;
-FONT-SIZE: 11px;
-FONT-FAMILY: Tahoma, Verdana, sans-serif;
-TEXT-DECORATION: none
+  BACKGROUND: #F6F7EB;
+  COLOR: #000000;
+  FONT-SIZE: 11px;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
 }
 
 A {
-COLOR: #000000;
-FONT-SIZE: 11px;
-FONT-FAMILY: Tahoma, Verdana, sans-serif;
-TEXT-DECORATION: none
+  COLOR: #000000;
+  FONT-SIZE: 11px;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
 }
 
 A:link {
-COLOR: #000000;
-FONT-SIZE: 11px;
-FONT-FAMILY: Tahoma, Verdana, sans-serif;
-TEXT-DECORATION: none
+  COLOR: #000000;
+  FONT-SIZE: 11px;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
 }
 
 A:active {
-COLOR: #000000;
-FONT-SIZE: 11px;
-FONT-FAMILY: Tahoma, Verdana, sans-serif;
-TEXT-DECORATION: none
+  COLOR: #000000;
+  FONT-SIZE: 11px;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
 }
 
 A:visited {
-COLOR: #000000;
-FONT-SIZE: 11px;
-FONT-FAMILY: Tahoma, Verdana, sans-serif;
-TEXT-DECORATION: none
+  COLOR: #000000;
+  FONT-SIZE: 11px;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
 }
 
 A:hover {
-COLOR: #000000;
-FONT-SIZE: 11px;
-FONT-FAMILY: Tahoma, Verdana, sans-serif;
-TEXT-DECORATION: underline
+  COLOR: #000000;
+  FONT-SIZE: 11px;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: underline
 }
 
-.pn-pagetitle {
-COLOR: #000000;
-FONT-SIZE: 16px;
-FONT-WEIGHT: bold;
-FONT-FAMILY: Tahoma, Verdana, sans-serif;
-LETTER-SPACING: 3px;
-TEXT-DECORATION: none
+TR.ow-footer {
+  background-color : #000000;
 }
 
-.pn-title {
-COLOR: #000000;
-FONT-SIZE: 11px;
-FONT-WEIGHT: bold;
-FONT-FAMILY: Tahoma, Verdana, sans-serif;
-TEXT-DECORATION: none
+TD.ow-footer {
+  font-family : Verdana, Arial, sans-serif;
+  font-size : 10px;
+  background-color : #000000;
+  color : #FFFFDF;
+  font-weight : bold;
 }
 
-.pn-normal {
-COLOR: #000000;
-FONT-SIZE: 11px;
-FONT-FAMILY: Tahoma, Verdana, sans-serif;
-TEXT-DECORATION: none
+.ow-pageTitle {
+  COLOR: #000000;
+  FONT-SIZE: 12px;
+  FONT-WEIGHT: bold;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
+}
+
+.ow-bigTitle {
+  COLOR: #000000;
+  FONT-SIZE: 18px;
+  FONT-WEIGHT: bold;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
+}
+
+.ow-pageGreat {
+  COLOR: #000000;
+  FONT-SIZE: 14px;
+  FONT-WEIGHT: bold;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
+}
+
+.ow-title {
+  COLOR: #000000;
+  FONT-SIZE: 11px;
+  FONT-WEIGHT: bold;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
+}
+
+.ow-main {
+  COLOR: #000000;
+  FONT-SIZE: 11px;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
+}
+
+
+.ow-normal {
+  COLOR: #000000;
+  FONT-SIZE: 11px;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
 }
 
 .pn-failed {
-COLOR: #ff0034;
-FONT-SIZE: 11px;
-FONT-FAMILY: Tahoma, Verdana, sans-serif;
-TEXT-DECORATION: none
+  COLOR: #ff0034;
+  FONT-SIZE: 11px;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
 }
 
 .pn-sub {
-COLOR: #000000;
-FONT-SIZE: 9px;
-FONT-FAMILY: Tahoma, Verdana, sans-serif;
-TEXT-DECORATION: none
+  COLOR: #000000;
+  FONT-SIZE: 9px;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
+}
+
+CHECKBOX, INPUT, RADIO, SELECT, TEXTAREA {
+  font-family : Verdana, Arial, sans-serif;
+  font-size : 11px;
 }

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.2 2003/03/28 02:06:47 r23 Exp $
+   $Id: index.php,v 1.3 2003/03/28 02:54:52 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -57,57 +57,50 @@
 
 set_time_limit(0);
 
-define('ADODB_DIR', 'pnadodb');
-require_once ("pnadodb/adodb.inc.php");
+define('ADODB_DIR', '../includes/adodb');
+require_once ('../includes/adodb/adodb.inc.php');
+require_once ('../includes/classes/osis_text_tool.php');
 
 if (isset($alanguage)) {
-   $currentlang = $alanguage;
+  $currentlang = $alanguage;
 }
 
-
-if(!isset($prefix))
-{
-    include_once 'config.php';
-    $prefix = $pnconfig['prefix'];
-    $dbtype = $pnconfig['dbtype'];
-    $dbhost = $pnconfig['dbhost'];
-    $dbuname = $pnconfig['dbuname'];
-    $dbpass = $pnconfig['dbpass'];
-    $dbname = $pnconfig['dbname'];
-    $system = $pnconfig['system'];
-    $encoded = $pnconfig['encoded'];   
+if (!isset($prefix)) {
+  include_once '../includes/config.php';
+  $prefix = $owconfig['prefix'];
+  $dbtype = $owconfig['dbtype'];
+  $dbhost = $owconfig['dbhost'];
+  $dbuname = $owconfig['dbuname'];
+  $dbpass = $owconfig['dbpass'];
+  $dbname = $owconfig['dbname'];
+  $system = $owconfig['system'];
+  $encoded = $owconfig['encoded'];   
 }
 
 if (!empty($encoded)) {
-    // Decode username and password
-    $dbuname = base64_decode($dbuname);
-    $dbpass = base64_decode($dbpass);
+  $dbuname = base64_decode($dbuname);
+  $dbpass = base64_decode($dbpass);
 }
 
-$pnconfig['prefix'] = $prefix;
+$owconfig['prefix'] = $prefix;
 
-include_once 'pntables.php';
-include_once 'install/language.php'; // functions for multilanguage support
+include_once 'language.php'; 
 
 installer_get_language();
 
-include_once 'install/modify_config.php'; // functions to modify config.php
-include_once 'install/upgrade.php';  // functions for upgrades
-include_once 'install/newinstall.php'; // functions for new installs
-include_once 'install/gui.php'; // functions for rendering the gui
-include_once 'install/db.php'; // functions for accessing the db
-include_once 'install/check.php'; // functions for various checks
+include_once 'modify_config.php'; 
+include_once 'newinstall.php'; 
+include_once 'gui.php'; 
+include_once 'db.php'; 
+include_once 'check.php'; 
 
 /** print the page header, include style sheets **/
 print_header();
 
 /*  This starts the switch statement that filters through the form options.
-
-* the @ is in front of $op to suppress error messages if $op is unset and E_ALL
-
-* is on
-
-*/
+ * the @ is in front of $op to suppress error messages if $op is unset and E_ALL
+ * is on
+ */
 switch(@$op) {
 
     case "CHM_check":
@@ -163,7 +156,7 @@ switch(@$op) {
          break;
 
     Case "PHP-Nuke":
-         print_select_phpnuke();
+         print_select_phowuke();
          break;
 
     Case "PostNuke":
@@ -171,7 +164,7 @@ switch(@$op) {
          break;
 
     Case "MyPHPNuke":
-         print_select_myphpnuke();
+         print_select_myphowuke();
          break;
          
 /* Removed for release.  Needs to be updated
@@ -190,152 +183,7 @@ switch(@$op) {
          $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
          sequence_update($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
          break; */
-
-    Case "MyPHPNuke 1.8.7":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade187($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-
-    Case "MyPHPNuke 1.8.8":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade188($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-
-    Case "PHP-Nuke 4.4":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade4($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade5($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade6($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade62($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade63($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_forum_info();
-         print_success();
-         break;
-         
-    Case "PHP-Nuke 5":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade5($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade6($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade62($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade63($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-
-    Case "PHP-Nuke 5.2":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade52($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade5($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade6($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade62($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade63($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-
-    Case "PHP-Nuke 5.3":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade53($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade52($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade5($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade6($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade62($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade63($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-
-       Case "PHP-Nuke 5.3.1":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade531($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade53($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade52($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade5($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade6($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade62($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade63($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-         
-        Case "PHP-Nuke 5.4":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade54($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);   
-         do_upgrade531($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade53($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade52($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade5($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade6($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade62($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade63($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break; 
-
-    Case "PostNuke .5":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade5($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade6($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade62($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade63($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-
-    Case "PostNuke .6":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade6($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade62($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade63($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-
-    Case "PostNuke .62":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade62($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade63($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-
-    Case "PostNuke .63":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade63($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-
-    Case "PostNuke .64":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade64($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-
-    Case "PostNuke .7":
-         $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-         do_upgrade7($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype);
-         print_success();
-         break;
-
+        
     case "Check":
         do_check_php();
         do_check_chmod();
@@ -346,6 +194,5 @@ switch(@$op) {
          break;
 }
 
-/** print the footer, and closing tags **/
 print_footer();
 ?>

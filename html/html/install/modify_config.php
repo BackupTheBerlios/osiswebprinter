@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: modify_config.php,v 1.2 2003/03/28 02:06:47 r23 Exp $
+   $Id: modify_config.php,v 1.3 2003/03/28 02:54:52 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -44,24 +44,20 @@
 // mod_file is general, give it a source file a destination.
 // an array of search patterns (Perl style) and replacement patterns
 // Returns a string which starts with "Err" if there's an error
-function modify_file($src, $dest, $reg_src, $reg_rep)
-{
+function modify_file($src, $dest, $reg_src, $reg_rep) {
     $in = @fopen($src, "r");
-    if (! $in)
-    {
+    if (!$in) {
         return _MODIFY_FILE_1." $src";
     }
     $i = 0;
-    while (!feof($in))
-    {
+    while (!feof($in)) {
         $file_buff1[$i++] = fgets($in, 4096);
     }
     fclose($in);
 
     $lines = 0; // Keep track of the number of lines changed
 
-    while (list ($bline_num, $buffer) = each ($file_buff1))
-    {
+    while (list ($bline_num, $buffer) = each ($file_buff1)) {
         $new = preg_replace($reg_src, $reg_rep, $buffer);
         if ($new != $buffer) {
             $lines++;
@@ -69,8 +65,7 @@ function modify_file($src, $dest, $reg_src, $reg_rep)
         $file_buff2[$bline_num] = $new;
     }
 
-    if ($lines == 0)
-    {
+    if ($lines == 0) {
         // Skip the rest - no lines changed
         return _MODIFY_FILE_3;
     }
@@ -78,13 +73,11 @@ function modify_file($src, $dest, $reg_src, $reg_rep)
     reset($file_buff1);
     $out_backup = @fopen($dest, "w");
 
-    if (! $out_backup)
-    {
+    if (! $out_backup) {
         return _MODIFY_FILE_2." $dest";
     }
 
-    while (list ($bline_num, $buffer) = each ($file_buff1))
-    {
+    while (list ($bline_num, $buffer) = each ($file_buff1)) {
         fputs($out_backup,$buffer);
     }
 
@@ -92,13 +85,11 @@ function modify_file($src, $dest, $reg_src, $reg_rep)
 
     reset($file_buff2);
     $out_original = fopen($src, "w");
-    if (! $out_original)
-    {
+    if (! $out_original) {
         return _MODIFY_FILE_2." $src";
     }
 
-    while (list ($bline_num, $buffer) = each ($file_buff2))
-    {
+    while (list ($bline_num, $buffer) = each ($file_buff2)) {
         fputs($out_original,$buffer);
     }
 
@@ -114,8 +105,7 @@ $reg_rep = array();
 
 // Setup various searches and replaces
 // Scott Kirkwood
-function add_src_rep($key, $rep)
-{
+function add_src_rep($key, $rep) {
     global $reg_src, $reg_rep;
 
     // Note: /x is to permit spaces in regular expressions
@@ -134,27 +124,25 @@ function add_src_rep($key, $rep)
     $reg_rep[] = "['$key'] = $rep;";
 }
 
-function show_error_info()
-{
+function show_error_info() {
     global $dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype;
 
     echo "<br/><br/><b>"._SHOW_ERROR_INFO_1."<br/>";
 echo <<< EOT
         <tt>
-        \$pnconfig['dbtype'] = '$dbtype';<br/>
-        \$pnconfig['dbhost']  = '$dbhost';<br/>
-        \$pnconfig['dbuname'] = '$dbuname';<br/>
-        \$pnconfig['dbpass'] = '$dbpass';<br/>
-        \$pnconfig['dbname'] = '$dbname';<br/>
-        \$pnconfig['prefix'] = '$prefix';<br/>
+        \$owconfig['dbtype'] = '$dbtype';<br/>
+        \$owconfig['dbhost']  = '$dbhost';<br/>
+        \$owconfig['dbuname'] = '$dbuname';<br/>
+        \$owconfig['dbpass'] = '$dbpass';<br/>
+        \$owconfig['dbname'] = '$dbname';<br/>
+        \$owconfig['prefix'] = '$prefix';<br/>
         </tt>
 EOT;
 
 }
 
 // Update the config.php file with the database information.
-function update_config_php($db_prefs = false)
-{
+function update_config_php($db_prefs = false) {
     global $reg_src, $reg_rep;
     global $dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype;
     global $email, $url,  $HTTP_ENV_VARS;
@@ -172,15 +160,13 @@ function update_config_php($db_prefs = false)
     }
     add_src_rep("encoded", '1');
 
-    if ($email)
-    {
+    if ($email)  {
         add_src_rep("adminmail", $email);
     }
 
-    $ret = modify_file("config.php", "config-old.php", $reg_src, $reg_rep);
+    $ret = modify_file("../includes/config.php", "../includes/config-old.php", $reg_src, $reg_rep);
 
-    if (preg_match("/Error/", $ret))
-    {
+    if (preg_match("/Error/", $ret)) {
         show_error_info();
     }
 }
