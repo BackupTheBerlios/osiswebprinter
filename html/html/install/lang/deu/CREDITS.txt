@@ -22,6 +22,18 @@ phpMailer Library for PHP4
 http://phpmailer.sourceforge.net
 Released under GNU Lesser GPL library license.
 
+Die Homepage basiert auf:
+osCommerce, Open Source E-Commerce Solutions
+Copyright (c) 2002 osCommerce
+http://www.oscommerce.com
+Released under GNU General Public License (GPL)
+
+Die Gestaltung der Seite basiert auf
+PostNuke Theme
+created by J. Cox (http://www.dinerminor.com)
+Released under GNU General Public License (GPL)
+
+
  
 Diese Liste erhebt keinen Anspruch auf Vollständigkeit!
 Sollten Sie der Meinung sein, auf diese Liste zu gehören, kontaktieren Sie mich unter credits@r23.de
