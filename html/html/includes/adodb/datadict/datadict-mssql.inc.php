@@ -1,7 +1,7 @@
 <?php
 
 /**
-  V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V3.40 7 April 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -26,7 +26,12 @@ class ADODB2_mssql extends ADODB_DataDict {
 		case 'D': return 'DATETIME';
 		case 'T': return 'DATETIME';
 		case 'L': return 'BIT';
+		
 		case 'I': return 'INT'; 
+		case 'I1': return 'TINYINT';
+		case 'I2': return 'SMALLINT';
+		case 'I4': return 'INT';
+		case 'I8': return 'BIGINT';
 		
 		case 'F': return 'REAL';
 		case 'N': return 'NUMERIC';

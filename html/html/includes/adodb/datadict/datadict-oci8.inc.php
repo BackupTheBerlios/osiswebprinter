@@ -1,7 +1,7 @@
 <?php
 
 /**
-  V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V3.40 7 April 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -30,8 +30,12 @@ class ADODB2_oci8 extends ADODB_DataDict {
 		case 'D': 
 		case 'T': return 'DATE';
 		case 'L': return 'NUMBER(1)';
-		case 'I': return 'NUMBER(16)';  // enough for 9 petabytes!
+		case 'I1': return 'NUMBER(3)';
+		case 'I2': return 'NUMBER(5)';
+		case 'I':
+		case 'I4': return 'NUMBER(10)';
 		
+		case 'I8': return 'NUMBER(20)';
 		case 'F': return 'NUMBER';
 		case 'N': return 'NUMBER';
 		default:

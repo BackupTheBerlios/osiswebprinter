@@ -1,7 +1,7 @@
 <?php
 
 /* 
-V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+V3.40 7 April 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. See License.txt. 
@@ -96,7 +96,7 @@ V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights re
 		
 		if ($meta = fgetcsv($fp, 32000, ",")) { // first read is larger because contains sql
 			// check if error message
-			if (substr($meta[0],0,4) === '****') {
+			if (strncmp($meta[0],'****',4) === 0) {
 				$err = trim(substr($meta[0],4,1024));
 				fclose($fp);
 				return false;
@@ -105,7 +105,7 @@ V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights re
 			// $meta[0] is -1 means return an empty recordset
 			// $meta[1] contains a time 
 	
-			if (substr($meta[0],0,4) ===  '====') {
+			if (strncmp($meta[0],'====',4) === 0) {
 			
 				if ($meta[0] == "====-1") {
 					if (sizeof($meta) < 5) {
@@ -134,7 +134,8 @@ V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights re
 			#
 			# Under high volume loads, we want only 1 thread/process to _write_file
 			# so that we don't have 50 processes queueing to write the same data.
-			# Would require probabilistic blocking write
+			#
+			# We implement a probabilistic blocking write:
 			#
 			# -2 sec before timeout, give processes 1/16 chance of writing to file with blocking io
 			# -1 sec after timeout give processes 1/4 chance of writing with blocking
@@ -145,14 +146,14 @@ V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights re
 						if ($tdiff <= 2) {
 							switch($tdiff) {
 							case 2: 
-								if ((rand() & 15) == 0) {
+								if ((rand() & 0xf) == 0) {
 									fclose($fp);
 									$err = "Timeout 2";
 									return false;
 								}
 								break;
 							case 1:
-								if ((rand() & 3) == 0) {
+								if ((rand() & 0x3) == 0) {
 									fclose($fp);
 									$err = "Timeout 1";
 									return false;
@@ -208,9 +209,12 @@ V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights re
 		}
 			
 		fclose($fp);
-		$arr = @unserialize($text);
-		
-		//var_dump($arr);
+		//print "<hr>";
+		//print_r($text);
+		//if (strlen($text) == 0) $arr = array();
+		//else 
+		$arr = unserialize($text);
+		//print_r($arr);
 		if (!is_array($arr)) {
 			$err = "Recordset had unexpected EOF (in serialized recordset)";
 			if (get_magic_quotes_runtime()) $err .= ". Magic Quotes Runtime should be disabled!";

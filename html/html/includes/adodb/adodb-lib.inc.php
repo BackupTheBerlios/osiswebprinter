@@ -1,6 +1,6 @@
 <?php
 /* 
-V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+V3.40 7 April 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. See License.txt. 
@@ -138,9 +138,16 @@ function _adodb_getcount(&$zthis, $sql,$inputarr=false,$secs2cache=0)
 	if ($rstest) {
    		$qryRecs = $rstest->RecordCount();
 		if ($qryRecs == -1) { 
+		global $ADODB_EXTENSION;
 		// some databases will return -1 on MoveLast() - change to MoveNext()
-			while(!$rstest->EOF) {
-				$rstest->MoveNext();
+			if ($ADODB_EXTENSION) {
+				while(!$rstest->EOF) {
+					adodb_movenext($rstest);
+				}
+			} else {
+				while(!$rstest->EOF) {
+					$rstest->MoveNext();
+				}
 			}
 			$qryRecs = $rstest->_currentRow;
 		}
@@ -309,7 +316,10 @@ function _adodb_getupdatesql(&$zthis,&$rs, $arrFields,$forceUpdate=false,$magicq
 				// go ahead and append the field name and new value to
 				// the update query.
 				
-				$val = ($hasnumeric) ? $rs->fields[$i] : $rs->fields[$upperfname];
+				if ($hasnumeric) $val = $rs->fields[$i];
+				else if (isset($rs->fields[$upperfname])) $val = $rs->fields[$upperfname];
+				else $val = '';
+				
 				if ($forceUpdate || strcmp($val, $arrFields[$upperfname])) {
 					// Set the counter for the number of fields that will be updated.
 					$fieldUpdatedCount++;
@@ -320,7 +330,7 @@ function _adodb_getupdatesql(&$zthis,&$rs, $arrFields,$forceUpdate=false,$magicq
 					
 					// "mike" <mike@partner2partner.com> patch and "Ryan Bailey" <rebel@windriders.com> 
 					//PostgreSQL uses a 't' or 'f' and therefore needs to be processed as a string ('C') type field.
-					if ((substr($zthis->databaseType,0,8) == "postgres") && ($mt == "L")) $mt = "C";
+					if ((strncmp($zthis->databaseType,"postgres",8) === 0) && ($mt == "L")) $mt = "C";
 					// is_null requires php 4.0.4
 					if (/*is_null($arrFields[$fieldname]) ||*/ $arrFields[$upperfname] === 'null') 
 						$updateSQL .= $field->name . " = null, ";
@@ -396,7 +406,7 @@ function _adodb_getinsertsql(&$zthis,&$rs,$arrFields,$magicq=false)
 				
 				// "mike" <mike@partner2partner.com> patch and "Ryan Bailey" <rebel@windriders.com> 
 				//PostgreSQL uses a 't' or 'f' and therefore needs to be processed as a string ('C') type field.
-				if ((substr($zthis->databaseType,0,8) == "postgres") && ($mt == "L")) $mt = "C";
+				if ((strncmp($zthis->databaseType,"postgres",8) === 0) && ($mt == "L")) $mt = "C";
 
 				// Based on the datatype of the field
 				// Format the value properly for the database

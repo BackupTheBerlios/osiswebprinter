@@ -1,6 +1,6 @@
 <?php
 /** 
- * @version V3.31 17 March 2003 (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+ * @version V3.40 7 April 2003 (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
  * Released under both BSD license and Lesser GPL library license. 
  * Whenever there is any discrepancy between the two licenses, 
  * the BSD license will take precedence. 
@@ -506,6 +506,15 @@
 		return $this->fields[$colname];
 	}
 	
+	function GetAssocKeys($upper=true)
+	{
+		$this->bind = array();
+		for ($i=0; $i < $this->_numOfFields; $i++) {
+			$o = $this->FetchField($i);
+			if ($upper === 2) $this->bind[$o->name] = $i;
+			else $this->bind[($upper) ? strtoupper($o->name) : strtolower($o->name)] = $i;
+		}
+	}
 	
   /**
    * Use associative array to get fields array for databases that do not support
@@ -520,12 +529,7 @@
 	{
 	 
 	   	if (!$this->bind) {
-			$this->bind = array();
-			for ($i=0; $i < $this->_numOfFields; $i++) {
-				$o = $this->FetchField($i);
-				if ($upper === 2) $this->bind[$o->name] = $i;
-				else $this->bind[($upper) ? strtoupper($o->name) : strtolower($o->name)] = $i;
-			}
+			$this->GetAssocKeys($upper);
 		}
 		
 		$record = array();

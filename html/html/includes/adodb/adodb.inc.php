@@ -15,7 +15,7 @@
 /**
 	\mainpage 	
 	
-	 @version V3.31 17 March 2003 (c) 2000-2003 John Lim (jlim\@natsoft.com.my). All rights reserved.
+	 @version V3.40 7 April 2003 (c) 2000-2003 John Lim (jlim\@natsoft.com.my). All rights reserved.
 
 	Released under both BSD license and Lesser GPL library license. 
  	Whenever there is any discrepancy between the two licenses, 
@@ -51,15 +51,15 @@
 	
 	/*
 	Controls ADODB_FETCH_ASSOC field-name case. Default is 2, use native case-names.
-	This currently works only with mssql, odbc and ibase derived drivers.
+	This currently works only with mssql, odbc, oci8po and ibase derived drivers.
 	
  		0 = assoc lowercase field names. $rs->fields['orderid']
 		1 = assoc uppercase field names. $rs->fields['ORDERID']
 		2 = use native-case field names. $rs->fields['OrderID']
 	*/
-	if (!defined('ADODB_ASSOC_CASE')) define('ADODB_ASSOC_CASE',2); 
+	if (!defined('ADODB_ASSOC_CASE')) define('ADODB_ASSOC_CASE',2);
 	
-	// allow [ ] @ and . in table names
+	// allow [ ] @ ` and . in table names
 	define('ADODB_TABLE_REGEX','([]0-9a-z_\`\.\@\[-]*)');
 	
 	
@@ -99,7 +99,7 @@
 	} else {
 		define('ADODB_PHPVER',0x4000);
 	}
-	$ADODB_EXTENSION = (defined('ADODB_EXTENSION'));
+	$ADODB_EXTENSION = defined('ADODB_EXTENSION');
 	//if (extension_loaded('dbx')) define('ADODB_DBX',1);
 	
 	/**
@@ -150,7 +150,7 @@
 		/**
 		 * ADODB version as a string.
 		 */
-		$ADODB_vers = 'V3.31 17 March 2003 (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved. Released BSD & LGPL.';
+		$ADODB_vers = 'V3.40 7 April 2003 (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved. Released BSD & LGPL.';
 	
 		/**
 		 * Determines whether recordset->RecordCount() is used. 
@@ -217,6 +217,7 @@
 	class ADORecordSet_empty
 	{
 		var $dataProvider = 'empty';
+		var $databaseType = false;
 		var $EOF = true;
 		var $_numOfRows = 0;
 		var $fields = false;
@@ -499,7 +500,7 @@
 		return $obj;
 	}
 	
-	function &NewDataDictionary($conn)
+	function &NewDataDictionary(&$conn)
 	{
 		$provider = $conn->dataProvider;
 		if ($provider !== 'native' && $provider != 'odbc' && $provider != 'ado') 
@@ -523,6 +524,8 @@
 		$dict = new $class();
 		$dict->connection = &$conn;
 		$dict->upperName = strtoupper($drivername);
+		if (is_resource($conn->_connectionID))
+			$dict->serverInfo = $conn->ServerInfo();
 		
 		return $dict;
 	}

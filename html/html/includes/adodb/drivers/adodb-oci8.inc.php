@@ -1,7 +1,7 @@
 <?php
 /*
 
-  version V3.31 17 March 2003 (c) 2000-2003 John Lim. All rights reserved.
+  version V3.40 7 April 2003 (c) 2000-2003 John Lim. All rights reserved.
 
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
@@ -241,6 +241,7 @@ NATSOFT.DOMAIN =
 	function ErrorMsg() 
 	{
 		$arr = @OCIerror($this->_stmt);
+		
 		if ($arr === false) {
 			$arr = @OCIerror($this->_connectionID);
 			if ($arr === false) $arr = @OCIError();
@@ -888,12 +889,13 @@ class ADORecordset_oci8 extends ADORecordSet {
 	{
 	//global $ADODB_EXTENSION;if ($ADODB_EXTENSION) return @adodb_movenext($this);
 		
-		if (!$this->EOF) {		
-			$this->_currentRow++;
-			if(@OCIfetchinto($this->_queryID,$this->fields,$this->fetchMode))
-				return true;
-			$this->EOF = true;
-		}
+		if ($this->EOF) return false;
+		
+		$this->_currentRow++;
+		if(@OCIfetchinto($this->_queryID,$this->fields,$this->fetchMode))
+			return true;
+		$this->EOF = true;
+		
 		return false;
 	}	
 	
@@ -966,7 +968,7 @@ class ADORecordset_oci8 extends ADORecordSet {
 		case 'BINARY':
 		case 'NCHAR':
 		case 'NVARCHAR':
-				 if ($len <= $this->blobSize) return 'C';
+				 if (isset($this) && $len <= $this->blobSize) return 'C';
 		
 		case 'NCLOB':
 		case 'LONG':

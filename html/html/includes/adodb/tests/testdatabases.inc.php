@@ -1,7 +1,7 @@
 <?php
   
 /*
-V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+V3.40 7 April 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -70,9 +70,10 @@ if (!empty($testaccess) && !empty($testado)) { // ADO ACCESS
 if (!empty($testvfp)) { // ODBC
 	$db = &ADONewConnection('vfp');
 	print "<h1>Connecting $db->databaseType...</h1>";flush();
-	if ($db->PConnect("logos2", "", "", ""))
-		testdb($db,"create table d:\\inetpub\\wwwroot\\logos2\\data\\ADOXYZ (id int, firstname char(24), lastname char(24),created date)");
-	 else print "ERROR: Visual FoxPro test requires a Windows ODBC DSN=logos2, VFP driver";
+
+	if ( $db->PConnect("vfp-adoxyz")) {
+		testdb($db,"create table d:\\inetpub\\wwwroot\\php\\vfp\\ADOXYZ (id int, firstname char(24), lastname char(24),created date)");
+	 } else print "ERROR: Visual FoxPro test requires a Windows ODBC DSN=logos2, VFP driver";
 	
 }
 
@@ -84,11 +85,26 @@ if (!empty($testmysql)) { // MYSQL
 	print "<h1>Connecting $db->databaseType...</h1>";
 	if ($HTTP_SERVER_VARS['HTTP_HOST'] == 'localhost') $server = 'localhost';
 	else $server = "mangrove";
-	if ($db->PConnect($server, "root", "", "test"))
+	if ($db->PConnect('jaguar', "mobydick", "", "test"))
 		testdb($db,
 		"create table ADOXYZ (id int, firstname char(24), lastname char(24), created date) type=innodb");
 	else print "ERROR: MySQL test requires a MySQL server on localhost, userid='admin', password='', database='test'".'<BR>'.$db->ErrorMsg();
 }
+
+// REQUIRES MySQL server at localhost with database 'test'
+if (!empty($testmysqlodbc)) { // MYSQL
+	
+	$db = &ADONewConnection('odbc');
+	$db->hasTransactions = false;
+	print "<h1>Connecting $db->databaseType...</h1>";
+	if ($HTTP_SERVER_VARS['HTTP_HOST'] == 'localhost') $server = 'localhost';
+	else $server = "mangrove";
+	if ($db->PConnect('mysql', "mobydick", ""))
+		testdb($db,
+		"create table ADOXYZ (id int, firstname char(24), lastname char(24), created date) type=innodb");
+	else print "ERROR: MySQL test requires a MySQL server on localhost, userid='admin', password='', database='test'".'<BR>'.$db->ErrorMsg();
+}
+
 if (!empty($testproxy)){
 	$db = &ADONewConnection('proxy');
 	print "<h1>Connecting $db->databaseType...</h1>";

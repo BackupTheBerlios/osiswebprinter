@@ -1,7 +1,7 @@
 <?php
 
 /**
-  V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V3.40 7 April 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -21,6 +21,7 @@ class ADODB_DataDict {
 	var $alterCol = ' ALTER COLUMN';
 	var $dropCol = ' DROP COLUMN';
 	var $schema = false;
+	var $serverInfo = array();
 	
 	function MetaTables()
 	{
@@ -50,7 +51,7 @@ class ADODB_DataDict {
 		foreach($sql as $line) {
 			$ok = $conn->Execute($line);
 			if (!$ok) {
-				if ($$this->debug) ADOConnection::outp($conn->ErrorMsg);
+				if ($this->debug) ADOConnection::outp($conn->ErrorMsg());
 				if (!$continueOnError) return 0;
 				$rez = 1;
 			}

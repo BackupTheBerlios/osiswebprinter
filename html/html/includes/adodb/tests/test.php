@@ -1,6 +1,6 @@
 <?php
 /* 
-V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+V3.40 7 April 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. 
@@ -101,8 +101,9 @@ GLOBAL $ADODB_vers,$ADODB_CACHE_DIR,$ADODB_FETCH_MODE, $HTTP_GET_VARS,$ADODB_COU
 	print "<br> Fractional TS (1999-2-20 13:40:50.91): ".$db->DBTimeStamp($db->UnixTimeStamp('1999-2-20 13:40:50.91+1'));
 	 $dd = $db->UnixDate('1999-02-20');
 	print "<br>unixdate</i> 1999-02-20 = ".date('Y-m-d',$dd)."<p>";
+	flush();
 	// mssql too slow in failing bad connection
-	if ($db->databaseType != 'mssql') {
+	if (false && $db->databaseType != 'mssql') {
 		print "<p>Testing bad connection. Ignore following error msgs:<br>";
 		$db2 = ADONewConnection();
 		$rez = $db2->Connect("bad connection");
@@ -147,7 +148,6 @@ GLOBAL $ADODB_vers,$ADODB_CACHE_DIR,$ADODB_FETCH_MODE, $HTTP_GET_VARS,$ADODB_COU
 	$rs = &$db->Execute("select * from ADOXYZ where id=9999");
 	if ($rs && !$rs->EOF) print "<b>Error: </b>RecordSet returned by Execute(select...') on empty table should show EOF</p>";
 	if ($rs) $rs->Close();
-
 	flush();
 	//$db->debug=true;	
 	print "<p>Testing Commit: ";
@@ -403,8 +403,14 @@ END adodb;
 	if (1) {
 	$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
 	//$db->debug=1;
-	$db->Execute('update ADOXYZ set id=id+1');	
-   $nrows = $db->Affected_Rows();   
+	$rs = $db->Execute('update ADOXYZ set id=id+1');	
+	if (!is_object($rs)) {
+		print_r($rs);
+		err("Update should return object");
+	}
+	if (!$rs) err("Update generated error");
+	
+	$nrows = $db->Affected_Rows();   
 	if ($nrows === false) print "<p><b>Affected_Rows() not supported</b></p>";
 	else if ($nrows != 50)  print "<p><b>Affected_Rows() Error: $nrows returned (should be 50) </b></p>";
 	else print "<p>Affected_Rows() passed</p>";
@@ -416,7 +422,7 @@ END adodb;
 	
 	$rs = $db->Execute("select * from ADOXYZ where firstname = 'not known'");
 	if (!$rs ||  !$rs->EOF) print "<p><b>Error on empty recordset</b></p>";
-	if ($rs->RecordCount() != 0) {
+	else if ($rs->RecordCount() != 0) {
 		print "<p><b>Error on RecordCount. Should be 0. Was ".$rs->RecordCount()."</b></p>"; 
 		print_r($rs->fields);
 	}
@@ -451,6 +457,7 @@ END adodb;
 
 	print "<p>FetchObject/FetchNextObject Test</p>";
 	$rs = &$db->Execute('select * from ADOXYZ');
+	
 	if (empty($rs->connection)) print "<b>Connection object missing from recordset</b></br>";
 	
 	while ($o = $rs->FetchNextObject()) { // calls FetchObject internally
@@ -749,7 +756,7 @@ END adodb;
 	
 	echo "<p> GenID test: ";
 	for ($i=1; $i <= 10; $i++) 
-		echo  "($i: ",$val = $db->GenID('abcseq5' ,5), ") ";
+		echo  "($i: ",$val = $db->GenID('abcseq6' ,5), ") ";
 	if ($val == 0) Err("GenID not supported");
 	
 	if ($val) {
@@ -994,13 +1001,50 @@ END adodb;
 	if ($pear) print "<p>PEAR DB emulation passed.</p>";
 	
 
+	if ($db->hasTransactions) {
+		//$db->debug=1;
+		echo "<p>Testing StartTrans CompleteTrans</p>";
+		$db->raiseErrorFn = false;
+		$db->StartTrans();
+		$rs = $db->Execute('select * from notable');
+			$db->StartTrans();
+				$db->BeginTrans();
+			$db->Execute("update ADOXYZ set firstname='Carolx' where id=1");
+				$db->CommitTrans();
+			$db->CompleteTrans();
+		$rez = $db->CompleteTrans();
+		if ($rez !== false) {
+			if (is_null($rez)) Err("Error: _transOK not modified");
+			else Err("Error: CompleteTrans (1) should have failed");
+		} else {
+			$name = $db->GetOne("Select firstname from ADOXYZ where id=1");
+			if ($name == "Carolx") Err("Error: CompleteTrans (2) should have failed");
+			else echo "<p> -- Passed StartTrans test1 - rolling back</p>";
+		}
+		
+		$db->StartTrans();
+			$db->BeginTrans();
+		$db->Execute("update ADOXYZ set firstname='Carolx' where id=1");
+			$db->RollbackTrans();
+		$rez = $db->CompleteTrans();
+		if ($rez !== true) Err("Error: CompleteTrans (1) should have succeeded");
+		else {
+			$name = $db->GetOne("Select firstname from ADOXYZ where id=1");
+			if (trim($name) != "Carolx") Err("Error: CompleteTrans (2) should have succeeded, returned name=$name");
+			else echo "<p> -- Passed StartTrans test2 - commiting</p>";
+		}
+	}
 	global $TESTERRS;
 	$debugerr = true;
 		
 	$db->debug = false;
 	$TESTERRS = 0;
 	$db->raiseErrorFn = 'adodb_test_err';
+	global $ERRNO; // from adodb_test_err
 	$db->Execute('select * from nowhere');
+	$metae = $db->MetaError($ERRNO);
+	if ($metae !== DB_ERROR_NOSUCHTABLE) print "<p><b>MetaError=".$metae." wrong</b>, should be ".DB_ERROR_NOSUCHTABLE."</p>";
+	else print "<p>MetaError ok (".DB_ERROR_NOSUCHTABLE.")</p>";
 	if ($TESTERRS != 1) print "<b>raiseErrorFn select nowhere failed</b><br>";
 	$rs = $db->Execute('select * from adoxyz');
 	if ($debugerr) print " Move";
@@ -1068,8 +1112,9 @@ END adodb;
 
 function adodb_test_err($dbms, $fn, $errno, $errmsg, $p1=false, $p2=false)
 {
-global $TESTERRS;
+global $TESTERRS,$ERRNO;
 
+	$ERRNO = $errno;
 	$TESTERRS += 1;
 	print "<i>** $dbms ($fn): errno=$errno &nbsp; errmsg=$errmsg ($p1,$p2)</i><br>";
 	
@@ -1134,6 +1179,7 @@ For the latest version of ADODB, visit <a href=http://php.weblogs.com/ADODB>php.
 <input type=checkbox name="testibase" value=1 <?php echo !empty($testibase) ? 'checked' : '' ?>> <b>Interbase</b><br>
 <input type=checkbox name="testmssql" value=1 <?php echo !empty($testmssql) ? 'checked' : '' ?>> <b>MSSQL</b><br>
  <input type=checkbox name="testmysql" value=1 <?php echo !empty($testmysql) ? 'checked' : '' ?>> <b>MySQL</b><br>
+<input type=checkbox name="testmysqlodbc" value=1 <?php echo !empty($testmysqlodbc) ? 'checked' : '' ?>> <b>MySQL ODBC</b><br>
 <input type=checkbox name="testproxy" value=1 <?php echo !empty($testproxy) ? 'checked' : '' ?>> <b>MySQL Proxy</b><br>
 <input type=checkbox name="testoracle" value=1 <?php echo !empty($testoracle) ? 'checked' : '' ?>> <b>Oracle (oci8)</b> <br>
 <input type=checkbox name="testpostgres" value=1 <?php echo !empty($testpostgres) ? 'checked' : '' ?>> <b>PostgreSQL</b><br>

@@ -1,7 +1,7 @@
 <?php
 /*
 
-  V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V3.40 7 April 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -44,8 +44,8 @@ FUNCTIONS:
 		array($fieldname, $type, [,$colsize] [,$otheroptions]*)
 	
 	The first 2 fields must be the field name and the field type. The field type
-	can be a 1 portable character type code or the actual type for that database. 
-	Legal 1 character type codes include:
+	can be a portable type codes or the actual type for that database. 
+	Legal portable type codes include:
 
 		C:  varchar
 		X:  CLOB (character large object) or largest varchar size 
@@ -55,18 +55,22 @@ FUNCTIONS:
 		
 		B:  BLOB (binary large object)
 		
-		D:  Date
-		T:  Date-time 
+		D:  Date (some databases do not support this, and we return a datetime type)
+		T:  Datetime or Timestamp
 		L:  Integer field suitable for storing booleans (0 or 1)
-		I:  Integer
+		I:  Integer (mapped to I4)
+		I1: 1-byte integer
+		I2: 2-byte integer
+		I4: 4-byte integer
+		I8: 8-byte integer
 		F:  Floating point number
 		N:  Numeric or decimal number
 		
 	The $colsize field represents the size of the field. If a decimal number is 
 	used, then it is assumed that the number following the dot is the precision,
 	so 6.2 means a number of size 6 digits and 2 decimal places. It is 
-	recommended that the number should be represented as a string to avoid any
-	rounding errors.
+	recommended that the default for number types be represented as a string to 
+	avoid any rounding errors.
 	
 	The $otheroptions include the following keywords (case-insensitive):
 
@@ -104,8 +108,8 @@ FUNCTIONS:
 	
 	$taboptarray = array('mysql' => 'TYPE=ISAM', 'oci8' => 'tablespace users');
 	
-	You can also define foreignkey constraints, assuming that you have got the sql 
-	syntax correct. The following is syntax for postgresql:
+	You can also define foreignkey constraints. The following is syntax for 
+	postgresql:
 	
 	$taboptarray = array('constraints' => 
 					', FOREIGN KEY (col1) REFERENCES reftable (refcol)');
@@ -129,9 +133,17 @@ FUNCTIONS:
 		FULLTEXT		Make fulltext index (only mysql)
 		HASH			Create hash index (only postgres)
 		
-		
-	=======
-	function ExecuteSQLArray($sqlarray,$contOnError = true)
+	========	
+	function AddColumnSQL($tabname, $flds)
+	
+	========
+	function AlterColumnSQL($tabname, $flds)
+	
+	========
+	function DropColumnSQL($tabname, $flds)
+	
+	========
+	function ExecuteSQLArray($sqlarray, $contOnError = true)
 	
 	RETURNS:		0 if failed, 1 if executed all but with errors, 2 if executed successfully
 	$sqlarray:		an array of strings with sql code (no semicolon at the end of string)
