@@ -1,14 +1,26 @@
 <?php
-/*
-  $Id: server_info.php,v 1.1 2003/04/18 22:54:11 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: server_info.php,v 1.2 2003/04/19 05:51:10 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: server_info.php,v 1.4 2002/03/30 15:06:44 harley_vb
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2002 osCommerce
-
-  Released under the GNU General Public License
-*/
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
 define('HEADING_TITLE', 'Server Information');
 
