@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newinstall.php,v 1.9 2003/04/22 07:27:37 r23 Exp $
+   $Id: newinstall.php,v 1.10 2003/04/23 06:49:55 r23 Exp $
 
    OSIS GMBH
    http://www.osisnet.de/
@@ -57,7 +57,7 @@ function make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake)
 
 /*** This function inserts the default data on new installs ***/
 function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone, $fax, $prefix) {
-    global $db; 
+    global $currentlang, $db; 
     
     echo '<font class="owp-title">' . INPUT_DATA . '</font>';
     echo "<center>";
@@ -67,7 +67,12 @@ function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone
     include ('../includes/functions/password_funcs.php');
     $owp_pwd = crypt_password($pwd);
     $today = date("Y-m-d H:i:s");
-
+    
+    if (!isset($currentlang)) {
+      $currentlang = 'deu'; 
+    }
+    if (file_exists($file="lang/$currentlang/newconfigdata.php"))
+      include $file;
     $sql = "INSERT INTO ".$prefix."_administrators
             (admin_gender,
              admin_firstname,

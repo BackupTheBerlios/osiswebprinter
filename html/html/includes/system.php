@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.8 2003/04/22 07:25:51 r23 Exp $
+   $Id: system.php,v 1.9 2003/04/23 06:49:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -69,13 +69,11 @@
   $owpDBTable['administrators'] = $prefix_table . 'administrators';
   $owpDBTable['configuration'] = $prefix_table . 'configuration';
   $owpDBTable['configuration_group'] = $prefix_table . 'configuration_group';
+  $owpDBTable['countries'] = $prefix_table . 'countries';
   $owpDBTable['languages'] = $prefix_table . 'languages';
   $owpDBTable['session'] = $prefix_table . 'sessions';
-
-  
-  
+  $owpDBTable['zones'] = $prefix_table . 'zones';
   $owpSelf = (! empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : $_SERVER['SCRIPT_NAME'];
-
 
 
 //session
@@ -89,6 +87,7 @@
   include_once(OWP_FUNCTIONS_DIR . 'owp_api.php');
   define('ADODB_ERROR_LOG_TYPE',3);
   define('ADODB_ERROR_LOG_DEST','d:/tmp/errors.log');
+  $ADODB_CACHE_DIR = 'd:/tmp/ADODB_cache';
   include_once(OWP_ADODB_DIR .'adodb-errorhandler.inc.php');
   include_once(OWP_ADODB_DIR . 'adodb.inc.php');
   include_once(OWP_ADODB_DIR . 'tohtml.inc.php');
@@ -97,19 +96,6 @@
   if (!owpDBInit()) {
     die('Unable to connect to database server!');
   }
-
-define('DEFAULT_LANGUAGE', 'deu');
-
-define('OWP_IMAGE_REQUIRE_ONED', 'false');
-define('CONFIG_CALCULATE_IMAGE_SIZE', 'true');
-
-define('LAYOUT_XHTML', 'true');
-define('BOX_WIDTH', 125); // how wide the boxes should be in pixels (default: 125)
-define('HEADING_IMAGE_WIDTH', '100%');
-define('HEADING_IMAGE_HEIGHT', '6');
-
-
-define('EMAIL_TRANSPORT', 'sendmail');
 
 // set the application parameters (can be modified through the administration tool)
   $configuration_query = $db->Execute('SELECT configuration_key as cfgKey, configuration_value as cfgValue FROM ' . $owpDBTable['configuration'] . '');
@@ -198,11 +184,11 @@ define('EMAIL_TRANSPORT', 'sendmail');
   require_once(OWP_FUNCTIONS_DIR . 'html_output.php');
   require_once(OWP_FUNCTIONS_DIR . 'general.php');
 
-  require_once(OWP_CLASSES_DIR . 'owp_text_tool.php');
+  require_once(OWP_CLASSES_DIR . 'owp_object_info.php');
   require_once(OWP_CLASSES_DIR . 'owp_split_page_results.php');
   require_once(OWP_CLASSES_DIR . 'owp_table_block.php');
+  require_once(OWP_CLASSES_DIR . 'owp_text_tool.php');
   require_once(OWP_CLASSES_DIR . 'owp_box.php');
-  
   if (EMAIL_TRANSPORT == 'sendmail') include(OWP_MAILER_DIR . 'class.phpmailer.php');
   if (EMAIL_TRANSPORT == 'smtp') include(OWP_MAILER_DIR . 'class.smtp.php');
 
@@ -218,22 +204,14 @@ define('EMAIL_TRANSPORT', 'sendmail');
   require_once(OWP_FUNCTIONS_DIR . 'whos_online.php');
   tep_update_whos_online();
 
-// Include the password crypto functions
-
-
 // Include validation functions (right now only email address)
   require_once(OWP_FUNCTIONS_DIR . 'validations.php');
 */
-// split-page-results
 
-
-/*!
   require_once(OWP_CLASSES_DIR . 'owp_breadcrumb.php');
   $breadcrumb = new breadcrumb;
+  $breadcrumb->add(HEADER_TITLE_TOP, owpLink($owpFilename['index']));
 
-  $breadcrumb->add(HEADER_TITLE_TOP, HTTP_SERVER);
-  $breadcrumb->add(HEADER_TITLE_CATALOG, owpLink(FILENAME_DEFAULT));
-*/
 // set which precautions should be checked
   define('WARN_INSTALL_EXISTENCE', 'true');
   define('WARN_CONFIG_WRITEABLE', 'true');

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newtables.php,v 1.12 2003/04/22 07:27:37 r23 Exp $
+   $Id: newtables.php,v 1.13 2003/04/23 06:49:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -12,11 +12,21 @@
    ----------------------------------------------------------------------
    Based on:
 
-   File: $Id: newtables.php,v 1.40.2.1 2002/04/03 21:02:06 jgm 
+   File: newtables.php,v 1.40.2.1 2002/04/03 21:02:06 jgm 
    ----------------------------------------------------------------------
    POST-NUKE Content Management System
    Copyright (C) 2001 by the Post-Nuke Development Team.
    http://www.postnuke.com/
+   ----------------------------------------------------------------------
+   DB Table 
+   Based on:
+   
+   File: oscommerce.sql,v 1.57 2002/11/03 23:41:42 hpdl
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
+   
+   Copyright (c) 2002 osCommerce  
    ----------------------------------------------------------------------
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
@@ -73,7 +83,6 @@ CREATE TABLE ".$prefix."_configuration (
 ";
 dosql($table,$sql);
 
-
 $table = $prefix.'_configuration_group';
 $sql = "
  CREATE TABLE ".$prefix."_configuration_group (
@@ -87,6 +96,19 @@ $sql = "
 ";
 dosql($table,$sql);
 
+$table = $prefix.'_countries';
+$sql = "
+ CREATE TABLE ".$prefix."_countries (
+  countries_id int NOT NULL auto_increment,
+  countries_name varchar(64) NOT NULL,
+  countries_iso_code_2 char(2) NOT NULL,
+  countries_iso_code_3 char(3) NOT NULL,
+  address_format_id int NOT NULL,
+  PRIMARY KEY (countries_id),
+  KEY IDX_COUNTRIES_NAME (countries_name)
+   )
+";
+dosql($table,$sql);
 
 $table = $prefix.'_languages';
 $sql = "
@@ -115,4 +137,29 @@ CREATE TABLE ".$prefix."_sessions (
 ";
 dosql($table,$sql);
 
+$table = $prefix.'_whos_online';
+$sql = "
+CREATE TABLE ".$prefix."_whos_online (
+  user_id int,
+  full_name varchar(64) NOT NULL,
+  session_id varchar(128) NOT NULL,
+  ip_address varchar(15) NOT NULL,
+  time_entry varchar(14) NOT NULL,
+  time_last_click varchar(14) NOT NULL,
+  last_page_url varchar(64) NOT NULL
+)
+";
+dosql($table,$sql);
+
+$table = $prefix.'_zones';
+$sql = "
+CREATE TABLE ".$prefix."_zones (
+  zone_id int NOT NULL auto_increment,
+  zone_country_id int NOT NULL,
+  zone_code varchar(32) NOT NULL,
+  zone_name varchar(32) NOT NULL,
+  PRIMARY KEY (zone_id)
+)
+";
+dosql($table,$sql);
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: configuration.php,v 1.2 2003/04/19 05:50:23 r23 Exp $
+   $Id: configuration.php,v 1.3 2003/04/23 06:49:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -21,6 +21,9 @@
    ----------------------------------------------------------------------
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
+
+define('NAVBAR_TITLE', 'Konfiguration');
+
 
 define('TABLE_HEADING_CONFIGURATION_TITLE', 'Name');
 define('TABLE_HEADING_CONFIGURATION_VALUE', 'Wert');
