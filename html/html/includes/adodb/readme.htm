@@ -11,7 +11,7 @@
 <body bgcolor="#FFFFFF">
 
 <h2>ADOdb Library for PHP</h2>
-<p>V3.31 17 March 2003 (c) 2000-2003 John Lim (<a href="mailto:jlim#natsoft.com.my">jlim#natsoft.com.my</a>)</p>
+<p>V3.40 7 April 2003 (c) 2000-2003 John Lim (<a href="mailto:jlim#natsoft.com.my">jlim#natsoft.com.my</a>)</p>
 <p>This software is dual licensed using BSD-Style and LGPL. 
 Where there is any discrepancy, the BSD-Style license will take precedence. 
 This means you can use it in proprietary and commercial products.</p>
@@ -64,7 +64,7 @@ This means you can use it in proprietary and commercial products.</p>
 	Paging/Scrolling: <a href="#pageexecute">PageExecute</a> <a href="#cachepageexecute">CachePageExecute</a><br>
 	Cleanup: <a href="#cacheflush">CacheFlush</a> <a href="#Close">Close</a><br>
 	Transactions: <a href="#begintrans">BeginTrans</a> <a href="#committrans">CommitTrans</a> 
-	<a href="#rollbacktrans">RollbackTrans</a> <br>
+	<a href="#rollbacktrans">RollbackTrans</a> <a href="#starttrans">StartTrans</a> <a href="#completetrans">CompleteTrans</a> <br>
 	Fetching Data: </font> <font size="2"><a href="#setfetchmode">SetFetchMode</a><br>
 	Strings: <a href="#concat">concat</a> <a href="#qstr">qstr</a> <a href="#quote">quote</a><br>
 	Dates: <a href="#dbdate">DBDate</a> <a href="#dbtimestamp">DBTimeStamp</a> 
@@ -73,14 +73,15 @@ This means you can use it in proprietary and commercial products.</p>
 	Rows Management: <a href="#affected_rows">Affected_Rows</a> <a href="#inserted_id">Insert_ID</a> 
 	<a href="#genid">GenID</a> <a href=#createseq>CreateSequence</a> <a href=#dropseq>DropSequence</a> 
 	<br>
-	Error Handling: <a href="#errormsg">ErrorMsg</a> <a href="#errorno">ErrorNo</a><br>
+	Error Handling: <a href="#errormsg">ErrorMsg</a> <a href="#errorno">ErrorNo</a>
+	 <a href="#metaerror">MetaError</a> <a href="#metaerrormsg">MetaErrorMsg</a><br>
 	Data Dictionary (metadata): <a href="#metadatabases">MetaDatabases</a> <a href="#metatables">MetaTables</a> 
 	<a href="#metacolumns">MetaColumns</a> <a href="#metacolumnames">MetaColumnNames</a> 
 	<a href="#metaprimarykeys">MetaPrimaryKeys</a> <a href="#serverinfo">ServerInfo</a> 
 	<br>
-	Statistics and Query-Rewriting: <a href="#fnExecute">fnExecute and fnCacheExecute</a><br>
+	Statistics and Query-Rewriting: <a href="#fnexecute">fnExecute and fnCacheExecute</a><br>
 	</font><font size="2">Deprecated: <a href="#bind">Bind</a> <a href="#blankrecordset">BlankRecordSet</a></font><br>
-	<a href="#ADORecordSet"><b><br>
+	<a href="#adorecordSet"><b><br>
 	ADORecordSet</b></a><br>
 	<font size="2">Returns one row:<a href="#fetchrow">FetchRow</a> <a href="#fetchinto">FetchInto</a> 
 	<a href="#fetchobject">FetchObject</a> <a href="#fetchnextobject">FetchNextObject</a> 
@@ -1483,7 +1484,7 @@ only with SELECT statements.
 	in $connection-&gt;cacheSecs.</p>
 </font> 
 <pre><font color="#000000">	$conn-&gt;Connect(...);
-   	$conn-&gt;cacheSecs = 3600*24; // cache 24 hours
+   $conn-&gt;cacheSecs = 3600*24; // cache 24 hours
 	$rs = $conn-&gt;CacheSelectLimit('select * from table',10);</font></pre>
 <font color="#000000"> 
 <p><b>CacheFlush<a name="cacheflush"></a>($sql=false,$inputarr=false)</b></p>
@@ -1494,16 +1495,7 @@ only with SELECT statements.
 	<code> &nbsp; system(&quot;rm -f `find &quot;.$ADODB_CACHE_DIR.&quot; -name 
 	adodb_*.cache`&quot;);</code></p>
 <p>For general cleanup of all expired files, you should use <a href="http://www.superscripts.com/tutorial/crontab.html">crontab</a> 
-	on Unix, or at.exe on Windows, and a shell script similar to the following:</p>
-<p><font face="Courier New, Courier, mono">#------------------------------------------------------ 
-	<br>
-	# TRUNCATING OUTPUT FILES OLDER THAN N DAYS <br>
-	# <br>
-	# Everything between the 3 lines above and their matching <br>
-	# lines at the bottom of this section show you how to <br>
-	# delete any log files whose modification time <br>
-	# is older than AGED. The AGED variable can be coded in the <br>
-	# script or passed on the command line. <br>
+	on Unix, or at.exe on Windows, and a shell script similar to the following:<font face="Courier New, Courier, mono"><br>
 	#------------------------------------------------------ <br>
 	# This particular example deletes files in the TMPPATH <br>
 	# directory with the string &quot;.cache&quot; in their name that <br>
@@ -1511,7 +1503,16 @@ only with SELECT statements.
 	#------------------------------------------------------ <br>
 	AGED=7 <br>
 	find ${TMPPATH} -mtime +$AGED | grep &quot;\.cache&quot; | xargs rm -f <br>
-	</font> 
+	</font> </p>
+<p><b>MetaError<a name="metaerror"></a>($errno=false)</b></p>
+<p>Returns a virtualized error number, based on PEAR DB's error number system. You might
+need to include adodb-error.inc.php before you call this function. The parameter $errno
+is the native error number you want to convert. If you do not pass any parameter, MetaError
+will call ErrorNo() for you and convert it. If the error number cannot be virtualized, MetaError 
+will return -1 (DB_ERROR).</p>
+
+<p><b>MetaErrorMsg<a name="metaerrormsg"></a>($errno)</b></p>
+<p>Pass the error number returned by MetaError() for the equivalent textual error message.</p>
 <p><b>ErrorMsg<a name="errormsg"></a>()</b></p>
 <p>Returns the last status or error message. This can return a string even if 
 	no error occurs. In general you do not need to call this function unless an 
@@ -1679,12 +1680,13 @@ $ret = $db->Replace('atable2',
 <p>Close the database connection. PHP4 proudly states that we no longer have to 
   clean up at the end of the connection because the reference counting mechanism 
   of PHP4 will automatically clean up for us.</p>
-<p><b>BeginTrans<a name="begintrans"></a>( )</b></p>
-<p>Begin a transaction. Turns off autoCommit. Returns true if successful. Some 
-  databases will always return false if transaction support is not available. 
-  Interbase, Oracle and MSSQL support transactions. Any open transactions will 
-  be rolled back when the connection is closed.</p>
-<p> The following is the wrong way to use transactions: 
+  <p><b>StartTrans<a name="starttrans"></a>( )</b></p>
+  <p>Start a monitored transaction. As SQL statements are executed, ADOdb will monitor
+  for SQL errors, and if any are detected, when CompleteTrans() is called, we auto-rollback.
+  <p>
+  <p> To understand why StartTrans() is superior to BeginTrans(), 
+  let us examine a few ways of using BeginTrans().
+  The following is the wrong way to use transactions: 
 <pre>
 $DB->BeginTrans();
 $DB->Execute("update table1 set val=$val1 where id=$id");
@@ -1707,6 +1709,33 @@ $ok = $DB->Execute("update table1 set val=$val1 where id=$id");
 if ($ok) $ok = $DB->Execute("update table2 set val=$val2 where id=$id");
 $DB->CommitTrans($ok);
 </pre>
+<p> Now it is a headache monitoring $ok all over the place. StartTrans() is an
+improvement because it monitors all SQL errors for you. This is particularly
+useful if you are calling black-box functions in which SQL queries might be executed.
+ Also all BeginTrans, CommitTrans and RollbackTrans calls inside a StartTrans block 
+  will be disabled, so even if the black box function does a commit, it will be ignored.
+<pre>
+$DB->StartTrans();
+CallBlackBox();
+$DB->Execute("update table1 set val=$val1 where id=$id");
+$DB->Execute("update table2 set val=$val2 where id=$id");
+$DB->CompleteTrans($ok);
+</pre>
+<p>Note that a StartTrans blocks are nestable, the inner blocks are ignored.
+ <p><b>CompleteTrans<a name="completetrans"></a>($autoComplete=true)</b></p>
+  <p>Complete a transaction called with StartTrans(). This function monitors
+  for SQL errors, and will commit if no errors have occured, otherwise it will rollback. 
+  Returns true on commit, false on rollback. If the parameter $autoComplete is true
+  monitor sql errors and commit and rollback as appropriate. Set $autoComplete to false 
+  to force rollback even if no SQL error detected.
+<p><b>BeginTrans<a name="begintrans"></a>( )</b></p>
+<p>Begin a transaction. Turns off autoCommit. Returns true if successful. Some 
+  databases will always return false if transaction support is not available. 
+  Interbase, Oracle and MSSQL support transactions. Any open transactions will 
+  be rolled back when the connection is closed.</p>
+ <p>Note that <a href=#starttrans>StartTrans()</a> and CompleteTrans() is a superior method of 
+ handling transactions, available since ADOdb 3.40. For a explanation, see the <a href=#starttrans>StartTrans()</a> documentation.
+
 <p>You can also use the ADOdb <a href=#errorhandling>error handler</a> to die 
   and rollback your transactions for you transparently. Some buggy database extensions 
   are known to commit all outstanding tranasactions, so you might want to explicitly 
@@ -2306,10 +2335,10 @@ $<font color="#663300">rs</font>   = $<font color="#663300">conn</font>->Execute
 	you decide to create such a class.</p>
 <p>First decide on a name in lower case to call the database type. Let's say we 
 	call it xbase. </p>
-<p>Then we need to create two classes ADOConnection_xbase and ADORecordSet_xbase 
+<p>Then we need to create two classes ADODB_xbase and ADORecordSet_xbase 
 	in the file adodb-xbase.inc.php.</p>
 <p>The simplest form of database driver is an adaptation of an existing ODBC driver. 
-	Then we just need to create the class <i>ADOConnection_xbase extends ADOConnection_odbc</i> 
+	Then we just need to create the class <i>ADODB_xbase extends ADODB_odbc</i> 
 	to support the new <b>date</b> and <b>timestamp</b> formats, the <b>concatenation</b> 
 	operator used, <b>true</b> and <b>false</b>. For the<i> ADORecordSet_xbase 
 	extends ADORecordSet_odbc </i>we need to change the <b>MetaType</b> function. 
@@ -2334,8 +2363,6 @@ $<font color="#663300">rs</font>   = $<font color="#663300">conn</font>->Execute
 </p>
 <p><b>ErrorMsg</b>: Stores the error message in the private variable _errorMsg. 
 </p>
-<p>The ADOConnection functions BeginTrans( ), CommitTrans( ), RollbackTrans( ) 
-	are reserved for future expansion.</p>
 <p><b>ADOConnection Fields to Set</b></p>
 <p>_<b>bindInputArray</b>: Set to true if binding of parameters for SQL inserts 
 	and updates is allowed using ?, eg. as with ODBC.</p>
@@ -2376,17 +2403,34 @@ $<font color="#663300">rs</font>   = $<font color="#663300">conn</font>->Execute
 	PHP</a>. </p>
 </font> 
 <h2>Change Log<a name="Changes"></a><a name="changelog"></a></h2>
+<p><b>3.40 ?? March 2003</b></p>
+<p>Modified postgresql UpdateBlobFile() because it did not work in safe mode.
+<p>Now connection object is passed to raiseErrorFn as last parameter. Needed by StartTrans().
+<p>Added StartTrans() and CompleteTrans(). It is recommended that you do not modify transOff, but
+use the above functions.
+<p>oci8po now obeys ADODB_ASSOC_CASE settings.
+<p>Added virtualized error codes, using PEAR DB equivalents. Requires you to manually include
+	adodb-error.inc.php yourself, with MetaError() and MetaErrorMsg($errno).
+<p>GetRowAssoc for mysql and pgsql were flawed. Fix by Ross Smith.
+<p>Added to datadict types I1, I2, I4 and I8. Changed datadict type 'T' to map to
+timestamp instead of datetime for postgresql.
+<p>Error handling in ExecuteSQLArray(), adodb-datadict.inc.php did not work. 
+<p>We now auto-quote postgresql connection parameters when building connection string.
+<p>Added session expiry notification.
+<p>We now test with odbc mysql - made some changes to odbc recordset constructor.
+<p>MetaColumns now special cases access and other databases for odbc.
 <p><b>3.31 17 March 2003</b></p>
 <p>Added row checking for _fetch in postgres.
 <p>Added Interval type to MetaType for postgres.
 <p>Remapped postgres driver to call postgres7 driver internally.
 <p>Adorecordset_array::getarray() did not return array when nRows >= 0.
-<p>Postgresql sometimes no error message returned by pg_result_error()
+<p>Postgresql: at times, no error message returned by pg_result_error()
  but error message returned in pg_last_error(). Recoded again.
 <p>Interbase blob's now use chunking for updateblob.
 <p>Move() did not set EOF correctly. Reported by Jorma T.
 <p>We properly support mysql timestamp fields when we are creating mysql
  tables using the data-dict interface.
+<p>Table regex includes backticks character now.
 <p><b>3.30 3 March 2003</b></p>
 <p>Added $ADODB_EXTENSION and $ADODB_COMPAT_FETCH constant.
 <p>Made blank1stItem configurable using syntax "value:text" in GetMenu/GetMenu2. Thx to Gabriel Birke.
