@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: zones.php,v 1.5 2003/04/25 07:06:20 r23 Exp $
+   $Id: zones.php,v 1.6 2003/04/26 06:41:11 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -33,7 +33,7 @@
                  zone_name) 
                  VALUES (" . $db->qstr($zone_country_id) . ','
                            . $db->qstr($zone_code) . ','
-                           . $db->qstr($$zone_name) . ")";
+                           . $db->qstr($zone_name) . ")";
         $db->Execute($sql);
         owpRedirect(owpLink($owpFilename['zones']));
         break;
@@ -82,7 +82,7 @@
 	  header('Pragma: no-cache');
 	  echo $buffer;
 	} 
-        owpRedirect(owpLink($owpFilename['countries'], 'page=' . $_GET['page']));
+        owpRedirect(owpLink($owpFilename['zones'], 'page=' . $_GET['page']));
         break;
     }
   }
@@ -139,7 +139,7 @@
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
-  $zones_query_raw = "SELECT z.zone_id, c.countries_id, c.countries_name, z.zone_name, z.zone_code, z.zone_country_id FROM " . $owpDBTable['zones'] . " z, " . $owpDBTable['countries'] . " c WHERE z.zone_country_id = c.countries_id order by c.countries_name, z.zone_name";
+  $zones_query_raw = "select z.zone_id, c.countries_id, c.countries_name, z.zone_name, z.zone_code, z.zone_country_id from " . $owpDBTable['zones'] . " z, " . $owpDBTable['countries'] . " c where z.zone_country_id = c.countries_id order by c.countries_name, z.zone_name";
   $zones_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $zones_query_raw, $zones_query_numrows);
   $zones_query = $db->Execute($zones_query_raw);
   while ($zones = $zones_query->fields) {

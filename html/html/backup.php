@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: backup.php,v 1.15 2003/04/25 15:56:55 r23 Exp $
+   $Id: backup.php,v 1.16 2003/04/26 06:35:58 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -213,7 +213,7 @@
             }
           }
         } elseif ($_GET['action'] == 'restorelocalnow') {
-          $sql_file = tep_get_uploaded_file('sql_file');
+          $sql_file = owpGetUploadedFile('sql_file');
 
           if (is_uploaded_file($sql_file['tmp_name'])) {
             $restore_query = fread(fopen($sql_file['tmp_name'], 'r'), filesize($sql_file['tmp_name']));
@@ -433,7 +433,7 @@
         $contents[] = array('text' => '<br>' . tep_draw_radio_field('compress', 'gzip', true) . ' ' . TEXT_INFO_USE_GZIP);
         $contents[] = array('text' => tep_draw_radio_field('compress', 'zip') . ' ' . TEXT_INFO_USE_ZIP);
         $contents[] = array('text' => tep_draw_radio_field('compress', 'no') . ' ' . TEXT_INFO_USE_NO_COMPRESSION);
-        $contents[] = array('text' => '<br>' . tep_draw_checkbox_field('download', 'yes') . ' ' . TEXT_INFO_DOWNLOAD_ONLY . '*<br><br>*' . TEXT_INFO_BEST_THROUGH_HTTPS);
+        $contents[] = array('text' => '<br>' . owpCheckboxField('download', 'yes') . ' ' . TEXT_INFO_DOWNLOAD_ONLY . '*<br><br>*' . TEXT_INFO_BEST_THROUGH_HTTPS);
       }
 
       $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_backup.gif', IMAGE_BACKUP) . '&nbsp;<a href="' . owpLink($owpFilename['backup']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
@@ -449,7 +449,7 @@
 
       $contents = array('form' => owpDrawForm('restore', $owpFilename['backup'], 'action=restorelocalnow', 'post', 'enctype="multipart/form-data"'));
       $contents[] = array('text' => TEXT_INFO_RESTORE_LOCAL . '<br><br>' . TEXT_INFO_BEST_THROUGH_HTTPS);
-      $contents[] = array('text' => '<br>' . tep_draw_file_field('sql_file'));
+      $contents[] = array('text' => '<br>' . owpFileField('sql_file'));
       $contents[] = array('text' => TEXT_INFO_RESTORE_LOCAL_RAW_FILE);
       $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_restore.gif', IMAGE_restore) . '&nbsp;<a href="' . owpLink($owpFilename['backup']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;

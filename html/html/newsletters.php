@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletters.php,v 1.13 2003/04/24 06:04:55 r23 Exp $
+   $Id: newsletters.php,v 1.14 2003/04/26 06:41:11 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -109,7 +109,7 @@
 <html <?php echo HTML_PARAMS; ?>>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
-<title><?php echo TITLE; ?></title>
+<title><?php echo OWP_NAME . ' :: ' . TITLE; ?></title>
 <META NAME="AUTHOR" CONTENT="OSIS GmbH">
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">
@@ -190,7 +190,7 @@
           </tr>
           <tr>
             <td class="main" valign="top"><?php echo TEXT_NEWSLETTER_CONTENT; ?></td>
-            <td class="main"><?php echo tep_draw_textarea_field('content', 'soft', '100%', '20', $nInfo->content); ?></td>
+            <td class="main"><?php echo owpTextareaField('content', 'soft', '100%', '20', $nInfo->content); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -273,7 +273,7 @@
       <tr>
         <td><table border="0" cellspacing="0" cellpadding="2">
           <tr>
-            <td class="main" valign="middle"><?php echo owpImage(OWP_INCLUDES_DIR . 'ani_send_email.gif', IMAGE_ANI_SEND_EMAIL); ?></td>
+            <td class="main" valign="middle"><?php echo owpImage(OWP_IMAGES_DIR . 'ani_send_email.gif', IMAGE_ANI_SEND_EMAIL); ?></td>
             <td class="main" valign="middle"><b><?php echo TEXT_PLEASE_WAIT; ?></b></td>
           </tr>
         </table></td>
@@ -330,7 +330,7 @@
                 <td class="dataTableContent" align="right"><?php echo $newsletters['module']; ?></td>
                 <td class="dataTableContent" align="center"><?php if ($newsletters['status'] == '1') { echo owpImage(OWP_ICONS_DIR . 'tick.gif', ICON_TICK); } else { echo owpImage(OWP_ICONS_DIR . 'cross.gif', ICON_CROSS); } ?></td>
                 <td class="dataTableContent" align="center"><?php if ($newsletters['locked'] > 0) { echo owpImage(OWP_ICONS_DIR . 'locked.gif', ICON_LOCKED); } else { echo owpImage(OWP_ICONS_DIR . 'unlocked.gif', ICON_UNLOCKED); } ?></td>
-                <td class="dataTableContent" align="right"><?php if ( (is_object($nInfo)) && ($newsletters['newsletters_id'] == $nInfo->newsletters_id) ) { echo owpImage(OWP_INCLUDES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $newsletters['newsletters_id']) . '">' . owpImage(OWP_INCLUDES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" align="right"><?php if ( (is_object($nInfo)) && ($newsletters['newsletters_id'] == $nInfo->newsletters_id) ) { echo owpImage(OWP_IMAGES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $newsletters['newsletters_id']) . '">' . owpImage(OWP_IMAGES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
     }

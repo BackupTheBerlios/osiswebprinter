@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.6 2003/04/25 16:01:18 r23 Exp $
+   $Id: mail.php,v 1.7 2003/04/26 06:39:31 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -208,7 +208,7 @@
               </tr>
               <tr>
                 <td valign="top" class="main"><?php echo TEXT_MESSAGE; ?></td>
-                <td><?php echo tep_draw_textarea_field('message', 'soft', '60', '15'); ?></td>
+                <td><?php echo owpTextareaField('message', 'soft', '60', '15'); ?></td>
               </tr>
               <tr>
                 <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>

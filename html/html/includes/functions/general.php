@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.10 2003/04/25 15:58:30 r23 Exp $
+   $Id: general.php,v 1.11 2003/04/26 06:35:58 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -702,7 +702,7 @@
 ////
 // Function to read in text area in admin
  function tep_cfg_textarea($text) {
-    return tep_draw_textarea_field('configuration_value', false, 35, 5, $text);
+    return owpTextareaField('configuration_value', false, 35, 5, $text);
   }
 
 ////
@@ -734,7 +734,7 @@
 
 ////
 
-  function tep_get_uploaded_file($filename) {
+  function owpGetUploadedFile($filename) {
     if (isset($_FILES[$filename])) {
       $uploaded_file = array('name' => $_FILES[$filename]['name'],
                              'type' => $_FILES[$filename]['type'],
@@ -759,7 +759,7 @@
 
 // the $filename parameter is an array with the following elements:
 // name, type, size, tmp_name
-  function tep_copy_uploaded_file($filename, $target) {
+  function owpCopyUploadedFile($filename, $target) {
     if (substr($target, -1) != '/') $target .= '/';
 
     $target .= $filename['name'];
@@ -955,7 +955,7 @@
     }
   }
 
-  function tep_get_file_permissions($mode) {
+  function owpGetFilePermissions($mode) {
 // determine type
     if ( ($mode & 0xC000) == 0xC000) { // unix domain socket
       $type = 's';

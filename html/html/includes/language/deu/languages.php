@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.3 2003/04/25 15:58:30 r23 Exp $
+   $Id: languages.php,v 1.4 2003/04/26 06:39:31 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,6 +22,8 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
+define('TITLE', 'Sprachen');
+define('NAVBAR_TITLE', 'Sprachen');
 define('HEADING_TITLE', 'Sprachen');
 
 define('TABLE_HEADING_LANGUAGE_NAME', 'Name');
@@ -42,6 +44,11 @@ define('TEXT_INFO_HEADING_NEW_LANGUAGE', 'Neue Sprache');
 define('TEXT_INFO_HEADING_EDIT_LANGUAGE', 'Sprache bearbeiten');
 define('TEXT_INFO_HEADING_DELETE_LANGUAGE', 'Sprache l&ouml;schen');
 define('TEXT_DEFAULT', 'Standardsprache');
-
+define('TEXT_SET_DEFAULT', 'Standardsprache');
 define('ERROR_REMOVE_DEFAULT_LANGUAGE', 'Fehler: Die Standardsprache darf nicht gel&ouml;scht werden. Bitte definieren Sie eine neue Standardsprache und wiederholen Sie den Vorgang.');
+
+define('ERROR_CSV_TEMP_DIRECTORY_NOT_WRITEABLE', 'Fehler: Das CSV-Dateiverzeichnis ist schreibgesch&uuml;tzt.');
+define('ERROR_CSV_TEMP_DIRECTORY_DOES_NOT_EXIST', 'Fehler: Das CSV-Dateiverzeichnis ist nicht vorhanden.');
+
+define('IMAGE_CSV_DOWNLOAD', 'Download');
 ?>

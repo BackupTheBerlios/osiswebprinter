@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: html_output.php,v 1.7 2003/04/24 06:03:13 r23 Exp $
+   $Id: html_output.php,v 1.8 2003/04/26 06:35:58 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -179,14 +179,14 @@
 
 ////
 // Output a form filefield
-  function tep_draw_file_field($name, $required = false) {
+  function owpFileField($name, $required = false) {
     $field = owpInputField($name, '', '', $required, 'file');
 
     return $field;
   }
 
 ////
-// Output a selection field - alias function for tep_draw_checkbox_field() and tep_draw_radio_field()
+// Output a selection field - alias function for owpCheckboxField() and tep_draw_radio_field()
   function tep_draw_selection_field($name, $type, $value = '', $checked = false, $compare = '') {
     $selection = '<input type="' . $type . '" name="' . $name . '"';
     if ($value != '') {
@@ -202,7 +202,7 @@
 
 ////
 // Output a form checkbox field
-  function tep_draw_checkbox_field($name, $value = '', $checked = false, $compare = '') {
+  function owpCheckboxField($name, $value = '', $checked = false, $compare = '') {
     return tep_draw_selection_field($name, 'checkbox', $value, $checked, $compare);
   }
 
@@ -214,7 +214,7 @@
 
 ////
 // Output a form textarea field
-  function tep_draw_textarea_field($name, $wrap, $width, $height, $text = '', $params = '', $reinsert_value = true) {
+  function owpTextareaField($name, $wrap, $width, $height, $text = '', $params = '', $reinsert_value = true) {
     $field = '<textarea name="' . $name . '" wrap="' . $wrap . '" cols="' . $width . '" rows="' . $height . '"';
     if ($params) $field .= ' ' . $params;
     $field .= '>';

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newconfigdata.php,v 1.2 2003/04/25 16:00:04 r23 Exp $
+   $Id: newconfigdata.php,v 1.3 2003/04/26 06:39:31 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -53,16 +53,20 @@ $result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_tit
 $result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Export von CSV-Dateien', 'OWP_CSV_EXCEL', 'false', 'Möchten Sie die Länder und Bundesländer in CSV-Dateien exportieren', '5', '1', 'owpCfgSelectOption(array(\'true\', \'false\'),', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('CSV - Verzeichnis', 'OWP_CSV_TEMP', 'd:/tmp/excel/', 'Das Verzeichnis in dem die CSV-Datei gespeichert werden soll.', '5', '2', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Dateiname per E-Mail', 'CVS_SEND_MAIL', 'false', 'Möchten Sie den Dateinamen per E-Mail erhalten?', '5', '3', 'owpCfgSelectOption(array(\'true\', \'false\'),', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
-$result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Download der CVS-Datei', 'CVS_DOWNLOAD', 'false', 'Möchten Sie die CSV-Datei direkt downloaden? Funktioniert leider nicht mit jedem Browser. Header manipulationen sollten aus sein.', '5', '4', 'owpCfgSelectOption(array(\'true\', \'false\'),', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
-$result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Löschen der CVS-Datei', 'CVS_DELETE_FILE', 'false', 'Soll die CSV-Datei nach dem Download gelöscht werden?', '5', '5', 'owpCfgSelectOption(array(\'true\', \'false\'),', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
+$result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Download der CSV-Datei', 'CVS_DOWNLOAD', 'false', 'Möchten Sie die CSV-Datei direkt downloaden? Funktioniert leider nicht mit jedem Browser. Header manipulationen sollten aus sein.', '5', '4', 'owpCfgSelectOption(array(\'true\', \'false\'),', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
+$result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Löschen der CSV-Datei', 'CVS_DELETE_FILE', 'false', 'Soll die CSV-Datei nach dem Download gelöscht werden?', '5', '5', 'owpCfgSelectOption(array(\'true\', \'false\'),', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
 
 
-//layout die Gestaltung ist *noch* versteckt
+//6 layout die Gestaltung ist versteckt
 $result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Seite in XHTML', 'LAYOUT_XHTML', 'false', 'Möchten Sie die Seite in XHTML anzeigen lassen?', '6', '1', 'owpCfgSelectOption(array(\'true\', \'false\'), ', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Breite der linken Box', 'BOX_WIDTH', '125', 'Die Breite der linken Box in Pixel', '6', '2', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Anzahl der Suchergebnisse', 'MAX_DISPLAY_SEARCH_RESULTS', '15', 'Die maximale Anzahl der Suchergebnisse auf einer Seite', '6', '3', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Calculate Image Size', 'CONFIG_CALCULATE_IMAGE_SIZE', 'true', 'Calculate the size of images?', '6', '4', 'owpCfgSelectOption(array(\'true\', \'false\'), ', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
-$result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Image Required', 'IMAGE_REQUIRED', 'true', 'Enable to display broken images. Good for development.', '6', '5', 'owpCfgSelectOption(array(\'true\', \'false\'), ', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
+$result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Image Required', 'OWP_IMAGE_REQUIRED', 'false', 'Enable to display broken images. Good for development.', '6', '5', 'owpCfgSelectOption(array(\'true\', \'false\'), ', " . $db->DBTimeStamp($today) . ")") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
+
+//7 system einstellungen versteckt
+$result = $db->Execute("INSERT INTO ".$prefix."_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order ) VALUES ('Standard Sprache', 'DEFAULT_LANGUAGE', 'deu', 'Standardsprache', '7', '1')") or die ("<b>"._NOTUPDATED.$prefix."_configuration</b>");
+
 
 echo '<br /><font class="owp-title">' . $prefix."_configuration" . UPDATED .'</font>';
 
@@ -76,7 +80,8 @@ $result = $db->Execute("INSERT INTO ".$prefix."_configuration_group VALUES ('2',
 $result = $db->Execute("INSERT INTO ".$prefix."_configuration_group VALUES ('3', 'FTP Optionen', 'FTP-Server Konfiguration Ihres Druckers', '3', '1')") or die ("<b>"._NOTUPDATED.$prefix."_configuration_group</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_configuration_group VALUES ('4', 'E-Mail Optionen', 'E-Mail Konfigration', '4', '1')") or die ("<b>"._NOTUPDATED.$prefix."_configuration_group</b>");
 $result = $db->Execute("INSERT INTO ".$prefix."_configuration_group VALUES ('5', 'MS-Excel', 'CSV Export für MS-Excel', '5', '1')") or die ("<b>"._NOTUPDATED.$prefix."_configuration_group</b>");
-$result = $db->Execute("INSERT INTO ".$prefix."_configuration_group VALUES ('6', 'Layout', 'Gestaltung der Seite', '6', '0')") or die ("<b>"._NOTUPDATED.$prefix."_configuration_group</b>");
+$result = $db->Execute("INSERT INTO ".$prefix."_configuration_group VALUES ('6', 'Layout', 'Gestaltung der Seite', '6', '1')") or die ("<b>"._NOTUPDATED.$prefix."_configuration_group</b>");
+$result = $db->Execute("INSERT INTO ".$prefix."_configuration_group VALUES ('7', 'OWP System', 'System Einstellung', '7', '0')") or die ("<b>"._NOTUPDATED.$prefix."_configuration_group</b>");
 
 echo '<br /><font class="owp-title">' . $prefix."_configuration_group" . UPDATED .'</font>';
 

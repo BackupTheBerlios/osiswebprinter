@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: server_info.php,v 1.10 2003/04/25 16:01:18 r23 Exp $
+   $Id: server_info.php,v 1.11 2003/04/26 06:41:11 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -59,7 +59,7 @@
 <!-- body_text //-->
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-            <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
+        <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
       </tr>
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.13 2003/04/25 16:01:18 r23 Exp $
+   $Id: languages.php,v 1.14 2003/04/26 06:39:31 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,10 +24,10 @@
 
   require('includes/system.php');
   
-#  if (!isset($_SESSION['user_id'])) {
-#    $_SESSION['navigation']->set_snapshot();
-#    owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
-#  }  
+  if (!isset($_SESSION['user_id'])) {
+    $_SESSION['navigation']->set_snapshot();
+    owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
+  }  
   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['languages']);
 
@@ -52,7 +52,7 @@
 /*!
  ?     $insert_id = tep_db_insert_id();
       // create additional categories_description records
-      $categories_query = $db->Execute("select c.categories_id, cd.categories_name from " . $owpDBTable['categories'] . " c left join " . $owpDBTable['categories_description'] . " cd on c.categories_id = cd.categories_id where cd.language = '" . $languages_id . "'");
+      $categories_query = $db->Execute("SELECT c.categories_id, cd.categories_name FROM " . $owpDBTable['categories'] . " c left join " . $owpDBTable['categories_description'] . " cd on c.categories_id = cd.categories_id where cd.language = '" . $languages_id . "'");
       while ($categories = $categories_query->fields) {
         $db->Execute("insert into " . $owpDBTable['categories_description'] . " (categories_id, language, categories_name) values ('" . $categories['categories_id'] . "', '" . tep_db_input($iso_639_2) . "', '" . tep_db_input($categories['categories_name']) . "')");
         $categories_query->MoveNext();
@@ -72,13 +72,14 @@
 	                 SET name = " . $db->qstr($name) . ",
 	                     iso_639_2 = " . $db->qstr($iso_639_2) . ",
 	                     iso_639_1 = " . $db->qstr($iso_639_1) . ",
-	                     sort_order = " . $db->qstr($sort_order) . ",
+	                     sort_order = " . $db->qstr($sort_order) . "
                        WHERE languages_id = '" . $_GET['lID'] . "'");
                        
       if ($_POST['default'] == 'on') {
         $db->Execute("UPDATE " . $owpDBTable['configuration'] . " 
 	                 SET configuration_value = " . $db->qstr($iso_639_2) . "
                        WHERE configuration_key = 'DEFAULT_LANGUAGE'");
+        owpSetLanguageStatus($_GET['lID'], '1');
       }
 
       owpRedirect(owpLink($owpFilename['languages'], 'page=' . $_GET['page'] . '&lID=' . $_GET['lID']));
@@ -86,7 +87,7 @@
     case 'deleteconfirm':
       $sql = "SELECT languages_id 
               FROM " . $owpDBTable['languages'] . " 
-              WHERE iso_639_2 = '" . DEFAULT_LANGUAGE . "'"
+              WHERE iso_639_2 = '" . DEFAULT_LANGUAGE . "'";
       $lng_query = $db->Execute($sql);
       $lng = $lng_query->fields;
       if ($lng['languages_id'] == $lID) {
@@ -100,7 +101,7 @@
       owpRedirect(owpLink($owpFilename['languages'], 'page=' . $_GET['page']));
       break;
     case 'delete':
-      $lng_query = $db->Execute("select iso_639_2 from " . $owpDBTable['languages'] . " where languages_id = '" . $_GET['lID'] . "'");
+      $lng_query = $db->Execute("SELECT iso_639_2 FROM " . $owpDBTable['languages'] . " where languages_id = '" . $_GET['lID'] . "'");
       $lng = $lng_query->fields;
 
       $remove_language = true;
@@ -109,7 +110,52 @@
         $messageStack->add(ERROR_REMOVE_DEFAULT_LANGUAGE, 'error');
       }
       break;
+    case 'download':
+      $db_table_file = 'db_' . $owpDBTable['languages'] . '-' . date('YmdHis') . '.csv'; 
+      $file = fopen (OWP_CSV_TEMP . $db_table_file, "a+");
+      $sql = "SELECT languages_id, name, iso_639_2, 
+                     iso_639_1, active, sort_order 
+              FROM " . $owpDBTable['languages'] . " 
+            ORDER BY sort_order";
+      $rs = $db->Execute($sql);
+      $rs->MoveFirst();
+      rs2csvfile($rs, $file);
+      fclose($file);
+  
+      if (CVS_SEND_MAIL == 'true') {
+	// wir senden eine mail mit dem dateinamen $db_table_file an den user 
+      }
+	
+      // download
+      if (CVS_DOWNLOAD == 'true') {
+        $fp = fopen(OWP_CSV_TEMP . $db_table_file, 'r');     
+	$buffer = fread($fp, filesize(OWP_CSV_TEMP . $db_table_file));
+	fclose($fp);
+	if ( (CVS_DELETE_FILE == 'true') && (CVS_SEND_MAIL == 'false') ){
+	  @ unlink(OWP_CSV_TEMP . $db_table_file);
+	}
+	header('Content-Type: application/vnd.ms-excel');
+	header('Content-Disposition: attachment; filename="' . $db_table_file . '"');
+	header('Expires: 0');
+	header('Pragma: no-cache');
+	echo $buffer;
+      } 
+    #  owpRedirect(owpLink($owpFilename['languages'], 'page=' . $_GET['page']));
+      break;
+
   }
+  
+  $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['languages'], '', 'NONSSL'));
+  
+  if (OWP_CSV_EXCEL == 'true') {
+    $dir_ok = false;
+    if (is_dir(owpGetLocalPath(OWP_CSV_TEMP))) {
+      $dir_ok = true;
+      if (!is_writeable(owpGetLocalPath(OWP_CSV_TEMP))) $messageStack->add(ERROR_CSV_TEMP_DIRECTORY_NOT_WRITEABLE, 'error');
+    } else {
+      $messageStack->add(ERROR_CSV_TEMP_DIRECTORY_DOES_NOT_EXIST, 'error');
+    }
+  }      
   
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -201,7 +247,8 @@
   if (!$_GET['action']) {
 ?>
                   <tr>
-                    <td align="right" colspan="2"><?php echo '<a href="' . owpLink($owpFilename['languages'], 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=new') . '">' . owpImageButton('button_new_language.gif', IMAGE_NEW_LANGUAGE) . '</a>'; ?></td>
+                    <td align="right"><?php if (OWP_CSV_EXCEL == 'true') { echo '<a href="' . owpLink($owpFilename['languages'], 'page=' . $_GET['page'] . '&action=download') . '">' . owpImageButton('excel_now.gif', IMAGE_CSV_DOWNLOAD) . '</a>'; } ?></td>
+                    <td align="right"><?php echo '<a href="' . owpLink($owpFilename['languages'], 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=new') . '">' . owpImageButton('button_new_language.gif', IMAGE_NEW_LANGUAGE) . '</a>'; ?></td>
                   </tr>
 <?php
   }

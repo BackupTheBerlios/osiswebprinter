@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: countries.php,v 1.5 2003/04/25 07:06:20 r23 Exp $
+   $Id: countries.php,v 1.6 2003/04/26 06:35:58 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -56,10 +56,10 @@
       case 'download':
         $db_table_file = 'db_' . $owpDBTable['countries'] . '-' . date('YmdHis') . '.csv'; 
         $file = fopen (OWP_CSV_TEMP . $db_table_file, "a+");
-        $sql = "select countries_id, countries_name, countries_iso_code_2, 
+        $sql = "SELECT countries_id, countries_name, countries_iso_code_2, 
                        countries_iso_code_3, address_format_id 
-                from " . $owpDBTable['countries'] . " 
-                order by countries_name";
+                FROM " . $owpDBTable['countries'] . " 
+                ORDER BY countries_name";
         $rs = $db->Execute($sql);
         $rs->MoveFirst();
         rs2csvfile($rs, $file);

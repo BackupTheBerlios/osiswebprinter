@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: file_manager.php,v 1.2 2003/04/19 05:50:23 r23 Exp $
+   $Id: file_manager.php,v 1.3 2003/04/26 06:35:58 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,6 +22,8 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
+define('TITLE', 'Datei-Manager');
+define('NAVBAR_TITLE', 'Datei-Manager');
 define('HEADING_TITLE', 'Datei-Manager');
 
 define('TABLE_HEADING_FILENAME', 'Name');
@@ -34,6 +36,7 @@ define('TABLE_HEADING_ACTION', 'Aktion');
 
 define('TEXT_INFO_HEADING_UPLOAD', 'Upload');
 define('TEXT_FILE_NAME', 'Dateiname:');
+define('TEXT_NEW_FOLDER_NAME', 'Verzeichnisname:');
 define('TEXT_FILE_SIZE', 'Gr&ouml;sse:');
 define('TEXT_FILE_CONTENTS', 'Inhalt:');
 define('TEXT_LAST_MODIFIED', 'letzte &Auml;nderung:');
