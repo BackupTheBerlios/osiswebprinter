@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: modify_config.php,v 1.4 2003/04/02 02:03:32 r23 Exp $
+   $Id: modify_config.php,v 1.5 2003/04/09 22:50:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -114,18 +114,20 @@ function add_src_rep($key, $rep) {
 
 
 function show_error_info() {
-    global $dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype;
+    global $owp_url, $root_path, $dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype;
 
-    echo "<br/><br/><b>"._SHOW_ERROR_INFO_1. "<br/>";
+    echo '<br /><br /><b>'. SHOW_ERROR_INFO . '<br /><br />';
 echo <<< EOT
         <tt>
-        \define('OWP_DB_TYPE', '$dbtype');<br />
-        \define('OWP_DB_SERVER', '$dbhost');<br />
-        \define('OWP_DB_USERNAME', '$dbuname');<br />
-        \define('OWP_DB_PASSWORD', '$dbpass');<br />
-        \define('OWP_DB_DATABASE', '$dbname');<br />
-        \define('OWP_DB_PREFIX', '$prefix');<br />
-        \define('OWP_ENCODED', '1');<br />
+        define('OWP_DB_TYPE', '$dbtype');<br />
+        define('OWP_DB_SERVER', '$dbhost');<br />
+        define('OWP_DB_USERNAME', '$dbuname');<br />
+        define('OWP_DB_PASSWORD', '$dbpass');<br />
+        define('OWP_DB_DATABASE', '$dbname');<br />
+        define('OWP_DB_PREFIX', '$prefix');<br />
+        define('OWP_ENCODED', '1');<br />
+        define('OWP_HTTP_SERVER', '$owp_url');<br />
+        define('OWP_ROOT_PATH', '$root_path');<br />
         </tt>
 EOT;
 
@@ -135,7 +137,7 @@ EOT;
 function update_config_php($db_prefs = false) {
     global $reg_src, $reg_rep;
     global $dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype;
-    global $url, $HTTP_ENV_VARS;
+    global $owp_url, $root_path, $HTTP_ENV_VARS;
 
     add_src_rep("OWP_DB_SERVER", $dbhost);
     add_src_rep("OWP_DB_USERNAME", base64_encode($dbuname));
@@ -143,6 +145,8 @@ function update_config_php($db_prefs = false) {
     add_src_rep("OWP_DB_DATABASE", $dbname);
     add_src_rep("OWP_DB_PREFIX", $prefix);
     add_src_rep("OWP_DB_TYPE", $dbtype);
+    add_src_rep("OWP_HTTP_SERVER", $owp_url);
+    add_src_rep("OWP_ROOT_PATH", $root_path);
     if (strstr($HTTP_ENV_VARS["OS"],"Win")) {
         add_src_rep("OWP_SYSTEM" , '1');
     } else {

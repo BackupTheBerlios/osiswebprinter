@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newinstall.php,v 1.6 2003/04/04 07:50:45 r23 Exp $
+   $Id: newinstall.php,v 1.7 2003/04/09 22:50:24 r23 Exp $
 
    OSIS GMBH
    http://www.osisnet.de/
@@ -42,7 +42,7 @@
 
 /*** This function creates the DB on new installs ***/
 function make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake) {
-    global $dbconn;
+    global $db;
     
     echo '<center><br /><br />';
     if ($dbmake) {
@@ -57,16 +57,17 @@ function make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake)
 
 /*** This function inserts the default data on new installs ***/
 function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone, $fax, $prefix) {
-    global $dbconn;
+    global $db; 
     
-    echo '<font class="owp-title">' . INPUT_DATA_1. '</font>';
+    echo '<font class="owp-title">' . INPUT_DATA . '</font>';
     echo "<center>";
  
     // Put basic information in first
     #include('newdata.php');
     include ('../includes/functions/password_funcs.php');
-    // new installs will use md5 hashing - compatible on windows and *nix variants.
     $owp_pwd = crypt_password($pwd);
+    $today = date("Y-m-d H:i:s");
+
     $sql = "INSERT INTO ".$prefix."_administrators
             (owp_admin_gender,
              owp_admin_firstname,
@@ -76,20 +77,20 @@ function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone
              owp_admin_fax,
              owp_admin_password,
              owp_date_added)
-             VALUES ('" . $gender . "', 
-                     '" . $firstname . "',
-                     '" . $name . "',
-                     '" . $email . "',
-                     '" . $phone . "',
-                     '" . $fax . "',
-                     '" . $owp_pwd. "',                
-                     now())";
-    $result = $dbconn->Execute($sql);
+             VALUES ("
+             . $db->qstr($gender) . ','
+             . $db->qstr($firstname) . ','
+             . $db->qstr($name) . ','
+             . $db->qstr($email) . ','
+             . $db->qstr($phone) . ','
+             . $db->qstr($fax) . ','
+             . $db->qstr($owp_pwd) . ','
+             . $db->DBTimeStamp($today) . ")";
+    $result = $db->Execute($sql);
     if ($result === false) {
-      echo '<br /><font class="owp-error">' . NOTMADE . '</font>';
+      echo '<br /><font class="owp-error">' .  $db->ErrorMsg() . NOTMADE . '</font>';
     } else {
       echo '<br /><font class="owp-title">' . $prefix . '_administrators&nbsp;'. UPDATED . '</font>';
     }
 }
-
 ?>

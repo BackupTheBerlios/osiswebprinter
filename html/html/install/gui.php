@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: gui.php,v 1.14 2003/04/04 07:50:45 r23 Exp $
+   $Id: gui.php,v 1.15 2003/04/09 22:50:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -143,7 +143,7 @@ function owp_admin_hidden() {
 function owp_CHM_check() {
    global $currentlang;
 
-   $chmCheck = '<font class="owp-title">' . DBINFO. '&nbsp;</font>' . 
+   $chmCheck = '<font class="owp-title">' . DBINFO. ':&nbsp;</font>' . 
                '<font class="owp-normal">' . CHM_CHECK_1 . '</font><br /><br />' . "\n" .
                '<form action="index.php" method="post"><center>' . "\n";
    $chmCheck .= owp_form_editabletext(0);
@@ -155,8 +155,8 @@ function owp_CHM_check() {
 
 
 function owp_submit() {
-  $submit = '<font class="owp-title">' . DBINFO . '</font>' .
-            '<font class="owp-normal"> ' . SUBMIT_1 . '</font><br /><br />' . "\n" .
+  $submit = '<font class="owp-title">' . DBINFO . ':&nbsp;</font>' .
+            '<font class="owp-normal">' . SUBMIT_1 . '</font><br /><br />' . "\n" .
             '<br /><font class="owp-normal">' . SUBMIT_2 . '</font><br /><br />' . "\n" .
             '<center>';               
   $submit .= owp_form_text();
@@ -192,7 +192,7 @@ function owp_change_info() {
    $dbname = owp_prepare_input($_POST['dbname']);
    $prefix = owp_prepare_input($_POST['prefix']);
    
-   $changeInfo = '<font class="owp-title">' . CHANGE_INFO_1 . '</font>' . 
+   $changeInfo = '<font class="owp-title">' . CHANGE_INFO_1 . ':&nbsp;</font>' . 
                  '&nbsp;<font class="owp-normal">' . CHANGE_INFO_2 . '<br /><br />' . "\n" .
                  '<form action="index.php" method="post"><center>' . "\n" .
                  '<table border="0">' . "\n" .
@@ -289,7 +289,7 @@ function owp_continue() {
    $protocol = ($HTTP_SERVER_VARS['HTTPS'] == 'on') ? 'https://' : 'http://';
    $owp_url = (!empty($filepath)) ? $protocol.$_SERVER['HTTP_HOST']."/".$filepath : $protocol.$_SERVER['HTTP_HOST'];
 
-   $continue = '<font class="owp-title">' . CONTINUE_1 . '</font>' . "\n" .
+   $continue = '<font class="owp-title">' . CONTINUE_1 . ':&nbsp;</font>' . "\n" .
                '<font class="owp-normal">' . CONTINUE_2 . '</font>' . "\n" .
                '<br /><br />' . "\n" .
                '<center><form action="index.php" method="post"><table width="60%" border="0">' . "\n" .
@@ -363,7 +363,7 @@ function owp_change_login() {
      $owp_radio_gender = '<input type="radio" name="gender" value="m">&nbsp;' . MALE . '&nbsp;&nbsp;<input type="radio" name="gender" value="f" checked>&nbsp;' . FEMALE . '&nbsp';
    }
    $continue .= '<br /><br />' . "\n" .
-                '<center><form action="index.php" method="post"><table width="50%" border="0">' . "\n" .
+                '<center><form action="index.php" method="post"><table width="80%" border="0">' . "\n" .
                 ' <tr>' . "\n" .
                 '  <td align="left"><font class="owp-normal">' . ADMIN_GENDER . '</font></td>' . "\n" .
                 '  <td><font class="owp-normal">' . $owp_radio_gender . '</font></td>' . "\n" .
@@ -422,8 +422,8 @@ function owp_login() {
 
    $owp_gender = ($gender == 'm') ? MALE : FEMALE;
 
-   $continue = '<font class="owp-title">' . CONTINUE_1 . '</font>' . "\n" .
-               '<font class="owp-normal">' . CONTINUE_2 . '</font>' . "\n" .
+   $continue = '<font class="owp-title">' . CONTINUE_1 . ':&nbsp;</font>' . "\n" .
+               '<font class="owp-normal">' . CONTINUE_3 . '</font>' . "\n" .
                '<br /><br />' . "\n" .
                '<form name="change login" action="index.php" method="post"><table width="80%" border="0" align="center">' . "\n" .
                ' <tr>' . "\n" .
@@ -508,15 +508,20 @@ function owp_set_login() {
 function owp_finish() {
    global $currentlang;
    
-   echo '<font class="owp-title">' . FINISH_1 . '</font>';
-   echo '<font class="owp-normal">' . FINISH_2 . '<br /><br />';
+   $root_path = str_replace("\\","/",getcwd()); // "
+   $root_path = str_replace("/install", "", $root_path);
+   
+   echo '<font class="owp-title">' . FINISH_1 . '&nbsp;</font>';
+   echo '<font class="owp-normal">' . FINISH_2 . '<br /><br /><br />';
    echo '<form action="index.php" method="post">';
    echo '<center><textarea name="license" cols=50 rows=8>';
 
    include("lang/" . $currentlang . "/CREDITS.txt");
 
-   echo '</textarea><br /><br />' . FINISH_3 . '</center></form></font>';
-   echo '<br /><br /><center><b><a href="index.php">' . FINISH_4 . '</a></b>';
+   echo '</textarea></form>';
+   echo '<br /><br />' . FINISH_3 . '<br /></font>';
+   echo '<br /><font class="owp-title">' .  $root_path . '</font><font class="owp-error">/install</font>';
+   echo '<br /><br /><font class="owp-title"><a href="../index.php">' . FINISH_4 . '</a></font>';
    echo '</center><br /><br />';
 }
 

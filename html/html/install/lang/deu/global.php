@@ -1,6 +1,6 @@
 <?php 
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.10 2003/04/03 21:51:52 r23 Exp $
+   $Id: global.php,v 1.11 2003/04/09 22:50:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -37,7 +37,9 @@ define('BTN_START','Start');
 define('BTN_SUBMIT','best&auml;tigen');
 define('BTN_NEW_INSTALL', 'Installation');
 define('BTN_CHANGE_INFO', 'Daten &auml;ndern');
-define('BTN_LOGIN_SUBMIT','Admin Installation');
+define('BTN_LOGIN_SUBMIT','Admin installieren');
+define('BTN_SET_LOGIN', 'Weiter');
+define('BTN_FINISH', 'Beenden');
 
 define('GREAT', 'Willkommen bei OSIS Web Printer.');
 define('GREAT_1', 'Die Komplettlösung zur schnellen Anbindung von Webanwendungen an Toshiba Tec Web Printer.'); 
@@ -78,10 +80,10 @@ define('DBPREFIX', 'Tabellen Pr&auml;fix (f&uuml;r Tabellen Sharing)');
 define('DBTYPE', 'Datenbank Type');
 define('DBUNAME', 'Datenbank Anwendername');
 
-define('SUBMIT_1','Bitte kontrollieren Sie Zugangsdaten Ihrer Datenbank.');
-define('SUBMIT_2','Sie haben folgende Zugangsdaten angegeben:');
-#define('SUBMIT_3','Select <b>New Install</b> or <b>Upgrade</b> to continue.');
-define('SUBMIT_3','Sind die Angaben korrekt, klicken Sie bitte auf <code>Installation</code>');
+define('SUBMIT_1', 'Bitte kontrollieren Sie Zugangsdaten Ihrer Datenbank.');
+define('SUBMIT_2', 'Sie haben folgende Zugangsdaten angegeben:');
+#define('SUBMIT_3', 'Select <b>New Install</b> or <b>Upgrade</b> to continue.');
+define('SUBMIT_3', 'Sind die Angaben korrekt, klicken Sie bitte auf <code>Installation</code>');
 
 define('CHANGE_INFO_1', 'DB Zugangsdaten &auml;ndern');
 define('CHANGE_INFO_2', 'Bitte korrigieren Sie Ihre Datenbank Zugangsdaten');
@@ -97,11 +99,12 @@ define('MAKE_DB_2', 'wurde angelegt.');
 define('MAKE_DB_3', 'Keine Datenbank erstellt.');
 define('MODIFY_FILE_1', 'Error: unable to open for read:');
 define('MODIFY_FILE_2', 'Error: unable to open for write:');
-define('MODIFY_FILE_3', '0 lines changed, did nothing');
+define('MODIFY_FILE_3', 'Error: lines changed, did nothing');
+define('SHOW_ERROR_INFO', 'Fehler:</b> OSIS Web Printer Installation konnte nicht in die \'config.php\' Datei  schreiben. <br /> Sie k&ouml;nnen mit einem Editor diese Datei selbst &auml;ndern. <br />Hier die Informationen  die Sie eintragen sollten:');
 
-
-define('CONTINUE_1','Setting Your DB Preferences');
-define('CONTINUE_2','You can now set up your administrative account. If you pass on this set up, your login for the administrative account will be Admin / Password (case sensitive).  It is advisable to set it up now, and not wait until later.');
+define('CONTINUE_1', 'Datenbank Administrator');
+define('CONTINUE_2', 'Legen Sie nun den Administrator f&uuml;r OSIS Web Printer fest. Sie k&ouml;nnen sp&auml;ter mit der Email - Adresse und dem Passwort OSIS Web Printer konfigurieren.');
+define('CONTINUE_3', 'Bitte kontrollieren Sie Ihre Angaben. Eine &Auml;nderung ist sp&auml;ter nicht mehr m&ouml;glich!');
 
 define('ADMIN_GENDER', 'Admin Anrede');
 define('MALE', 'Herr');
@@ -118,63 +121,17 @@ define('ADMIN_REPEATPASS','Passwort best&auml;tigen');
 define('PASSWORD_HIDDEN', '--VERSTECKT--');
 define('OWP_URL', 'Virtual Path (URL)');
 define('ROOT_DIR', 'Webserver Root Directory');
-define('ADMIN_INSTALL', 'Sind die Angaben korrekt, klicken Sie bitte auf <code>Admin Installation</code>');
+define('ADMIN_INSTALL', 'Sind die Angaben korrekt, klicken Sie bitte auf <code>Admin installieren</code>');
 define('PASSWORD_ERROR', 'Das \'Passwort\' und die \'Best&auml;tigung\' müssen übereinstimmen!');
 define('ADMIN_ERROR', 'Fehler:');
 define('ADMIN_PASSWORD_ERROR', 'Bitte geben Sie ein \'Passwort\' ein!');
 define('ADMIN_EMAIL_ERROR', 'Bitte geben Sie Ihre \'E-Mail Adresse\' ein!');
 
-define('FINISH_1','The Credits');
-define('FINISH_2','These are the scripts and people that make PostNuke go. Take some time and let these people know how much you appreciate their work. If you would like to be listed here, contact us about being a part of the developement team. We are always looking for some help.');
-define('FINISH_3','You are now done with the PostNuke installation. If you run into any problems, let us know.  Make sure that you delete this script. You will not need it again.');
-define('FINISH_4','Go to your PostNuke site');
+define('INPUT_DATA', 'Daten f&uuml;r OSIS Web Printer ');
 
+define('FINISH_1', 'Danksagung');
+define('FINISH_2', 'Bei dieser Gelegenheit m&ouml;chten wir allen danken, die zur Entwicklung von OSIS Web Printer beigetragen haben. Unser spezieller Dank geb&uuml;hrt den Entwicklern  von PHP. ');
+define('FINISH_3', 'Sie haben OSIS Web Printer erfolgreich installiert. Bitte l&ouml;schen Sie nun das Installations Verzeichnis');
+define('FINISH_4', 'OSIS Web Printer Homepage');
 
-
-define('_BTN_CHANGEINFO','Change Info');
-define('_BTN_NEWINSTALL','New install');
-define('_BTN_UPGRADE','Upgrade');
-define('_BTN_CONTINUE','Continue');
-define('_BTN_FINISH','Finish');
-define('_BTN_SET_LOGIN','Set Login');
-
-
-define('_CONTINUE_1','Setting Your DB Preferences');
-define('_CONTINUE_2','You can now set up your administrative account. If you pass on this set up, your login for the administrative account will be Admin / Password (case sensitive).  It is advisable to set it up now, and not wait until later.');
-define('_DONE','Done.');
-define('_FINISH_1','The Credits');
-define('_FINISH_2','These are the scripts and people that make PostNuke go. Take some time and let these people know how much you appreciate their work. If you would like to be listed here, contact us about being a part of the developement team. We are always looking for some help.');
-define('_FINISH_3','You are now done with the PostNuke installation. If you run into any problems, let us know.  Make sure that you delete this script. You will not need it again.');
-define('_FINISH_4','Go to your PostNuke site');
-define('_FORUM_INFO_1','Your forum tables are untouched.<br><br>FYI, those tables are:');
-define('_FORUM_INFO_2','So, you can delete those tables if you don\'t want to use forums.<br> phpBB should be available as a module from http://mods.postnuke.com');
-define('_INPUT_DATA_1','Uploaded Data');
-define('_INSTALLATION','PostNuke Installation');
-define('_ISINTRANET','Site is for intranet or other local (non-internet) use');
-define('_INTRANETINFO','You must set the "intranet" option if your site does not use a fully-qualified host name for access.  Examples of fully qualified hostnames are www.postnuke.com and foo.bar.com.  Examples of hostnames that are not fully qualified are foo.com, localhost, and mysite.org  If you do not set this paramter properly you might not be able to log in to your site.');
-define('_MADE',' made.');
-define('_MAKE_DB_1','Unable to make database');
-define('_MAKE_DB_2','has been created.');
-define('_MAKE_DB_3','No database made.');
-define('_MODIFY_FILE_1','Error: unable to open for read:');
-define('_MODIFY_FILE_2','Error: unable to open for write:');
-define('_MODIFY_FILE_3','0 lines changed, did nothing');
-define('_NO','No');
-define('_NOTMADE','Unable to make ');
-define('_NOTSELECT','Unable to select database.');
-define('_NOTUPDATED','Unable to update ');
-
-define('_PWBADMATCH', 'The passwords supplied do not match.  Please go back and re-type the passwords to ensure they are the same.');
-
-define('_SHOW_ERROR_INFO_1','Write error</b> unable to update your \'config.php\' file<br/> You will have to modify this file yourself using a text editor.<br/> Here are the changes required:');
-define('_SKIPPED','Skipped.');
-
-define('_SUCCESS_1','Finished');
-define('_SUCCESS_2','Your upgrade to the latest version of PostNuke is finished.<br> Remember to change your config.php settings before using for the first time.');
-define('_UPDATED',' updated.');
-define('_UPDATING','Updating table: ');
-define('_UPGRADE_1','Upgrades');
-define('_UPGRADE_2','Here is where you can select which CMS your are upgrading from.<br><br><center> Select <b>PHP-Nuke</b> to upgrade an existing PHP-Nuke install.<br> Select <b>PostNuke</b> to upgrade an existing PostNuke install.<br> Select <b>MyPHPNuke</b> to upgrade an exisitng MyPHPNuke install.');
-define('_UPGRADETAKESALONGTIME','Carrying out a PostNuke upgrade can take a long time, maybe a matter of minutes.  When selecting an upgrade option please select the option only once, and wait for the next screen to appear.  Clicking on upgrade options multiple times can cause the upgrade process to fail');
-define('_YES', 'Yes');
 ?>

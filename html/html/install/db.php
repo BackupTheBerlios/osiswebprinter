@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: db.php,v 1.2 2003/03/28 02:06:47 r23 Exp $
+   $Id: db.php,v 1.3 2003/04/09 22:50:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -41,36 +41,18 @@
    ---------------------------------------------------------------------- */
 
 /*** Connect to Database ***/
-function dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype='mysql') {
+function owp_DBInit($dbhost, $dbuname, $dbpass, $dbname, $dbtype='mysql') {
+    global $db;
 
-    $connectString = "$dbtype://$dbuname:$dbpass@$dbhost/$dbname";
-
-    GLOBAL $ADODB_FETCH_MODE;
-    $dbconn = &ADONewConnection($dbtype);
-    $dbh = $dbconn->Connect($dbhost, $dbuname, $dbpass, $dbname);
-    $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-
-    // if we get an error, log it and die
-    if ($dbh === false) {
-        error_log ("connect string: $connectString");
-        error_log ("error: " . $dbconn->ErrorMsg());
-		// show error and die
-        PN_DBMsgError($dbconn, __FILE__ , __LINE__, "Error connecting to db");
-    } else {
-        return $dbconn;
+    $db = ADONewConnection($dbtype);
+    $dbh = $db->Connect($dbhost, $dbuname, $dbpass, $dbname);
+    if (!$dbh) {
+      $dbpass = "";
+      die("$dbtype://$dbuname:$dbpass@$dbhost/$dbname failed to connect" . $db->ErrorMsg());
     }
+    global $ADODB_FETCH_MODE;
+    $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
+
+    return true;
 }
-
-/** Error message due a ADODB SQL error and die (copied from mainfile.php because it is not included */
-function PN_DBMsgError($db='',$prg='',$line=0,$message='Error accessing the database') {
-   $lcmessage = $message . "<br>" .
-              "Program: " . $prg . " - " . "Line N.: " . $line . "<br>" .
-              "Database: " . $db->database . "<br> ";
-
-   if($db->ErrorNo()<>0) {
-       $lcmessage .= "Error (" . $db->ErrorNo() . ") : " . $db->ErrorMsg() . "<br>";
-   }
-   die($lcmessage);
-}
-
 ?>

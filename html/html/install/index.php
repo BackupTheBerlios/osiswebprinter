@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.12 2003/04/04 07:50:45 r23 Exp $
+   $Id: index.php,v 1.13 2003/04/09 22:50:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -113,9 +113,8 @@
       if ($pwd != $repeatpwd) {
         echo owp_change_login();
       } else {     
-       $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
+       owp_DBInit($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
        input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone, $fax, $prefix);
-       #input_data($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $aid, $name, $pwd, $repeatpwd, $email, $url);
        update_config_php(true); // Scott - added
        echo owp_set_login();
       }
