@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: zones.php,v 1.4 2003/04/24 06:04:55 r23 Exp $
+   $Id: zones.php,v 1.5 2003/04/25 07:06:20 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -27,38 +27,84 @@
   if ($_GET['action']) {
     switch ($_GET['action']) {
       case 'insert':
-        $zone_country_id = tep_db_prepare_input($HTTP_POST_VARS['zone_country_id']);
-        $zone_code = tep_db_prepare_input($HTTP_POST_VARS['zone_code']);
-        $zone_name = tep_db_prepare_input($HTTP_POST_VARS['zone_name']);
-
-        $db->Execute("insert into " . $owpDBTable['zones'] . " (zone_country_id, zone_code, zone_name) values ('" . tep_db_input($zone_country_id) . "', '" . tep_db_input($zone_code) . "', '" . tep_db_input($zone_name) . "')");
-        tep_redirect(owpLink($owpFilename['zones']));
+        $sql = "INSERT INTO " . $owpDBTable['zones'] . " 
+                (zone_country_id,
+                 zone_code, 
+                 zone_name) 
+                 VALUES (" . $db->qstr($zone_country_id) . ','
+                           . $db->qstr($zone_code) . ','
+                           . $db->qstr($$zone_name) . ")";
+        $db->Execute($sql);
+        owpRedirect(owpLink($owpFilename['zones']));
         break;
       case 'save':
-        $zone_id = tep_db_prepare_input($_GET['cID']);
-        $zone_country_id = tep_db_prepare_input($HTTP_POST_VARS['zone_country_id']);
-        $zone_code = tep_db_prepare_input($HTTP_POST_VARS['zone_code']);
-        $zone_name = tep_db_prepare_input($HTTP_POST_VARS['zone_name']);
-
-        $db->Execute("update " . $owpDBTable['zones'] . " set zone_country_id = '" . tep_db_input($zone_country_id) . "', zone_code = '" . tep_db_input($zone_code) . "', zone_name = '" . tep_db_input($zone_name) . "' where zone_id = '" . tep_db_input($zone_id) . "'");
-        tep_redirect(owpLink($owpFilename['zones'], 'page=' . $_GET['page'] . '&cID=' . $zone_id));
+        $db->Execute("UPDATE " . $owpDBTable['zones'] . " 
+	                 SET zone_country_id = " . $db->qstr($zone_country_id) . ", 
+                             zone_code = " . $db->qstr($zone_code) . ", 
+                             zone_name = " . $db->qstr($zone_name) . " 
+                       WHERE zone_id = '" . $_GET['cID'] . "'");
+        owpRedirect(owpLink($owpFilename['zones'], 'page=' . $_GET['page'] . '&cID=' . $_GET['cID']));
         break;
       case 'deleteconfirm':
-        $zone_id = tep_db_prepare_input($_GET['cID']);
-
-        $db->Execute("delete from " . $owpDBTable['zones'] . " where zone_id = '" . tep_db_input($zone_id) . "'");
-        tep_redirect(owpLink($owpFilename['zones'], 'page=' . $_GET['page']));
+        $db->Execute("DELETE FROM " . $owpDBTable['zones'] . " 
+                      WHERE zone_id = '" . $_GET['cID'] . "'");
+        owpRedirect(owpLink($owpFilename['zones'], 'page=' . $_GET['page']));
+        break;
+      case 'download':
+        $db_table_file = 'db_' . $owpDBTable['zones'] . '-' . date('YmdHis') . '.csv'; 
+        $file = fopen (OWP_CSV_TEMP . $db_table_file, "a+");
+        $sql = "SELECT z.zone_id, c.countries_id, c.countries_name, 
+                       z.zone_name, z.zone_code, z.zone_country_id 
+                FROM " . $owpDBTable['zones'] . " z, 
+                     " . $owpDBTable['countries'] . " c 
+                WHERE z.zone_country_id = c.countries_id 
+                ORDER BY c.countries_name, z.zone_name";
+        $rs = $db->Execute($sql);
+        $rs->MoveFirst();
+        rs2csvfile($rs, $file);
+        fclose($file);
+  
+        if (CVS_SEND_MAIL == 'true') {
+	  // wir senden eine mail mit dem dateinamen $db_table_file an den user 
+        }
+	
+        // download
+        if (CVS_DOWNLOAD == 'true') {
+          $fp = fopen(OWP_CSV_TEMP . $db_table_file, 'r');     
+	  $buffer = fread($fp, filesize(OWP_CSV_TEMP . $db_table_file));
+	  fclose($fp);
+	  if ( (CVS_DELETE_FILE == 'true') && (CVS_SEND_MAIL == 'false') ){
+	    @ unlink(OWP_CSV_TEMP . $db_table_file);
+	  }
+	  header('Content-Type: application/vnd.ms-excel');
+	  header('Content-Disposition: attachment; filename="' . $db_table_file . '"');
+	  header('Expires: 0');
+	  header('Pragma: no-cache');
+	  echo $buffer;
+	} 
+        owpRedirect(owpLink($owpFilename['countries'], 'page=' . $_GET['page']));
         break;
     }
   }
   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['zones']);
+  $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['zones'], '', 'NONSSL'));
+  
+  if (OWP_CSV_EXCEL == 'true') {
+    $dir_ok = false;
+    if (is_dir(owpGetLocalPath(OWP_CSV_TEMP))) {
+      $dir_ok = true;
+      if (!is_writeable(owpGetLocalPath(OWP_CSV_TEMP))) $messageStack->add(ERROR_CSV_TEMP_DIRECTORY_NOT_WRITEABLE, 'error');
+    } else {
+      $messageStack->add(ERROR_CSV_TEMP_DIRECTORY_DOES_NOT_EXIST, 'error');
+    }
+  }
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
-<title><?php echo TITLE; ?></title>
+<title><?php echo OWP_NAME . ' :: ' . TITLE; ?></title>
 <META NAME="AUTHOR" CONTENT="OSIS GmbH">
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">
@@ -93,7 +139,7 @@
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
-  $zones_query_raw = "select z.zone_id, c.countries_id, c.countries_name, z.zone_name, z.zone_code, z.zone_country_id from " . $owpDBTable['zones'] . " z, " . $owpDBTable['countries'] . " c where z.zone_country_id = c.countries_id order by c.countries_name, z.zone_name";
+  $zones_query_raw = "SELECT z.zone_id, c.countries_id, c.countries_name, z.zone_name, z.zone_code, z.zone_country_id FROM " . $owpDBTable['zones'] . " z, " . $owpDBTable['countries'] . " c WHERE z.zone_country_id = c.countries_id order by c.countries_name, z.zone_name";
   $zones_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $zones_query_raw, $zones_query_numrows);
   $zones_query = $db->Execute($zones_query_raw);
   while ($zones = $zones_query->fields) {
@@ -126,7 +172,8 @@
   if (!$_GET['action']) {
 ?>
                   <tr>
-                    <td colspan="2" align="right"><?php echo '<a href="' . owpLink($owpFilename['zones'], 'page=' . $_GET['page'] . '&action=new') . '">' . owpImageButton('button_new_zone.gif', IMAGE_NEW_ZONE) . '</a>'; ?></td>
+                    <td align="right"><?php if (OWP_CSV_EXCEL == 'true') { echo '<a href="' . owpLink($owpFilename['zones'], 'page=' . $_GET['page'] . '&action=download') . '">' . owpImageButton('excel_now.gif', IMAGE_CSV_DOWNLOAD) . '</a>'; } ?></td>
+                    <td align="right"><?php echo '<a href="' . owpLink($owpFilename['zones'], 'page=' . $_GET['page'] . '&action=new') . '">' . owpImageButton('button_new_zone.gif', IMAGE_NEW_ZONE) . '</a>'; ?></td>
                   </tr>
 <?php
   }
@@ -143,9 +190,9 @@
 
       $contents = array('form' => owpDrawForm('zones', $owpFilename['zones'], 'page=' . $_GET['page'] . '&action=insert'));
       $contents[] = array('text' => TEXT_INFO_INSERT_INTRO);
-      $contents[] = array('text' => '<br>' . TEXT_INFO_ZONES_NAME . '<br>' . tep_draw_input_field('zone_name'));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_ZONES_CODE . '<br>' . tep_draw_input_field('zone_code'));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_COUNTRY_NAME . '<br>' . owpPullDownMenu('zone_country_id', tep_get_countries()));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_ZONES_NAME . '<br>' . owpInputField('zone_name'));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_ZONES_CODE . '<br>' . owpInputField('zone_code'));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_COUNTRY_NAME . '<br>' . owpPullDownMenu('zone_country_id', owpGetCountries()));
       $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_insert.gif', IMAGE_INSERT) . '&nbsp;<a href="' . owpLink($owpFilename['zones'], 'page=' . $_GET['page']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'edit':
@@ -153,9 +200,9 @@
 
       $contents = array('form' => owpDrawForm('zones', $owpFilename['zones'], 'page=' . $_GET['page'] . '&cID=' . $cInfo->zone_id . '&action=save'));
       $contents[] = array('text' => TEXT_INFO_EDIT_INTRO);
-      $contents[] = array('text' => '<br>' . TEXT_INFO_ZONES_NAME . '<br>' . tep_draw_input_field('zone_name', $cInfo->zone_name));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_ZONES_CODE . '<br>' . tep_draw_input_field('zone_code', $cInfo->zone_code));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_COUNTRY_NAME . '<br>' . owpPullDownMenu('zone_country_id', tep_get_countries(), $cInfo->countries_id));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_ZONES_NAME . '<br>' . owpInputField('zone_name', $cInfo->zone_name));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_ZONES_CODE . '<br>' . owpInputField('zone_code', $cInfo->zone_code));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_COUNTRY_NAME . '<br>' . owpPullDownMenu('zone_country_id', owpGetCountries(), $cInfo->countries_id));
       $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_update.gif', IMAGE_UPDATE) . '&nbsp;<a href="' . owpLink($owpFilename['zones'], 'page=' . $_GET['page'] . '&cID=' . $cInfo->zone_id) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'delete':
