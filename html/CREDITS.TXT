@@ -33,11 +33,19 @@ PostNuke Theme
 created by J. Cox (http://www.dinerminor.com)
 Released under GNU General Public License (GPL)
 
-Anbindung an ADODB und Sprach-DB basiert auf:
+Anbindung von osCommerce an ADODB basiert auf:
 neXtCommerce, the XtC for your Business
 Copyright (c) 2002-2003 neXtCommerce
 http://www.neXtCommerce.de
 Released under GNU Lesser GPL library license.
+
+Login basiert auf:
+Login and Logoff for osCommerce Administrators.
+Original Version by Blake Schwendiman
+blake@intechra.net
+Updated Version 1.1.0 (03/01/2002) by Christopher Conkie
+chris@conkiec.freeserve.co.uk
+Released under the GNU General Public License
 
  
 Diese Liste erhebt keinen Anspruch auf Vollständigkeit!
