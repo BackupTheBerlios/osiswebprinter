@@ -11,7 +11,7 @@
 <body bgcolor="#FFFFFF">
 
 <h2>ADOdb Library for PHP</h2>
-<p>V3.30 3 March 2003 (c) 2000-2003 John Lim (<a href="mailto:jlim#natsoft.com.my">jlim#natsoft.com.my</a>)</p>
+<p>V3.31 17 March 2003 (c) 2000-2003 John Lim (<a href="mailto:jlim#natsoft.com.my">jlim#natsoft.com.my</a>)</p>
 <p>This software is dual licensed using BSD-Style and LGPL. 
 Where there is any discrepancy, the BSD-Style license will take precedence. 
 This means you can use it in proprietary and commercial products.</p>
@@ -502,9 +502,11 @@ You will use <code>$conn-><a href=#connect>Connect()</a></code> or
 <p>The column &quot;RecordCount() usable&quot; indicates whether RecordCount() 
 	return the number of rows, or returns -1 when a SELECT statement is executed. 
 	If this column displays Y/N then the RecordCount() is emulated when the global 
-	variable $ADODB_COUNTRECS=true, which is the default. Note that for large 
+	variable $ADODB_COUNTRECS=true (this is the default). Note that for large 
 	recordsets, it might be better to disable RecordCount() emulation because 
-	substantial amounts of memory are required to cache the recordset for counting. 
+	substantial amounts of memory are required to cache the recordset for counting. Also
+	there is a speed penalty of 40-50% if emulation is required. This is emulated in
+	most databases except for PostgreSQL and MySQL.
 	This variable is checked every time a query is executed, so you can selectively 
 	choose which recordsets to count.</p>
 <p>
@@ -2374,6 +2376,17 @@ $<font color="#663300">rs</font>   = $<font color="#663300">conn</font>->Execute
 	PHP</a>. </p>
 </font> 
 <h2>Change Log<a name="Changes"></a><a name="changelog"></a></h2>
+<p><b>3.31 17 March 2003</b></p>
+<p>Added row checking for _fetch in postgres.
+<p>Added Interval type to MetaType for postgres.
+<p>Remapped postgres driver to call postgres7 driver internally.
+<p>Adorecordset_array::getarray() did not return array when nRows >= 0.
+<p>Postgresql sometimes no error message returned by pg_result_error()
+ but error message returned in pg_last_error(). Recoded again.
+<p>Interbase blob's now use chunking for updateblob.
+<p>Move() did not set EOF correctly. Reported by Jorma T.
+<p>We properly support mysql timestamp fields when we are creating mysql
+ tables using the data-dict interface.
 <p><b>3.30 3 March 2003</b></p>
 <p>Added $ADODB_EXTENSION and $ADODB_COMPAT_FETCH constant.
 <p>Made blank1stItem configurable using syntax "value:text" in GetMenu/GetMenu2. Thx to Gabriel Birke.
