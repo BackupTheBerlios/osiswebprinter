@@ -48,11 +48,14 @@
   Wir gehen davon aus, dass Sie sich OSIS Web Printer erfolgreich 
   downgeloaded haben.
   
+  
+  LINUX
+  -----
   1. Entpacken Sie die Datei mit 
   
     # tar -xzf osis_webprinter_pr*.*.tar.gz
   
-  2. Kopieren Sie WebPrinter in das Verzeichnis Ihres WebServers
+  2. Kopieren Sie OSIS WebPrinter in das Verzeichnis Ihres WebServers
   
     # cd osis_webprinter_pr*.*
     # cp -R html /usr/local/apache/htdocs/
@@ -68,9 +71,62 @@
     # chmod 666 /usr/local/apache/htdocs/html/includes/config-old.php
      
    
-  3. Die Installationsroutine ist unter:
+  4. Die Installationsroutine ist unter:
          http://[Ihre Seite]/html/install/
      zu finden
+  
+  WINDOWS
+  -------
+  
+  1. Entpachen Sie die Datei 
+  
+     osis_webprinter_pr*.*.zip
+  
+     z.b. mit PowerArchiver http://www.powerarchiver.com/
+     
+  2. Übertragen Sie OSIS WebPrinter per FTP in das Verzeichnis Ihres 
+     WebServers
+  
+  3. CHMOD 666
+     Die Installationsroutine benötigt Schreibrechte auf die
+     Dateien config.php und config-old.php
+     
+     Eine Anleitung für Unix Systeme finden Sie unter 
+     ~/html/installation/chmod/windows_ftp_client.htm
+     
+     Sollte OSIS Web Printer auf einem Windows System laufen,
+     finden Sie eine Anleitung unter
+     
+     ~/html/installation/chmod/windows_system.htm
+  
+  4. Die Installationsroutine ist unter:
+           http://[Ihre Seite]/html/install/
+     zu finden
+    
+    
+  Hinweise bei der Installationsroutine: 
+  ------------------------------------------------------------------------
+  
+  OSIS WebPrinter benötigt auf Ihrem System PHP 4.1 oder höher 
+  (4.3.0 empfohlen). Sollten Sie eine ältere PHP Version
+  verwenden, ist eine Installtion nicht möglich. Bitte
+  Installieren Sie sich eine aktuelle PHP Version http://www.php.net/
+  
+  OSIS WebPrinter benötigt
+  magic_quotes_gpc ON
+  magic_quotes_runtime OFF
+
+  Bei der Installationsroutine werden die PHP-Konfigurations-
+  einstellungen geprüft. Sollte die OSIS Web Printer Installtion
+  einen Fehler finden, erhalten Sie entsprechende Warnhinweise.
+  
+  Sie können in der php.ini diese Konfiguration ändern, oder
+  fallse Sie den OSIS WebPrinter in Verbindung mit dem Apache Webserver
+  verwenden, können Sie in das OSIS WebPrinter Verzeichnis eine .htaccess
+  anlegen. 
+  
+  Ein Beispiel der .htaccess liegt in dem Verzeichnis
+  ~/html/installation/extras/
   
   
   Manuelle Installation
@@ -95,12 +151,14 @@
   
   
   Wie Sie einen WebServer mit Datenbank als Testumgebung
-  auf Ihrem System installieren können finden Sie unter
+  auf Ihrem System installieren können, finden Sie unter
   
   ~/html/installation/wamp.txt  für Windows Anwender
   ~/html/installation/lanp.txt  für Linux Anwender
 
-  
+  ------------------------------------------------------------------------
+
+  Probleme mit der Installationsroutine:
   
 have fun
   

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.4 2003/03/28 17:43:12 r23 Exp $
+   $Id: index.php,v 1.5 2003/03/30 16:11:31 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -134,8 +134,10 @@
       print_CHM_check();
       break;
     case 'Check':
-      do_check_php();
       do_check_chmod();
+      break;
+    case 'PHP_Check':
+      do_check_php();
       break;
     case 'Set Language':
       $currentlang = $alanguage;

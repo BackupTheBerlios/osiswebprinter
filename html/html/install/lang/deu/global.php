@@ -1,6 +1,6 @@
 <?php 
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.5 2003/03/29 22:31:47 r23 Exp $
+   $Id: global.php,v 1.6 2003/03/30 16:11:31 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -27,29 +27,41 @@
 define('HTML_PARAMS','dir="LTR" lang="de"');
 define('CHARSET', 'iso-8859-1');
 define('INSTALLATION', 'OSIS Web Printer Installation');
-define('GREAT', 'Willkommen bei OSIS Web Printer.');
-define('GREAT_1', 'Die Komplettlösung zur schnellen Anbindung von Webanwendungen an Toshiba Tec Web Printer.'); 
-define('SELECT_LANGUAGE_1', 'Auswahl Ihrer Sprache.');
-define('SELECT_LANGUAGE_2', 'Sprachen: ');
 
 define('BTN_SET_LANGUAGE', 'Sprache festlegen');
 define('BTN_CONTINUE', 'Weiter');
 define('BTN_NEXT' ,'Weiter');
 define('BTN_RECHECK', 'wiederholen');
 
+define('GREAT', 'Willkommen bei OSIS Web Printer.');
+define('GREAT_1', 'Die Komplettlösung zur schnellen Anbindung von Webanwendungen an Toshiba Tec Web Printer.'); 
+define('SELECT_LANGUAGE_1', 'Auswahl Ihrer Sprache.');
+define('SELECT_LANGUAGE_2', 'Sprachen: ');
+
 define('DEFAULT_1', 'OSIS Web Printer ist eine allumfassende L&ouml;sung f&uuml;r das Drucken aus Ihrer Web-Anwendung per e-Mail, FTP und XML. Mit der F&uuml;lle von Werkzeugen,  die Ihnen zur Verf&uuml;gung stehen, k&ouml;nnen Sie praktisch &uuml;ber das  Internet drucken. Diese Anwendung installiert die OSIS Web Printer Datenbank  und hilft Ihnen bei der Konfiguration.');
 define('DEFAULT_2', 'Dieses Programm ist freie Software. Sie k&ouml;nnen es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation ver&ouml;ffentlicht, weitergeben und/oder modifizieren, entweder gem&auml;&szlig; Version 2 der Lizenz  oder (nach Ihrer Option) jeder sp&auml;teren Version.');
 define('DEFAULT_3', 'Die Ver&ouml;ffentlichung dieses Programms erfolgt in der Hoffnung, da&szlig; es Ihnen von Nutzen sein wird, aber ohne irgendeine Garantie, sogar ohne die implizite Garantie der Marktreife oder der Verwendbarkeit f&uuml;r einen bestimmten Zweck.');
 define('DEFAULT_4', 'Bitte lesen ');
 define('DEFAULT_5', 'Sie die GNU General Public License.');
+
+define('PHP_CHECK_1', 'PHP Diagnose');
+define('PHP_CHECK_2', 'Hier pr&uuml;fen wir die Konfigurationseinstellungen Ihrer PHP Installation. <a href=\'phpinfo.php\' target=\'_blank\'>PHP Info</a>');
+define('PHP_CHECK_3', 'Ihre PHP Version ist ');
+define('PHP_CHECK_4', 'Bitte installieren Sie eine aktuelle PHP Version - <a href=\'http://www.php.net\' target=\'_blank\'>http://www.php.net</a>');
+define('PHP_CHECK_5', 'Es sind uns keine Probelme mit Ihrer PHP Version in Verbindung mit OSIS Web Printer bekannt.');
+define('PHP_CHECK_6', 'magic_quotes_gpc is Off.');
+define('PHP_CHECK_7', 'Tragen Sie in Ihre .htaccess Datei folgende Zeile ein:<br />php_flag magic_quotes_gpc On');
+define('PHP_CHECK_8', 'magic_quotes_gpc is ON.');
+define('PHP_CHECK_9', 'magic_quotes_runtime is On.');
+define('PHP_CHECK_10', 'Tragen Sie in Ihre .htaccess Datei folgende Zeile ein:<br />php_flag magic_quotes_runtime Off');
+define('PHP_CHECK_11', 'magic_quotes_runtime is Off.');
+
 define('CHMOD_CHECK_1', 'CHMOD Check');
-define('CHMOD_CHECK_2', 'Wir &uuml;berpr&uuml;fen hier ob die Zugriffsrechte (CHMOD) f&uuml;r das Schreiben in die Konfiguration-Dateien richtig sind. Die OSIS Web  Printer Installation schreibt in Ihre Konfigurationsdateien Ihre Zugangsdaten  verschl&uuml;sselt.');
+define('CHMOD_CHECK_2', 'Wir &uuml;berpr&uuml;fen hier ob die Zugriffsrechte (CHMOD) f&uuml;r das Schreiben in die Konfiguration-Dateien richtig ist. Die OSIS Web  Printer Installation schreibt in Ihre Konfigurationsdateien Ihre Zugangsdaten  verschl&uuml;sselt.');
 define('CHMOD_CHECK_3', 'CHMOD ~/includes/config.php ist 666 -- RICHTIG');
 define('CHMOD_CHECK_4', 'Bitte &auml;ndern Sie die Zugriffsrechte (CHMOD 666) der Datei ~/includes/config.php ');
 define('CHMOD_CHECK_5', 'CHMOD ~/includes/config-old.php ist 666 -- RICHTIG');
 define('CHMOD_CHECK_6', 'Bitte &auml;ndern Sie die Zugriffsrechte (CHMOD 666) der Datei ~/includes/config-old.php ');
-
-
 
 
 define('_ADMIN_EMAIL','Admin Email');
@@ -63,19 +75,11 @@ define('_BTN_NEWINSTALL','New install');
 define('_BTN_UPGRADE','Upgrade');
 define('_BTN_CONTINUE','Continue');
 define('_BTN_FINISH','Finish');
-define('_BTN_NEXT','Next');
-define('_BTN_RECHECK','Re-check');
-define('_BTN_SET_LANGUAGE','Set Language');
 define('_BTN_SET_LOGIN','Set Login');
 define('_BTN_START','Start');
 define('_BTN_SUBMIT','Submit');
 define('_CHANGE_INFO_1','Please correct your database information.');
-define('_CHMOD_CHECK_1','CHMOD Check');
-define('_CHMOD_CHECK_2','We will first check to see that your CHMOD settings are correct in order for the script to write to the file. If your settings are not correct, this script will not be able to encrypt your data in your config file. Encrypting the SQL data is added security, and is set by this script. You will also not be able to update your preferences from your admin once your site is up and running.');
-define('_CHMOD_CHECK_3','CHMOD setting for config.php is 666 -- correct, this script can write to the file');
-define('_CHMOD_CHECK_4','Please set your CHMOD on config.php to 666 so this script can write and encrypt the DB data');
-define('_CHMOD_CHECK_5','CHMOD setting for config-old.php is 666 -- correct, this script can write to the file');
-define('_CHMOD_CHECK_6','Please set your CHMOD on config-old.php to 666 so this script can write and encrypt the DB data');
+
 define('_CHM_CHECK_1', 'Please enter your DB info. If you do not have root access to your DB (virtual hosting, etc), you will need to make your database before you proceed. A good rule of thumb, if you cannot create databases through phpMyAdmin because of virtual hosting, or security on mySQL, then this script will not be able to create the db for you. This script will still be able to fill the database, and will still need to be run.');
 define('_CONTINUE_1','Setting Your DB Preferences');
 define('_CONTINUE_2','You can now set up your administrative account. If you pass on this set up, your login for the administrative account will be Admin / Password (case sensitive).  It is advisable to set it up now, and not wait until later.');
@@ -117,23 +121,6 @@ define('_NO','No');
 define('_NOTMADE','Unable to make ');
 define('_NOTSELECT','Unable to select database.');
 define('_NOTUPDATED','Unable to update ');
-define('_PHPNUKE_1','Upgrading from PHP-Nuke 4.4?');
-define('_PHPNUKE_2','Please read the following note, and press the <b>PHP-Nuke 4.4</b> button when ready.<br><br> This script will leave intact your forums DB but this version will not manage the data.<i> There is an upgrade script for this forum data that is being tested. It is currently held in the pn-modules CVS</i><br><br> We do not have PHPBB included into the release, but the upgrade script is the same. It will not destroy any of your data.');
-define('_PHPNUKE_3','Upgrading from PHP-Nuke 5?');
-define('_PHPNUKE_4','Just press the <b>PHP-Nuke 5</b> button');
-define('_PHPNUKE_5','Upgrading from PHP-Nuke 5.2?');
-define('_PHPNUKE_6','Just press the <b>PHP-Nuke 5.2</b> button');
-define('_PHPNUKE_7','Upgrading from PHP-Nuke 5.3?');
-define('_PHPNUKE_8','Just press the <b>PHP-Nuke 5.3</b> button');
-define('_PHPNUKE_9','Upgrading from PHP-Nuke 5.3.1?');
-define('_PHPNUKE_10','Just press the <b>PHP-Nuke 5.3.1</b> button');
-define('_PHPNUKE_11','Upgrading from PHP-Nuke 5.4?');
-define('_PHPNUKE_12','Just press the <b>PHP-Nuke 5.4</b> button');
-define('_PHP_CHECK_1','Your PHP version is ');
-define('_PHP_CHECK_2','You need to upgrade PHP to at least 4.0.1 - <a href=\'http://www.php.net\'>http://www.php.net</a>');
-define('_PHP_CHECK_3','Not Good! magic_quotes_gpc is Off.<br>This can often be fixed using a .htaccess file with the following line:<br>php_flag magic_quotes_gpc On');
-define('_PHP_CHECK_4','Not Good! magic_quotes_runtime is On.<br>This can often be fixed using a .htaccess file with the following line:<br>php_flag magic_quotes_runtime Off');
-define('_PN6_1','Admin: You Will Need To Re-Save Your Website Settings In The Admin Page ASAP!');
 define('_PN6_2','(We Are Sorry For This Inconvience)');
 define('_PN6_3','ERROR: File not found: ');
 define('_PN6_4','Done converting old-style button blocks.');

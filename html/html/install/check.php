@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: check.php,v 1.4 2003/03/29 22:31:47 r23 Exp $
+   $Id: check.php,v 1.5 2003/03/30 16:11:31 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -28,20 +28,52 @@
 /** Checks various php settings **/
 /** by Bob Herald **/
 function do_check_php() {
+   global $currentlang;
 
-   if (phpversion() < "4.0.1") {
-      $phpver = phpversion();
-      echo "<br /><font class=\"ow-title\">"._PHP_CHECK_1.$phpver."<br />
-      "._PHP_CHECK_2."</font><br />";
+   echo '<font class="ow-title">' . PHP_CHECK_1 . '</font><br /><br />';
+   echo '<font class="ow-normal">' . PHP_CHECK_2. '</font><br />';
+   
+   $check_php = true;
+   $phpver = phpversion();
+   echo '<br /><font class="ow-title">' . PHP_CHECK_3 . $phpver. '</font><br />';
+
+   if (phpversion() < '4.1.0') {
+     echo '<font class="ow-error">' . PHP_CHECK_4 . '</font><br />';
+     $check_php = false;
+   } else {
+     echo '<font class="ow-normal">' . PHP_CHECK_5. '</font><br />';
    }
 
    if (get_magic_quotes_gpc() == 0) {
-      echo "<br /><font class=\"ow-title\">"._PHP_CHECK_3."</font><br />";
-   }
-
+     echo '<br /><font class="ow-error">' . PHP_CHECK_6 . '</font><br />';
+     echo '<font class="ow-title">' . PHP_CHECK_7 . '</font><br />';
+     $check_php = false;
+   } else {
+     echo '<br /><font class="ow-title">' . PHP_CHECK_8 . '</font><br />';
+   } 
+   
    if (get_magic_quotes_runtime() == 1) {
-      echo "<br /><font class=\"ow-title\">"._PHP_CHECK_4."</font><br />";
+     echo '<br /><font class="ow-error">' . PHP_CHECK_9. '</font><br />';
+     echo '<font class="ow-title">' . PHP_CHECK_10 . '</font><br />';
+     $check_php = false;
+   } else {
+     echo '<br /><font class="ow-title">' . PHP_CHECK_11 . '</font><br />';
    }
+   
+   if ($check_php == 'true') {
+     echo '<p><form action="index.php" method="post">';
+     echo '<input type="hidden" name="currentlang" value="' . $currentlang . '">';
+     echo '<input type="hidden" name="op" value="Check">';
+     echo '<center><input type="submit" value="' . BTN_CONTINUE . '"></center></form></p>';
+   } else {
+     echo '<p><form action="index.php" method="post">';
+     echo '<input type="hidden" name="currentlang" value="' . $currentlang . '">';
+     echo '<input type="hidden" name="op" value="PHP_Check">';
+     echo '<center><input type="submit" value="' . BTN_RECHECK . '"></center></form></p>';
+   }
+   
+   
+   
 }
 
 /** Checks if config.php has the correct permissions set **/
@@ -51,24 +83,24 @@ function do_check_chmod() {
    echo '<font class="ow-title">' . CHMOD_CHECK_1 . '</font><br /><br />';
    echo '<font class="ow-normal">' . CHMOD_CHECK_2. '</font>';
    
-   $check = false;
+   $check_chmod = true;
    $file='../includes/config.php';
    if (is_writable($file)){
      echo '<br /><br /><font class="ow-title">' . CHMOD_CHECK_3 . '</font><br />';
-     $check = true;
    } else {
      echo '<br /><br /><font class="ow-error">' . CHMOD_CHECK_4 . '</font><br />';
+     $check_chmod = false;
    }
    
    $file='../includes/config-old.php';
    if (is_writable($file)){
      echo '<p><font class="ow-title">' . CHMOD_CHECK_5 . '</font></p>';
-     $check = true;
    } else {
      echo '<p><font class="ow-error">' . CHMOD_CHECK_6 . '</font></p>';
+     $check_chmod = false;
    }
    
-   if ($check == 'true') {
+   if ($check_chmod == 'true') {
      echo '<p><form action="index.php" method="post">';
      echo '<input type="hidden" name="currentlang" value="' . $currentlang . '">';
      echo '<input type="hidden" name="op" value="CHM_check">';
@@ -76,8 +108,8 @@ function do_check_chmod() {
    } else {
      echo '<p><form action="index.php" method="post">';
      echo '<input type="hidden" name="currentlang" value="' . $currentlang . '">';
-     echo '<center><input type="hidden" name="op" value="Check">';
-     echo '<input type="submit" value="' . BTN_RECHECK . '"></center></form></p>';
+     echo '<input type="hidden" name="op" value="Check">';
+     echo '<center><input type="submit" value="' . BTN_RECHECK . '"></center></form></p>';
    }
 }
 ?>

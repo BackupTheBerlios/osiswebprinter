@@ -1,0 +1,4 @@
+# $Id: .htaccess,v 1.1 2003/03/30 16:11:31 r23 Exp $
+
+php_flag magic_quotes_gpc ON
+php_flag magic_quotes_runtime OFF
