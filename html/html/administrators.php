@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: administrators.php,v 1.6 2003/05/02 09:48:04 r23 Exp $
+   $Id: administrators.php,v 1.7 2003/05/02 17:00:39 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -43,16 +43,15 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
-
-/*  
+/*
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
 */
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['administrators']);
-
-
+  require_once(OWP_FUNCTIONS_DIR . 'owp_administrators.php');
+/*
   $aErrors = '';
   if ( $REQUEST_METHOD == 'POST' ) 
   {
@@ -83,11 +82,15 @@
         $aErrors = TEXT_UNAME_ERROR;
       }
   } 
-  
-  if ( $action == 'delete' )
-  {
-    $aSQL = "delete FROM " . TABLE_ADMINISTRATORS . " WHERE ( administrator_id = '$admin_id' )";
-    tep_db_query( $aSQL );
+*/  
+  switch ($_GET['action']) {
+    case 'deleteconfirm':
+      $db->Execute("DELETE FROM " . $owpDBTable['administrators'] . " WHERE admin_id = '" . $_GET['aID'] . "'");
+      $db->Execute("DELETE FROM " . $owpDBTable['administrators_info'] . " WHERE admin_info_id = '" . $_GET['aID'] . "'");
+      
+      $messageStack->add_session(SUCCESS_DELETE_USER, 'success');
+      owpRedirect(owpLink($owpFilename['administrators'], 'page=' . $_GET['page']));
+      break;
   }
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -116,6 +119,106 @@
     </table></td>
 <!-- body_text //-->
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
+<?php
+  if ($_GET['action'] == 'edit') {
+    $admin_sql = "SELECT admin_id, admin_gender, admin_firstname, admin_lastname,
+                         admin_email_address, admin_telephone, admin_fax, 
+                         admin_password, admin_allowed_pages, admin_newsletter
+                  FROM " . $owpDBTable['administrators'] . " 
+                  WHERE admin_id = '" . $_GET['aID'] . "'";
+    $admin_query = $db->Execute($admin_sql);
+    $admins = $admin_query->fields;   
+    $aInfo = new objectInfo($admins);
+
+    $newsletter_array = array(array('id' => '1', 'text' => NEWSLETTER_YES),
+                              array('id' => '0', 'text' => NEWSLETTER_NO));
+?>
+      <tr>
+        <td class="owp-title"><?php echo HEADING_TITLE . ' : ' . $aInfo->admin_firstname . ' ' . $aInfo->admin_lastname ; ?></td>
+      </tr>
+      </tr>
+      <tr>
+        <td><?php echo owpTransLine('1', '10');; ?></td>
+      </tr>
+      <tr><?php echo owpDrawForm('user', $owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $aInfo->admin_id . 'action=update', 'post', 'onSubmit="return check_form();"'); ?>
+        <td class="formAreaTitle"><?php echo CATEGORY_PERSONAL; ?></td>
+      </tr>
+      <tr>
+        <td class="formArea"><table border="0" cellspacing="2" cellpadding="2">
+          <tr>
+            <td class="main"><?php echo GENDER; ?></td>
+            <td class="main"><?php echo owpRadioField('admin_gender', 'm', false, $aInfo->admin_gender) . '&nbsp;&nbsp;' . MALE . '&nbsp;&nbsp;' . owpRadioField('admin_gender', 'f', false, $aInfo->admin_gender) . '&nbsp;&nbsp;' . FEMALE; ?></td>
+          </tr>
+          <tr>
+            <td class="main"><?php echo FIRST_NAME; ?></td>
+            <td class="main"><?php echo owpInputField('admin_firstname', $aInfo->admin_firstname, 'maxlength="32"', true); ?></td>
+          </tr>
+          <tr>
+            <td class="main"><?php echo LAST_NAME; ?></td>
+            <td class="main"><?php echo owpInputField('admin_lastname', $aInfo->admin_lastname, 'maxlength="32"', true); ?></td>
+          </tr>
+          <tr>
+            <td class="main"><?php echo EMAIL_ADDRESS; ?></td>
+            <td class="main"><?php echo owpInputField('admin_email_address', $aInfo->admin_email_address, 'maxlength="96"', true); ?></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><?php echo owpTransLine('1', '10');; ?></td>
+      </tr>
+      <tr>
+        <td class="formAreaTitle"><?php echo CATEGORY_CONTACT; ?></td>
+      </tr>
+      <tr>
+        <td class="formArea"><table border="0" cellspacing="2" cellpadding="2">
+          <tr>
+            <td class="main"><?php echo TELEPHONE_NUMBER; ?></td>
+            <td class="main"><?php echo owpInputField('admin_telephone', $aInfo->admin_telephone, 'maxlength="32"', true); ?></td>
+          </tr>
+          <tr>
+            <td class="main"><?php echo FAX_NUMBER; ?></td>
+            <td class="main"><?php echo owpInputField('admin_fax', $aInfo->admin_fax, 'maxlength="32"'); ?></td>
+          </tr>
+          <tr>
+            <td class="main"><?php echo NEWSLETTER; ?></td>
+            <td class="main"><?php echo owpPullDownMenu('admin_newsletter', $newsletter_array, $aInfo->admin_newsletter); ?></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><?php echo owpTransLine('1', '10');; ?></td>
+      </tr>
+      <tr>
+        <td class="formAreaTitle"><?php echo TEXT_PARTIAL_ACCESS; ?></td>
+      </tr>
+      <tr>
+        <td class="formArea"><table border="0" cellspacing="2" cellpadding="2">
+          <tr>
+            <td><input type="radio" name="adm_type" value="all"></td>
+            <td class="main"><?php print( TEXT_FULL_ACCESS ); ?></td>
+          </tr>
+          <tr>
+            <td valign="top"><input type="radio" name="adm_type" value="not_all" checked></td>
+            <td class="main"><?php echo TEXT_SELECT; ?><br><br>
+               <SELECT name="adm_pages[]" size="<?php print( count( $aADMBoxes ) ); ?>" multiple>
+<?php
+   foreach( $aADMBoxes as $aKey => $aValue ) {
+     print( "<option value=\"$aKey\">$aValue</option>" );
+   }
+?>
+              </SELECT></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><?php echo owpTransLine('1', '10');; ?></td>
+      </tr>
+      <tr>
+        <td align="right" class="main"><?php echo owpImageSubmit('button_update.gif', IMAGE_UPDATE) . ' <a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $aInfo->admin_id . '') . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>'; ?></td>
+      </tr></form>
+<?php
+  } else {
+?>
       <tr>
         <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
       </tr>
@@ -186,6 +289,16 @@
                     <td class="smallText" valign="top"><?php echo $admin_split->display_count($admin_query_numrows, MAX_DISPLAY_SEARCH_RESULTS, $_GET['page'], TEXT_DISPLAY_NUMBER_OF_USER); ?></td>
                     <td class="smallText" align="right"><?php echo $admin_split->display_links($admin_query_numrows, MAX_DISPLAY_SEARCH_RESULTS, MAX_DISPLAY_PAGE_LINKS, $_GET['page'], owpGetAllGetParameters(array('page', 'info', 'x', 'y', 'aID'))); ?></td>
                   </tr>
+<?php
+  if (!$_GET['action']) {
+?>
+              <tr>
+              <td align="right"><?php if (OWP_CSV_EXCEL == 'true') { echo '<a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&action=download') . '">' . owpImageButton('excel_now.gif', IMAGE_CSV_DOWNLOAD) . '</a>'; } ?></td>
+              <td align="right"><?php echo '<a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&action=new') . '">' . owpImageButton('button_new_user.gif', IMAGE_NEW_USER) . '</a>'; ?></td>
+              </tr>
+<?php
+  }
+?>
                 </table></td>
               </tr>
             </table></td>
@@ -193,11 +306,18 @@
   $heading = array();
   $contents = array();
   switch ($_GET['action']) {
+    case 'delete':
+        $heading[] = array('text' => '<b>' . TEXT_INFO_HEADING_DELETE_USER . '</b>');
+  
+        $contents[] = array('text' => TEXT_INFO_DELETE_INTRO);
+        $contents[] = array('text' => '<br><b>' . $aInfo->admin_firstname . ' ' . $aInfo->admin_lastname . '</b>');
+        $contents[] = array('align' => 'center', 'text' => '<br><a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $aInfo->admin_id . '&action=deleteconfirm') . '">' . owpImageButton('button_delete.gif', IMAGE_DELETE) . '</a> <a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $aInfo->admin_id) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      break;
     default:   
       if (is_object($aInfo)) {
         $heading[] = array('text' => '<b>' . $aInfo->admin_firstname . ' ' . $aInfo->admin_lastname . '</b>');
           
-        $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $aInfo->admin_id . '&action=edit') . '">' . owpImageButton('button_edit.gif', IMAGE_EDIT) . '</a> <a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $cInfo->admin_id . '&action=delete') . '">' . owpImageButton('button_delete.gif', IMAGE_DELETE) . '</a>');
+        $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $aInfo->admin_id . '&action=edit') . '">' . owpImageButton('button_edit.gif', IMAGE_EDIT) . '</a> <a href="' . owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $aInfo->admin_id . '&action=delete') . '">' . owpImageButton('button_delete.gif', IMAGE_DELETE) . '</a>');
         $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['mail'], 'selected_box=tools&admin=' . $aInfo->admin_email_address) . '">' . owpImageButton('button_email.gif', IMAGE_EMAIL) . '</a>');
         $contents[] = array('text' => '<br>' . TEXT_DATE_ACCOUNT_CREATED . ' ' . owpDateShort($aInfo->date_account_created));
         $contents[] = array('text' => '<br>' . TEXT_DATE_ACCOUNT_LAST_MODIFIED . ' ' . owpDateShort($aInfo->date_account_last_modified));
@@ -219,6 +339,9 @@
           </tr>
         </table></td>
       </tr>
+<?php
+  }
+?>
     </table></td>
 <!-- body_text_eof //-->
   </tr>
@@ -232,88 +355,3 @@
 </body>
 </html>
 <?php require(OWP_INCLUDES_DIR . 'nice_exit.php'); ?>
-              <table>
-                    <form action="<?php print( $owpSelf ); ?>" method="post">
-                    <tr>
-                        <td width="10">
-                            &nbsp;
-                        </td>
-                        <td colspan="2" class="infoBoxHeading">
-                            <?php print( TEXT_ADD_ADMINISTRATOR ); ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="10">
-                            &nbsp;
-                        </td>
-                        <td class="infoBoxHeading" valign="top">
-                            <table>
-                                <tr>
-                                    <td class="main">
-                                        <?php print( TEXT_ADMINISTRATOR_USERNAME ); ?>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="username" maxlength="20">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="main">
-                                        <?php print( TEXT_ADMINISTRATOR_PASSWORD ); ?>
-                                    </td>
-                                    <td>
-                                        <input type="password" name="password" maxlength="20">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="main">
-                                        <?php print( TEXT_ADMINISTRATOR_CONFPWD ); ?>
-                                    </td>
-                                    <td>
-                                        <input type="password" name="confpwd" maxlength="20">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td valign="top">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <input type="radio" name="adm_type" value="all">
-                                    </td>
-                                    <td class="main">
-                                        <?php print( TEXT_FULL_ACCESS ); ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td valign="top">
-                                        <input type="radio" name="adm_type" value="not_all" checked>
-                                    </td>
-                                    <td class="main">
-                                        <?php print( TEXT_PARTIAL_ACCESS ); ?><br><br>
-                                        <SELECT name="adm_pages[]" size="<?php print( count( $aADMBoxes ) ); ?>" multiple>
-                                        <?php
-                                            foreach( $aADMBoxes as $aKey => $aValue )
-                                            {
-                                                print( "<option value=\"$aKey\">$aValue</option>" );
-                                            }
-                                        ?>
-                                        </SELECT>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="10">
-                            &nbsp;
-                        </td>
-                        <td colspan="2" class="infoBoxHeading">
-                            <input type="submit" name="Submit" value="<?php print( TEXT_ADMIN_SAVE ); ?>">
-                        </td>
-                    </tr>
-                    </form>
-                </table>
