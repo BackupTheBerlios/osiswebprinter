@@ -1,17 +1,30 @@
 <?php
-/*
-  $Id: owp_language.php,v 1.1 2003/04/20 06:21:39 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: owp_language.php,v 1.2 2003/04/20 06:23:12 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: language.php,v 1.1 2002/04/24 16:48:13 hpdl
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2002 osCommerce
+   Copyright (c) 2002 osCommerce
 
-  Released under the GNU General Public License
-
-  browser language detection logic Copyright phpMyAdmin (select_lang.lib.php3 v1.24 04/19/2002)
-                                   Copyright Stephane Garin <sgarin@sgarin.com> (detect_language.php v0.1 04/02/2002)
-*/
+   browser language detection logic:
+   Copyright phpMyAdmin (select_lang.lib.php3 v1.24 04/19/2002)
+   Copyright Stephane Garin <sgarin@sgarin.com> (detect_language.php v0.1 04/02/2002)
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
   class language {
     var $languages, $catalog_languages, $browser_languages, $language;
