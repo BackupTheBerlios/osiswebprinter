@@ -1,14 +1,26 @@
 <?php
-/*
-  $Id: countries.php,v 1.1 2003/04/23 16:06:27 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: countries.php,v 1.2 2003/04/23 16:09:00 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: countries.php,v 1.25 2002/03/17 17:34:47 harley_vb
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2002 osCommerce
-
-  Released under the GNU General Public License
-*/
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
   require('includes/application_top.php');
 
