@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: zones.php,v 1.2 2003/04/23 16:09:00 r23 Exp $
+   $Id: zones.php,v 1.3 2003/04/25 16:00:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,6 +23,9 @@
    ---------------------------------------------------------------------- */
 
 define('HEADING_TITLE', 'Bundesl&auml;nder');
+define('TITLE', 'Bundesl&auml;nder');
+define('NAVBAR_TITLE', 'Bundesl&auml;nder');
+define('HEADING_TITLE', 'Bundesl&auml;nder');
 
 define('TABLE_HEADING_COUNTRY_NAME', 'Land');
 define('TABLE_HEADING_ZONE_NAME', 'Bundesland');
@@ -38,4 +41,7 @@ define('TEXT_INFO_DELETE_INTRO', 'Sind Sie sicher, dass Sie dieses Bundesland l&
 define('TEXT_INFO_HEADING_NEW_ZONE', 'neues Bundesland');
 define('TEXT_INFO_HEADING_EDIT_ZONE', 'Bundesland bearbeiten');
 define('TEXT_INFO_HEADING_DELETE_ZONE', 'Bundesland l&ouml;schen');
+
+define('ERROR_CSV_TEMP_DIRECTORY_NOT_WRITEABLE', 'Fehler: Das CSV-Dateiverzeichnis ist schreibgesch&uuml;tzt.');
+define('ERROR_CSV_TEMP_DIRECTORY_DOES_NOT_EXIST', 'Fehler: Das CSV-Dateiverzeichnis ist nicht vorhanden.');
 ?>

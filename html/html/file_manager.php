@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: file_manager.php,v 1.13 2003/04/24 06:03:13 r23 Exp $
+   $Id: file_manager.php,v 1.14 2003/04/25 15:56:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,34 +23,43 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
-  
+/*  
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
-  
+*/  
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['file_manager']);
 
-  if (!tep_session_is_registered('current_path')) {
-    $current_path = OWP_ROOT_PATH;
-    tep_session_register('current_path');
-  }
+ # if (!isset($_SESSION['current_path'])) {
+ #   $_SESSION['current_path'] = OWP_ROOT_PATH;
+ # }
 
-  if ($_GET['goto']) {
-    $current_path = $_GET['goto'];
+  if (!empty($_GET['goto'])) {
+    $_SESSION['current_path'] = $_GET['goto'];
     owpRedirect(owpLink($owpFilename['file_manager']));
   }
-
+  
+  if (isset($_SESSION['current_path'])) {
+    $current_path = $_SESSION['current_path'];
+  } else {
+     $_SESSION['current_path'] = OWP_ROOT_PATH;
+  }
+/*
   if (strstr($current_path, '..')) $current_path = OWP_ROOT_PATH;
 
-  if (!is_dir($current_path)) $current_path = OWP_ROOT_PATH;
+#  if (!is_dir($current_path)) $current_path = OWP_ROOT_PATH;
 
   if (!ereg('^' . OWP_ROOT_PATH, $current_path)) $current_path = OWP_ROOT_PATH;
 
   if ($_GET['action']) {
     switch ($_GET['action']) {
       case 'reset':
-        tep_session_unregister('current_path');
+        if (phpversion() < '4.3.0') {
+	  session_unregister('current_path');
+	} else {
+	  unset($_SESSION['current_path']);
+        }
         owpRedirect(owpLink($owpFilename['file_manager']));
         break;
       case 'deleteconfirm':
@@ -72,7 +81,7 @@
         }
         break;
       case 'processuploads':
-        $_current_path = tep_get_local_path($current_path);
+        $_current_path = owpGetLocalPath($current_path);
 
         if (!is_writeable($_current_path)) {
           if (is_dir($_current_path)) {
@@ -121,16 +130,16 @@
         break;
     }
   }
-
   $in_directory = substr(substr(OWP_ROOT_PATH, strrpos(OWP_ROOT_PATH, '/')), 1);
   $current_path_array = explode('/', $current_path);
   $document_root_array = explode('/', OWP_ROOT_PATH);
   $goto_array = array(array('id' => OWP_ROOT_PATH, 'text' => $in_directory));
   for ($i=0; $i<sizeof($current_path_array); $i++) {
     if ($current_path_array[$i] != $document_root_array[$i]) {
-      $goto_array[] = array('id' => implode('/', tep_array_slice($current_path_array, 0, $i+1)), 'text' => $current_path_array[$i]);
+      $goto_array[] = array('id' => implode('/', owpArraySlice($current_path_array, 0, $i+1)), 'text' => $current_path_array[$i]);
     }
   }
+ */
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -146,7 +155,14 @@
 <!-- header //-->
 <?php require(OWP_INCLUDES_DIR . 'header.php'); ?>
 <!-- header_eof //-->
-
+<?php
+echo $current_path;
+echo '<br>';
+echo $_SESSION['current_path'];
+echo '<br>';
+print_r($_SESSION);
+print_r($current_path);
+?>
 <!-- body //-->
 <table border="0" width="100%" cellspacing="2" cellpadding="2">
   <tr>
@@ -161,7 +177,7 @@
         <td width="100%"><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr><?php echo owpDrawForm('goto', $owpFilename['file_manager'], '', 'get'); ?>
             <td class="owp-title"><?php echo HEADING_TITLE . '<br><span class="smallText">' . $current_path . '</span>'; ?></td>
-            <td class="owp-title" align="right"><?php echo owpTransLine('1', HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="owp-title" align="right"><?php echo owpTransLine('1', '10'); ?></td>
             <td class="owp-title" align="right"><?php echo owpPullDownMenu('goto', $goto_array, $current_path, 'onChange="this.form.submit();"'); ?></td>
           </form></tr>
         </table></td>
@@ -291,7 +307,7 @@
                 <td class="dataTableContent" onclick="document.location.href='<?php echo owpLink($owpFilename['file_manager'], $onclick_link); ?>'"><?php echo $contents[$i]['user']; ?></td>
                 <td class="dataTableContent" onclick="document.location.href='<?php echo owpLink($owpFilename['file_manager'], $onclick_link); ?>'"><?php echo $contents[$i]['group']; ?></td>
                 <td class="dataTableContent" align="center" onclick="document.location.href='<?php echo owpLink($owpFilename['file_manager'], $onclick_link); ?>'"><?php echo $contents[$i]['last_modified']; ?></td>
-                <td class="dataTableContent" align="right"><?php if ($contents[$i]['name'] != '..') echo '<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($contents[$i]['name']) . '&action=delete') . '">' . owpImage(OWP_ICONS_DIR . 'delete.gif', ICON_DELETE) . '</a>&nbsp;'; if (is_object($fInfo) && ($fInfo->name == $contents[$i]['name'])) { echo owpImage(OWP_INCLUDES_DIR . 'icon_arrow_right.gif'); } else { echo '<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($contents[$i]['name'])) . '">' . owpImage(OWP_INCLUDES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" align="right"><?php if ($contents[$i]['name'] != '..') echo '<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($contents[$i]['name']) . '&action=delete') . '">' . owpImage(OWP_ICONS_DIR . 'delete.gif', ICON_DELETE) . '</a>&nbsp;'; if (is_object($fInfo) && ($fInfo->name == $contents[$i]['name'])) { echo owpImage(OWP_IMAGES_DIR . 'icon_arrow_right.gif'); } else { echo '<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($contents[$i]['name'])) . '">' . owpImage(OWP_IMAGES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
   }

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: define_language.php,v 1.2 2003/04/19 05:50:23 r23 Exp $
+   $Id: define_language.php,v 1.3 2003/04/25 15:58:30 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,6 +22,8 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
+define('TITLE', 'Sprache definieren');
+define('NAVBAR_TITLE', 'Sprache definieren');
 define('HEADING_TITLE', 'Sprache definieren');
 
 define('TEXT_FILE_DOES_NOT_EXIST', 'Datei nicht vorhanden.');

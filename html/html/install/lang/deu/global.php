@@ -1,6 +1,6 @@
 <?php 
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.12 2003/04/21 21:08:31 r23 Exp $
+   $Id: global.php,v 1.13 2003/04/25 16:00:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -55,7 +55,7 @@ define('PHP_CHECK_1', 'PHP Diagnose');
 define('PHP_CHECK_2', 'Hier pr&uuml;fen wir die Konfigurationseinstellungen Ihrer PHP Installation. <a href=\'phpinfo.php\' target=\'_blank\'>PHP Info</a>');
 define('PHP_CHECK_3', 'Ihre PHP Version ist ');
 define('PHP_CHECK_4', 'Bitte installieren Sie eine aktuelle PHP Version - <a href=\'http://www.php.net\' target=\'_blank\'>http://www.php.net</a>');
-define('PHP_CHECK_5', 'Es sind uns keine Probelme mit Ihrer PHP Version in Verbindung mit OSIS Web Printer bekannt.');
+define('PHP_CHECK_OK', 'Es sind uns keine Probelme mit Ihrer PHP Version in Verbindung mit OSIS Web Printer bekannt.');
 define('PHP_CHECK_6', 'magic_quotes_gpc is Off.');
 define('PHP_CHECK_7', 'Tragen Sie in Ihre .htaccess Datei folgende Zeile ein:<br />php_flag magic_quotes_gpc On');
 define('PHP_CHECK_8', 'magic_quotes_gpc is ON.');

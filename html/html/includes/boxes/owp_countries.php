@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_countries.php,v 1.2 2003/04/23 16:09:00 r23 Exp $
+   $Id: owp_countries.php,v 1.3 2003/04/25 15:56:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,7 +22,7 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 ?>
-<!-- taxes //-->
+<!-- countries //-->
           <tr>
             <td>
 <?php
@@ -30,14 +30,11 @@
   $contents = array();
 
   $heading[] = array('text'  => BOX_HEADING_LOCATION_AND_TAXES,
-                     'link'  => tep_href_link(basename($PHP_SELF), tep_get_all_get_params(array('selected_box')) . 'selected_box=taxes'));
+                     'link'  => owpLink(basename($owpSelf), owpGetAllGetParameters(array('selected_box')) . 'selected_box=countries'));
 
-  if ($selected_box == 'taxes') {
-    $contents[] = array('text'  => '<a href="' . tep_href_link(FILENAME_COUNTRIES, '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_TAXES_COUNTRIES . '</a><br>' .
-                                   '<a href="' . tep_href_link(FILENAME_ZONES, '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_TAXES_ZONES . '</a><br>' .
-                                   '<a href="' . tep_href_link(FILENAME_GEO_ZONES, '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_TAXES_GEO_ZONES . '</a><br>' .
-                                   '<a href="' . tep_href_link(FILENAME_TAX_CLASSES, '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_TAXES_TAX_CLASSES . '</a><br>' .
-                                   '<a href="' . tep_href_link(FILENAME_TAX_RATES, '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_TAXES_TAX_RATES . '</a>');
+  if ($selected_box == 'countries') {
+    $contents[] = array('text'  => '<a href="' . owpLink($owpFilename['countries'], '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_TAXES_COUNTRIES . '</a><br>' .
+                                   '<a href="' . owpLink($owpFilename['zones'], '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_TAXES_ZONES . '</a>');
   }
 
   $box = new box;
@@ -45,4 +42,4 @@
 ?>
             </td>
           </tr>
-<!-- taxes_eof //-->
+<!-- countries_eof //-->

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.4 2003/04/22 07:25:51 r23 Exp $
+   $Id: global.php,v 1.5 2003/04/25 15:58:30 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -51,13 +51,17 @@ define('DATE_LONG', '%A, %d. %B %Y'); // this is used for strftime()
 define('HTML_PARAMS','dir="LTR" lang="de"');
 define('CHARSET', 'iso-8859-1');
 
-define('OWP_PAGE_TITLE', 'OSIS Web Printer');
-
 define('DATE_FORMAT_LONG', '%A, %d. %B %Y'); 
 define('DATE_FORMAT', 'd.m.Y');  // this is used for strftime()
 define('PHP_DATE_TIME_FORMAT', 'd.m.Y H:i:s'); 
 define('DATE_TIME_FORMAT', DATE_SHORT . ' %H:%M:%S');
 
+define('DEVELOPER_SITE', 'Homepage');
+define('SUPPORT_FORUMS', 'Foren');
+define('MAILING_LISTS', 'Mailingliste');
+define('FEEDBACK', 'Feedback');
+define('SUPPOORT', 'Support-Zentren');
+define('BUGS', 'Bug?');
 
 
 define('_ABOUTPOSTING','About posting');

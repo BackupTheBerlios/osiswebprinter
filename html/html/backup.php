@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: backup.php,v 1.14 2003/04/24 06:03:13 r23 Exp $
+   $Id: backup.php,v 1.15 2003/04/25 15:56:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -310,9 +310,9 @@
 
 // check if the backup directory exists
   $dir_ok = false;
-  if (is_dir(tep_get_local_path(DIR_FS_BACKUP))) {
+  if (is_dir(owpGetLocalPath(DIR_FS_BACKUP))) {
     $dir_ok = true;
-    if (!is_writeable(tep_get_local_path(DIR_FS_BACKUP))) $messageStack->add(ERROR_BACKUP_DIRECTORY_NOT_WRITEABLE, 'error');
+    if (!is_writeable(owpGetLocalPath(DIR_FS_BACKUP))) $messageStack->add(ERROR_BACKUP_DIRECTORY_NOT_WRITEABLE, 'error');
   } else {
     $messageStack->add(ERROR_BACKUP_DIRECTORY_DOES_NOT_EXIST, 'error');
   }
@@ -321,7 +321,7 @@
 <html <?php echo HTML_PARAMS; ?>>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
-<title><?php echo TITLE; ?></title>
+<title><?php echo OWP_NAME . ' :: ' . TITLE; ?></title>
 <META NAME="AUTHOR" CONTENT="OSIS GmbH">
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">
@@ -395,7 +395,7 @@
                 <td class="dataTableContent" onclick="document.location.href='<?php echo owpLink($owpFilename['backup'], $onclick_link); ?>'"><?php echo '<a href="' . owpLink($owpFilename['backup'], 'action=download&file=' . $entry) . '">' . owpImage(OWP_ICONS_DIR . 'file_download.gif', ICON_FILE_DOWNLOAD) . '</a>&nbsp;' . $entry; ?></td>
                 <td class="dataTableContent" align="center" onclick="document.location.href='<?php echo owpLink($owpFilename['backup'], $onclick_link); ?>'"><?php echo date(PHP_DATE_TIME_FORMAT, filemtime(DIR_FS_BACKUP . $entry)); ?></td>
                 <td class="dataTableContent" align="right" onclick="document.location.href='<?php echo owpLink($owpFilename['backup'], $onclick_link); ?>'"><?php echo number_format(filesize(DIR_FS_BACKUP . $entry)); ?> bytes</td>
-                <td class="dataTableContent" align="right"><?php if ( (is_object($buInfo)) && ($entry == $buInfo->file) ) { echo owpImage(OWP_INCLUDES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . owpLink($owpFilename['backup'], 'file=' . $entry) . '">' . owpImage(OWP_INCLUDES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" align="right"><?php if ( (is_object($buInfo)) && ($entry == $buInfo->file) ) { echo owpImage(OWP_IMAGES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . owpLink($owpFilename['backup'], 'file=' . $entry) . '">' . owpImage(OWP_IMAGES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
     }

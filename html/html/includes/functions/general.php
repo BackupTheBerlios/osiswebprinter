@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.9 2003/04/24 06:03:13 r23 Exp $
+   $Id: general.php,v 1.10 2003/04/25 15:58:30 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -310,6 +310,21 @@
     return stristr($HTTP_USER_AGENT, $component);
   }
 
+  function owpSetLanguageStatus($languages_id, $status) {
+    GLOBAL $db;
+
+    $owpDBTable = owpDBGetTables();
+
+    if ($status == '1') {
+      return $db->Execute("update " . $owpDBTable['languages'] . " set active = '1' where languages_id = '" . $languages_id . "'");
+    } elseif ($status == '0') {
+      return $db->Execute("update " . $owpDBTable['languages'] . " set active = '0' where languages_id = '" . $languages_id . "'");
+    } else {
+      return -1;
+    }
+  }
+
+
   function tep_tax_classes_pull_down($parameters, $selected = '') {
     $select_string = '<select ' . $parameters . '>';
     $classes_query = tep_db_query("select tax_class_id, tax_class_title from " . TABLE_TAX_CLASS . " order by tax_class_title");
@@ -464,15 +479,20 @@
     return $pieces[0];
   }
 
-  function tep_get_languages() {
-    $languages_query = tep_db_query("select languages_id, name, code, image, directory from " . TABLE_LANGUAGES . " order by sort_order");
-    while ($languages = tep_db_fetch_array($languages_query)) {
-      $languages_array[] = array('id' => $languages['languages_id'],
-                                 'name' => $languages['name'],
-                                 'code' => $languages['code'],
-                                 'image' => $languages['image'],
-                                 'directory' => $languages['directory']
+////
+// in use: categories.php, customers_status.php, define_language.php, index.php, manufacturers.php, meta_tags.php, orders_status.php, products_attributes.php, includes\system.php, includes\general.php, functions\languages.php
+  function owpGetLanguages() {
+    GLOBAL $db;
+
+    $owpDBTable = owpDBGetTables();
+
+    $languages_query = $db->Execute("select languages_id, name, iso_639_2, iso_639_1 from " . $owpDBTable['languages'] . " where active = '1' order by sort_order");
+    while ($languages = $languages_query->fields) {
+      $languages_array[] = array('name' => $languages['name'],
+                                 'iso_639_2' => $languages['iso_639_2'],
+                                 'iso_639_1' => $languages['iso_639_1']
                                 );
+      $languages_query->MoveNext();
     }
 
     return $languages_array;
@@ -748,7 +768,7 @@
   }
 
 // return a local directory path (without trailing slash)
-  function tep_get_local_path($path) {
+  function owpGetLocalPath($path) {
     if (substr($path, -1) == '/') $path = substr($path, 0, -1);
 
     return $path;
@@ -912,7 +932,7 @@
           if ($dir = @opendir(DIR_FS_CACHE)) {
             while ($cache_file = readdir($dir)) {
               $cached_file = $cache_blocks[$i]['file'];
-              $languages = tep_get_languages();
+              $languages = owpGetLanguages();
               for ($j=0; $j<sizeof($languages); $j++) {
                 $cached_file_unlink = ereg_replace('-language', '-' . $languages[$j]['directory'], $cached_file);
                 if (ereg('^' . $cached_file_unlink, $cache_file)) {
@@ -924,7 +944,7 @@
           }
         } else {
           $cached_file = $cache_blocks[$i]['file'];
-          $languages = tep_get_languages();
+          $languages = owpGetLanguages();
           for ($i=0; $i<sizeof($languages); $i++) {
             $cached_file = ereg_replace('-language', '-' . $languages[$i]['directory'], $cached_file);
             @unlink(DIR_FS_CACHE . $cached_file);
@@ -977,7 +997,7 @@
            $world['read'] . $world['write'] . $world['execute'];
   }
 
-  function tep_array_slice($array, $offset, $length = '0') {
+  function owpArraySlice($array, $offset, $length = '0') {
     if (function_exists('array_slice')) {
       return array_slice($array, $offset, $length);
     } else {

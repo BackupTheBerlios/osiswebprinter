@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_split_page_results.php,v 1.8 2003/04/25 07:10:04 r23 Exp $
+   $Id: owp_split_page_results.php,v 1.9 2003/04/25 15:56:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -36,7 +36,7 @@
       if (empty($current_page_number)) $current_page_number = 1;
 
       $pos_to = strlen($sql_query);
-      $pos_from = strpos($sql_query, ' FROM', 0);
+      $pos_from = strpos($sql_query, ' from', 0);
 
       $pos_group_by = strpos($sql_query, ' group by', $pos_from);
       if (($pos_group_by < $pos_to) && ($pos_group_by != false)) $pos_to = $pos_group_by;
@@ -56,7 +56,7 @@
       $offset = ($max_rows_per_page * ($current_page_number - 1));
       $sql_query .= " limit " . $offset . ", " . $max_rows_per_page;
 
-      $count_values = $db->Execute($sql);
+      $count_values = $db->Execute("select count(*) as total " . substr($sql_query, $pos_from, ($pos_to - $pos_from)));
       $query_num_rows = $count_values->fields['total'];
       
     }

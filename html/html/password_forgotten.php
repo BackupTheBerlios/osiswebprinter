@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: password_forgotten.php,v 1.3 2003/04/23 16:28:24 r23 Exp $
+   $Id: password_forgotten.php,v 1.4 2003/04/25 16:01:18 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -50,7 +50,7 @@
 <html <?php echo HTML_PARAMS; ?>>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
-<title><?php echo TITLE; ?></title>
+<title><?php echo OWP_NAME . ' :: ' . TITLE; ?></title>
 <META NAME="AUTHOR" CONTENT="OSIS GmbH">
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">
@@ -72,12 +72,7 @@
 <!-- body_text //-->
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
-          <tr>
             <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
-            <td class="owp-title" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
-          </tr>
-        </table></td>
       </tr>
       <tr>
         <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>

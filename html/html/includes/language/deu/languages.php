@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.2 2003/04/19 05:51:10 r23 Exp $
+   $Id: languages.php,v 1.3 2003/04/25 15:58:30 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -25,13 +25,15 @@
 define('HEADING_TITLE', 'Sprachen');
 
 define('TABLE_HEADING_LANGUAGE_NAME', 'Name');
-define('TABLE_HEADING_LANGUAGE_CODE', 'Codierung');
+define('TABLE_HEADING_LANGUAGE_ISO_639_2', 'ISO 639-2');
+define('TABLE_HEADING_LANGUAGE_ISO_639_1', 'ISO 639-1');
+define('TABLE_HEADING_LANGUAGE_STATUS', 'Status');
 define('TABLE_HEADING_ACTION', 'Aktion');
 
 define('TEXT_INFO_EDIT_INTRO', 'Bitte f&uuml;hren Sie alle notwendigen &Auml;nderungen durch');
 define('TEXT_INFO_LANGUAGE_NAME', 'Name:');
-define('TEXT_INFO_LANGUAGE_CODE', 'Codierung:');
-define('TEXT_INFO_LANGUAGE_IMAGE', 'Symbol:');
+define('TEXT_INFO_LANGUAGE_ISO_639_2', 'ISO 639-2:');
+define('TEXT_INFO_LANGUAGE_ISO_639_1', 'ISO 639-1:');
 define('TEXT_INFO_LANGUAGE_DIRECTORY', 'Verzeichnis:');
 define('TEXT_INFO_LANGUAGE_SORT_ORDER', 'Sortierreihenfolge:');
 define('TEXT_INFO_INSERT_INTRO', 'Bitte geben Sie die neue Sprache mit allen relevanten Daten ein');
@@ -39,6 +41,7 @@ define('TEXT_INFO_DELETE_INTRO', 'Sind Sie sicher, dass Sie die Sprache l&ouml;s
 define('TEXT_INFO_HEADING_NEW_LANGUAGE', 'Neue Sprache');
 define('TEXT_INFO_HEADING_EDIT_LANGUAGE', 'Sprache bearbeiten');
 define('TEXT_INFO_HEADING_DELETE_LANGUAGE', 'Sprache l&ouml;schen');
+define('TEXT_DEFAULT', 'Standardsprache');
 
 define('ERROR_REMOVE_DEFAULT_LANGUAGE', 'Fehler: Die Standardsprache darf nicht gel&ouml;scht werden. Bitte definieren Sie eine neue Standardsprache und wiederholen Sie den Vorgang.');
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: configuration.php,v 1.13 2003/04/24 06:03:13 r23 Exp $
+   $Id: configuration.php,v 1.14 2003/04/25 15:56:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -55,7 +55,7 @@
 <html <?php echo HTML_PARAMS; ?>>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
-<title><?php echo TITLE; ?></title>
+<title><?php echo OWP_NAME . ' :: ' . TITLE; ?></title>
 <META NAME="AUTHOR" CONTENT="OSIS GmbH">
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">

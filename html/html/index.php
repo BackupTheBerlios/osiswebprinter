@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.12 2003/04/24 06:04:55 r23 Exp $
+   $Id: index.php,v 1.13 2003/04/25 16:00:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -51,7 +51,7 @@
                      'image' => 'localization.gif',
                      'href' => owpLink(FILENAME_CURRENCIES, 'SELECTed_box=localization'),
                      'children' => array(array('title' => BOX_LOCALIZATION_CURRENCIES, 'link' => owpLink(FILENAME_CURRENCIES, 'SELECTed_box=localization')),
-                                         array('title' => BOX_LOCALIZATION_LANGUAGES, 'link' => owpLink(FILENAME_LANGUAGES, 'SELECTed_box=localization')))),
+                                         array('title' => BOX_LOCALIZATION_LANGUAGES, 'link' => owpLink($owpFilename['languages'], 'SELECTed_box=localization')))),
                array('title' => BOX_HEADING_REPORTS,
                      'image' => 'reports.gif',
                      'href' => owpLink(FILENAME_STATS_PRODUCTS_PURCHASED, 'SELECTed_box=reports'),
@@ -64,7 +64,7 @@
                                          array('title' => TOOLS_BANNERS, 'link' => owpLink(FILENAME_BANNER_MANAGER, 'SELECTed_box=tools')),
                                          array('title' => TOOLS_FILES, 'link' => owpLink($owpFilename['file_manager'], 'SELECTed_box=tools')))));
 
-  $languages = tep_get_languages();
+  $languages = owpGetLanguages();
   $languages_array = array();
   for ($i=0; $i<sizeof($languages); $i++) {
     $languages_array[] = array('id' => $languages[$i]['code'],
@@ -75,7 +75,7 @@
 <html <?php echo HTML_PARAMS; ?>>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
-<title><?php echo TITLE; ?></title>
+<title><?php echo OWP_NAME . ' :: ' . TITLE; ?></title>
 <META NAME="AUTHOR" CONTENT="OSIS GmbH">
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">
@@ -106,7 +106,7 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
       <tr bgcolor="#000000">
         <td><table border="0" width="600" height="440" cellspacing="0" cellpadding="0">
           <tr bgcolor="#ffffff" height="50">
-            <td height="50"><?php echo owpImage(OWP_INCLUDES_DIR . 'oscommerce.gif', 'osCommerce', '204', '50'); ?></td>
+            <td height="50"><?php echo owpImage(OWP_IMAGES_DIR . 'oscommerce.gif', 'osCommerce', '204', '50'); ?></td>
             <td align="right" class="text" nowrap><?php echo '<a href="' . owpLink($owpFilename['index']) . '">' . HEADER_TITLE_ADMINISTRATION . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="' . tep_catalog_href_link() . '">' . HEADER_TITLE_ONLINE_CATALOG . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.oscommerce.com" target="_blank">' . HEADER_TITLE_SUPPORT_SITE . '</a>'; ?>&nbsp;&nbsp;</td>
           </tr>
           <tr bgcolor="#080381">
@@ -220,7 +220,7 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
 
     echo '                    <td><table border="0" cellspacing="0" cellpadding="2">' . "\n" .
          '                      <tr>' . "\n" .
-         '                        <td><a href="' . $cat[$i]['href'] . '">' . owpImage(OWP_INCLUDES_DIR . 'categories/' . $cat[$i]['image'], $cat[$i]['title'], '32', '32') . '</a></td>' . "\n" .
+         '                        <td><a href="' . $cat[$i]['href'] . '">' . owpImage(OWP_IMAGES_DIR . 'categories/' . $cat[$i]['image'], $cat[$i]['title'], '32', '32') . '</a></td>' . "\n" .
          '                        <td><table border="0" cellspacing="0" cellpadding="2">' . "\n" .
          '                          <tr>' . "\n" .
          '                            <td class="main"><a href="' . $cat[$i]['href'] . '" class="main">' . $cat[$i]['title'] . '</a></td>' . "\n" .

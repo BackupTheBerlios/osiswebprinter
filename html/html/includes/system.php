@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.11 2003/04/24 06:04:55 r23 Exp $
+   $Id: system.php,v 1.12 2003/04/25 16:00:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -100,7 +100,7 @@
   if (!owpDBInit()) {
     die('Unable to connect to database server!');
   }
-define('MAX_DISPLAY_SEARCH_RESULTS', '10');
+
 // set the application parameters (can be modified through the administration tool)
   $configuration_query = $db->Execute('SELECT configuration_key as cfgKey, configuration_value as cfgValue FROM ' . $owpDBTable['configuration'] . '');
   while ($configuration = $configuration_query->fields) {
@@ -130,7 +130,7 @@ define('MAX_DISPLAY_SEARCH_RESULTS', '10');
     $HTTP_USER_AGENT = $_SERVER['HTTP_USER_AGENT'];
   } 
   
-
+define('DEFAULT_LANGUAGE', 'deu');
 // language
   if ( (!isset($_SESSION['language'])) || (!empty($_GET['language'])) ) {
     if ($_GET['language']) {
@@ -193,6 +193,9 @@ define('MAX_DISPLAY_SEARCH_RESULTS', '10');
   require_once(OWP_CLASSES_DIR . 'owp_table_block.php');
   require_once(OWP_CLASSES_DIR . 'owp_text_tool.php');
   require_once(OWP_CLASSES_DIR . 'owp_box.php');
+  require_once(OWP_CLASSES_DIR . 'owp_message_stack.php');
+  $messageStack = new messageStack;
+  
   if (EMAIL_TRANSPORT == 'sendmail') include(OWP_MAILER_DIR . 'class.phpmailer.php');
   if (EMAIL_TRANSPORT == 'smtp') include(OWP_MAILER_DIR . 'class.smtp.php');
 

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: check.php,v 1.6 2003/04/01 02:30:23 r23 Exp $
+   $Id: check.php,v 1.7 2003/04/25 16:00:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -41,7 +41,7 @@ function do_check_php() {
      echo '<font class="owp-error">' . PHP_CHECK_4 . '</font><br />';
      $check_php = false;
    } else {
-     echo '<font class="owp-normal">' . PHP_CHECK_5. '</font><br />';
+     echo '<font class="owp-normal">' . PHP_CHECK_OK . '</font><br />';
    }
 
    if (get_magic_quotes_gpc() == 0) {

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: define_language.php,v 1.13 2003/04/24 06:03:13 r23 Exp $
+   $Id: define_language.php,v 1.14 2003/04/25 15:56:55 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,22 +23,18 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
-  
+ /* 
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
-  
+*/  
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['define_language']);
 
   switch ($_GET['action']) {
     case 'save':
       if ( ($_GET['lngdir']) && ($_GET['filename']) ) {
-        if ($_GET['filename'] == $language . '.php') {
-          $file = DIR_FS_CATALOG_LANGUAGES . $_GET['filename'];
-        } else {
-          $file = DIR_FS_CATALOG_LANGUAGES . $_GET['lngdir'] . '/' . $_GET['filename'];
-        }
+        $file = OWP_LANG_PATH . $_GET['lngdir'] . '/' . $_GET['filename'];
         if (file_exists($file)) {
           if (file_exists('bak' . $file)) {
             @unlink('bak' . $file);
@@ -53,25 +49,30 @@
       }
       break;
   }
-
-  if (!$_GET['lngdir']) $_GET['lngdir'] = $language;
+  if (!isset($_GET['lngdir'])) {
+    $_GET['lngdir'] = $language;
+  }
 
   $languages_array = array();
-  $languages = tep_get_languages();
+  $languages = owpGetLanguages();
   $lng_exists = false;
   for ($i=0; $i<sizeof($languages); $i++) {
-    if ($languages[$i]['directory'] == $_GET['lngdir']) $lng_exists = true;
+    if ($languages[$i]['iso_639_2'] == $_GET['lngdir']) $lng_exists = true;
 
-    $languages_array[] = array('id' => $languages[$i]['directory'],
+    $languages_array[] = array('id' => $languages[$i]['iso_639_2'],
                                'text' => $languages[$i]['name']);
   }
   if (!$lng_exists) $_GET['lngdir'] = $language;
+  
+  $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['define_language'], '', 'NONSSL'));
+  $breadcrumb->add(OWP_LANG_PATH . $_GET['lngdir'],  owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir'], 'NONSSL'));
+
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
-<title><?php echo TITLE; ?></title>
+<title><?php echo OWP_NAME . ' :: ' . TITLE; ?></title>
 <META NAME="AUTHOR" CONTENT="OSIS GmbH">
 <META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
 <META NAME="ROBOTS" content="NOFOLLOW">
@@ -96,7 +97,7 @@
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr><?php echo owpDrawForm('lng', $owpFilename['define_language'], '', 'get'); ?>
             <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
-            <td class="owp-title" align="right"><?php echo owpTransLine('1', HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="owp-title" align="right"><?php echo owpTransLine('1', '10'); ?></td>
             <td class="owp-title" align="right"><?php echo owpPullDownMenu('lngdir', $languages_array, '', 'onChange="this.form.submit();"'); ?></td>
           </form></tr>
         </table></td>
@@ -106,9 +107,9 @@
 <?php
   if ( ($_GET['lngdir']) && ($_GET['filename']) ) {
     if ($_GET['filename'] == $language . '.php') {
-      $file = DIR_FS_CATALOG_LANGUAGES . $_GET['filename'];
+      $file = OWP_LANG_PATH . $_GET['filename'];
     } else {
-      $file = DIR_FS_CATALOG_LANGUAGES . $_GET['lngdir'] . '/' . $_GET['filename'];
+      $file = OWP_LANG_PATH . $_GET['lngdir'] . '/' . $_GET['filename'];
     }
     if (file_exists($file)) {
       $file_array = file($file);
@@ -154,17 +155,17 @@
 <?php
     }
   } else {
-    $filename = $_GET['lngdir'] . '.php';
 ?>
           <tr>
             <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td class="smallText"><a href="<?php echo owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir'] . '&filename=' . $filename); ?>"><b><?php echo $filename; ?></b></a></td>
+                <td class="smallText"><b><?php echo $_GET['lngdir']; ?></b></a></td>
 <?php
-    $dir = dir(DIR_FS_CATALOG_LANGUAGES . $_GET['lngdir']);
+    $dir = dir(OWP_LANG_PATH . $_GET['lngdir']);
     $left = false;
     if ($dir) {
-      $file_extension = substr($owpSelf, strrpos($owpSelf, '.'));
+      // nur .php anzeigen
+      $file_extension = '.php';
       while ($file = $dir->read()) {
         if (substr($file, strrpos($file, '.')) == $file_extension) {
           echo '                <td class="smallText"><a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir'] . '&filename=' . $file) . '">' . $file . '</a></td>' . "\n";
@@ -185,7 +186,7 @@
             <td><?php echo owpTransLine('1', '10'); ?></td>
           </tr>
           <tr>
-            <td align="right"><?php echo '<a href="' . owpLink(FILENAME_FILE_MANAGER, 'current_path=' . DIR_FS_CATALOG_LANGUAGES . $_GET['lngdir']) . '">' . owpImageButton('button_file_manager.gif', IMAGE_FILE_MANAGER) . '</a>'; ?></td>
+            <td align="right"><?php echo '<a href="' . owpLink($owpFilename['file_manager'], 'current_path=' . OWP_LANG_PATH . $_GET['lngdir']) . '">' . owpImageButton('button_file_manager.gif', IMAGE_FILE_MANAGER) . '</a>'; ?></td>
           </tr>
 <?php
   }
