@@ -1,0 +1,118 @@
+
+  OSIS WebPrinter Übersetzung
+
+  Mit dieser Anleitung können Sie OSIS WebPrinter in Ihre gewünschte
+  Sprache übersetzen.
+  
+  Verzeichnise
+
+  html
+  \ html
+   | includes
+   | \languages
+   |  | deu
+   \ install
+     \ lang
+       | deu
+
+  Übersicht der in OSIS WebPrinter vorbereiteten Sprachenkürzeln nach 
+  http://www.loc.gov/standards/iso639-2/langcodes.html
+  
+          ara = Arabic
+          bul = Bulgarian
+          zho = Chinese
+          ces = Czech
+          cro = Croatian
+          dan = Danish
+          nld = Dutch
+          eng = English
+          epo = Esperanto
+          est = Estonian
+          fin = Finnish
+          fra = French
+          deu = German * vorhanden 
+          ell = Greek, Modern (1453-)
+          heb = Hebrew
+          hun = Hungarian
+          isl = Icelandic
+          ind = Indonesian
+          ita = Italian
+          jpn = Japanese
+          kor = Korean
+          lav = Latvian
+          lit = Lithuanian
+          mas = Malay
+          nor = Norwegian
+          pol = Polish
+          por = Portuguese
+          ron = Romanian
+          rus = Russian
+          slv = Slovenian
+          spa = Spanish
+          swe = Swedish
+          tha = Thai
+          tur = Turkish
+          ukr = Ukrainian
+          yid = Yiddish
+          x_brazilian_portuguese = Brazilian Portuguese
+          x_klingon = Klingon
+          x_rus_koi8r'] = // Russian KOI8-R
+  
+
+  Diese Sprachenkürzel basiert auf http://www.loc.gov/standards/iso639-2/langcodes.html
+  zur Kurzbezeichnung von Sprachen. Die in dieser ISO-Norm vordefinierten Kürzel 
+  erlaubt Ihnen Angaben wie deu für Deutsch, eng für Englisch. Die Reservierung 
+  erfolgt durch die Internet-Behörte IANA http://www.iana.org. Hier wurde
+  auch das Sprachkürzel x-klingon (für "Klingonisch" - aus dem Kultserie "Startrek") 
+  registriert. Außerdem wurde ein Startkürzel x für den privaten Gebrauch 
+  reserviert, wodurch Sprachenkürzel wie x-osis (für "OSISisch") von Ihnen
+  verwendet werden kann.
+
+
+  Beispiel: Englisch Übersetzung
+  Erstellen Sie in den Ordnern
+  ~/html/includes/languages/ 
+  ~/html/install/lang/ 
+  je ein Verzeichnis mit dem Spachkürzel eng
+
+  Ihr Verzeichnisbaum
+    html
+    \ html
+     | includes
+     | \languages
+     |  | deu
+     |  | eng
+     \ install
+       \ lang
+       | deu
+       | eng
+       
+  Kopieren Sie nun die Dateien aus dem Verzeichnis
+    ~/html/includes/languages/deu/*.* 
+  nach
+    ~/html/includes/languages/eng/
+  und  
+    ~/html/install/lang/deu/*.*
+  nach
+    ~/html/install/lang/eng/
+    
+
+  Öffnen Sie die Datei, die Sie übersetzen möchten mit einem Editor
+  z.b. TextPad, WordPad, NotPad usw.
+
+  
+  Die Texte beim OSIS WebPrinter Projekt werden in Konstanten
+  gespeichert. 
+ 
+  define('KONSTANTE', 'Sprache');
+  
+  Die Konstante wird in GROSSBUCHSTABEN geschrieben. Bitte
+  ändern Sie die Bezeichnung der Kontante nicht! 
+  
+  define('KONSTANTE', 'Langugage');
+  
+  Bitte übersenden Sie uns an info@r23.de Ihre Sprachdateien.
+  
+  Vielen Dank!
+  
+  

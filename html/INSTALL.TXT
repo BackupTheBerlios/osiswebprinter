@@ -1,0 +1,106 @@
+
+  OSIS Web Printer
+  
+  Entwicklerversion
+  ------------------------------------------------------------------------
+  DIESE VERSION IST NOCH NICHT VERÖFFENTLICHT, SONDERN STELLT LEDIGLICH EINEN
+  ENTWICKLUNGSSTAND DAR. DIE BENUTZUNG DIESER SOFTWARE ERFOLGT AUSSCHLIESSLICH
+  AUF EIGENES RISIKO!
+  
+  
+  Dieses Programm ist freie Software. Sie können es unter den Bedingungen
+  der GNU General Public License, wie von der Free Software Foundation
+  veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version
+  2 der Lizenz oder (nach Ihrer Option) jeder späteren Version.
+  
+  Die Veröffentlichung dieses Programms erfolgt in der Hoffnung, daß es Ihnen
+  von Nutzen sein wird, aber OHNE IRGENDEINE GARANTIE, sogar ohne die
+  implizite Garantie der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN
+  BESTIMMTEN ZWECK. Details finden Sie in der GNU General Public License.
+  
+  Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
+  Programm erhalten haben. Falls nicht, schreiben Sie an die Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+  
+  
+  Systemanforderungen:
+  ------------------------------------------------------------------------
+  PHP 4.1 oder höher (4.3.0 empfohlen)
+  MySQL 3.23.3 oder höher
+
+
+  Mit OSIS Web Printer wird Ihnen eine Lösung zur Verfügung 
+  gestellt mit der Sie von Ihrer Homepage über das Internet
+  drucken können.
+  
+  OSIS Web Printer läuft auf der Basis von PHP und einer 
+  MySQL-Datenbank, und lässt sich deshalb individuell 
+  erweitern. 
+  
+  OSIS Web Printer lässt sich problemlos in die Struktur Ihres 
+  Unternehmens einbinden und kann individuell an jedes Design 
+  angepasst werden.
+  
+
+  Installation:
+  ------------------------------------------------------------------------
+
+  Wir gehen davon aus, dass Sie sich OSIS Web Printer erfolgreich 
+  downgeloaded haben.
+  
+  1. Entpacken Sie die Datei mit 
+  
+    # tar -xzf osis_webprinter_pr*.*.tar.gz
+  
+  2. Kopieren Sie WebPrinter in das Verzeichnis Ihres WebServers
+  
+    # cd osis_webprinter_pr*.*
+    # cp -R html /usr/local/apache/htdocs/
+  
+     In dem Beispiel, '/usr/local/apache/htdocs/' ist dies das
+     WebRoot Verzeichnis Ihres WebServers.
+     
+  3. CHMOD 666
+     Die Installationsroutine benötigt Schreibrechte auf die
+     Dateien config.php und config-old.php
+     
+    # chmod 666 /usr/local/apache/htdocs/html/includes/config.php
+    # chmod 666 /usr/local/apache/htdocs/html/includes/config-old.php
+     
+   
+  3. Die Installationsroutine ist unter:
+         http://[Ihre Seite]/html/install/
+     zu finden
+  
+  
+  Manuelle Installation
+  ------------------------------------------------------------------------
+  Sollte bei Ihrem Provider die Installationsroutine unter 
+  http://[Ihre Seite]/html/install/ nicht funktionieren :-( Können
+  Sie OSIS WebPrinter Datenbank per "Hand" installieren
+  
+  Erstellen Sie eine 'webprinter' Datenbank und importieren die
+  Beispiel-Daten:
+
+    # mysqladmin create webprinter
+     
+    # mysql webprinter < ./installation/sql/osiswebprinter.sql
+
+     Sie können mit mysqlshow Ihren Datenimport überprüfen:
+
+    # mysqlshow webprinter
+ 
+  2. Editieren Sie die Datei html/includes/config.php 
+  ------------------------------------------------------------------------
+  
+  
+  Wie Sie einen WebServer mit Datenbank als Testumgebung
+  auf Ihrem System installieren können finden Sie unter
+  
+  ~/html/installation/wamp.txt  für Windows Anwender
+  ~/html/installation/lanp.txt  für Linux Anwender
+
+  
+  
+have fun
+  
