@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: check.php,v 1.3 2003/03/28 02:54:52 r23 Exp $
+   $Id: check.php,v 1.4 2003/03/29 22:31:47 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -48,40 +48,36 @@ function do_check_php() {
 function do_check_chmod() {
    global $currentlang;
 
-   echo "<font class=\"ow-title\">"._CHMOD_CHECK_1."</font><br /><br />
-   <font class=\"ow-normal\">"._CHMOD_CHECK_2."</font>";
+   echo '<font class="ow-title">' . CHMOD_CHECK_1 . '</font><br /><br />';
+   echo '<font class="ow-normal">' . CHMOD_CHECK_2. '</font>';
+   
+   $check = false;
    $file='../includes/config.php';
-
-//   $mode = fileperms($file);
-//   $mode &= 0x1ff; # Remove the bits we don't need
-//   $chmod = sprintf("%o", $mode);
-//   if ($chmod == '666'){
-
    if (is_writable($file)){
-      echo "<br /><br /><font class=\"ow-title\">"._CHMOD_CHECK_3."</font><br />";
+     echo '<br /><br /><font class="ow-title">' . CHMOD_CHECK_3 . '</font><br />';
+     $check = true;
    } else {
-     echo "<br /><br /><font class=\"ow-title\">"._CHMOD_CHECK_4."</font><br />";
+     echo '<br /><br /><font class="ow-error">' . CHMOD_CHECK_4 . '</font><br />';
    }
-
+   
    $file='../includes/config-old.php';
-
-//   $mode = fileperms($file);
-//   $mode &= 0x1ff; # Remove the bits we don't need
-//   $chmod = sprintf("%o", $mode);
-//   if ($chmod == '666'){
-
    if (is_writable($file)){
-     echo "<p><font class=\"ow-title\">"._CHMOD_CHECK_5."</font></p>
-     <p><form action=\"index.php\" method=\"post\">
-     <input type=\"hidden\" name=\"currentlang\" value=\"$currentlang\">
-     <center><input type=\"hidden\" name=\"op\" value=\"CHM_check\">
-     <input type=\"submit\" value=\""._BTN_CONTINUE."\"></center></form></p>";
+     echo '<p><font class="ow-title">' . CHMOD_CHECK_5 . '</font></p>';
+     $check = true;
    } else {
-     echo "<font class=\"ow-title\">"._CHMOD_CHECK_6."</font>
-     <p><form action=\"index.php\" method=\"post\">
-     <input type=\"hidden\" name=\"currentlang\" value=\"$currentlang\">
-     <center><input type=\"hidden\" name=\"op\" value=\"Check\">
-     <input type=\"submit\" value=\""._BTN_RECHECK."\"></center></form></p>";
+     echo '<p><font class="ow-error">' . CHMOD_CHECK_6 . '</font></p>';
+   }
+   
+   if ($check == 'true') {
+     echo '<p><form action="index.php" method="post">';
+     echo '<input type="hidden" name="currentlang" value="' . $currentlang . '">';
+     echo '<input type="hidden" name="op" value="CHM_check">';
+     echo '<center><input type="submit" value="' . BTN_CONTINUE . '"></center></form></p>';
+   } else {
+     echo '<p><form action="index.php" method="post">';
+     echo '<input type="hidden" name="currentlang" value="' . $currentlang . '">';
+     echo '<center><input type="hidden" name="op" value="Check">';
+     echo '<input type="submit" value="' . BTN_RECHECK . '"></center></form></p>';
    }
 }
 ?>

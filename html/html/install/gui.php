@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: gui.php,v 1.5 2003/03/29 00:03:48 r23 Exp $
+   $Id: gui.php,v 1.6 2003/03/29 22:31:47 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -301,7 +301,7 @@ function print_default() {
 
    echo "
 <input type=\"hidden\" name=\"op\" value=\"Check\">
-<input type=\"submit\" value=\"" . NEXT . "\"></center>
+<input type=\"submit\" value=\"" . BTN_NEXT . "\"></center>
 </form>";
 }
 

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: footer.php,v 1.2 2003/03/29 00:03:48 r23 Exp $
+   $Id: footer.php,v 1.3 2003/03/29 22:31:47 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -15,9 +15,11 @@
 ?>
     </td>
   </tr>
-  <tr>
-    <td class="ow-footer"><img src="images/trans.gif" width="1" height="4" border="0" alt=" "></td>
-  </tr>
+</table>
+<table width="670" border="0" cellspacing="0" cellpadding="0" align="center">
+   <tr>
+     <td class="ow-footer"><img src="images/trans.gif" width="1" height="4" border="0" alt=" "></td>
+   </tr>
 </table>
 <br /><br />
 <p align="center"><font class="ow-sub"><?php

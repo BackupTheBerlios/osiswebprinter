@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: header.php,v 1.2 2003/03/29 00:03:48 r23 Exp $
+   $Id: header.php,v 1.3 2003/03/29 22:31:47 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,23 +24,21 @@
 <link rel="StyleSheet" href="style/style.css" type="text/css" />
 </head>
 <body>
-<table width="670" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr> 
-    <td rowspan="6"><img src="images/trans.gif" width="1" height="460" border="0" alt=" "></td>   
+<table width="670" border="0" cellspacing="0" cellpadding="1" align="center">
+  <tr>  
     <td align="left" valign="top" class="ow-main"><font class="ow-pageTitle"><?php  echo owTextTool::heading(INSTALLATION); ?></font></td>
   </tr>
   <tr>
-    <td><img src="images/trans.gif" width="1%" height="6" border="0" alt=" "></td>
+    <td><img src="images/trans.gif" width="100%" height="6" border="0" alt=" "></td>
   </tr>
   <tr>
-    <td align="left" valign="top" class="ow-main"><table width="100%" border="0" cellspacing="0" cellpadding="1" align="center">
-      <tr class="ow-footer">
-        <td class="ow-footer">&nbsp;&nbsp;<?php  echo strftime(DATE_LONG); ?>&nbsp;&nbsp;</td>
-      </tr>
-    </table></td>
+    <td align="left" valign="top" class="ow-footer">&nbsp;&nbsp;<?php  echo strftime(DATE_LONG); ?>&nbsp;&nbsp;</td>
   </tr>
   <tr>
-    <td><img src="images/trans.gif" width="1%" height="6" border="0" alt=" "></td>
+    <td><img src="images/trans.gif" width="100%" height="7" border="0" alt=" "></td>
   </tr>
+</table>
+<table width="670" border="0" cellspacing="0" cellpadding="0" align="center">
   <tr> 
+    <td><img src="images/trans.gif" width="1" height="410" border="0" alt=" "></td> 
     <td align="left" valign="top">

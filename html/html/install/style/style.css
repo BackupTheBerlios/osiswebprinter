@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------
-   $Id: style.css,v 1.4 2003/03/29 00:03:48 r23 Exp $
+   $Id: style.css,v 1.5 2003/03/29 22:31:47 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -99,6 +99,14 @@ TD.ow-footer {
 
 .ow-title {
   COLOR: #000000;
+  FONT-SIZE: 11px;
+  FONT-WEIGHT: bold;
+  FONT-FAMILY: Verdana, Arial, sans-serif;
+  TEXT-DECORATION: none
+}
+
+.ow-error {
+  COLOR: #EA0000;
   FONT-SIZE: 11px;
   FONT-WEIGHT: bold;
   FONT-FAMILY: Verdana, Arial, sans-serif;

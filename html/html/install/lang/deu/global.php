@@ -1,6 +1,6 @@
 <?php 
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.4 2003/03/29 00:03:48 r23 Exp $
+   $Id: global.php,v 1.5 2003/03/29 22:31:47 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -31,13 +31,26 @@ define('GREAT', 'Willkommen bei OSIS Web Printer.');
 define('GREAT_1', 'Die Komplettlösung zur schnellen Anbindung von Webanwendungen an Toshiba Tec Web Printer.'); 
 define('SELECT_LANGUAGE_1', 'Auswahl Ihrer Sprache.');
 define('SELECT_LANGUAGE_2', 'Sprachen: ');
+
 define('BTN_SET_LANGUAGE', 'Sprache festlegen');
+define('BTN_CONTINUE', 'Weiter');
+define('BTN_NEXT' ,'Weiter');
+define('BTN_RECHECK', 'wiederholen');
+
 define('DEFAULT_1', 'OSIS Web Printer ist eine allumfassende L&ouml;sung f&uuml;r das Drucken aus Ihrer Web-Anwendung per e-Mail, FTP und XML. Mit der F&uuml;lle von Werkzeugen,  die Ihnen zur Verf&uuml;gung stehen, k&ouml;nnen Sie praktisch &uuml;ber das  Internet drucken. Diese Anwendung installiert die OSIS Web Printer Datenbank  und hilft Ihnen bei der Konfiguration.');
 define('DEFAULT_2', 'Dieses Programm ist freie Software. Sie k&ouml;nnen es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation ver&ouml;ffentlicht, weitergeben und/oder modifizieren, entweder gem&auml;&szlig; Version 2 der Lizenz  oder (nach Ihrer Option) jeder sp&auml;teren Version.');
 define('DEFAULT_3', 'Die Ver&ouml;ffentlichung dieses Programms erfolgt in der Hoffnung, da&szlig; es Ihnen von Nutzen sein wird, aber ohne irgendeine Garantie, sogar ohne die implizite Garantie der Marktreife oder der Verwendbarkeit f&uuml;r einen bestimmten Zweck.');
 define('DEFAULT_4', 'Bitte lesen ');
 define('DEFAULT_5', 'Sie die GNU General Public License.');
-define('NEXT','Weiter');
+define('CHMOD_CHECK_1', 'CHMOD Check');
+define('CHMOD_CHECK_2', 'Wir &uuml;berpr&uuml;fen hier ob die Zugriffsrechte (CHMOD) f&uuml;r das Schreiben in die Konfiguration-Dateien richtig sind. Die OSIS Web  Printer Installation schreibt in Ihre Konfigurationsdateien Ihre Zugangsdaten  verschl&uuml;sselt.');
+define('CHMOD_CHECK_3', 'CHMOD ~/includes/config.php ist 666 -- RICHTIG');
+define('CHMOD_CHECK_4', 'Bitte &auml;ndern Sie die Zugriffsrechte (CHMOD 666) der Datei ~/includes/config.php ');
+define('CHMOD_CHECK_5', 'CHMOD ~/includes/config-old.php ist 666 -- RICHTIG');
+define('CHMOD_CHECK_6', 'Bitte &auml;ndern Sie die Zugriffsrechte (CHMOD 666) der Datei ~/includes/config-old.php ');
+
+
+
 
 define('_ADMIN_EMAIL','Admin Email');
 define('_ADMIN_LOGIN','Admin Login');
