@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: language.php,v 1.3 2003/03/28 02:54:52 r23 Exp $
+   $Id: language.php,v 1.4 2003/03/31 16:40:09 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -60,7 +60,7 @@
    function lang_dropdown() {
       global $currentlang;
 
-      echo "<select name=\"alanguage\" class=\"ow-text\">";
+      $selection = '<select name="alanguage" class="ow-text">';
       $lang = languagelist();
       $handle = opendir('lang');
       while ($f = readdir($handle)) {
@@ -70,13 +70,15 @@
       }
       asort($langlist);
       foreach ($langlist as $k=>$v) {
-        echo '<option value="' . $k . '"';
+        $selection .= '<option value="' . $k . '"';
         if ( $currentlang == $k) {
-          echo ' selected';
+          $selection .= ' selected';
         }
-        echo '>'. $v . '</option> ';
+        $selection .= '>'. $v . '</option> ';
       }
-      echo "</select>";
+      $selection .= '</select>';
+      
+      return $selection;
    }
 // list of all availabe languages (from Patrick Kellum <webmaster@ctarl-ctarl.com>)
    function languagelist() {

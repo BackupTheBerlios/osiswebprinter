@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.5 2003/03/30 16:11:31 r23 Exp $
+   $Id: index.php,v 1.6 2003/03/31 16:40:09 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -112,26 +112,26 @@
       print_set_login();
       break;
     case 'Continue':
-      print_continue();
+      echo print_continue();
       break;
     case 'Start':
       if (!isset($dbmake)) {
         $dbmake = false;
       }
       make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake);
-      print_start();
+      echo print_start();
       break;
     case 'New Install':
-      print_new_install();
+      echo print_new_install();
       break;
     case 'Change Info':
-      print_change_info();
+      echo print_change_info();
       break;
     case 'Submit':
-      print_submit();
+      echo print_submit();
       break;
     case 'CHM_check':
-      print_CHM_check();
+      echo print_CHM_check();
       break;
     case 'Check':
       do_check_chmod();
@@ -141,10 +141,10 @@
       break;
     case 'Set Language':
       $currentlang = $alanguage;
-      print_default();
+      echo print_default();
       break;       
     default:
-      print_select_language();
+      echo print_select_language();
       break;
   }
   include_once 'footer.php';
