@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: whos_online.php,v 1.7 2003/04/20 06:48:05 r23 Exp $
+   $Id: whos_online.php,v 1.8 2003/04/20 07:09:15 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -58,7 +58,7 @@
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr>
             <td class="pageHeading"><?php echo HEADING_TITLE; ?></td>
-            <td class="pageHeading" align="right"><?php echo tep_draw_separator('pixel_trans.gif', HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="pageHeading" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -85,7 +85,7 @@
     if ($whos_online['session_id'] == $info) {
       echo '              <tr class="dataTableRowSelected">' . "\n";
     } else {
-      echo '              <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . tep_href_link(FILENAME_WHOS_ONLINE, tep_get_all_get_params(array('info', 'action')) . 'info=' . $whos_online['session_id'], 'NONSSL') . '\'">' . "\n";
+      echo '              <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . owpLink(FILENAME_WHOS_ONLINE, owpGetAllGetParameters(array('info', 'action')) . 'info=' . $whos_online['session_id'], 'NONSSL') . '\'">' . "\n";
     }
 ?>
                 <td class="dataTableContent"><?php echo gmdate('H:i:s', $time_online); ?></td>
@@ -145,7 +145,7 @@
         }
 
         if (sizeof($products) > 0) {
-          $contents[] = array('text' => tep_draw_separator('pixel_black.gif', '100%', '1'));
+          $contents[] = array('text' => owpTransLine());
           $contents[] = array('align' => 'right', 'text'  => TEXT_SHOPPING_CART_SUBTOTAL . ' ' . $currencies->format($cart->show_total(), true, $currency));
         } else {
           $contents[] = array('text' => '&nbsp;');
@@ -154,7 +154,7 @@
     }
   }
 
-  if ( (tep_not_null($heading)) && (tep_not_null($contents)) ) {
+  if ( (owpNotNull($heading)) && (owpNotNull($contents)) ) {
     echo '            <td width="25%" valign="top">' . "\n";
 
     $box = new box;

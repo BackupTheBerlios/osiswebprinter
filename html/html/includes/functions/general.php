@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.3 2003/04/20 06:46:43 r23 Exp $
+   $Id: general.php,v 1.4 2003/04/20 07:08:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,7 +24,7 @@
 
 ////
 // Redirect to another page or site
-  function tep_redirect($url) {
+  function owpRedirect($url) {
     global $logger;
 
     header('Location: ' . $url);
@@ -36,6 +36,33 @@
 
     exit;
   }
+  
+  /**
+   * owpPrepareInput: formatiert user eingaben 
+   *  
+   * @author     r23
+   * @version    1.0
+   * @param      $string 
+   * @return     entfernt unerlaubte zeichen im string
+   */
+   function owpPrepareInput($string) {
+      if (get_magic_quotes_gpc()) {
+        $string =& stripslashes($string);
+      }
+      $string =& strip_tags($string);
+      $string =& trim($string);
+  
+      return $string;
+   }
+
+////
+// Sets timeout for the current script.
+// Cant be used in safe mode.
+  function owpSetTimeLimit($limit) {
+    if (!get_cfg_var('safe_mode')) {
+      set_time_limit($limit);
+    }
+  }
 
   function tep_customers_name($customers_id) {
     $customers = tep_db_query("select customers_firstname, customers_lastname from " . TABLE_CUSTOMERS . " where customers_id = '" . $customers_id . "'");
@@ -44,48 +71,16 @@
     return $customers_values['customers_firstname'] . ' ' . $customers_values['customers_lastname'];
   }
 
-  function tep_get_path($current_category_id = '') {
-    global $cPath_array;
 
-    if ($current_category_id == '') {
-      $cPath_new = implode('_', $cPath_array);
-    } else {
-      if (sizeof($cPath_array) == 0) {
-        $cPath_new = $current_category_id;
-      } else {
-        $cPath_new = '';
-        $last_category_query = tep_db_query("select parent_id from " . TABLE_CATEGORIES . " where categories_id = '" . $cPath_array[(sizeof($cPath_array)-1)] . "'");
-        $last_category = tep_db_fetch_array($last_category_query);
-        $current_category_query = tep_db_query("select parent_id from " . TABLE_CATEGORIES . " where categories_id = '" . $current_category_id . "'");
-        $current_category = tep_db_fetch_array($current_category_query);
-        if ($last_category['parent_id'] == $current_category['parent_id']) {
-          for ($i=0; $i<(sizeof($cPath_array)-1); $i++) {
-            $cPath_new .= '_' . $cPath_array[$i];
-          }
-        } else {
-          for ($i=0; $i<sizeof($cPath_array); $i++) {
-            $cPath_new .= '_' . $cPath_array[$i];
-          }
-        }
-        $cPath_new .= '_' . $current_category_id;
-        if (substr($cPath_new, 0, 1) == '_') {
-          $cPath_new = substr($cPath_new, 1);
-        }
-      }
-    }
-
-    return 'cPath=' . $cPath_new;
-  }
-
-  function tep_get_all_get_params($exclude_array = '') {
-    global $HTTP_GET_VARS;
+  function owpGetAllGetParameters($exclude_array = '') {
+    global $_GET;
 
     if ($exclude_array == '') $exclude_array = array();
 
     $get_url = '';
 
-    reset($HTTP_GET_VARS);
-    while (list($key, $value) = each($HTTP_GET_VARS)) {
+    reset($_GET);
+    while (list($key, $value) = each($_GET)) {
       if (($key != tep_session_name()) && ($key != 'error') && (!tep_in_array($key, $exclude_array))) $get_url .= $key . '=' . $value . '&';
     }
 
@@ -226,17 +221,7 @@
     return $values_values['products_options_values_name'];
   }
 
-  function tep_info_image($image, $alt, $width = '', $height = '') {
-    if ( ($image) && (file_exists(DIR_FS_CATALOG_IMAGES . $image)) ) {
-      $image = tep_image(OWP_IMAGES_DIR . $image, $alt, $width, $height);
-    } else {
-      $image = TEXT_IMAGE_NONEXISTENT;
-    }
-
-    return $image;
-  }
-
-  function tep_break_string($string, $len, $break_char = '-') {
+  function owpBreakString($string, $len, $break_char = '-') {
     $l = 0;
     $output = '';
     for ($i = 0; $i < strlen($string); $i++) {
@@ -278,7 +263,7 @@
     }
   }
 
-  function tep_not_null($value) {
+  function owpNotNull($value) {
     if (is_array($value)) {
       if (sizeof($value) > 0) {
         return true;
@@ -294,7 +279,7 @@
     }
   }
 
-  function tep_browser_detect($component) {
+  function owpBrowserDetect($component) {
     global $HTTP_USER_AGENT;
 
     return stristr($HTTP_USER_AGENT, $component);
@@ -402,7 +387,7 @@
     eval("\$address = \"$fmt\";");
     $address = stripslashes($address);
 
-    if ( (ACCOUNT_COMPANY == 'true') && (tep_not_null($company)) ) {
+    if ( (ACCOUNT_COMPANY == 'true') && (owpNotNull($company)) ) {
       $address = $company . $cr . $address;
     }
 
@@ -455,7 +440,7 @@
   }
 
   function tep_get_languages() {
-  #  $languages_query = tep_db_query("select languages_id, name, code, image, directory from " . TABLE_LANGUAGES . " order by sort_order");
+    $languages_query = tep_db_query("select languages_id, name, code, image, directory from " . TABLE_LANGUAGES . " order by sort_order");
     while ($languages = tep_db_fetch_array($languages_query)) {
       $languages_array[] = array('id' => $languages['languages_id'],
                                  'name' => $languages['name'],
@@ -619,7 +604,7 @@
   function tep_prepare_country_zones_pull_down($country_id = '') {
 // preset the width of the drop-down for Netscape
     $pre = '';
-    if ( (!tep_browser_detect('MSIE')) && (tep_browser_detect('Mozilla/4')) ) {
+    if ( (!owpBrowserDetect('MSIE')) && (owpBrowserDetect('Mozilla/4')) ) {
       for ($i=0; $i<45; $i++) $pre .= '&nbsp;';
     }
 
@@ -631,7 +616,7 @@
     } else {
       $zones = array(array('id' => '', 'text' => TYPE_BELOW));
 // create dummy options for Netscape to preset the height of the drop-down
-      if ( (!tep_browser_detect('MSIE')) && (tep_browser_detect('Mozilla/4')) ) {
+      if ( (!owpBrowserDetect('MSIE')) && (owpBrowserDetect('Mozilla/4')) ) {
         for ($i=0; $i<9; $i++) {
           $zones[] = array('id' => '', 'text' => $pre);
         }
@@ -668,51 +653,6 @@
 // Function to read in text area in admin
  function tep_cfg_textarea($text) {
     return tep_draw_textarea_field('configuration_value', false, 35, 5, $text);
-  }
-
-////
-// Sets the status of a banner
-  function tep_set_banner_status($banners_id, $status) {
-    if ($status == '1') {
-      return tep_db_query("update " . TABLE_BANNERS . " set status = '1', expires_impressions = NULL, expires_date = NULL, date_status_change = NULL where banners_id = '" . $banners_id . "'");
-    } elseif ($status == '0') {
-      return tep_db_query("update " . TABLE_BANNERS . " set status = '0', date_status_change = now() where banners_id = '" . $banners_id . "'");
-    } else {
-      return -1;
-    }
-  }
-
-////
-// Sets the status of a product
-  function tep_set_product_status($products_id, $status) {
-    if ($status == '1') {
-      return tep_db_query("update " . TABLE_PRODUCTS . " set products_status = '1', products_last_modified = now() where products_id = '" . $products_id . "'");
-    } elseif ($status == '0') {
-      return tep_db_query("update " . TABLE_PRODUCTS . " set products_status = '0', products_last_modified = now() where products_id = '" . $products_id . "'");
-    } else {
-      return -1;
-    }
-  }
-
-////
-// Sets the status of a product on special
-  function tep_set_specials_status($specials_id, $status) {
-    if ($status == '1') {
-      return tep_db_query("update " . TABLE_SPECIALS . " set status = '1', expires_date = NULL, date_status_change = NULL where specials_id = '" . $specials_id . "'");
-    } elseif ($status == '0') {
-      return tep_db_query("update " . TABLE_SPECIALS . " set status = '0', date_status_change = now() where specials_id = '" . $specials_id . "'");
-    } else {
-      return -1;
-    }
-  }
-
-////
-// Sets timeout for the current script.
-// Cant be used in safe mode.
-  function tep_set_time_limit($limit) {
-    if (!get_cfg_var('safe_mode')) {
-      set_time_limit($limit);
-    }
   }
 
 ////
@@ -831,7 +771,7 @@
           $category_query = tep_db_query("select cd.categories_name, c.parent_id from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.categories_id = '" . $categories['categories_id'] . "' and c.categories_id = cd.categories_id and cd.language_id = '" . $languages_id . "'");
           $category = tep_db_fetch_array($category_query);
           $categories_array[$index][] = array('id' => $categories['categories_id'], 'text' => $category['categories_name']);
-          if ( (tep_not_null($category['parent_id'])) && ($category['parent_id'] != '0') ) $categories_array = tep_generate_category_path($category['parent_id'], 'category', $categories_array, $index);
+          if ( (owpNotNull($category['parent_id'])) && ($category['parent_id'] != '0') ) $categories_array = tep_generate_category_path($category['parent_id'], 'category', $categories_array, $index);
           $categories_array[$index] = tep_array_reverse($categories_array[$index]);
         }
         $index++;
@@ -840,7 +780,7 @@
       $category_query = tep_db_query("select cd.categories_name, c.parent_id from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.categories_id = '" . $id . "' and c.categories_id = cd.categories_id and cd.language_id = '" . $languages_id . "'");
       $category = tep_db_fetch_array($category_query);
       $categories_array[$index][] = array('id' => $id, 'text' => $category['categories_name']);
-      if ( (tep_not_null($category['parent_id'])) && ($category['parent_id'] != '0') ) $categories_array = tep_generate_category_path($category['parent_id'], 'category', $categories_array, $index);
+      if ( (owpNotNull($category['parent_id'])) && ($category['parent_id'] != '0') ) $categories_array = tep_generate_category_path($category['parent_id'], 'category', $categories_array, $index);
     }
 
     return $categories_array;
@@ -862,7 +802,7 @@
     return $calculated_category_path_string;
   }
 
-  function tep_remove_category($category_id) {
+  function owpRemove_category($category_id) {
     $category_image_query = tep_db_query("select categories_image from " . TABLE_CATEGORIES . " where categories_id = '" . tep_db_input($category_id) . "'");
     $category_image = tep_db_fetch_array($category_image_query);
 
@@ -885,7 +825,7 @@
     }
   }
 
-  function tep_remove_product($product_id) {
+  function owpRemove_product($product_id) {
     $product_image_query = tep_db_query("select products_image from " . TABLE_PRODUCTS . " where products_id = '" . tep_db_input($product_id) . "'");
     $product_image = tep_db_fetch_array($product_image_query);
 
@@ -918,7 +858,7 @@
     }
   }
 
-  function tep_remove_order($order_id, $restock = false) {
+  function owpRemove_order($order_id, $restock = false) {
     if ($restock == 'on') {
       $order_query = tep_db_query("select products_id, products_quantity from " . TABLE_ORDERS_PRODUCTS . " where orders_id = '" . tep_db_input($order_id) . "'");
       while ($order = tep_db_fetch_array($order_query)) {
@@ -1026,20 +966,20 @@
     }
   }
 
-  function tep_remove($source) {
-    global $messageStack, $tep_remove_error;
+  function owpRemove($source) {
+    global $messageStack, $owpRemoveError;
 
-    if (isset($tep_remove_error)) $tep_remove_error = false;
+    if (isset($owpRemoveError)) $owpRemoveError = false;
 
     if (is_dir($source)) {
       $dir = dir($source);
       while ($file = $dir->read()) {
         if ( ($file != '.') && ($file != '..') ) {
           if (is_writeable($source . '/' . $file)) {
-            tep_remove($source . '/' . $file);
+            owpRemove($source . '/' . $file);
           } else {
             $messageStack->add(sprintf(ERROR_FILE_NOT_REMOVEABLE, $source . '/' . $file), 'error');
-            $tep_remove_error = true;
+            $owpRemoveError = true;
           }
         }
       }
@@ -1049,14 +989,14 @@
         rmdir($source);
       } else {
         $messageStack->add(sprintf(ERROR_DIRECTORY_NOT_REMOVEABLE, $source), 'error');
-        $tep_remove_error = true;
+        $owpRemoveError = true;
       }
     } else {
       if (is_writeable($source)) {
         unlink($source);
       } else {
         $messageStack->add(sprintf(ERROR_FILE_NOT_REMOVEABLE, $source), 'error');
-        $tep_remove_error = true;
+        $owpRemoveError = true;
       }
     }
   }

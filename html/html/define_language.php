@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: define_language.php,v 1.8 2003/04/20 06:45:10 r23 Exp $
+   $Id: define_language.php,v 1.9 2003/04/20 07:05:02 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -42,7 +42,7 @@
           fwrite($new_file, $file_contents, strlen($file_contents));
           fclose($new_file);
         }
-        tep_redirect(tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']));
+        owpRedirect(owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']));
       }
       break;
   }
@@ -86,7 +86,7 @@
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr><?php echo tep_draw_form('lng', FILENAME_DEFINE_LANGUAGE, '', 'get'); ?>
             <td class="pageHeading"><?php echo HEADING_TITLE; ?></td>
-            <td class="pageHeading" align="right"><?php echo tep_draw_separator('pixel_trans.gif', '1', HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="pageHeading" align="right"><?php echo owpTransLine('1', HEADING_IMAGE_HEIGHT); ?></td>
             <td class="pageHeading" align="right"><?php echo tep_draw_pull_down_menu('lngdir', $languages_array, '', 'onChange="this.form.submit();"'); ?></td>
           </form></tr>
         </table></td>
@@ -122,10 +122,10 @@
                 <td class="main"><?php echo tep_draw_textarea_field('file_contents', 'soft', '80', '20', $file_contents, (($file_writeable) ? '' : 'readonly')); ?></td>
               </tr>
               <tr>
-                <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
+                <td><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
-                <td align="right"><?php if ($file_writeable) { echo tep_image_submit('button_save.gif', IMAGE_SAVE) . '&nbsp;<a href="' . tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>'; } else { echo '<a href="' . tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; } ?></td>
+                <td align="right"><?php if ($file_writeable) { echo owpImage_submit('button_save.gif', IMAGE_SAVE) . '&nbsp;<a href="' . owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>'; } else { echo '<a href="' . owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_back.gif', IMAGE_BACK) . '</a>'; } ?></td>
               </tr>
             </table></td>
           </form></tr>
@@ -136,10 +136,10 @@
             <td class="main"><b><?php echo TEXT_FILE_DOES_NOT_EXIST; ?></b></td>
           </tr>
           <tr>
-            <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
+            <td><?php echo owpTransLine('1', '10'); ?></td>
           </tr>
           <tr>
-            <td><?php echo '<a href="' . tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
+            <td><?php echo '<a href="' . owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
           </tr>
 <?php
     }
@@ -149,7 +149,7 @@
           <tr>
             <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td class="smallText"><a href="<?php echo tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir'] . '&filename=' . $filename); ?>"><b><?php echo $filename; ?></b></a></td>
+                <td class="smallText"><a href="<?php echo owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir'] . '&filename=' . $filename); ?>"><b><?php echo $filename; ?></b></a></td>
 <?php
     $dir = dir(DIR_FS_CATALOG_LANGUAGES . $_GET['lngdir']);
     $left = false;
@@ -157,7 +157,7 @@
       $file_extension = substr($PHP_SELF, strrpos($PHP_SELF, '.'));
       while ($file = $dir->read()) {
         if (substr($file, strrpos($file, '.')) == $file_extension) {
-          echo '                <td class="smallText"><a href="' . tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir'] . '&filename=' . $file) . '">' . $file . '</a></td>' . "\n";
+          echo '                <td class="smallText"><a href="' . owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $_GET['lngdir'] . '&filename=' . $file) . '">' . $file . '</a></td>' . "\n";
           if (!$left) {
             echo '              </tr>' . "\n" .
                  '              <tr>' . "\n";
@@ -172,10 +172,10 @@
             </table></td>
           </tr>
           <tr>
-            <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
+            <td><?php echo owpTransLine('1', '10'); ?></td>
           </tr>
           <tr>
-            <td align="right"><?php echo '<a href="' . tep_href_link(FILENAME_FILE_MANAGER, 'current_path=' . DIR_FS_CATALOG_LANGUAGES . $_GET['lngdir']) . '">' . tep_image_button('button_file_manager.gif', IMAGE_FILE_MANAGER) . '</a>'; ?></td>
+            <td align="right"><?php echo '<a href="' . owpLink(FILENAME_FILE_MANAGER, 'current_path=' . DIR_FS_CATALOG_LANGUAGES . $_GET['lngdir']) . '">' . owpImage_button('button_file_manager.gif', IMAGE_FILE_MANAGER) . '</a>'; ?></td>
           </tr>
 <?php
   }

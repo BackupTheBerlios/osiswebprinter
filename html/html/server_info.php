@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: server_info.php,v 1.6 2003/04/20 06:48:05 r23 Exp $
+   $Id: server_info.php,v 1.7 2003/04/20 07:09:15 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -52,7 +52,7 @@
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr>
             <td class="pageHeading"><?php echo HEADING_TITLE; ?></td>
-            <td class="pageHeading" align="right"><?php echo tep_draw_separator('pixel_trans.gif', HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="pageHeading" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -83,7 +83,7 @@
                 <td colspan="3" class="smallText"><?php echo $system['uptime']; ?></td>
               </tr>
               <tr>
-                <td colspan="4"><?php echo tep_draw_separator('pixel_trans.gif', '1', '5'); ?></td>
+                <td colspan="4"><?php echo owpTransLine('1', '5'); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><b><?php echo TITLE_HTTP_SERVER; ?></b></td>
@@ -98,7 +98,7 @@
         </table></td>
       </tr>
       <tr>
-        <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
+        <td><?php echo owpTransLine('1', '10'); ?></td>
       </tr>
     </table></td>
 <!-- body_text_eof //-->

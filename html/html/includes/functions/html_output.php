@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: html_output.php,v 1.3 2003/04/20 06:46:43 r23 Exp $
+   $Id: html_output.php,v 1.4 2003/04/20 07:08:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,9 +24,9 @@
 
 ////
 // The HTML href link wrapper function
-  function tep_href_link($page = '', $parameters = '', $connection = 'NONSSL') {
+  function owpLink($page = '', $parameters = '', $connection = 'NONSSL') {
     if ($page == '') {
-      die('</td></tr></table></td></tr></table><br><br><font color="#ff0000"><b>Error!</b></font><br><br><b>Unable to determine the page link!<br><br>Function used:<br><br>tep_href_link(\'' . $page . '\', \'' . $parameters . '\', \'' . $connection . '\')</b>');
+      die('</td></tr></table></td></tr></table><br><br><font color="#ff0000"><b>Error!</b></font><br><br><b>Unable to determine the page link!<br><br>Function used:<br><br>owpLink(\'' . $page . '\', \'' . $parameters . '\', \'' . $connection . '\')</b>');
     }
     if ($connection == 'NONSSL') {
       $link = HTTP_SERVER . DIR_WS_ADMIN;
@@ -37,7 +37,7 @@
         $link = HTTP_SERVER . DIR_WS_ADMIN;
       }
     } else {
-      die('</td></tr></table></td></tr></table><br><br><font color="#ff0000"><b>Error!</b></font><br><br><b>Unable to determine connection method on a link!<br><br>Known methods: NONSSL SSL<br><br>Function used:<br><br>tep_href_link(\'' . $page . '\', \'' . $parameters . '\', \'' . $connection . '\')</b>');
+      die('</td></tr></table></td></tr></table><br><br><font color="#ff0000"><b>Error!</b></font><br><br><b>Unable to determine connection method on a link!<br><br>Known methods: NONSSL SSL<br><br>Function used:<br><br>owpLink(\'' . $page . '\', \'' . $parameters . '\', \'' . $connection . '\')</b>');
     }
     if ($parameters == '') {
       $link = $link . $page . '?' . SID;
@@ -50,28 +50,6 @@
     return $link;
   }
 
-  function tep_catalog_href_link($page = '', $parameters = '', $connection = 'NONSSL') {
-    if ($connection == 'NONSSL') {
-      $link = HTTP_CATALOG_SERVER . DIR_WS_CATALOG;
-    } elseif ($connection == 'SSL') {
-      if (ENABLE_SSL_CATALOG == 'true') {
-        $link = HTTPS_CATALOG_SERVER . DIR_WS_CATALOG;
-      } else {
-        $link = HTTP_CATALOG_SERVER . DIR_WS_CATALOG;
-      }
-    } else {
-      die('</td></tr></table></td></tr></table><br><br><font color="#ff0000"><b>Error!</b></font><br><br><b>Unable to determine connection method on a link!<br><br>Known methods: NONSSL SSL<br><br>Function used:<br><br>tep_href_link(\'' . $page . '\', \'' . $parameters . '\', \'' . $connection . '\')</b>');
-    }
-    if ($parameters == '') {
-      $link .= $page;
-    } else {
-      $link .= $page . '?' . $parameters;
-    }
-
-    while ( (substr($link, -1) == '&') || (substr($link, -1) == '?') ) $link = substr($link, 0, -1);
-
-    return $link;
-  }
 
 ////
 // The HTML image wrapper function
@@ -159,9 +137,9 @@
   function tep_draw_form($name, $action, $parameters = '', $method = 'post', $params = '') {
     $form = '<form name="' . $name . '" action="';
     if ($parameters) {
-      $form .= tep_href_link($action, $parameters);
+      $form .= owpLink($action, $parameters);
     } else {
-      $form .= tep_href_link($action);
+      $form .= owpLink($action);
     }
     $form .= '" method="' . $method . '"';
     if ($params) {
@@ -283,4 +261,76 @@
 
     return $field;
   }
+  
+  /**
+   * owpImage : liefert image mit tags zurück
+   *  
+   * @author     r23
+   * @version    1.0
+   * @param      $src   	Bildname
+   * @param      $alt   	Bild Tag
+   * @param      width  	Breite des Bildes, wenn nicht vergeben
+   *		      	wird die Breite errechnet
+   * @param      $height 	Höhe des Bildes, wenn nicht vergeben
+   *		      	wird die Höhe errechnet
+   * @param      $parameters 	für sonstige html parameter 
+   * @return     <img src=bildname width height border=0 alt=[text] />
+   */
+   function owpImage($src, $alt = '', $width = '', $height = '', $parameters = '') {    
+     if ( (($src == '') || ($src == OWP_IMAGES_DIR)) && (OWP_IMAGE_REQUIRED == 'false') ) {
+       return '';
+     }  
+     $image = '<img src="' . $src . '"';   
+     if ( (CONFIG_CALCULATE_IMAGE_SIZE == 'true') && ((!$width) || (!$height)) ) {
+       if ($image_size = @getimagesize($src)) {
+         if ( (!$width) && ($height) ) {
+           $ratio = $height / $image_size[1];
+           $width = $image_size[0] * $ratio;
+         } elseif ( ($width) && (!$height) ) {
+           $ratio = $width / $image_size[0];
+           $height = $image_size[1] * $ratio;
+         } elseif ( (!$width) && (!$height) ) {
+           $width = $image_size[0];
+           $height = $image_size[1];
+         }
+       } elseif (OWP_IMAGE_REQUIRED == 'false') {
+         return false;
+       }
+     }
+  
+     if ( ($width) && ($height) ) {
+       $image .= ' width="' . $width . '" height="' . $height . '"';
+     }
+  
+     if ($parameters != '') {
+       $image .= ' ' . $parameters;
+     }
+  
+     if ($alt == '') {
+       $image .= ' border="0" alt=" "';
+     } else {
+       $image .= ' border="0" alt="[ ' . htmlspecialchars($alt) . ' ]" title=" ' . htmlspecialchars($alt) . ' "';
+     }
+     
+     if (LAYOUT_XHTML == 'true') {
+       $image .= ' /';
+     }
+       $image .= '>';
+  
+     return $image;
+   }
+
+  /**
+   *  owpTransLine : liefert eine transparente grafik bei aufruf
+   *                 ohne parameter mit width = 100% und height= 1 zurück
+   *  
+   * @author     r23
+   * @version    1.0
+   * @param      $width, $height, $image
+   * @return     ruft die funktion owpImage auf 
+   * @return     <img src="images/trans.gif" width="100%" height="1" alt=" " />
+   */
+   function owpTransLine($width = '100%', $height = '1', $image = 'trans.gif') {
+     return owpImage(OWP_INCLUDES_DIR . $image, '', $width, $height);
+   }
 ?>

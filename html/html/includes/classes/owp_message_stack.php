@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_message_stack.php,v 1.3 2003/04/20 06:45:10 r23 Exp $
+   $Id: owp_message_stack.php,v 1.4 2003/04/20 07:07:07 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -47,11 +47,11 @@
 
     function add($message, $type = 'error') {
       if ($type == 'error') {
-        $this->errors[] = array('params' => 'class="messageStackError"', 'text' => tep_image(OWP_ICONS_DIR . 'error.gif', ICON_ERROR) . '&nbsp;' . $message);
+        $this->errors[] = array('params' => 'class="messageStackError"', 'text' => owpImage(OWP_ICONS_DIR . 'error.gif', ICON_ERROR) . '&nbsp;' . $message);
       } elseif ($type == 'warning') {
-        $this->errors[] = array('params' => 'class="messageStackWarning"', 'text' => tep_image(OWP_ICONS_DIR . 'warning.gif', ICON_WARNING) . '&nbsp;' . $message);
+        $this->errors[] = array('params' => 'class="messageStackWarning"', 'text' => owpImage(OWP_ICONS_DIR . 'warning.gif', ICON_WARNING) . '&nbsp;' . $message);
       } elseif ($type == 'success') {
-        $this->errors[] = array('params' => 'class="messageStackSuccess"', 'text' => tep_image(OWP_ICONS_DIR . 'success.gif', ICON_SUCCESS) . '&nbsp;' . $message);
+        $this->errors[] = array('params' => 'class="messageStackSuccess"', 'text' => owpImage(OWP_ICONS_DIR . 'success.gif', ICON_SUCCESS) . '&nbsp;' . $message);
       } else {
         $this->errors[] = array('params' => 'class="messageStackError"', 'text' => $message);
       }

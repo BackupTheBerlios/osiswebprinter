@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: column_left.php,v 1.4 2003/04/20 06:45:10 r23 Exp $
+   $Id: column_left.php,v 1.5 2003/04/20 07:08:17 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
