@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: backup.php,v 1.2 2003/04/18 22:59:37 r23 Exp $
+   $Id: backup.php,v 1.3 2003/04/18 23:15:00 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,8 +24,8 @@
 
   require('includes/application_top.php');
 
-  if ($HTTP_GET_VARS['action']) {
-    switch ($HTTP_GET_VARS['action']) {
+  if ($_GET['action']) {
+    switch ($_GET['action']) {
       case 'forget':
         tep_db_query("delete from " . TABLE_CONFIGURATION . " where configuration_key = 'DB_LAST_RESTORE'");
         $messageStack->add_session(SUCCESS_LAST_RESTORE_CLEARED, 'success');
@@ -172,11 +172,11 @@
       case 'restorelocalnow':
         tep_set_time_limit(0);
 
-        if ($HTTP_GET_VARS['action'] == 'restorenow') {
-          $read_from = $HTTP_GET_VARS['file'];
-          if (file_exists(DIR_FS_BACKUP . $HTTP_GET_VARS['file'])) {
-            $restore_file = DIR_FS_BACKUP . $HTTP_GET_VARS['file'];
-            $extension = substr($HTTP_GET_VARS['file'], -3);
+        if ($_GET['action'] == 'restorenow') {
+          $read_from = $_GET['file'];
+          if (file_exists(DIR_FS_BACKUP . $_GET['file'])) {
+            $restore_file = DIR_FS_BACKUP . $_GET['file'];
+            $extension = substr($_GET['file'], -3);
             if ( ($extension == 'sql') || ($extension == '.gz') || ($extension == 'zip') ) {
               switch ($extension) {
                 case 'sql':
@@ -201,7 +201,7 @@
               }
             }
           }
-        } elseif ($HTTP_GET_VARS['action'] == 'restorelocalnow') {
+        } elseif ($_GET['action'] == 'restorelocalnow') {
           $sql_file = tep_get_uploaded_file('sql_file');
 
           if (is_uploaded_file($sql_file['tmp_name'])) {
@@ -273,13 +273,13 @@
         tep_redirect(tep_href_link(FILENAME_BACKUP));
         break;
       case 'download':
-        $extension = substr($HTTP_GET_VARS['file'], -3);
+        $extension = substr($_GET['file'], -3);
         if ( ($extension == 'zip') || ($extension == '.gz') || ($extension == 'sql') ) {
-          if ($fp = fopen(DIR_FS_BACKUP . $HTTP_GET_VARS['file'], 'rb')) {
-            $buffer = fread($fp, filesize(DIR_FS_BACKUP . $HTTP_GET_VARS['file']));
+          if ($fp = fopen(DIR_FS_BACKUP . $_GET['file'], 'rb')) {
+            $buffer = fread($fp, filesize(DIR_FS_BACKUP . $_GET['file']));
             fclose($fp);
             header('Content-type: application/x-octet-stream');
-            header('Content-disposition: attachment; filename=' . $HTTP_GET_VARS['file']);
+            header('Content-disposition: attachment; filename=' . $_GET['file']);
             echo $buffer;
             exit;
           }
@@ -288,9 +288,9 @@
         }
         break;
       case 'deleteconfirm':
-        if (strstr($HTTP_GET_VARS['file'], '..')) tep_redirect(tep_href_link(FILENAME_BACKUP));
+        if (strstr($_GET['file'], '..')) tep_redirect(tep_href_link(FILENAME_BACKUP));
 
-        tep_remove(DIR_FS_BACKUP . '/' . $HTTP_GET_VARS['file']);
+        tep_remove(DIR_FS_BACKUP . '/' . $_GET['file']);
         if (!$tep_remove_error) {
           $messageStack->add_session(SUCCESS_BACKUP_DELETED, 'success');
           tep_redirect(tep_href_link(FILENAME_BACKUP));
@@ -365,7 +365,7 @@
 
       $check = 0;
 
-      if (((!$HTTP_GET_VARS['file']) || ($HTTP_GET_VARS['file'] == $entry)) && (!$buInfo) && ($HTTP_GET_VARS['action'] != 'backup') && ($HTTP_GET_VARS['action'] != 'restorelocal')) {
+      if (((!$_GET['file']) || ($_GET['file'] == $entry)) && (!$buInfo) && ($_GET['action'] != 'backup') && ($_GET['action'] != 'restorelocal')) {
         $file_array['file'] = $entry;
         $file_array['date'] = date(PHP_DATE_TIME_FORMAT, filemtime(DIR_FS_BACKUP . $entry));
         $file_array['size'] = number_format(filesize(DIR_FS_BACKUP . $entry)) . ' bytes';
@@ -398,7 +398,7 @@
 ?>
               <tr>
                 <td class="smallText" colspan="3"><?php echo TEXT_BACKUP_DIRECTORY . ' ' . DIR_FS_BACKUP; ?></td>
-                <td align="right" class="smallText"><?php if ( ($HTTP_GET_VARS['action'] != 'backup') && ($dir) ) echo '<a href="' . tep_href_link(FILENAME_BACKUP, 'action=backup') . '">' . tep_image_button('button_backup.gif', IMAGE_BACKUP) . '</a>'; if ( ($HTTP_GET_VARS['action'] != 'restorelocal') && ($dir) ) echo '&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_BACKUP, 'action=restorelocal') . '">' . tep_image_button('button_restore.gif', IMAGE_RESTORE) . '</a>'; ?></td>
+                <td align="right" class="smallText"><?php if ( ($_GET['action'] != 'backup') && ($dir) ) echo '<a href="' . tep_href_link(FILENAME_BACKUP, 'action=backup') . '">' . tep_image_button('button_backup.gif', IMAGE_BACKUP) . '</a>'; if ( ($_GET['action'] != 'restorelocal') && ($dir) ) echo '&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_BACKUP, 'action=restorelocal') . '">' . tep_image_button('button_restore.gif', IMAGE_RESTORE) . '</a>'; ?></td>
               </tr>
 <?php
   if (defined('DB_LAST_RESTORE')) {
@@ -413,7 +413,7 @@
 <?php
   $heading = array();
   $contents = array();
-  switch ($HTTP_GET_VARS['action']) {
+  switch ($_GET['action']) {
     case 'backup':
       $heading[] = array('text' => '<b>' . TEXT_INFO_HEADING_NEW_BACKUP . '</b>');
 

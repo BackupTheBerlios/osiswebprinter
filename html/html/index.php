@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.2 2003/04/18 22:59:37 r23 Exp $
+   $Id: index.php,v 1.3 2003/04/18 23:15:00 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -204,7 +204,7 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
                     <td colspan="2"><table border="0" width="100%" cellspacing="0" cellpadding="2">
                       <tr><?php echo tep_draw_form('languages', 'index.php', '', 'get'); ?>
                         <td class="heading"><?php echo HEADING_TITLE; ?></td>
-                        <td align="right"><?php echo tep_draw_pull_down_menu('language', $languages_array, ($HTTP_GET_VARS['language'] ? $HTTP_GET_VARS['language'] : DEFAULT_LANGUAGE), 'onChange="this.form.submit();"'); ?></td>
+                        <td align="right"><?php echo tep_draw_pull_down_menu('language', $languages_array, ($_GET['language'] ? $_GET['language'] : DEFAULT_LANGUAGE), 'onChange="this.form.submit();"'); ?></td>
                       </form></tr>
                     </table></td>
                   </tr>

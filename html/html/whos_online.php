@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: whos_online.php,v 1.2 2003/04/18 22:59:37 r23 Exp $
+   $Id: whos_online.php,v 1.3 2003/04/18 23:15:00 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -79,7 +79,7 @@
   $whos_online_query = tep_db_query("select customer_id, full_name, ip_address, time_entry, time_last_click, last_page_url, session_id from " . TABLE_WHOS_ONLINE);
   while ($whos_online = tep_db_fetch_array($whos_online_query)) {
     $time_online = (time() - $whos_online['time_entry']);
-    if ( ((!$HTTP_GET_VARS['info']) || (@$HTTP_GET_VARS['info'] == $whos_online['session_id'])) && (!$info) ) {
+    if ( ((!$_GET['info']) || (@$_GET['info'] == $whos_online['session_id'])) && (!$info) ) {
       $info = $whos_online['session_id'];
     }
     if ($whos_online['session_id'] == $info) {
