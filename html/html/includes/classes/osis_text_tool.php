@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: osis_text_tool.php,v 1.1 2003/03/28 03:25:28 r23 Exp $
+   $Id: osis_text_tool.php,v 1.2 2003/04/03 21:53:25 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -38,7 +38,7 @@
       return stripslashes(htmlspecialchars($string));
     }
 
-    function &heading($string, $big = "ow-bigTitle") {
+    function &heading($string, $big = "owp-bigTitle") {
       $string = str_replace("&szlig;", 'ß', $string );     
       $string = str_replace("&ouml;", 'ö', $string);
       $string = str_replace("&auml;", 'ä', $string);
