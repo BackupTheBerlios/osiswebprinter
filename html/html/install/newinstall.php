@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newinstall.php,v 1.3 2003/03/28 02:54:52 r23 Exp $
+   $Id: newinstall.php,v 1.4 2003/04/01 02:30:23 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -41,49 +41,46 @@
    ---------------------------------------------------------------------- */
 
 /*** This function creates the DB on new installs ***/
-function make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake)
-{
+function make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake) {
     global $dbconn;
-    echo "<center><br><br>";
+    
+    echo '<center><br /><br />';
     if ($dbmake) {
-        mysql_pconnect($dbhost, $dbuname, $dbpass);
-        $result = mysql_query("CREATE DATABASE $dbname") or die (_MAKE_DB_1);
-        $message = "<br><br><font class=\"pn-failed\">$dbname "._MAKE_DB_2."</font>";
-        echo $message;
+       mysql_connect($dbhost, $dbuname, $dbpass);
+       $result = mysql_query("CREATE DATABASE $dbname") or die (_MAKE_DB_1);
+       echo '<br><br><font class="owp-error">' . $dbname . MAKE_DB_2. '</font>'; 
     } else {
-        echo "<font class=\"pn-failed\">"._MAKE_DB_3."</font>";
+        echo '<font class="owp-error">'. MAKE_DB_3 . '</font>';
     }
-    include("newtables.php");
+    include('newtables.php');
 }
 
 /*** This function inserts the default data on new installs ***/
-function input_data($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $aid, $name, $pwd, $repeatpwd, $email, $url)
-{
-
+function input_data($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $aid, $name, $pwd, $repeatpwd, $email, $url) {
+    global $dbconn;
+    
     if ($pwd != $repeatpwd) {
-        echo _PWBADMATCH;
-        exit;
+      echo _PWBADMATCH;
+      exit;
     } else {
-        echo "<font class=\"pn-title\">"._INPUT_DATA_1."</font>";
+      echo '<font class="owp-title">' . INPUT_DATA_1. '</font>';
+      echo "<center>";
+      global $dbconn;
+      mysql_connect($dbhost, $dbuname, $dbpass);
+      mysql_select_db("$dbname") or die ("<br><font class=\"owp-sub\">"._NOTSELECT."</font>");
 
+      // Put basic information in first
+      include('newdata.php');
 
-        echo "<center>";
-        global $dbconn;
-        mysql_connect($dbhost, $dbuname, $dbpass);
-        mysql_select_db("$dbname") or die ("<br><font class=\"pn-sub\">"._NOTSELECT."</font>");
+      // new installs will use md5 hashing - compatible on windows and *nix variants.
+      $pwd = md5($pwd);
 
-        // Put basic information in first
-        include("newdata.php");
+      $result = $dbconn->Execute("INSERT INTO $prefix"._users." VALUES ( NULL, '$name', '$aid', '$email', '', '$url', 'blank.gif', ".time().", '', '', '', '', '', '', '', '', '', '', '$pwd', 10, '', 0, 0, 0, '', 0, '', '', 4096, 0, '12.0')") or die ("<b>"._NOTUPDATED.$prefix."_users</b>");
+      echo '<br><font class="owp-sub">' . $prefix . '_users' . UPDATED . '</font>';
 
-        // new installs will use md5 hashing - compatible on windows and *nix variants.
-        $pwd = md5($pwd);
-
-        $result = $dbconn->Execute("INSERT INTO $prefix"._users." VALUES ( NULL, '$name', '$aid', '$email', '', '$url', 'blank.gif', ".time().", '', '', '', '', '', '', '', '', '', '', '$pwd', 10, '', 0, 0, 0, '', 0, '', '', 4096, 0, '12.0')") or die ("<b>"._NOTUPDATED.$prefix."_users</b>");
-        echo "<br><font class=\"pn-sub\">".$prefix."_users"._UPDATED."</font>";
-
-        // We know that the above user is UID 2 and that the admin group is GID 2 from the newdata
-        $result = $dbconn->Execute("INSERT INTO $prefix"._group_membership." VALUES (2, 2)") or die ("<b>"._NOTUPDATED.$prefix."_group_membership</b>");
-        echo "<br><font class=\"pn-sub\">".$prefix."_group_membership"._UPDATED."</font>";
+      // We know that the above user is UID 2 and that the admin group is GID 2 from the newdata
+      $result = $dbconn->Execute("INSERT INTO $prefix"._group_membership." VALUES (2, 2)") or die ("<b>"._NOTUPDATED.$prefix."_group_membership</b>");
+      echo '<br><font class="owp-sub">' . $prefix . '_group_membership ' . UPDATED. '</font>';
     }
 }
 

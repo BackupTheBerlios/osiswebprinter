@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newtables.php,v 1.3 2003/03/28 02:55:43 r23 Exp $
+   $Id: newtables.php,v 1.4 2003/04/01 02:30:23 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -26,10 +26,10 @@ function dosql($table,$sql) {
    GLOBAL $dbconn;
    $result = $dbconn->Execute($sql);
    if ($result === false) {
-      echo "<font class=\"pn-failed\">"._NOTMADE." ".$table."</font>";
+      echo '<font class="owp-error">" . NOTMADE . " " . $table . '</font>';
       exit;
    }
-   echo "<br><font class=\"pn-sub\">".$table." "._MADE."</font>";
+   echo '<br><font class="owp-sub">' . $table . " " . MADE . '</font>';
 }
 
 $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);

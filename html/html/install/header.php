@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: header.php,v 1.3 2003/03/29 22:31:47 r23 Exp $
+   $Id: header.php,v 1.4 2003/04/01 02:30:23 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -26,13 +26,13 @@
 <body>
 <table width="670" border="0" cellspacing="0" cellpadding="1" align="center">
   <tr>  
-    <td align="left" valign="top" class="ow-main"><font class="ow-pageTitle"><?php  echo owTextTool::heading(INSTALLATION); ?></font></td>
+    <td align="left" valign="top" class="owp-main"><font class="owp-pageTitle"><?php  echo owTextTool::heading(INSTALLATION); ?></font></td>
   </tr>
   <tr>
     <td><img src="images/trans.gif" width="100%" height="6" border="0" alt=" "></td>
   </tr>
   <tr>
-    <td align="left" valign="top" class="ow-footer">&nbsp;&nbsp;<?php  echo strftime(DATE_LONG); ?>&nbsp;&nbsp;</td>
+    <td align="left" valign="top" class="owp-footer">&nbsp;&nbsp;<?php  echo strftime(DATE_LONG); ?>&nbsp;&nbsp;</td>
   </tr>
   <tr>
     <td><img src="images/trans.gif" width="100%" height="7" border="0" alt=" "></td>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: check.php,v 1.5 2003/03/30 16:11:31 r23 Exp $
+   $Id: check.php,v 1.6 2003/04/01 02:30:23 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -30,34 +30,34 @@
 function do_check_php() {
    global $currentlang;
 
-   echo '<font class="ow-title">' . PHP_CHECK_1 . '</font><br /><br />';
-   echo '<font class="ow-normal">' . PHP_CHECK_2. '</font><br />';
+   echo '<font class="owp-title">' . PHP_CHECK_1 . '</font><br /><br />';
+   echo '<font class="owp-normal">' . PHP_CHECK_2. '</font><br />';
    
    $check_php = true;
    $phpver = phpversion();
-   echo '<br /><font class="ow-title">' . PHP_CHECK_3 . $phpver. '</font><br />';
+   echo '<br /><font class="owp-title">' . PHP_CHECK_3 . $phpver. '</font><br />';
 
    if (phpversion() < '4.1.0') {
-     echo '<font class="ow-error">' . PHP_CHECK_4 . '</font><br />';
+     echo '<font class="owp-error">' . PHP_CHECK_4 . '</font><br />';
      $check_php = false;
    } else {
-     echo '<font class="ow-normal">' . PHP_CHECK_5. '</font><br />';
+     echo '<font class="owp-normal">' . PHP_CHECK_5. '</font><br />';
    }
 
    if (get_magic_quotes_gpc() == 0) {
-     echo '<br /><font class="ow-error">' . PHP_CHECK_6 . '</font><br />';
-     echo '<font class="ow-title">' . PHP_CHECK_7 . '</font><br />';
+     echo '<br /><font class="owp-error">' . PHP_CHECK_6 . '</font><br />';
+     echo '<font class="owp-title">' . PHP_CHECK_7 . '</font><br />';
      $check_php = false;
    } else {
-     echo '<br /><font class="ow-title">' . PHP_CHECK_8 . '</font><br />';
+     echo '<br /><font class="owp-title">' . PHP_CHECK_8 . '</font><br />';
    } 
    
    if (get_magic_quotes_runtime() == 1) {
-     echo '<br /><font class="ow-error">' . PHP_CHECK_9. '</font><br />';
-     echo '<font class="ow-title">' . PHP_CHECK_10 . '</font><br />';
+     echo '<br /><font class="owp-error">' . PHP_CHECK_9. '</font><br />';
+     echo '<font class="owp-title">' . PHP_CHECK_10 . '</font><br />';
      $check_php = false;
    } else {
-     echo '<br /><font class="ow-title">' . PHP_CHECK_11 . '</font><br />';
+     echo '<br /><font class="owp-title">' . PHP_CHECK_11 . '</font><br />';
    }
    
    if ($check_php == 'true') {
@@ -80,23 +80,23 @@ function do_check_php() {
 function do_check_chmod() {
    global $currentlang;
 
-   echo '<font class="ow-title">' . CHMOD_CHECK_1 . '</font><br /><br />';
-   echo '<font class="ow-normal">' . CHMOD_CHECK_2. '</font>';
+   echo '<font class="owp-title">' . CHMOD_CHECK_1 . '</font><br /><br />';
+   echo '<font class="owp-normal">' . CHMOD_CHECK_2. '</font>';
    
    $check_chmod = true;
    $file='../includes/config.php';
    if (is_writable($file)){
-     echo '<br /><br /><font class="ow-title">' . CHMOD_CHECK_3 . '</font><br />';
+     echo '<br /><br /><font class="owp-title">' . CHMOD_CHECK_3 . '</font><br />';
    } else {
-     echo '<br /><br /><font class="ow-error">' . CHMOD_CHECK_4 . '</font><br />';
+     echo '<br /><br /><font class="owp-error">' . CHMOD_CHECK_4 . '</font><br />';
      $check_chmod = false;
    }
    
    $file='../includes/config-old.php';
    if (is_writable($file)){
-     echo '<p><font class="ow-title">' . CHMOD_CHECK_5 . '</font></p>';
+     echo '<p><font class="owp-title">' . CHMOD_CHECK_5 . '</font></p>';
    } else {
-     echo '<p><font class="ow-error">' . CHMOD_CHECK_6 . '</font></p>';
+     echo '<p><font class="owp-error">' . CHMOD_CHECK_6 . '</font></p>';
      $check_chmod = false;
    }
    

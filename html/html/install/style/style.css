@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------
-   $Id: style.css,v 1.5 2003/03/29 22:31:47 r23 Exp $
+   $Id: style.css,v 1.6 2003/04/01 02:31:27 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -61,11 +61,11 @@ A:hover {
   TEXT-DECORATION: underline
 }
 
-TR.ow-footer {
+TR.owp-footer {
   background-color : #000000;
 }
 
-TD.ow-footer {
+TD.owp-footer {
   font-family : Verdana, Arial, sans-serif;
   font-size : 10px;
   background-color : #000000;
@@ -73,7 +73,7 @@ TD.ow-footer {
   font-weight : bold;
 }
 
-.ow-pageTitle {
+.owp-pageTitle {
   COLOR: #000000;
   FONT-SIZE: 12px;
   FONT-WEIGHT: bold;
@@ -81,7 +81,7 @@ TD.ow-footer {
   TEXT-DECORATION: none
 }
 
-.ow-bigTitle {
+.owp-bigTitle {
   COLOR: #000000;
   FONT-SIZE: 18px;
   FONT-WEIGHT: bold;
@@ -89,7 +89,7 @@ TD.ow-footer {
   TEXT-DECORATION: none
 }
 
-.ow-pageGreat {
+.owp-pageGreat {
   COLOR: #000000;
   FONT-SIZE: 14px;
   FONT-WEIGHT: bold;
@@ -97,7 +97,7 @@ TD.ow-footer {
   TEXT-DECORATION: none
 }
 
-.ow-title {
+.owp-title {
   COLOR: #000000;
   FONT-SIZE: 11px;
   FONT-WEIGHT: bold;
@@ -105,7 +105,7 @@ TD.ow-footer {
   TEXT-DECORATION: none
 }
 
-.ow-error {
+.owp-error {
   COLOR: #EA0000;
   FONT-SIZE: 11px;
   FONT-WEIGHT: bold;
@@ -113,7 +113,7 @@ TD.ow-footer {
   TEXT-DECORATION: none
 }
 
-.ow-main {
+.owp-main {
   COLOR: #000000;
   FONT-SIZE: 11px;
   FONT-FAMILY: Verdana, Arial, sans-serif;
@@ -121,21 +121,14 @@ TD.ow-footer {
 }
 
 
-.ow-normal {
+.owp-normal {
   COLOR: #000000;
   FONT-SIZE: 11px;
   FONT-FAMILY: Verdana, Arial, sans-serif;
   TEXT-DECORATION: none
 }
 
-.pn-failed {
-  COLOR: #ff0034;
-  FONT-SIZE: 11px;
-  FONT-FAMILY: Verdana, Arial, sans-serif;
-  TEXT-DECORATION: none
-}
-
-.ow-sub {
+.owp-sub {
   COLOR: #000000;
   FONT-SIZE: 9px;
   FONT-FAMILY: Verdana, Arial, sans-serif;

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: language.php,v 1.4 2003/03/31 16:40:09 r23 Exp $
+   $Id: language.php,v 1.5 2003/04/01 02:30:23 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -43,18 +43,15 @@
 /** Loads the required language file for the installer **/
   function installer_get_language() {
      global $currentlang;
+     
      if (!isset($currentlang)) {
         $currentlang = 'deu'; 
      }
      if (file_exists($file="lang/$currentlang/global.php"))
        include $file;
-     elseif (file_exists($file="lang/$language/global.php"))
-       @include $file;
      if (file_exists($file="../includes/language/$currentlang/global.php"))
        @include $file;
-     elseif (file_exists($file="../includes/language/$language/global.php"))
-       @include $file;
-  }
+   }
 
 // Make common language selection dropdown (from Tim Litwiller)
    function lang_dropdown() {

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.7 2003/04/01 02:27:02 r23 Exp $
+   $Id: index.php,v 1.8 2003/04/01 02:30:23 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -113,7 +113,7 @@
  */
  switch ($_POST['op']) {
     case 'Finish':
-      print_finish();
+      owp_finish();
       break;
     case 'Set Login':
       $aid = owp_prepare_input($_POST['aid']);
@@ -126,27 +126,27 @@
       $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
       input_data($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $aid, $name, $pwd, $repeatpwd, $email, $url);
       update_config_php(true); // Scott - added
-      echo print_set_login();
+      echo owp_set_login();
       break;
     case 'Continue':
-      echo print_continue();
+      echo owp_continue();
       break;
     case 'Start':
       $dbmake = owp_prepare_input($_POST['dbmake']);
       make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake);
-      echo print_start();
+      echo owp_start();
       break;
     case 'New Install':
-      echo print_new_install();
+      echo owp_new_install();
       break;
     case 'Change Info':
-      echo print_change_info();
+      echo owp_change_info();
       break;
     case 'Submit':
-      echo print_submit();
+      echo owp_submit();
       break;
     case 'CHM_check':
-      echo print_CHM_check();
+      echo owp_CHM_check();
       break;
     case 'Check':
       do_check_chmod();
@@ -155,10 +155,10 @@
       do_check_php();
       break;
     case 'Set Language':
-      echo print_default();
+      echo owp_default();
       break;       
     default:
-      echo print_select_language();
+      echo owp_select_language();
       break;
   }
   include_once 'footer.php';
