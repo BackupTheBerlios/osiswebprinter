@@ -1,6 +1,6 @@
 <?php
 /** 
- * @version V3.30 3 March 2003 (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+ * @version V3.31 17 March 2003 (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
  * Released under both BSD license and Lesser GPL library license. 
  * Whenever there is any discrepancy between the two licenses, 
  * the BSD license will take precedence. 
@@ -725,7 +725,6 @@
 			else $rs = &$this->Execute($sql,$inputarr,$arg3);
 		}
 		$ADODB_COUNTRECS = $savec;
-		
 		if ($rs && !$rs->EOF) {
 			return $this->_rs2rs($rs,$nrows,$offset);
 		}
@@ -752,6 +751,7 @@
 			$rs = &$rs; // required to prevent crashing in 4.2.1-- why ?
 			return $rs;
 		}
+		
 		for ($i=0, $max=$rs->FieldCount(); $i < $max; $i++) {
 			$flds[] = $rs->FetchField($i);
 		}
@@ -869,7 +869,13 @@
 	*/
 	function GetAll($sql,$inputarr=false)
 	{
+	global $ADODB_COUNTRECS;
+		
+		$savec = $ADODB_COUNTRECS;
+		$ADODB_COUNTRECS = false;
 		$rs = $this->Execute($sql,$inputarr);
+		$ADODB_COUNTRECS = $savec;
+		
 		if (!$rs) 
 			if (defined('ADODB_PEAR')) return ADODB_PEAR_Error();
 			else return false;
@@ -880,7 +886,13 @@
 	
 	function CacheGetAll($secs2cache,$sql=false,$inputarr=false)
 	{
+	global $ADODB_COUNTRECS;
+		
+		$savec = $ADODB_COUNTRECS;
+		$ADODB_COUNTRECS = false;
 		$rs = $this->CacheExecute($secs2cache,$sql,$inputarr);
+		$ADODB_COUNTRECS = $savec;
+		
 		if (!$rs) 
 			if (defined('ADODB_PEAR')) return ADODB_PEAR_Error();
 			else return false;
@@ -905,6 +917,8 @@
 		$ADODB_COUNTRECS = false;
 		
 		$rs = $this->Execute($sql,$inputarr);
+		
+		$ADODB_COUNTRECS = $crecs;
 		if ($rs) {
 			$arr = false;
 			if (!$rs->EOF) $arr = $rs->fields;
@@ -912,7 +926,6 @@
 			return $arr;
 		}
 		
-		$crecs = $ADODB_COUNTRECS;
 		return false;
 	}
 	
@@ -983,17 +996,22 @@
 			$update = "UPDATE $table SET $uSet WHERE $where";
 		
 			$rs = $this->Execute($update);
-			
 			if ($rs) {
 				if ($this->poorAffectedRows) {
+				/*
+				 The Select count(*) wipes out any errors that the update would have returned. 
+				http://phplens.com/lens/lensforum/msgs.php?id=5696
+				*/
+					if ($this->ErrorNo()<>0) return 0;
+					
 				# affected_rows == 0 if update field values identical to old values
-				# for mysql - which is silly.
+				# for mysql - which is silly. 
+			
 					$cnt = $this->GetOne("select count(*) from $table where $where");
 					if ($cnt > 0) return 1; // record already exists
 				} else
 					 if (($this->Affected_Rows()>0)) return 1;
 			}
-			
 				
 		}
 	//	print "<p>Error=".$this->ErrorNo().'<p>';

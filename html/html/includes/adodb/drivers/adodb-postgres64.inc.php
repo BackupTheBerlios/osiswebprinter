@@ -1,6 +1,6 @@
 <?php
 /*
- V3.30 3 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+ V3.31 17 March 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -450,10 +450,10 @@ a different OID if a database must be reloaded. */
 		if (ADODB_PHPVER >= 0x4300) {
 			if (!empty($this->_resultid)) {
 				$this->_errorMsg = @pg_result_error($this->_resultid);
-				if (empty($this->_errorMsg)) {
-					$this->_errorMsg = @pg_last_error($this->_connectionID);
-				}
-			} else if (!empty($this->_connectionID)) {
+				if ($this->_errorMsg) return $this->_errorMsg;
+			}
+			
+			if (!empty($this->_connectionID)) {
 				$this->_errorMsg = @pg_last_error($this->_connectionID);
 			} else $this->_errorMsg = @pg_last_error();
 		} else {
@@ -609,6 +609,7 @@ class ADORecordSet_postgres64 extends ADORecordSet{
 					return true;
 				}
 			}
+			$this->fields = false;
 			$this->EOF = true;
 		}
 		return false;
@@ -616,6 +617,9 @@ class ADORecordSet_postgres64 extends ADORecordSet{
 	
 	function _fetch()
 	{
+		if ($this->_currentRow >= $this->_numOfRows && $this->_numOfRows != -1)
+        	return false;
+
 		$this->fields = @pg_fetch_array($this->_queryID,$this->_currentRow,$this->fetchMode);
 		if (isset($this->_blobArr)) $this->_fixblobs();
 			
@@ -635,6 +639,7 @@ class ADORecordSet_postgres64 extends ADORecordSet{
 			$len = $fieldobj->max_length;
 		}
 		switch (strtoupper($t)) {
+				case 'INTERVAL':
 				case 'CHAR':
 				case 'CHARACTER':
 				case 'VARCHAR':

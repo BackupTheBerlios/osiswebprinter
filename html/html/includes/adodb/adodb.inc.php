@@ -15,7 +15,7 @@
 /**
 	\mainpage 	
 	
-	 @version V3.30 3 March 2003 (c) 2000-2003 John Lim (jlim\@natsoft.com.my). All rights reserved.
+	 @version V3.31 17 March 2003 (c) 2000-2003 John Lim (jlim\@natsoft.com.my). All rights reserved.
 
 	Released under both BSD license and Lesser GPL library license. 
  	Whenever there is any discrepancy between the two licenses, 
@@ -60,7 +60,7 @@
 	if (!defined('ADODB_ASSOC_CASE')) define('ADODB_ASSOC_CASE',2); 
 	
 	// allow [ ] @ and . in table names
-	define('ADODB_TABLE_REGEX','([]0-9a-z_\.\@\[-]*)');
+	define('ADODB_TABLE_REGEX','([]0-9a-z_\`\.\@\[-]*)');
 	
 	
 	if (!defined('ADODB_PREFETCH_ROWS')) define('ADODB_PREFETCH_ROWS',10);
@@ -150,7 +150,7 @@
 		/**
 		 * ADODB version as a string.
 		 */
-		$ADODB_vers = 'V3.30 3 March 2003 (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved. Released BSD & LGPL.';
+		$ADODB_vers = 'V3.31 17 March 2003 (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved. Released BSD & LGPL.';
 	
 		/**
 		 * Determines whether recordset->RecordCount() is used. 
@@ -316,15 +316,15 @@
 			if ($fieldarr) {
 				$this->_fieldobjects = $fieldarr;
 			} 
-			
 			$this->Init();
 		}
 		
 		function GetArray($nRows=-1)
 		{
-			if ($nRows == -1 && $this->_currentRow == 0) return $this->_array;
-			else {
-				ADORecordSet::GetArray($nRows);
+			if ($nRows == -1 && $this->_currentRow <= 0 && !$this->_skiprow1) {
+				return $this->_array;
+			} else {
+				return ADORecordSet::GetArray($nRows);
 			}
 		}
 		
@@ -374,23 +374,36 @@
 			return false;
 		}
 		
+		function MoveNext() 
+		{
+			if (!$this->EOF) {		
+				$this->_currentRow++;
+				
+				$pos = $this->_currentRow;
+				if ($this->_skiprow1) $pos += 1;
+				
+				if ($this->_numOfRows <= $pos) {
+					if (!$this->compat) $this->fields = false;
+				} else {
+					$this->fields = $this->_array[$pos];
+					return true;
+				}		
+				$this->EOF = true;
+			}
+			
+			return false;
+		}	
+	
 		function _fetch()
 		{
 			$pos = $this->_currentRow;
+			if ($this->_skiprow1) $pos += 1;
 			
-			if ($this->_skiprow1) {
-				if ($this->_numOfRows <= $pos-1) {
-					if (!$this->compat) $this->fields = false;
-					return false;
-				}
-				$pos += 1;
-			} else {
-				if ($this->_numOfRows <= $pos) {
-					if (!$this->compat) $this->fields = false;
-					return false;
-				}
+			if ($this->_numOfRows <= $pos) {
+				if (!$this->compat) $this->fields = false;
+				return false;
 			}
-			
+
 			$this->fields = $this->_array[$pos];
 			return true;
 		}
@@ -427,6 +440,7 @@
 		$ADODB_Database = strtolower($dbType);
 		switch ($ADODB_Database) {
 			case 'maxsql': $ADODB_Database = 'mysqlt'; break;
+			case 'postgres':
 			case 'pgsql': $ADODB_Database = 'postgres7'; break;
 		}
 		// Karsten Kraus <Karsten.Kraus@web.de> 
@@ -565,6 +579,46 @@
 		return $ok;
 	}
 
+	
+	function adodb_backtrace($print=true)
+	{
+		$s = '';
+		if (PHPVERSION() >= 4.3) {
+		
+			$MAXSTRLEN = 64;
+		
+			$s = '<pre align=left>';
+			$traceArr = debug_backtrace();
+			array_shift($traceArr);
+			$tabs = sizeof($traceArr)-1;
+			foreach ($traceArr as $arr) {
+				for ($i=0; $i < $tabs; $i++) $s .= ' &nbsp; ';
+				$tabs -= 1;
+				$s .= '<font face="Courier New,Courier">';
+				if (isset($arr['class'])) $s .= $arr['class'].'.';
+				foreach($arr['args'] as $v) {
+					if (is_null($v)) $args[] = 'null';
+					else if (is_array($v)) $args[] = 'Array['.sizeof($v).']';
+					else if (is_object($v)) $args[] = 'Object:'.get_class($v);
+					else if (is_bool($v)) $args[] = $v ? 'true' : 'false';
+					else { 
+						$v = (string) @$v;
+						$str = htmlspecialchars(substr($v,0,$MAXSTRLEN));
+						if (strlen($v) > $MAXSTRLEN) $str .= '...';
+						$args[] = $str;
+					}
+				}
+				
+				$s .= $arr['function'].'('.implode(', ',$args).')';
+				$s .= sprintf("</font><font color=#808080 size=-1> # line %4d, file: <a href=\"file:/%s\">%s</a></font>",
+					$arr['line'],$arr['file'],$arr['file']);
+				$s .= "\n";
+			}	
+			$s .= '</pre>';
+			if ($print) print $s;
+		}
+		return $s;
+	}
 	
 } // defined
 ?>
