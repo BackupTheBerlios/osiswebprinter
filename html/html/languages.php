@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.4 2003/04/18 23:18:24 r23 Exp $
+   $Id: languages.php,v 1.5 2003/04/19 05:33:34 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -53,24 +53,6 @@
         tep_db_query("insert into " . TABLE_PRODUCTS_OPTIONS . " (products_options_id, language_id, products_options_name) values ('" . $products_options['products_options_id'] . "', '" . $insert_id . "', '" . tep_db_input($products_options['products_options_name']) . "')");
       }
 
-// create additional products_options_values records
-      $products_options_values_query = tep_db_query("select products_options_values_id, products_options_values_name from " . TABLE_PRODUCTS_OPTIONS_VALUES . " where language_id = '" . $languages_id . "'");
-      while ($products_options_values = tep_db_fetch_array($products_options_values_query)) {
-        tep_db_query("insert into " . TABLE_PRODUCTS_OPTIONS_VALUES . " (products_options_values_id, language_id, products_options_values_name) values ('" . $products_options_values['products_options_values_id'] . "', '" . $insert_id . "', '" . tep_db_input($products_options_values['products_options_values_name']) . "')");
-      }
-
-// create additional manufacturers_info records
-      $manufacturers_query = tep_db_query("select m.manufacturers_id, mi.manufacturers_url from " . TABLE_MANUFACTURERS . " m left join " . TABLE_MANUFACTURERS_INFO . " mi on m.manufacturers_id = mi.manufacturers_id where mi.languages_id = '" . $languages_id . "'");
-      while ($manufacturers = tep_db_fetch_array($manufacturers_query)) {
-        tep_db_query("insert into " . TABLE_MANUFACTURERS_INFO . " (manufacturers_id, languages_id, manufacturers_url) values ('" . $manufacturers['manufacturers_id'] . "', '" . $insert_id . "', '" . tep_db_input($manufacturers['manufacturers_url']) . "')");
-      }
-
-// create additional orders_status records
-      $orders_status_query = tep_db_query("select orders_status_id, orders_status_name from " . TABLE_ORDERS_STATUS . " where language_id = '" . $languages_id . "'");
-      while ($orders_status = tep_db_fetch_array($orders_status_query)) {
-        tep_db_query("insert into " . TABLE_ORDERS_STATUS . " (orders_status_id, language_id, orders_status_name) values ('" . $orders_status['orders_status_id'] . "', '" . $insert_id . "', '" . tep_db_input($orders_status['orders_status_name']) . "')");
-      }
-
       if ($_POST['default'] == 'on') {
         tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . tep_db_input($code) . "' where configuration_key = 'DEFAULT_LANGUAGE'");
       }
@@ -103,11 +85,6 @@
       }
 
       tep_db_query("delete from " . TABLE_CATEGORIES_DESCRIPTION . " where language_id = '" . tep_db_input($lID) . "'");
-      tep_db_query("delete from " . TABLE_PRODUCTS_DESCRIPTION . " where language_id = '" . tep_db_input($lID) . "'");
-      tep_db_query("delete from " . TABLE_PRODUCTS_OPTIONS . " where language_id = '" . tep_db_input($lID) . "'");
-      tep_db_query("delete from " . TABLE_PRODUCTS_OPTIONS_VALUES . " where language_id = '" . tep_db_input($lID) . "'");
-      tep_db_query("delete from " . TABLE_MANUFACTURERS_INFO . " where languages_id = '" . tep_db_input($lID) . "'");
-      tep_db_query("delete from " . TABLE_ORDERS_STATUS . " where language_id = '" . tep_db_input($lID) . "'");
       tep_db_query("delete from " . TABLE_LANGUAGES . " where languages_id = '" . tep_db_input($lID) . "'");
 
       tep_redirect(tep_href_link(FILENAME_LANGUAGES, 'page=' . $_GET['page']));

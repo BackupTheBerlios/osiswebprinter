@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: whos_online.php,v 1.3 2003/04/18 23:15:00 r23 Exp $
+   $Id: whos_online.php,v 1.4 2003/04/19 05:33:34 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -121,33 +121,10 @@
     }
 
     if ($length = strlen($session_data)) {
-      if (PHP_VERSION < 4) {
-        $start_id = strpos($session_data, 'customer_id[==]s');
-        $start_cart = strpos($session_data, 'cart[==]o');
-        $start_currency = strpos($session_data, 'currency[==]s');
-        $start_country = strpos($session_data, 'customer_country_id[==]s');
-        $start_zone = strpos($session_data, 'customer_zone_id[==]s');
-      } else {
-        $start_id = strpos($session_data, 'customer_id|s');
-        $start_cart = strpos($session_data, 'cart|O');
-        $start_currency = strpos($session_data, 'currency|s');
-        $start_country = strpos($session_data, 'customer_country_id|s');
-        $start_zone = strpos($session_data, 'customer_zone_id|s');
-      }
-
-      for ($i=$start_cart; $i<$length; $i++) {
-        if ($session_data[$i] == '{') {
-          if (isset($tag)) {
-            $tag++;
-          } else {
-            $tag = 1;
-          }
-        } elseif ($session_data[$i] == '}') {
-          $tag--;
-        } elseif ( (isset($tag)) && ($tag < 1) ) {
-          break;
-        }
-      }
+      $start_id = strpos($session_data, 'customer_id|s');
+      $start_currency = strpos($session_data, 'currency|s');
+      $start_country = strpos($session_data, 'customer_country_id|s');
+      $start_zone = strpos($session_data, 'customer_zone_id|s');
 
       $session_data_id = substr($session_data, $start_id, (strpos($session_data, ';', $start_id) - $start_id + 1));
       $session_data_cart = substr($session_data, $start_cart, $i);
@@ -160,12 +137,6 @@
       session_decode($session_data_country);
       session_decode($session_data_zone);
       session_decode($session_data_cart);
-
-      if (PHP_VERSION < 4) {
-        $broken_cart = $cart;
-        $cart = new shoppingCart;
-        $cart->unserialize($broken_cart);
-      }
 
       if (is_object($cart)) {
         $products = $cart->get_products();

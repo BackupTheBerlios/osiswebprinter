@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.3 2003/04/18 23:15:00 r23 Exp $
+   $Id: index.php,v 1.4 2003/04/19 05:33:34 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -40,16 +40,6 @@
                      'href' => tep_href_link(FILENAME_CATEGORIES, 'selected_box=catalog'),
                      'children' => array(array('title' => CATALOG_CONTENTS, 'link' => tep_href_link(FILENAME_CATEGORIES, 'selected_box=catalog')),
                                          array('title' => BOX_CATALOG_MANUFACTURERS, 'link' => tep_href_link(FILENAME_MANUFACTURERS, 'selected_box=catalog')))),
-               array('title' => BOX_HEADING_LOCATION_AND_TAXES,
-                     'image' => 'location.gif',
-                     'href' => tep_href_link(FILENAME_COUNTRIES, 'selected_box=taxes'),
-                     'children' => array(array('title' => BOX_TAXES_COUNTRIES, 'link' => tep_href_link(FILENAME_COUNTRIES, 'selected_box=taxes')),
-                                         array('title' => BOX_TAXES_GEO_ZONES, 'link' => tep_href_link(FILENAME_GEO_ZONES, 'selected_box=taxes')))),
-               array('title' => BOX_HEADING_CUSTOMERS,
-                     'image' => 'customers.gif',
-                     'href' => tep_href_link(FILENAME_CUSTOMERS, 'selected_box=customers'),
-                     'children' => array(array('title' => BOX_CUSTOMERS_CUSTOMERS, 'link' => tep_href_link(FILENAME_CUSTOMERS, 'selected_box=customers')),
-                                         array('title' => BOX_CUSTOMERS_ORDERS, 'link' => tep_href_link(FILENAME_ORDERS, 'selected_box=customers')))),
                array('title' => BOX_HEADING_LOCALIZATION,
                      'image' => 'localization.gif',
                      'href' => tep_href_link(FILENAME_CURRENCIES, 'selected_box=localization'),
@@ -257,7 +247,5 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
     </table></td>
   </tr>
 </table>
-
 </body>
-
 </html>

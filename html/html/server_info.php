@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: server_info.php,v 1.2 2003/04/18 22:59:37 r23 Exp $
+   $Id: server_info.php,v 1.3 2003/04/19 05:33:34 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -99,9 +99,6 @@
       </tr>
       <tr>
         <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
-      </tr>
-      <tr>
-        <td><?php phpinfo(); ?></td>
       </tr>
     </table></td>
 <!-- body_text_eof //-->
