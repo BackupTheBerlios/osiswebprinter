@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newtables.php,v 1.7 2003/04/03 21:51:52 r23 Exp $
+   $Id: newtables.php,v 1.8 2003/04/04 07:50:45 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -70,7 +70,7 @@ dosql($table,$sql);
 
 $table = $prefix.'_administrators';
 $sql = "
-CREATE TABLE ".$prefix."_user (
+CREATE TABLE ".$prefix."_administrators (
   owp_admin_id int(11) NOT NULL auto_increment,
   owp_admin_gender char(1) NOT NULL default '',
   owp_admin_firstname varchar(32) NOT NULL default '',

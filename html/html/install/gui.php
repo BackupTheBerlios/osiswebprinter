@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: gui.php,v 1.13 2003/04/03 21:51:52 r23 Exp $
+   $Id: gui.php,v 1.14 2003/04/04 07:50:45 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -357,11 +357,16 @@ function owp_change_login() {
    if ($pwd != $repeatpwd) {
      $continue .= '<br /><font class="owp-error">' . ADMIN_ERROR . '&nbsp;' . PASSWORD_ERROR . '</font>' . "\n";
    } 
+   if ($gender == 'm') {
+     $owp_radio_gender = '<input type="radio" name="gender" value="m" checked>&nbsp;' . MALE . '&nbsp;&nbsp;<input type="radio" name="gender" value="f">&nbsp;' . FEMALE . '&nbsp';
+   } else {
+     $owp_radio_gender = '<input type="radio" name="gender" value="m">&nbsp;' . MALE . '&nbsp;&nbsp;<input type="radio" name="gender" value="f" checked>&nbsp;' . FEMALE . '&nbsp';
+   }
    $continue .= '<br /><br />' . "\n" .
                 '<center><form action="index.php" method="post"><table width="50%" border="0">' . "\n" .
                 ' <tr>' . "\n" .
                 '  <td align="left"><font class="owp-normal">' . ADMIN_GENDER . '</font></td>' . "\n" .
-                '  <td><font class="owp-normal"><input type="radio" name="gender" value="m" checked>&nbsp;' . MALE . '&nbsp;&nbsp;<input type="radio" name="gender" value="f">&nbsp;' . FEMALE . '&nbsp;</font></td>' . "\n" .
+                '  <td><font class="owp-normal">' . $owp_radio_gender . '</font></td>' . "\n" .
                 ' </tr>' . "\n" .
                 ' <tr>' . "\n" .
                 '  <td align="left"><font class="owp-normal">' . ADMIN_FIRSTNAME . '</font></td>' . "\n" .
@@ -399,6 +404,10 @@ function owp_change_login() {
                 '  <td align="left"><font class="owp-normal">' . OWP_URL . '</font></td>' . "\n" .
                 '  <td><input type="text" name="owp_url" SIZE=30 maxlength=80 value="' . $owp_url . '"></td>' . "\n" .
                 ' </tr>' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="left">&nbsp;</td>' . "\n" .
+                '  <td>&nbsp;</td>' . "\n" .
+                ' </tr>' . "\n" .
                 '</table>' . "\n";
    $continue .= owp_form_hidden();
    $continue .= '<input type="hidden" name="op" value="Login">' . "\n" .
@@ -416,7 +425,7 @@ function owp_login() {
    $continue = '<font class="owp-title">' . CONTINUE_1 . '</font>' . "\n" .
                '<font class="owp-normal">' . CONTINUE_2 . '</font>' . "\n" .
                '<br /><br />' . "\n" .
-               '<center><form name="change login" action="index.php" method="post"><table width="80%" border="0">' . "\n" .
+               '<form name="change login" action="index.php" method="post"><table width="80%" border="0" align="center">' . "\n" .
                ' <tr>' . "\n" .
                '  <td align="left"><font class="owp-normal">' . ADMIN_GENDER . '</font></td>' . "\n" .
                '  <td><font class="owp-normal">' . $owp_gender . '</font></td>' . "\n" .
@@ -470,15 +479,19 @@ function owp_login() {
                 '<input type="submit" value="' . BTN_CHANGE_INFO . '"><br />' . "\n" .
                 '  </td>' . "\n" .
                 ' </tr>' . "\n" .
-                '</table></form></center>' . "\n" .
-                '<br /><font class="owp-normal">' . ADMIN_INSTALL . '</font>' . "\n" .
-                '<form name="login install" action="index.php" method="post">' . "\n";
+                '</table></form>' . "\n" .
+                '<font class="owp-normal">' . ADMIN_INSTALL . '</font>' . "\n" .
+                '<form name="login install" action="index.php" method="post"><table width="80%" border="0" align="right">' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="right">' . "\n";
    $continue .= owp_form_hidden();
    $continue .= owp_admin_hidden();
    $continue .= '<input type="hidden" name="op" value="Set Login">' . "\n" .
                 '<input type="submit" value="' . BTN_LOGIN_SUBMIT . '">' . "\n" .
-                '</form>' . "\n" .
-                '' . "\n";
+                ' </td>' . "\n" .
+                ' </tr>' . "\n" .
+                '</table>' . "\n" .
+                '</form>' . "\n";
    return $continue;
 
 }

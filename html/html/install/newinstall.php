@@ -1,9 +1,9 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newinstall.php,v 1.5 2003/04/02 06:34:02 r23 Exp $
+   $Id: newinstall.php,v 1.6 2003/04/04 07:50:45 r23 Exp $
 
-   OSIS WebPrinter for your Homepage
-   http://www.osisnet.de
+   OSIS GMBH
+   http://www.osisnet.de/
    
    Ralf Zschemisch
    http://www.r23.de/
@@ -46,41 +46,49 @@ function make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake)
     
     echo '<center><br /><br />';
     if ($dbmake) {
-       mysql_pconnect($dbhost, $dbuname, $dbpass);
-       $result = mysql_query("CREATE DATABASE $dbname") or die (_MAKE_DB_1);
-       echo '<font class="owp-error">' . $dbname . ' ' . MAKE_DB_2. '</font>'; 
+      mysql_pconnect($dbhost, $dbuname, $dbpass);
+      $result = mysql_query("CREATE DATABASE $dbname") or die (_MAKE_DB_1);
+      echo '<font class="owp-error">' . $dbname . ' ' . MAKE_DB_2. '</font>'; 
     } else {
-        echo '<font class="owp-error">'. MAKE_DB_3 . '</font>';
+      echo '<font class="owp-error">'. MAKE_DB_3 . '</font>';
     }
     include('newtables.php');
 }
 
 /*** This function inserts the default data on new installs ***/
-function input_data($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $aid, $name, $pwd, $repeatpwd, $email, $url) {
+function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone, $fax, $prefix) {
     global $dbconn;
     
-    if ($pwd != $repeatpwd) {
-      echo _PWBADMATCH;
-      exit;
+    echo '<font class="owp-title">' . INPUT_DATA_1. '</font>';
+    echo "<center>";
+ 
+    // Put basic information in first
+    #include('newdata.php');
+    include ('../includes/functions/password_funcs.php');
+    // new installs will use md5 hashing - compatible on windows and *nix variants.
+    $owp_pwd = crypt_password($pwd);
+    $sql = "INSERT INTO ".$prefix."_administrators
+            (owp_admin_gender,
+             owp_admin_firstname,
+             owp_admin_lastname,
+             owp_admin_email_address,
+             owp_admin_telephone,
+             owp_admin_fax,
+             owp_admin_password,
+             owp_date_added)
+             VALUES ('" . $gender . "', 
+                     '" . $firstname . "',
+                     '" . $name . "',
+                     '" . $email . "',
+                     '" . $phone . "',
+                     '" . $fax . "',
+                     '" . $owp_pwd. "',                
+                     now())";
+    $result = $dbconn->Execute($sql);
+    if ($result === false) {
+      echo '<br /><font class="owp-error">' . NOTMADE . '</font>';
     } else {
-      echo '<font class="owp-title">' . INPUT_DATA_1. '</font>';
-      echo "<center>";
-      global $dbconn;
-      mysql_connect($dbhost, $dbuname, $dbpass);
-      mysql_select_db("$dbname") or die ("<br><font class=\"owp-sub\">"._NOTSELECT."</font>");
-
-      // Put basic information in first
-      include('newdata.php');
-
-      // new installs will use md5 hashing - compatible on windows and *nix variants.
-      $pwd = md5($pwd);
-
-      $result = $dbconn->Execute("INSERT INTO $prefix"._users." VALUES ( NULL, '$name', '$aid', '$email', '', '$url', 'blank.gif', ".time().", '', '', '', '', '', '', '', '', '', '', '$pwd', 10, '', 0, 0, 0, '', 0, '', '', 4096, 0, '12.0')") or die ("<b>"._NOTUPDATED.$prefix."_users</b>");
-      echo '<br><font class="owp-sub">' . $prefix . '_users' . UPDATED . '</font>';
-
-      // We know that the above user is UID 2 and that the admin group is GID 2 from the newdata
-      $result = $dbconn->Execute("INSERT INTO $prefix"._group_membership." VALUES (2, 2)") or die ("<b>"._NOTUPDATED.$prefix."_group_membership</b>");
-      echo '<br><font class="owp-sub">' . $prefix . '_group_membership ' . UPDATED. '</font>';
+      echo '<br /><font class="owp-title">' . $prefix . '_administrators&nbsp;'. UPDATED . '</font>';
     }
 }
 
