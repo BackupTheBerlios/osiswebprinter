@@ -1,0 +1,30 @@
+
+  OSIS Web Printer
+
+  OSIS Web Printer ist eine allumfassende Lösung für das Drucken 
+  aus Ihrer Web-Anwendung per e-Mail, FTP und XML. Mit der Fülle 
+  von Werkzeugen, die Ihnen zur Verfügung stehen, können Sie 
+  praktisch über das Internet drucken.
+  
+  Dieses Programm ist freie Software. Sie können es unter den 
+  Bedingungen der GNU General Public License, wie von der 
+  Free Software Foundation veröffentlicht, weitergeben und/oder 
+  modifizieren, entweder gemäß Version 2 der Lizenz oder 
+  (nach Ihrer Option) jeder späteren Version.
+
+
+  Für die History lesen Sie die Datei CHANGELOG.
+  
+  Für die Danksagung (wer machte was) lesen Sie die Datei CREDITS.
+  
+  Informationen wie Sie die Anwendung übersetzen können finden
+  Sie in der Datei TRANSLATION.
+
+  Für Informationen über die Installtion finden Sie in der Datei
+  INSTALL.
+
+
+  LINKS:
+  Entwickler wenden sich an Ralf Zschemisch info@r23.de
+
+  

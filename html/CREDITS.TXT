@@ -1,0 +1,31 @@
+
+=== OSIS WebPrinter Credits ===
+
+Die Installation basiert auf:
+POST-NUKE Content Management System
+Copyright (C) 2001 by the Post-Nuke Development Team.
+http://www.postnuke.com/
+Released under GNU General Public License (GPL)
+    
+ADODB Library for PHP4
+(c) 2000-2002 John Lim (jlim@natsoft.com.my)
+http://php.weblogs.com/ADOdb
+Released under both BSD and GNU Lesser GPL library license. 
+
+FPDF Library for PHP4
+by Olivier Plathey
+http://www.fpdf.org
+Released under Freeware
+
+phpMailer Library for PHP4
+(c) Brent R. Matzelle <bmatzelle@yahoo.com>
+http://phpmailer.sourceforge.net
+Released under GNU Lesser GPL library license.
+
+ 
+Diese Liste erhebt keinen Anspruch auf Vollständigkeit!
+Sollten Sie der Meinung sein, auf diese Liste zu gehören, 
+kontaktieren Sie mich unter credits@r23.de
+
+--------------------------------------------------
+

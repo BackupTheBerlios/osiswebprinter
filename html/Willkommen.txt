@@ -1,0 +1,87 @@
+
+   Willkommen bei OSIS Web Printer
+
+
+   OSIS Web Printer ist eine allumfassende Lösung für das Drucken 
+   aus Ihrer Web-Anwendung per e-Mail, FTP und XML. Mit der Fülle 
+   von Werkzeugen, die Ihnen zur Verfügung stehen, können Sie 
+   praktisch über das Internet drucken. 
+
+   Dieses Programm ist freie Software. Sie können es unter den 
+   Bedingungen der GNU General Public License, wie von der 
+   Free Software Foundation veröffentlicht, weitergeben und/oder 
+   modifizieren, entweder gemäß Version 2 der Lizenz oder 
+   (nach Ihrer Option) jeder späteren Version.
+
+   Die Veröffentlichung dieses Programms erfolgt in der Hoffnung, 
+   daß es Ihnen von Nutzen sein wird, aber ohne irgendeine Garantie, 
+   sogar ohne die implizite Garantie der Marktreife oder der 
+   Verwendbarkeit für einen bestimmten Zweck
+
+   Wir bieten Ihnen umfassende Ressourcen, die Sie beim Kennenlernen 
+   von OSIS Web Printer, beim Anfordern der technischen Unterstützung 
+   und beim Einsenden von Feedback an das Entwicklungsteam unterstützen.
+
+
+   So erfahren Sie mehr über OSIS Web Printer
+   http://developer.berlios.de/projects/osiswebprinter/
+   OSIS Web Printer-Website ist die empfehlenswerte Adresse für neueste 
+   Informationen über OSIS Web Printer, Software-Aktualisierungen und 
+   neue Download-Angebote.
+
+   So erhalten Sie Technische Unterstützung
+   OSIS Web Printer Support-Zentren 
+   http://developer.berlios.de/support/?group_id=752
+   Hier finden Sie die neuesten technischen Anmerkungen und Informationen 
+   zur Fehlersuche und -behebung bei OSIS Web Printer. Desweiteren finden 
+   Sie hier Artikel mit Tipps und technischen Tricks zur Anwendung von 
+   OSIS Web Printer, ausdruckbare Dokumentationen und mehr. 
+
+   OSIS Web Printer Online-Foren 
+   http://developer.berlios.de/forum/?group_id=752
+   Diese Foren stellen eine Austausch- und Diskussionsplattform für 
+   Entwickler verschiedener Erfahrungsstufen dar. Technische Themen 
+   können besprochen und hilfreiches technisches Know-How im 
+   Zusammenhang mit OSIS Web Printer ausgetauscht werden. 
+   Informationen über den Zugang zu diesen Online-Foren und das 
+   Aufstellen und Senden von Beiträgen finden Sie in den
+   OSIS Web Printer Online-Foren.
+
+
+   OSIS Web Printer Mailinglisten
+   https://lists.berlios.de/mailman/listinfo/osiswebprinter-announce
+   Hier erhalten Sie Versionshinweise und neueste Informationen zu 
+   OSIS Web Printer.
+
+
+   https://lists.berlios.de/mailman/listinfo/osiswebprinter-users
+   Die Mailingliste soll eine wahre Goldgrube für Ratschläge 
+   hinsichtlich projektspezifischer Fragen werden. 
+   Informationen über den Zugang zu dieser Mailingiste 
+   und das Aufstellen und Senden von Beiträgen finden Sie 
+   in den OSIS Web Printer.
+
+
+   So senden Sie Feedback
+   http://developer.berlios.de/forum/forum.php?forum_id=2251
+   Senden Sie Ihre Vorschläge (zu Funktionen und Änderungen) an das 
+   Entwicklerteam von OSIS Web Printer. Wir werden uns bemühen, 
+   Ihren Wünschen nachzukommen. Wir lesen zwar jede Nachricht,
+   die gesandt wurde, können aber leider nicht auf alle Nachrichten 
+   antworten. Wenn Sie Unterstützung benötigen, wenden Sie sich einfach an 
+   unser Help-Forum.
+   http://developer.berlios.de/forum/forum.php?forum_id=2252
+   
+   
+   http://developer.berlios.de/bugs/?group_id=752
+   Senden Sie Bug-Mitteilungen direkt an uns. Wir sind sehr an 
+   Ihren Mitteilungen über Bugs interessiert, die Ihnen bei der 
+   Anwendung von OSIS Web Printer begegnen.
+   
+ 
+   Sie möchten sich an der Entwicklung beteiligen?
+   Wenden Sie sich an info@r23.de 
+   
+   
+   Vielen Dank!
+   Das Entwicklerteam von OSIS Web Printer 
