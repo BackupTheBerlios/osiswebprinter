@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.6 2003/03/31 16:40:09 r23 Exp $
+   $Id: index.php,v 1.7 2003/04/01 02:27:02 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -60,12 +60,30 @@
  define('ADODB_DIR', '../includes/adodb');
  require_once ('../includes/adodb/adodb.inc.php');
  require_once ('../includes/classes/osis_text_tool.php');
-
- if (isset($alanguage)) {
-   $currentlang = $alanguage;
+ 
+ include_once 'modify_config.php'; 
+ include_once 'newinstall.php'; 
+ include_once 'gui.php'; 
+ include_once 'db.php'; 
+ include_once 'check.php'; 
+ 
+ include_once 'language.php'; 
+ 
+ if ($_POST['op']) {
+   $dbhost = owp_prepare_input($_POST['dbhost']);
+   $dbuname = owp_prepare_input($_POST['dbuname']);
+   $dbpass = owp_prepare_input($_POST['dbpass']);
+   $dbname = owp_prepare_input($_POST['dbname']);
+   $prefix = owp_prepare_input($_POST['prefix']);
+   $dbtype = owp_prepare_input($_POST['dbtype']);
+   $currentlang = owp_prepare_input($_POST['currentlang']);
  }
-
- if (!isset($prefix)) {
+ 
+ if ($_POST['alanguage']) {
+   $currentlang = owp_prepare_input($_POST['alanguage']);
+ }
+ 
+ if (!@$_POST['prefix']) {
     include_once '../includes/config.php';
     $prefix = $owconfig['prefix'];
     $dbtype = $owconfig['dbtype'];
@@ -84,15 +102,7 @@
 
   $owconfig['prefix'] = $prefix;
 
-  include_once 'language.php'; 
-
   installer_get_language();
-
-  include_once 'modify_config.php'; 
-  include_once 'newinstall.php'; 
-  include_once 'gui.php'; 
-  include_once 'db.php'; 
-  include_once 'check.php'; 
 
 // header
   include_once 'header.php';
@@ -106,18 +116,23 @@
       print_finish();
       break;
     case 'Set Login':
+      $aid = owp_prepare_input($_POST['aid']);
+      $name = owp_prepare_input($_POST['name']);
+      $pwd = owp_prepare_input($_POST['pwd']);
+      $repeatpwd = owp_prepare_input($_POST['repeatpwd']);
+      $email = owp_prepare_input($_POST['email']);
+      $url = owp_prepare_input($_POST['url']);
+      
       $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
       input_data($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $aid, $name, $pwd, $repeatpwd, $email, $url);
       update_config_php(true); // Scott - added
-      print_set_login();
+      echo print_set_login();
       break;
     case 'Continue':
       echo print_continue();
       break;
     case 'Start':
-      if (!isset($dbmake)) {
-        $dbmake = false;
-      }
+      $dbmake = owp_prepare_input($_POST['dbmake']);
       make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake);
       echo print_start();
       break;
@@ -140,7 +155,6 @@
       do_check_php();
       break;
     case 'Set Language':
-      $currentlang = $alanguage;
       echo print_default();
       break;       
     default:

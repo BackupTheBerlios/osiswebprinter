@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: gui.php,v 1.8 2003/03/31 16:40:09 r23 Exp $
+   $Id: gui.php,v 1.9 2003/04/01 02:27:02 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -39,236 +39,267 @@
    Original Author of file:  Gregor J. Rothfuss
    Purpose of file: Provide gui rendering functions for the installer.
    ---------------------------------------------------------------------- */
+   
+function owp_prepare_input($string) {
+   return trim(stripslashes($string));
+}
 
 /*** This function prints the "This is your setting" area ***/
 function print_form_text($border=0) {
-   global $dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype;
+   global $_POST;
 
-   $body_main = '<table border="' . $border . '">' . "\n" .
-                ' <tr>' . "\n" .
-                '   <td align="left"><font class="ow-normal">' . DBHOST . '</font></td>' . "\n" .
-                '   <td><font class="ow-normal">' . $dbhost . '</font></td>' . "\n" .
-                ' </tr>' . "\n" .
-                ' <tr>' . "\n" .
-                '   <td align="left"><font class="ow-normal">' . DBUNAME . '</font></td>' . "\n" .
-                '   <td><font class="ow-normal">' . $dbuname . '</font></td>' . "\n" .
-                ' </tr>' . "\n" .
-                ' <tr>' . "\n" .
-                '  <td align="left"><font class="ow-normal">' . DBPASS . '</font></td>' . "\n" .
-                '  <td><font class="ow-normal">' . $dbpass . '</font></td>' . "\n" .
-                ' </tr>' . "\n" .
-                ' <tr>' . "\n" .
-                '   <td align="left"><font class="ow-normal">' . DBNAME . '</font></td>' . "\n" .
-                '   <td><font class="ow-normal">' . $dbname . '</font></td>' . "\n" .
-                ' </tr>' . "\n" .
-                ' <tr>' . "\n" .
-                '   <td align="left"><font class="ow-normal">' . DBPREFIX . '</font></td>' . "\n" .
-                '   <td><font class="ow-normal">' . $prefix . '</font></td>' . "\n" .
-                ' </tr>' . "\n" .
-                ' <tr>' . "\n" .
-                '   <td align="left"><font class="ow-normal">' . DBTYPE . '</font></td>' . "\n" .
-                '   <td><font class="ow-normal">' . $dbtype . '</font></td>' . "\n" .
-                ' </tr>' . "\n" .
-                '</table>' . "\n";
-   return $body_main;
+   $formText = '<table border="' . $border . '">' . "\n" .
+               ' <tr>' . "\n" .
+               '   <td align="left"><font class="ow-normal">' . DBHOST . '</font></td>' . "\n" .
+               '   <td><font class="ow-normal">' . $_POST['dbhost'] . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '   <td align="left"><font class="ow-normal">' . DBUNAME . '</font></td>' . "\n" .
+               '   <td><font class="ow-normal">' . $_POST['dbuname'] . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="ow-normal">' . DBPASS . '</font></td>' . "\n" .
+               '  <td><font class="ow-normal">' . $_POST['dbpass'] . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '   <td align="left"><font class="ow-normal">' . DBNAME . '</font></td>' . "\n" .
+               '   <td><font class="ow-normal">' . $_POST['dbname'] . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '   <td align="left"><font class="ow-normal">' . DBPREFIX . '</font></td>' . "\n" .
+               '   <td><font class="ow-normal">' . $_POST['prefix'] . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '   <td align="left"><font class="ow-normal">' . DBTYPE . '</font></td>' . "\n" .
+               '   <td><font class="ow-normal">' . $_POST['dbtype'] . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               '</table>' . "\n";
+   return $formText;
 }
 
 
 function print_form_editabletext($border = '0') {
    global $dbhost, $dbuname, $dbpass, $dbname, $prefix;
 
-   $body_main = '<table border="' . $border . '">' . "\n" .
-                ' <tr>' . "\n" .
-                '   <td align="left"><font class="ow-normal">' . DBHOST . '</font></td>' . "\n" .
-                '   <td><input type="text" NAME="dbhost" SIZE=30 maxlength=80 value="' . $dbhost . '"></td>' . "\n" .
-                ' </tr>' . "\n" .
-                ' <tr>' . "\n" .
-                '   <td align="left"><font class="ow-normal">' . DBUNAME . '</font></td>' . "\n" .
-                '   <td><input type="text" NAME="dbuname" SIZE=30 maxlength=80 value="' . $dbuname . '"></td>' . "\n" .
-                ' </tr>' . "\n" .
-                ' <tr>' . "\n" .
-                '  <td align="left"><font class="ow-normal">' . DBPASS . '</font></td>' . "\n" .
-                '  <td><input type="text" NAME="dbpass" SIZE=30 maxlength=80 value="' . $dbpass . '"></td>' . "\n" .
-                ' </tr>' . "\n" .
-                ' <tr>' . "\n" .
-                '   <td align="left"><font class="ow-normal">' . DBNAME . '</font></td>' . "\n" .
-                '   <td><input type="text" NAME="dbname" SIZE=30 maxlength=80 value="' . $dbname . '"></td>' . "\n" .
-                ' </tr>' . "\n" .
-                ' <tr>' . "\n" .
-                '   <td align="left"><font class="ow-normal">' . DBPREFIX . '</font></td>' . "\n" .
-                '   <td><input type="text" NAME="prefix" SIZE=30 maxlength=80 value="' . $prefix .'"></td>' . "\n" .
-                ' </tr>' . "\n" .
-                ' <tr>' . "\n" .
-                '   <td align="left"><font class="ow-normal">' . DBTYPE . '</font></td>' . "\n" .
-                '   <td><select name="dbtype"><option value="mysql" selected>&nbsp;MySQL&nbsp;</option></select></td>' . "\n" .
-                ' </tr>' . "\n" .
-                '</table>' . "\n";
-   return $body_main;
+   $ediTable = '<table border="' . $border . '">' . "\n" .
+               ' <tr>' . "\n" .
+               '   <td align="left"><font class="ow-normal">' . DBHOST . '</font></td>' . "\n" .
+               '   <td><input type="text" name="dbhost" SIZE=30 maxlength=80 value="' . $dbhost . '"></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '   <td align="left"><font class="ow-normal">' . DBUNAME . '</font></td>' . "\n" .
+               '   <td><input type="text" name="dbuname" SIZE=30 maxlength=80 value="' . $dbuname . '"></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="ow-normal">' . DBPASS . '</font></td>' . "\n" .
+               '  <td><input type="text" name="dbpass" SIZE=30 maxlength=80 value="' . $dbpass . '"></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '   <td align="left"><font class="ow-normal">' . DBNAME . '</font></td>' . "\n" .
+               '   <td><input type="text" name="dbname" SIZE=30 maxlength=80 value="' . $dbname . '"></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '   <td align="left"><font class="ow-normal">' . DBPREFIX . '</font></td>' . "\n" .
+               '   <td><input type="text" name="prefix" SIZE=30 maxlength=80 value="' . $prefix .'"></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '   <td align="left"><font class="ow-normal">' . DBTYPE . '</font></td>' . "\n" .
+               '   <td><select name="dbtype"><option value="mysql" selected>&nbsp;MySQL&nbsp;</option></select></td>' . "\n" .
+               ' </tr>' . "\n" .
+               '</table>' . "\n";
+   return $ediTable;
 }
 
 
 /*** This function prints the <input type=hidden> area ***/
 function print_form_hidden() {
-   global $currentlang, $dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype;
+   global $_POST;
 
-   $body_hidden = '<input type="hidden" NAME="currentlang" value="' . $currentlang . '">' . "\n" .
-                  '<input type="hidden" NAME="dbhost" value="' . $dbhost . '">' . "\n" .
-                  '<input type="hidden" NAME="dbuname" value="' . $dbuname . '">' . "\n" .
-                  '<input type="hidden" NAME="dbpass" value="' . $dbpass . '">' . "\n" .
-                  '<input type="hidden" NAME="dbname" value="' . $dbname . '">' . "\n" .
-                  '<input type="hidden" NAME="prefix" value="' . $prefix . '">' . "\n" .
-                  '<input type="hidden" NAME="dbtype" value="' . $dbtype . '">' . "\n";
-   return $body_hidden;
+   $formHidden = '<input type="hidden" name="currentlang" value="' . $_POST['currentlang'] . '">' . "\n" .
+                 '<input type="hidden" name="dbhost" value="' . $_POST['dbhost'] . '">' . "\n" .
+                 '<input type="hidden" name="dbuname" value="' . $_POST['dbuname'] . '">' . "\n" .
+                 '<input type="hidden" name="dbpass" value="' . $_POST['dbpass'] . '">' . "\n" .
+                 '<input type="hidden" name="dbname" value="' . $_POST['dbname'] . '">' . "\n" .
+                 '<input type="hidden" name="prefix" value="' . $_POST['prefix'] . '">' . "\n" .
+                 '<input type="hidden" name="dbtype" value="' . $_POST['dbtype'] . '">' . "\n";
+   return $formHidden;
 }
 
 
 function print_CHM_check() {
    global $currentlang;
 
-   $body_main = '<font class="ow-title">' . DBINFO. '&nbsp;</font>' . 
-                '<font class="ow-normal">' . CHM_CHECK_1 . '</font><br /><br />' . "\n" .
-                '<form action="index.php" method="post"><center>' . "\n";
-   
-   $body_main .= print_form_editabletext(0);
-   
-   $body_main .= '<input type="hidden" NAME="currentlang" value="' . $currentlang .'">' . "\n" .
-                 '<input type="hidden" name="op" value="Submit"><br /><br />' . "\n" .
-                 '<input type="submit" value="' . BTN_SUBMIT . '"></center></form>' . "\n";
-   return $body_main;
+   $chmCheck = '<font class="ow-title">' . DBINFO. '&nbsp;</font>' . 
+               '<font class="ow-normal">' . CHM_CHECK_1 . '</font><br /><br />' . "\n" .
+               '<form action="index.php" method="post"><center>' . "\n";
+   $chmCheck .= print_form_editabletext(0);
+   $chmCheck .= '<input type="hidden" name="currentlang" value="' . $currentlang .'">' . "\n" .
+                '<input type="hidden" name="op" value="Submit"><br /><br />' . "\n" .
+                '<input type="submit" value="' . BTN_SUBMIT . '"></center></form>' . "\n";
+   return $chmCheck;
 }
 
 
 function print_submit() {
-  $body_main = '<font class="ow-title">' . DBINFO . '</font>' .
-               '<font class="ow-normal"> ' . SUBMIT_1 . '</font><br /><br />' . "\n" .
-               '<br /><font class="ow-normal">' . SUBMIT_2 . '</font><br /><br />' . "\n" .
-               '<center>';
-               
-  $body_main .= print_form_text();
-  
-  $body_main .='<form action="index.php" method="post">' . "\n" .
-               '<input type="submit" name="op" value="Change Info"><br />' . "\n" .
-               '</center>' . "\n" .
-               '<br /><br />' . "\n" .
-               '<font class="ow-normal">' . SUBMIT_3 . '</font><br />' . "\n" .
-               '<table width="50%" align="center">' . "\n" .
-               ' <tr align="right">' . "\n" .
-               '  <td>' . "\n";
-  
-  $body_main .= print_form_hidden();
-  
-  $body_main .= '<input type="submit" name="op" value="New Install"></td>' . "\n" .
-#               '  <td><input type="submit" name="op" value="Upgrade"></td>' . "\n" .
-                ' </tr>' . "\n" .
-                '</table></form>' . "\n";
-   return $body_main;
+  $submit = '<font class="ow-title">' . DBINFO . '</font>' .
+            '<font class="ow-normal"> ' . SUBMIT_1 . '</font><br /><br />' . "\n" .
+            '<br /><font class="ow-normal">' . SUBMIT_2 . '</font><br /><br />' . "\n" .
+            '<center>';               
+  $submit .= print_form_text();
+  $submit .= '<form action="index.php" method="post">' . "\n" .
+             '<input type="submit" name="op" value="Change Info"><br />' . "\n" .
+             '</center>' . "\n" .
+             '<br /><br />' . "\n" .
+             '<font class="ow-normal">' . SUBMIT_3 . '</font><br />' . "\n" .
+             '<table width="50%" align="center">' . "\n" .
+             ' <tr align="right">' . "\n" .
+             '  <td>' . "\n";
+  $submit .= print_form_hidden();
+  $submit .= '<input type="submit" name="op" value="New Install"></td>' . "\n" .
+#            '  <td><input type="submit" name="op" value="Upgrade"></td>' . "\n" .
+             ' </tr>' . "\n" .
+             '</table></form>' . "\n";
+   return $submit;
 }
 
 
 function print_change_info() {
-   $body_main = '<font class="ow-title">' . CHANGE_INFO_1 . '</font>' . 
-                '<font class="ow-normal">' . CHANGE_INFO_2 . '<br /><br />' . "\n" .
-                '<form action="index.php" method="post"><center>' . "\n";
-
-   $body_main .= print_form_editabletext(0);
-
-   $body_main .= '<input type="hidden" name="op" value="Submit">' . "\n" .
+   global $_POST;
+ 
+   $dbhost = owp_prepare_input($_POST['dbhost']);
+   $dbuname = owp_prepare_input($_POST['dbuname']);
+   $dbpass = owp_prepare_input($_POST['dbpass']);
+   $dbname = owp_prepare_input($_POST['dbname']);
+   $prefix = owp_prepare_input($_POST['prefix']);
+   
+   $changeInfo = '<font class="ow-title">' . CHANGE_INFO_1 . '</font>' . 
+                 '&nbsp;<font class="ow-normal">' . CHANGE_INFO_2 . '<br /><br />' . "\n" .
+                 '<form action="index.php" method="post"><center>' . "\n" .
+                 '<table border="0">' . "\n" .
+                 ' <tr>' . "\n" .
+                 '   <td align="left"><font class="ow-normal">' . DBHOST . '</font></td>' . "\n" .
+                 '   <td><input type="text" name="dbhost" SIZE=30 maxlength=80 value="' . $dbhost . '"></td>' . "\n" .
+                 ' </tr>' . "\n" .
+                 ' <tr>' . "\n" .
+                 '   <td align="left"><font class="ow-normal">' . DBUNAME . '</font></td>' . "\n" .
+                 '   <td><input type="text" name="dbuname" SIZE=30 maxlength=80 value="' . $dbuname . '"></td>' . "\n" .
+                 ' </tr>' . "\n" .
+                 ' <tr>' . "\n" .
+                 '  <td align="left"><font class="ow-normal">' . DBPASS . '</font></td>' . "\n" .
+                 '  <td><input type="text" name="dbpass" SIZE=30 maxlength=80 value="' . $dbpass . '"></td>' . "\n" .
+                 ' </tr>' . "\n" .
+                 ' <tr>' . "\n" .
+                 '   <td align="left"><font class="ow-normal">' . DBNAME . '</font></td>' . "\n" .
+                 '   <td><input type="text" name="dbname" SIZE=30 maxlength=80 value="' . $dbname . '"></td>' . "\n" .
+                 ' </tr>' . "\n" .
+                 ' <tr>' . "\n" .
+                 '   <td align="left"><font class="ow-normal">' . DBPREFIX . '</font></td>' . "\n" .
+                 '   <td><input type="text" name="prefix" SIZE=30 maxlength=80 value="' . $prefix .'"></td>' . "\n" .
+                 ' </tr>' . "\n" .
+                 ' <tr>' . "\n" .
+                 '   <td align="left"><font class="ow-normal">' . DBTYPE . '</font></td>' . "\n" .
+                 '   <td><select name="dbtype"><option value="mysql" selected>&nbsp;MySQL&nbsp;</option></select></td>' . "\n" .
+                 ' </tr>' . "\n" .
+                 '</table>' . "\n" .
+                 '<br /><br />' . "\n" .
+                 '<input type="hidden" name="currentlang" value="' . $_POST['currentlang'] . '">' . "\n" .
+                 '<input type="hidden" name="op" value="Submit">' . "\n" .
                  '<input type="submit" value="' . BTN_SUBMIT . '">' . "\n" .
                  '</center></form></font>' . "\n";
-   return $body_main;
+   return $changeInfo;
 }
 
 
 function print_new_install() {
-   $body_main = '<font class="ow-title">New Install</font>' . 
-                '<font class="ow-normal"> ' . NEW_INSTALL_1 . '</font>' . "\n" .
-                '<br /><br /><center>' . "\n";
+   $newInstall = '<font class="ow-title">New Install</font>' . 
+                 '<font class="ow-normal"> ' . NEW_INSTALL_1 . '</font>' . "\n" .
+                 '<br /><br /><center>' . "\n";
    
-   $body_main .= print_form_text(0);
+   $newInstall .= print_form_text(0);
    
-   $body_main .= '<br /><br /><font class="ow-normal">' . NEW_INSTALL_2 . '</font>' . "\n" .
-                 '<form action="index.php" method="post"><table width="50%">' . "\n" .
-                 ' <tr>' . "\n" .
-                 '   <td align=center><font class="ow-normal">' . NEW_INSTALL_3 . '</font>' . "\n" .
-                 '     <br /><input type=checkbox name="dbmake"><br /></td>' . "\n" .
-                 '   <td>';
+   $newInstall .= '<br /><br /><font class="ow-normal">' . NEW_INSTALL_2 . '</font>' . "\n" .
+                  '<form action="index.php" method="post"><table width="50%">' . "\n" .
+                  ' <tr>' . "\n" .
+                  '   <td align=center><font class="ow-normal">' . NEW_INSTALL_3 . '</font>' . "\n" .
+                  '     <br /><input type=checkbox name="dbmake"><br /></td>' . "\n" .
+                  '   <td>';
    
-   $body_main .= print_form_hidden();
+   $newInstall .= print_form_hidden();
    
-   $body_main .= '  <input type="hidden" name="op" value="Start">' . "\n" .
-                 '  <input type="submit" value="' . BTN_START . '">' . "\n" .
-                 '  </td>' . "\n" .
-                 ' </tr>' . "\n" .
-                 '</table>' . "\n" .
-                 '</form></font></center>' . "\n";
-   return $body_main;  
+   $newInstall .= '  <input type="hidden" name="op" value="Start">' . "\n" .
+                  '  <input type="submit" value="' . BTN_START . '">' . "\n" .
+                  '  </td>' . "\n" .
+                  ' </tr>' . "\n" .
+                  '</table>' . "\n" .
+                  '</form></font></center>' . "\n";
+   return $newInstall;  
 }
 
 
 function print_start() {
-   $body_main = '<form action="index.php" method="post"><table width="50%" align=center>' . "\n" .
+   $bodyStart = '<form action="index.php" method="post"><table width="50%" align=center>' . "\n" .
                 ' <tr>' . "\n" .
                 '   <td align=center>' . "\n";
 
-   $body_main .= print_form_hidden();
+   $bodyStart .= print_form_hidden();
 
-   $body_main .= '<input type="hidden" name="op" value="Continue">' . "\n" .
+   $bodyStart .= '<input type="hidden" name="op" value="Continue">' . "\n" .
                  '<input type="submit" value="' . BTN_CONTINUE . '"></td>' . "\n" .
                  ' </tr>' . "\n" .
                  '</table></form>' . "\n";
-   return $body_main;             
+   return $bodyStart;             
 }
 
 
 function print_continue() {
- $body_main = '<font class="ow-title">' . CONTINUE_1 . '</font>' . "\n" .
-              '<font class="ow-normal">' . CONTINUE_2 . '</font>' . "\n" .
-              '<br /><br />' . "\n" .
-              '<center><form action="index.php" method="post"><table width="50%" border=1>' . "\n" .
-              ' <tr>' . "\n" .
-              '  <td align="left"><font class="ow-normal">' . ADMIN_LOGIN . '</font></td>' . "\n" .
-              '  <td><input type="text" NAME="aid" SIZE=30 maxlength=80 value="Admin"></td>' . "\n" .
-              ' </tr>' . "\n" .
-              ' <tr>' . "\n" .
-              '  <td align="left"><font class="ow-normal">' . ADMIN_NAME . '</font></td>' . "\n" .
-              '  <td><input type="text" NAME="name" SIZE=30 maxlength=80 value="Admin"></td>' . "\n" .
-              ' </tr>' . "\n" .
-              ' <tr>' . "\n" .
-              '  <td align="left"><font class="ow-normal">' . ADMIN_PASS . '</font></td>' . "\n" .
-              '  <td><input type="password" NAME="pwd" SIZE=30 maxlength=80 value=""></td>' . "\n" .
-              ' </tr>' . "\n" .
-              ' <tr>' . "\n" .
-              '  <td align="left"><font class="ow-normal">' . ADMIN_REPEATPASS . '</font></td>' . "\n" .
-              '  <td><input type="password" NAME="repeatpwd" SIZE=30 maxlength=80 value=""></td>' . "\n" .
-              ' </tr>' . "\n" .
-              ' <tr>' . "\n" .
-              '  <td align="left"><font class="ow-normal">' . ADMIN_EMAIL . '</font></td>' . "\n" .
-              '  <td><input type="text" NAME="email" SIZE=30 maxlength=80 value="none@none.com"></td>' . "\n" .
-              ' </tr>' . "\n" .
-              ' <tr>' . "\n" .
-              '  <td align="left"><font class="ow-normal">' . ADMIN_URL . '</font></td>' . "\n" .
-              '  <td><input type="text" NAME="url" SIZE=30 maxlength=80 value="http://www.osisnet.de"></td>' . "\n" .
-              ' </tr>' . "\n" .
-              '</table>' . "\n";
+ $continue = '<font class="ow-title">' . CONTINUE_1 . '</font>' . "\n" .
+             '<font class="ow-normal">' . CONTINUE_2 . '</font>' . "\n" .
+             '<br /><br />' . "\n" .
+             '<center><form action="index.php" method="post"><table width="50%" border=1>' . "\n" .
+             ' <tr>' . "\n" .
+             '  <td align="left"><font class="ow-normal">' . ADMIN_LOGIN . '</font></td>' . "\n" .
+             '  <td><input type="text" name="aid" SIZE=30 maxlength=80 value="Admin"></td>' . "\n" .
+             ' </tr>' . "\n" .
+             ' <tr>' . "\n" .
+             '  <td align="left"><font class="ow-normal">' . ADMIN_NAME . '</font></td>' . "\n" .
+             '  <td><input type="text" name="name" SIZE=30 maxlength=80 value="Admin"></td>' . "\n" .
+             ' </tr>' . "\n" .
+             ' <tr>' . "\n" .
+             '  <td align="left"><font class="ow-normal">' . ADMIN_PASS . '</font></td>' . "\n" .
+             '  <td><input type="password" name="pwd" SIZE=30 maxlength=80 value=""></td>' . "\n" .
+             ' </tr>' . "\n" .
+             ' <tr>' . "\n" .
+             '  <td align="left"><font class="ow-normal">' . ADMIN_REPEATPASS . '</font></td>' . "\n" .
+             '  <td><input type="password" name="repeatpwd" SIZE=30 maxlength=80 value=""></td>' . "\n" .
+             ' </tr>' . "\n" .
+             ' <tr>' . "\n" .
+             '  <td align="left"><font class="ow-normal">' . ADMIN_EMAIL . '</font></td>' . "\n" .
+             '  <td><input type="text" name="email" SIZE=30 maxlength=80 value="none@none.com"></td>' . "\n" .
+             ' </tr>' . "\n" .
+             ' <tr>' . "\n" .
+             '  <td align="left"><font class="ow-normal">' . ADMIN_URL . '</font></td>' . "\n" .
+             '  <td><input type="text" name="url" SIZE=30 maxlength=80 value="http://www.osisnet.de"></td>' . "\n" .
+             ' </tr>' . "\n" .
+             '</table>' . "\n";
 
-   $body_main .= print_form_hidden();
+   $continue .= print_form_hidden();
    
-   $body_main .= '<input type="hidden" name="op" value="Set Login">' . "\n" .
-                 '<input type="submit" value="' . BTN_SET_LOGIN . '">' . "\n" .
-                 '</form></center>' . "\n";
-   return $body_main;
+   $continue .= '<input type="hidden" name="op" value="Set Login">' . "\n" .
+                '<input type="submit" value="' . BTN_SET_LOGIN . '">' . "\n" .
+                '</form></center>' . "\n";
+   return $continue;
 
 }
 
 
 function print_set_login() {
-   $body_main .= '<form action="index.php" method="post"><center><table width="50%">' . "\n";
+   $setLogin .= '<form action="index.php" method="post"><center><table width="50%">' . "\n";
 
-   $body_main .= print_form_hidden();
+   $setLogin .= print_form_hidden();
 
-   $body_main .= '<tr><td align=center><input type="hidden" name="op" value="Finish">' . "\n" .
-                 '<input type="submit" value="' . BTN_FINISH . '"></td></tr></table></center></form>' . "\n";
-   return $body_main;               
+   $setLogin .= '<tr><td align=center><input type="hidden" name="op" value="Finish">' . "\n" .
+                '<input type="submit" value="' . BTN_FINISH . '"></td></tr></table></center></form>' . "\n";
+   return $setLogin;               
 }
 
 
@@ -289,34 +320,36 @@ function print_finish() {
 
 
 function print_success() {
-   $body_main = '<font class="ow-title">' . SUCCESS_1 . '</font>' . "\n" .
-                '<font class="ow-normal">' . SUCCESS_2 . '<br /><br />' . "\n" .
-                '<form action="index.php" method="post"><center><table width="50%">' . "\n";
+   $success = '<font class="ow-title">' . SUCCESS_1 . '</font>' . "\n" .
+              '<font class="ow-normal">' . SUCCESS_2 . '<br /><br />' . "\n" .
+              '<form action="index.php" method="post"><center><table width="50%">' . "\n";
 
-   $body_main .= print_form_hidden();
+   $success .= print_form_hidden();
 
-   $body_main .= '<tr><td align=center><input type="hidden" name="op" value="Finish">' . "\n" .
-                 '<input type="submit" value="' . BTN_FINISH . '"></td>' . "\n" .
-                 '</tr></table></center></form></font><br /><br />' . "\n";
-   return $body_main;
+   $success .= '<tr><td align=center><input type="hidden" name="op" value="Finish">' . "\n" .
+               '<input type="submit" value="' . BTN_FINISH . '"></td>' . "\n" .
+               '</tr></table></center></form></font><br /><br />' . "\n";
+   return $success;
 }
 
 
 function print_default() {
+   global $currentlang;
+  
    echo '<font class="ow-normal">' . DEFAULT_1  . '</font><br /><br />';
    echo '<font class="ow-normal">' . DEFAULT_2  . '</font><br /><br />';
    echo '<font class="ow-normal">' . DEFAULT_3  . '</font><br /><br />';
    echo '<font class="ow-title">' . DEFAULT_4 . '</font>';
    echo '<font class="ow-normal">' . DEFAULT_5 . '<br /><br />';
-   echo '<form action="index.php" method="post"><center>';
+   echo '<form name="license"><center>';
    echo '<textarea name="license" cols=60 rows=10>';
 
    include("../docs/LICENSE.txt");
 
-   echo  '</textarea><br /><br /';
-
-   echo print_form_hidden();
-
+   echo  '</textarea></form><br /><br />';
+   
+   echo '<form name="next" action="index.php" method="post"><center>';
+   echo '<input type="hidden" name="currentlang" value="' . $currentlang . '">';
    echo '<input type="hidden" name="op" value="PHP_Check">';
    echo '<input type="submit" value="' . BTN_NEXT . '"></center>';
    echo '</form>';
@@ -324,18 +357,18 @@ function print_default() {
 
 
 function print_select_language() {
-   $body_main = '<br />' . "\n" .
-                '<p><font class="ow-pageGreat">' . GREAT . '</font></p>' . "\n" .
-                '<p><font class="ow-main">' . GREAT_1 . '</font></p>' . "\n" .
-                '<p><img src="images/trans.gif" width="1%" height="40" border="0" alt=" "></p>' . "\n" .
-                '<p><font class="ow-title">' . SELECT_LANGUAGE_1 . '</font></p>' . "\n" .
-                '<form action="index.php" method="post"><table width="400" align="center" border="0"><tr>' . "\n" .
-                '<td align="center"><font class="ow-normal">' . SELECT_LANGUAGE_2;
-   $body_main .= lang_dropdown();
-   $body_main .= '<input type="hidden" name="op" value="Set Language">' . "\n" .
-                 '<input type="submit" value="' . BTN_SET_LANGUAGE . '"></td></tr>' . "\n" .
-                 '</table></form></font>' . "\n";
-   return $body_main;
+   $selectLanguage = '<br />' . "\n" .
+                     '<p><font class="ow-pageGreat">' . GREAT . '</font></p>' . "\n" .
+                     '<p><font class="ow-main">' . GREAT_1 . '</font></p>' . "\n" .
+                     '<p><img src="images/trans.gif" width="1%" height="40" border="0" alt=" "></p>' . "\n" .
+                     '<p><font class="ow-title">' . SELECT_LANGUAGE_1 . '</font></p>' . "\n" .
+                     '<form action="index.php" method="post"><table width="400" align="center" border="0"><tr>' . "\n" .
+                     '<td align="center"><font class="ow-normal">' . SELECT_LANGUAGE_2;
+   $selectLanguage .= lang_dropdown();
+   $selectLanguage .= '<input type="hidden" name="op" value="Set Language">' . "\n" .
+                      '<input type="submit" value="' . BTN_SET_LANGUAGE . '"></td></tr>' . "\n" .
+                      '</table></form></font>' . "\n";
+   return $selectLanguage;
 }
 
 ?>
