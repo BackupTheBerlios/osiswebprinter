@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: gui.php,v 1.11 2003/04/01 05:15:34 r23 Exp $
+   $Id: gui.php,v 1.12 2003/04/02 06:34:02 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -217,14 +217,19 @@ function owp_change_info() {
 
 
 function owp_new_install() {
-   $newInstall = '<font class="owp-title">New Install</font>' . 
-                 '<font class="owp-normal"> ' . NEW_INSTALL_1 . '</font>' . "\n" .
+   $newInstall = '<font class="owp-title">' . NEW_INSTALL_1 . '</font>' . 
+                 '<font class="owp-normal">&nbsp;' . NEW_INSTALL_2 . '</font>' . "\n" .
                  '<br /><br /><center>' . "\n";
-   $newInstall .= owp_form_text(0);  
-   $newInstall .= '<br /><br /><font class="owp-normal">' . NEW_INSTALL_2 . '</font>' . "\n" .
-                  '<form action="index.php" method="post"><table width="50%">' . "\n" .
+   $newInstall .= owp_form_text(0); 
+   $newInstall .= '<form name="change info" action="index.php" method="post">' . "\n";
+   $newInstall .= owp_form_hidden();
+   $newInstall .= '<input type="hidden" name="op" value="Change Info">' . "\n" . 
+                  '<input type="submit" value="' . BTN_CHANGE_INFO . '"><br />' . "\n" .
+                  '</form>' . "\n" .
+                  '<br /><br /><font class="owp-normal">' . NEW_INSTALL_3 . '</font>' . "\n" .
+                  '<form name="install" action="index.php" method="post"><table width="50%">' . "\n" .
                   ' <tr>' . "\n" .
-                  '   <td align=center><font class="owp-normal">' . NEW_INSTALL_3 . '</font>' . "\n" .
+                  '   <td align=center><font class="owp-normal">' . NEW_INSTALL_4 . '</font>' . "\n" .
                   '     <br /><input type=checkbox name="dbmake"><br /></td>' . "\n" .
                   '   <td>';
    $newInstall .= owp_form_hidden();

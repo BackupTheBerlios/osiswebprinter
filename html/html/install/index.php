@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.9 2003/04/02 02:03:32 r23 Exp $
+   $Id: index.php,v 1.10 2003/04/02 06:34:02 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -96,13 +96,15 @@
     $dbpass = base64_decode($dbpass);
   }
 
-  $owconfig['prefix'] = $prefix;
+ # $owconfig['prefix'] = $prefix;
 
   installer_get_language();
 
 // header
   include_once 'header.php';
-
+  
+  echo '<b>' . $prefix . '</b><br>' . $dbname;
+  
 /* This starts the switch statement that filters through the form options.
  * the @ is in front of $op to suppress error messages if $op is unset and E_ALL
  * is on
@@ -121,7 +123,6 @@
       echo owp_continue();
       break;
     case 'Start':
-      $dbmake = owp_prepare_input($_POST['dbmake']);
       make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake);
       echo owp_start();
       break;
@@ -150,5 +151,6 @@
       echo owp_select_language();
       break;
   }
+  
   include_once 'footer.php';
 ?>

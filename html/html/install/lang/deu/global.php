@@ -1,6 +1,6 @@
 <?php 
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.8 2003/04/01 05:15:34 r23 Exp $
+   $Id: global.php,v 1.9 2003/04/02 06:34:02 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -69,7 +69,7 @@ define('CHMOD_CHECK_5', 'CHMOD ~/includes/config-old.php ist 666 -- RICHTIG');
 define('CHMOD_CHECK_6', 'Bitte &auml;ndern Sie die Zugriffsrechte (CHMOD 666) der Datei ~/includes/config-old.php ');
 
 define('CHM_CHECK_1', 'Bitte geben Sie die Zugangsdaten Ihrer Datenbank an. Sollten Sie keine Root-Rechte bei Ihrer Datenbank haben (z.b. virtual Hosting) erstellen Sie die Datenbank vorher. Zur Erstellung einer Datenbank empfehlen wir Ihnen phpMyAdmin. OSIS Web Printer Installtion wird in Ihrer Datenbank die notwendigen Tabelle anlegen.');
-define('DBHOST', 'Datenbank Host');
+define('DBHOST', 'Datenbank Server');
 define('DBINFO', 'Datenbank Information');
 define('DBNAME', 'Datenbank Name');
 define('DBPASS', 'Datenbank Passwort');
@@ -80,14 +80,24 @@ define('DBUNAME', 'Datenbank Anwendername');
 define('SUBMIT_1','Bitte kontrollieren Sie Zugangsdaten Ihrer Datenbank.');
 define('SUBMIT_2','Sie haben folgende Zugangsdaten angegeben:');
 #define('SUBMIT_3','Select <b>New Install</b> or <b>Upgrade</b> to continue.');
-define('SUBMIT_3','Sind die Angaben korrekt, klicken Sie bitte auf <code>New Install</code>');
+define('SUBMIT_3','Sind die Angaben korrekt, klicken Sie bitte auf <code>Installation</code>');
 
 define('CHANGE_INFO_1', 'DB Zugangsdaten &auml;ndern');
 define('CHANGE_INFO_2', 'Bitte korrigieren Sie Ihre Datenbank Zugangsdaten');
 
-define('NEW_INSTALL_1', 'You have choosen to do a new install. Below is the information that you have entered.');
-define('NEW_INSTALL_2', 'If you have root access, check the <b>create the database</b> box. Otherwise, just click on start.<br>If you do not have root access you need to create the db manually and this script will then add the tables for you.');
-define('NEW_INSTALL_3', 'Create the Database');
+define('NEW_INSTALL_1', 'Neue Installation.');
+define('NEW_INSTALL_2', 'Die OSIS WebPrinter Datenbank wird mit folgenden Zugangsdaten erstellt:');
+define('NEW_INSTALL_3', 'Soll die Datenbank erstellt werden <samp>(root)</samp>, aktivieren Sie <b>Datenbank anlegen</b>.<br />Ist die Datenbank bereits angelegt, klicken Sie bitte auf Start. Es werden die Tabellen angelegt.');
+define('NEW_INSTALL_4', 'Datenbank anlegen');
+
+
+define('MADE', ' erstellt.');
+define('MAKE_DB_1', 'Datenbank konnte nicht erstellt werden');
+define('MAKE_DB_2', 'wurde angelegt.');
+define('MAKE_DB_3', 'Keine Datenbank erstellt.');
+define('MODIFY_FILE_1', 'Error: unable to open for read:');
+define('MODIFY_FILE_2', 'Error: unable to open for write:');
+define('MODIFY_FILE_3', '0 lines changed, did nothing');
 
 
 

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newinstall.php,v 1.4 2003/04/01 02:30:23 r23 Exp $
+   $Id: newinstall.php,v 1.5 2003/04/02 06:34:02 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -46,9 +46,9 @@ function make_db($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $dbmake)
     
     echo '<center><br /><br />';
     if ($dbmake) {
-       mysql_connect($dbhost, $dbuname, $dbpass);
+       mysql_pconnect($dbhost, $dbuname, $dbpass);
        $result = mysql_query("CREATE DATABASE $dbname") or die (_MAKE_DB_1);
-       echo '<br><br><font class="owp-error">' . $dbname . MAKE_DB_2. '</font>'; 
+       echo '<font class="owp-error">' . $dbname . ' ' . MAKE_DB_2. '</font>'; 
     } else {
         echo '<font class="owp-error">'. MAKE_DB_3 . '</font>';
     }
