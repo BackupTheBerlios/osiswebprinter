@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: zones.php,v 1.5 2003/04/30 15:29:12 r23 Exp $
+   $Id: zones.php,v 1.6 2003/05/02 09:50:50 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -55,4 +55,7 @@ define('ERROR_CSV_TEMP_DIRECTORY_NOT_WRITEABLE', 'Fehler: Das CSV-Dateiverzeichn
 define('ERROR_CSV_TEMP_DIRECTORY_DOES_NOT_EXIST', 'Fehler: Das CSV-Dateiverzeichnis ist nicht vorhanden.');
 
 define('IMAGE_CSV_DOWNLOAD', 'Download');
+
+define('TEXT_DISPLAY_NUMBER_OF_ZONES', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Bundesl&auml;ndern)');
+
 ?>

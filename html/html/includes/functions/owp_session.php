@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_session.php,v 1.2 2003/04/29 06:24:52 r23 Exp $
+   $Id: owp_session.php,v 1.3 2003/05/02 09:48:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -13,7 +13,6 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
  
- /*
  GLOBAL $_SESSION, 
         $ADODB_SESSION_CONNECT, 
         $ADODB_SESSION_DRIVER,
@@ -37,7 +36,8 @@
   
   include(OWP_ADODB_DIR . 'adodb.inc.php');
   include(OWP_ADODB_DIR . 'adodb-cryptsession.php');
-*/
+
+
   function owpSessIni($session_name = "owpSid", $session_serialize_handler = 'php', $session_gc_probability = 50, $session_gc_maxlifetime = 1440, $session_referer_check  ='', $session_entropy_file = '', $session_entropy_length = 0, $session_cache_limiter = 'nocache', $session_cache_expire = 180, $session_use_trans_sid = 0, $sesssion_url_rewriter_tags = 'a=href,area=href,frame=src,input=src,form=fakeentry') {
     session_name($session_name);
     if (function_exists('ini_set')) {

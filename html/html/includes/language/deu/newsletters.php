@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletters.php,v 1.2 2003/04/19 05:51:10 r23 Exp $
+   $Id: newsletters.php,v 1.3 2003/05/02 09:49:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -43,9 +43,13 @@ define('TEXT_INFO_DELETE_INTRO', 'Sind Sie sicher, dass Sie dieses Rundschreiben
 define('TEXT_PLEASE_WAIT', 'Bitte warten Sie .. eMails werden gesendet ..<br><br>Bitte unterbrechen Sie diesen Prozess nicht!');
 define('TEXT_FINISHED_SENDING_EMAILS', 'eMails wurden versendet!');
 
+define('TEXT_FIELD_REQUIRED', '&nbsp;<span class="fieldRequired">* erforderlich</span>');
+
 define('ERROR_NEWSLETTER_TITLE', 'Fehler: Ein Titel f&uuml;r das Rundschreiben ist erforderlich.');
 define('ERROR_NEWSLETTER_MODULE', 'Fehler: Das Newsletter Modul wird ben&ouml;tigt.');
 define('ERROR_REMOVE_UNLOCKED_NEWSLETTER', 'Fehler: Bitte sperren Sie das Rundschreiben bevor Sie es l&ouml;schen.');
 define('ERROR_EDIT_UNLOCKED_NEWSLETTER', 'Fehler: Bitte sperren Sie das Rundschreiben bevor Sie es bearbeiten.');
 define('ERROR_SEND_UNLOCKED_NEWSLETTER', 'Fehler: Bitte sperren Sie das Rundschreiben bevor Sie es versenden.');
+
+define('TEXT_DISPLAY_NUMBER_OF_NEWSLETTERS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Rundschreiben)');
 ?>

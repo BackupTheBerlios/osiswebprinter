@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_api.php,v 1.5 2003/05/01 14:37:29 r23 Exp $
+   $Id: owp_api.php,v 1.6 2003/05/02 09:48:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -12,10 +12,7 @@
    ----------------------------------------------------------------------
    Based on:
    
-   File: newsletters.php,v 1.14 2002/03/29 13:04:25 dgw_
-   ----------------------------------------------------------------------
-
-   $Id: owp_api.php,v 1.5 2003/05/01 14:37:29 r23 Exp $
+   File: pnAPI.php,v 1.81.2.14 2002/05/17 16:50:12 byronmhome 
    ----------------------------------------------------------------------
    POST-NUKE Content Management System
    Copyright (C) 2001 by the Post-Nuke Development Team.

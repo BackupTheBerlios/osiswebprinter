@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: footer.php,v 1.2 2003/04/25 07:21:50 r23 Exp $
+   $Id: footer.php,v 1.3 2003/05/02 09:48:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -39,7 +39,7 @@
     <td bgcolor="#D9DCC2" align="center" valign="middle">
       <p align="center"><font class="owp-sub">
 	<br /><a href="http://www.osisnet.de/shop.php" target="_blank"><img src="images/powered/osis.gif" border="0" alt="Web site powered by OSIS" hspace="10" /></a> 
-	<a href="http://php.weblogs.com/ADODB" target="_blank"><img src="images/adodb2.gif" alt="ADODB database library" border="0" hspace="10" /></a>
+	<a href="http://php.weblogs.com/ADODB" target="_blank"><img src="images/powered/adodb2.gif" alt="ADODB database library" border="0" hspace="10" /></a>
 	<a href="http://www.php.net/" target="_blank"><img src="images/powered/php2.gif" alt="PHP Scripting Language" border="0" hspace="10" /></a>
 	<br /><br />
 <?php

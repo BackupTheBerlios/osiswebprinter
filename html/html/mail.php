@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.11 2003/05/01 14:39:04 r23 Exp $
+   $Id: mail.php,v 1.12 2003/05/02 09:50:50 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -23,12 +23,12 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
-
+/*
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
-
+*/
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['mail']);
   $breadcrumb->add(NAVBAR_TITLE, owpLink($owpFilename['mail']));
 
@@ -265,7 +265,7 @@
 ?>
               <tr>
                 <td class="main"><?php echo TEXT_USER; ?></td>
-                <td><?php echo owpPullDownMenu('user_email_address', $user);?></td>
+                <td><?php echo owpPullDownMenu('user_email_address', $user, $_GET['admin']);?></td>
               </tr>
               <tr>
                 <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>

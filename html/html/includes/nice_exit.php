@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: nice_exit.php,v 1.1 2003/04/19 21:32:40 r23 Exp $
+   $Id: nice_exit.php,v 1.2 2003/05/02 09:50:50 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -13,7 +13,7 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-// session_close
+  session_close;
 
 // db close
 

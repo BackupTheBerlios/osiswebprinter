@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.5 2003/04/30 15:29:12 r23 Exp $
+   $Id: mail.php,v 1.6 2003/05/02 09:49:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,6 +24,7 @@
 
 define('TITLE', 'eMail versenden.');
 define('NAVBAR_TITLE', 'eMail versenden');
+define('NAVBAR_TITLE_2', 'Ihre eMail');
 define('HEADING_TITLE', 'eMail an '.  OWP_NAME .' - Anwender versenden.');
 
 define('TEXT_USER', 'Anwender:');
@@ -42,7 +43,9 @@ define('EMAIL_GREET_ALL', 'Sehr geehrte ... ');
 define('EMAIL_FOOT', 'Mit den besten Grüssen,' . "\n" .  OWP_NAME . "\n\n\n" . OWP_HTTP_SERVER . '/' . "\n\n");
 
 define('NOTICE_EMAIL_SENT_TO', 'Hinweis: eMail wurde versendet an: %s');
-define('ERROR_NO_USER_SELECTED', 'Fehler: Es wurde kein Kunde ausgew&auml;hlt.');
-define('ERROR_NO_FROM_NAME', 'Fehler: Es wurde kein Absender - Name eingeben.');
-define('ERROR_NO_FROM_MAIL', 'Fehler: Es wurde keine Absender - eMail Adresse eingeben.');
+define('ERROR_NO_USER_SELECTED', 'Fehler: Es wurde kein Anwender ausgew&auml;hlt.');
+define('ERROR_NO_FROM_NAME', 'Fehler: Bitte geben Sie Ihren Namen als Absender ein.');
+define('ERROR_NO_FROM_MAIL', 'Fehler: Bitte geben Sie Ihre eMail Adresse als Absender ein.');
+define('ERROR_NO_SUBJECT', 'Fehler: Bitte geben Sie ein Betreff ein.');
+define('ERROR_NO_BODY', 'Fehler: Bitte geben Sie eine Nachricht ein.');
 ?>
