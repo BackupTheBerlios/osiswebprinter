@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.16 2003/05/01 14:37:29 r23 Exp $
+   $Id: system.php,v 1.17 2003/05/03 15:56:02 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -72,9 +72,6 @@
   $owpDBTable['session'] = $prefix_table . 'sessions';
   $owpDBTable['whos_online'] = $prefix_table . 'whos_online';
   $owpDBTable['zones'] = $prefix_table . 'zones';
-  
-  
-  $owpSelf = (! empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : $_SERVER['SCRIPT_NAME'];
 
 //session
   require_once(OWP_CLASSES_DIR . 'owp_navigation_history.php');
@@ -167,7 +164,7 @@
   if (!empty($_GET['selected_box'])) {
     $_SESSION['selected_box'] = $_GET['selected_box'];
   } 
-  $selected_box =& $_SESSION['selected_box'];
+  $selected_box = $_SESSION['selected_box'];
 
 // include the language translations
   require_once(OWP_LANGUAGES_DIR . $language . '/global.php');

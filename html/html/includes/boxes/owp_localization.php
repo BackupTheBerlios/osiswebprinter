@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_localization.php,v 1.6 2003/04/25 15:56:55 r23 Exp $
+   $Id: owp_localization.php,v 1.7 2003/05/03 15:55:01 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -29,13 +29,12 @@
   $heading = array();
   $contents = array();
 
-  $heading[] = array('text'  => BOX_HEADING_LOCALIZATION,
-                     'link'  => owpLink(basename($owpSelf), owpGetAllGetParameters(array('selected_box')) . 'selected_box=localization'));
+  $heading[] = array('text'  => BOX_HEADING_LANGUAGES,
+                     'link'  => owpLink(basename($_SERVER['PHP_SELF']), owpGetAllGetParameters(array('selected_box')) . 'selected_box=localization'));
 
   if ($selected_box == 'localization') {
-    $contents[] = array('text'  => '<a href="' . owpLink(FILENAME_CURRENCIES, '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_LOCALIZATION_CURRENCIES . '</a><br>' .
-                                   '<a href="' . owpLink($owpFilename['languages'], '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_LOCALIZATION_LANGUAGES . '</a><br>' .
-                                   '<a href="' . owpLink(FILENAME_ORDERS_STATUS, '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_LOCALIZATION_ORDERS_STATUS . '</a>');
+    $contents[] = array('text'  => '<a href="' . owpLink($owpFilename['define_language']) . '" class="menuBoxContentLink">' . BOX_TOOLS_DEFINE_LANGUAGE . '</a><br>' .
+                                   '<a href="' . owpLink($owpFilename['languages'], '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_LOCALIZATION_LANGUAGES . '</a>');
   }
 
   $box = new box;

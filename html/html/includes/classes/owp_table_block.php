@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_table_block.php,v 1.2 2003/04/19 06:35:38 r23 Exp $
+   $Id: owp_table_block.php,v 1.3 2003/05/03 15:55:33 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -40,7 +40,7 @@
       if ($contents['form']) {
         echo $contents['form'] . "\n";
         $form_set = true;
-        tep_array_shift($contents);
+        owpArrayShift($contents);
       }
 
       for ($i=0; $i<sizeof($contents); $i++) {

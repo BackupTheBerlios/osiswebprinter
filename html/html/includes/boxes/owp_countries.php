@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_countries.php,v 1.3 2003/04/25 15:56:55 r23 Exp $
+   $Id: owp_countries.php,v 1.4 2003/05/03 15:55:01 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -29,8 +29,8 @@
   $heading = array();
   $contents = array();
 
-  $heading[] = array('text'  => BOX_HEADING_LOCATION_AND_TAXES,
-                     'link'  => owpLink(basename($owpSelf), owpGetAllGetParameters(array('selected_box')) . 'selected_box=countries'));
+  $heading[] = array('text'  => BOX_HEADING_LOCALIZATION,
+                     'link'  => owpLink(basename($_SERVER['PHP_SELF']), owpGetAllGetParameters(array('selected_box')) . 'selected_box=countries'));
 
   if ($selected_box == 'countries') {
     $contents[] = array('text'  => '<a href="' . owpLink($owpFilename['countries'], '', 'NONSSL') . '" class="menuBoxContentLink">' . BOX_TAXES_COUNTRIES . '</a><br>' .

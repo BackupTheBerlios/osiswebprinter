@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_administrators.php,v 1.3 2003/04/22 07:22:17 r23 Exp $
+   $Id: owp_administrators.php,v 1.4 2003/05/03 15:55:01 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -43,11 +43,13 @@
   $contents = array();
   
   $heading[] = array('text'  => BOX_HEADING_ADMINISTRATORS,
-                     'link'  => owpLink(basename($owpSelf), owpGetAllGetParameters(array('selected_box')) . 'selected_box=administrators'));
+                     'link'  => owpLink(basename($_SERVER['PHP_SELF']), owpGetAllGetParameters(array('selected_box')) . 'selected_box=administrators'));
 
+# 'link'  => owpLink(basename($_SERVER['PHP_SELF']), owpGetAllGetParameters(array('selected_box')) . 'selected_box=administrators'));
 
   if ($selected_box == 'administrators') {
-    $contents[] = array('text'  => '<a href="' . owpLink($owpFilename['administrators'], '', 'NONSSL') . '">' . BOX_ADMINISTRATORS_SETUP . '</a>');
+    $contents[] = array('text'  => '<a href="' . owpLink($owpFilename['administrators']) . '" class="menuBoxContentLink">' . BOX_ADMINISTRATORS_SETUP . '</a>');
+
   }
   
   $box = new box;

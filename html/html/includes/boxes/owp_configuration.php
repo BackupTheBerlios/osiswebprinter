@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_configuration.php,v 1.6 2003/04/23 07:04:35 r23 Exp $
+   $Id: owp_configuration.php,v 1.7 2003/05/03 15:55:01 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -30,7 +30,7 @@
   $contents = array();
 
   $heading[] = array('text'  => BOX_HEADING_CONFIGURATION,
-                     'link'  => owpLink(basename($owpSelf), owpGetAllGetParameters(array('selected_box')) . 'selected_box=configuration'));
+                     'link'  => owpLink(basename($_SERVER['PHP_SELF']), owpGetAllGetParameters(array('selected_box')) . 'selected_box=configuration'));
 
   if ($selected_box == 'configuration') {
     $cfg_groups = '';

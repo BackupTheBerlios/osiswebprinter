@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_split_page_results.php,v 1.9 2003/04/25 15:56:55 r23 Exp $
+   $Id: owp_split_page_results.php,v 1.10 2003/05/03 15:55:33 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -21,13 +21,6 @@
    ----------------------------------------------------------------------
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
-
-// die classe ist für owp nicht geeigent
-// limit ist unbrauchbar für adbo
-// die string *untersuchungen* in 
-// dieser classe verhindern den
-// owp sql - style in
-// zones.php, countries.php usw.
 
   class splitPageResults {
     function splitPageResults(&$current_page_number, $max_rows_per_page, &$sql_query, &$query_num_rows) {
@@ -62,7 +55,7 @@
     }
 
     function display_links($query_numrows, $max_rows_per_page, $max_page_links, $current_page_number, $parameters = '', $page_name = 'page') {
-      global $owpSelf;
+      global $_SERVER;
 
       if ($parameters != '') $parameters .= '&';
 
@@ -78,10 +71,10 @@
       }
 
       if ($num_pages > 1) {
-        $display_links = owpDrawForm('pages', basename($owpSelf), '', 'get');
+        $display_links = owpDrawForm('pages', basename($_SERVER['PHP_SELF']), '', 'get');
 
         if ($current_page_number > 1) {
-          $display_links .= '<a href="' . owpLink(basename($owpSelf), $parameters . $page_name . '=' . ($current_page_number - 1), 'NONSSL') . '" class="splitPageLink">' . PREVNEXT_BUTTON_PREV . '</a>&nbsp;&nbsp;';
+          $display_links .= '<a href="' . owpLink(basename($_SERVER['PHP_SELF']), $parameters . $page_name . '=' . ($current_page_number - 1), 'NONSSL') . '" class="splitPageLink">' . PREVNEXT_BUTTON_PREV . '</a>&nbsp;&nbsp;';
         } else {
           $display_links .= PREVNEXT_BUTTON_PREV . '&nbsp;&nbsp;';
         }
@@ -89,7 +82,7 @@
         $display_links .= sprintf(TEXT_RESULT_PAGE, owpPullDownMenu($page_name, $pages_array, '', 'onChange="this.form.submit();"'), $num_pages);
 
         if (($current_page_number < $num_pages) && ($num_pages != 1)) {
-          $display_links .= '&nbsp;&nbsp;<a href="' . owpLink(basename($owpSelf), $parameters . $page_name . '=' . ($current_page_number + 1), 'NONSSL') . '" class="splitPageLink">' . PREVNEXT_BUTTON_NEXT . '</a>';
+          $display_links .= '&nbsp;&nbsp;<a href="' . owpLink(basename($_SERVER['PHP_SELF']), $parameters . $page_name . '=' . ($current_page_number + 1), 'NONSSL') . '" class="splitPageLink">' . PREVNEXT_BUTTON_NEXT . '</a>';
         } else {
           $display_links .= '&nbsp;&nbsp;' . PREVNEXT_BUTTON_NEXT;
         }
@@ -126,12 +119,5 @@
       return sprintf($text_output, $from_num, $to_num, $query_numrows);
     }
   }
-  
-    function owpSessionID($sessID = '') {
-      if ($sessID != '') {
-        return session_id($sessID);
-      } else {
-        return session_id();
-      }
-  }
+
 ?>

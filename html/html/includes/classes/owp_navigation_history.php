@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_navigation_history.php,v 1.4 2003/04/23 07:04:35 r23 Exp $
+   $Id: owp_navigation_history.php,v 1.5 2003/05/03 15:55:33 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -35,11 +35,11 @@
     }
 
     function add_current_page() {
-      global $owpSelf, $_GET, $_POST, $_SERVER;
+      global $_GET, $_POST, $_SERVER;
 
       $set = 'true';
       for ($i=0; $i<sizeof($this->path); $i++) {
-        if ( ($this->path[$i]['page'] == basename($owpSelf)) ) {
+        if ( ($this->path[$i]['page'] == basename($_SERVER['PHP_SELF'])) ) {
           array_splice($this->path, ($i));
           $set = 'true';
           break;
@@ -47,7 +47,7 @@
       }
 
       if ($set == 'true') {
-        $this->path[] = array('page' => basename($owpSelf),
+        $this->path[] = array('page' => basename($_SERVER['PHP_SELF']),
                               'mode' => (($_SERVER['HTTPS'] == 'on') ? 'SSL' : 'NONSSL'),
                               'get' => $_GET,
                               'post' => $_POST);
@@ -55,7 +55,7 @@
     }
 
     function set_snapshot($page = '') {
-      global $owpSelf, $_GET, $_POST, $_SERVER;
+      global $_GET, $_POST, $_SERVER;
 
       if (is_array($page)) {
         $this->snapshot = array('page' => $page['page'],
@@ -63,7 +63,7 @@
                                 'get' => $page['get'],
                                 'post' => $page['post']);
       } else {
-        $this->snapshot = array('page' => basename($owpSelf),
+        $this->snapshot = array('page' => basename($_SERVER['PHP_SELF']),
                                 'mode' => (($_SERVER['HTTPS'] == 'on') ? 'SSL' : 'NONSSL'),
                                 'get' => $_GET,
                                 'post' => $_POST);
