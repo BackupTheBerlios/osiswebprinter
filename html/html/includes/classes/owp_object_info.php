@@ -1,15 +1,27 @@
 <?php
-/*
-  $Id: owp_object_info.php,v 1.1 2003/04/23 06:30:23 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: owp_object_info.php,v 1.2 2003/04/23 06:32:13 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: object_info.php,v 1.5 2002/01/30 01:14:20 hpdl
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2001 osCommerce
-
-  Released under the GNU General Public License
-*/
-
+   Copyright (c) 2001 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
+   
   class objectInfo {
 
 // class constructor
