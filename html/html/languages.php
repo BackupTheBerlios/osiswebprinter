@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.3 2003/04/18 23:15:00 r23 Exp $
+   $Id: languages.php,v 1.4 2003/04/18 23:18:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -26,11 +26,11 @@
 
   switch ($_GET['action']) {
     case 'insert':
-      $name = tep_db_prepare_input($HTTP_POST_VARS['name']);
-      $code = tep_db_prepare_input($HTTP_POST_VARS['code']);
-      $image = tep_db_prepare_input($HTTP_POST_VARS['image']);
-      $directory = tep_db_prepare_input($HTTP_POST_VARS['directory']);
-      $sort_order = tep_db_prepare_input($HTTP_POST_VARS['sort_order']);
+      $name = tep_db_prepare_input($_POST['name']);
+      $code = tep_db_prepare_input($_POST['code']);
+      $image = tep_db_prepare_input($_POST['image']);
+      $directory = tep_db_prepare_input($_POST['directory']);
+      $sort_order = tep_db_prepare_input($_POST['sort_order']);
 
       tep_db_query("insert into " . TABLE_LANGUAGES . " (name, code, image, directory, sort_order) values ('" . tep_db_input($name) . "', '" . tep_db_input($code) . "', '" . tep_db_input($image) . "', '" . tep_db_input($directory) . "', '" . tep_db_input($sort_order) . "')");
       $insert_id = tep_db_insert_id();
@@ -71,7 +71,7 @@
         tep_db_query("insert into " . TABLE_ORDERS_STATUS . " (orders_status_id, language_id, orders_status_name) values ('" . $orders_status['orders_status_id'] . "', '" . $insert_id . "', '" . tep_db_input($orders_status['orders_status_name']) . "')");
       }
 
-      if ($HTTP_POST_VARS['default'] == 'on') {
+      if ($_POST['default'] == 'on') {
         tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . tep_db_input($code) . "' where configuration_key = 'DEFAULT_LANGUAGE'");
       }
 
@@ -79,15 +79,15 @@
       break;
     case 'save':
       $lID = tep_db_prepare_input($_GET['lID']);
-      $name = tep_db_prepare_input($HTTP_POST_VARS['name']);
-      $code = tep_db_prepare_input($HTTP_POST_VARS['code']);
-      $image = tep_db_prepare_input($HTTP_POST_VARS['image']);
-      $directory = tep_db_prepare_input($HTTP_POST_VARS['directory']);
-      $sort_order = tep_db_prepare_input($HTTP_POST_VARS['sort_order']);
+      $name = tep_db_prepare_input($_POST['name']);
+      $code = tep_db_prepare_input($_POST['code']);
+      $image = tep_db_prepare_input($_POST['image']);
+      $directory = tep_db_prepare_input($_POST['directory']);
+      $sort_order = tep_db_prepare_input($_POST['sort_order']);
 
       tep_db_query("update " . TABLE_LANGUAGES . " set name = '" . tep_db_input($name) . "', code = '" . tep_db_input($code) . "', image = '" . tep_db_input($image) . "', directory = '" . tep_db_input($directory) . "', sort_order = '" . tep_db_input($sort_order) . "' where languages_id = '" . tep_db_input($lID) . "'");
 
-      if ($HTTP_POST_VARS['default'] == 'on') {
+      if ($_POST['default'] == 'on') {
         tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . tep_db_input($code) . "' where configuration_key = 'DEFAULT_LANGUAGE'");
       }
 

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletters.php,v 1.3 2003/04/18 23:15:00 r23 Exp $
+   $Id: newsletters.php,v 1.4 2003/04/18 23:18:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -37,10 +37,10 @@
         break;
       case 'insert':
       case 'update':
-        $newsletter_id = tep_db_prepare_input($HTTP_POST_VARS['newsletter_id']);
-        $newsletter_module = tep_db_prepare_input($HTTP_POST_VARS['module']);
-        $title = tep_db_prepare_input($HTTP_POST_VARS['title']);
-        $content = tep_db_prepare_input($HTTP_POST_VARS['content']);
+        $newsletter_id = tep_db_prepare_input($_POST['newsletter_id']);
+        $newsletter_module = tep_db_prepare_input($_POST['module']);
+        $title = tep_db_prepare_input($_POST['title']);
+        $content = tep_db_prepare_input($_POST['content']);
 
         $newsletter_error = false;
         if (empty($title)) {
@@ -145,8 +145,8 @@
       $newsletter = tep_db_fetch_array($newsletter_query);
 
       $nInfo = new objectInfo($newsletter);
-    } elseif ($HTTP_POST_VARS) {
-      $nInfo = new objectInfo($HTTP_POST_VARS);
+    } elseif ($_POST) {
+      $nInfo = new objectInfo($_POST);
     } else {
       $nInfo = new objectInfo(array());
     }

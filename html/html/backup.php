@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: backup.php,v 1.3 2003/04/18 23:15:00 r23 Exp $
+   $Id: backup.php,v 1.4 2003/04/18 23:18:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -106,9 +106,9 @@
           $schema .= "\n";
         }
 
-        if ($HTTP_POST_VARS['download'] == 'yes') {
+        if ($_POST['download'] == 'yes') {
           $backup_file = 'db_' . DB_DATABASE . '-' . date('YmdHis') . '.sql';
-          switch ($HTTP_POST_VARS['compress']) {
+          switch ($_POST['compress']) {
             case 'no':
               header('Content-type: application/x-octet-stream');
               header('Content-disposition: attachment; filename=' . $backup_file);
@@ -155,7 +155,7 @@
           if ($fp = fopen($backup_file, 'w')) {
             fputs($fp, $schema);
             fclose($fp);
-            switch ($HTTP_POST_VARS['compress']) {
+            switch ($_POST['compress']) {
               case 'gzip':
                 exec(LOCAL_EXE_GZIP . ' ' . $backup_file);
                 break;

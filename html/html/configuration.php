@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: configuration.php,v 1.3 2003/04/18 23:15:00 r23 Exp $
+   $Id: configuration.php,v 1.4 2003/04/18 23:18:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -27,7 +27,7 @@
   if ($_GET['action']) {
     switch ($_GET['action']) {
       case 'save':
-        $configuration_value = tep_db_prepare_input($HTTP_POST_VARS['configuration_value']);
+        $configuration_value = tep_db_prepare_input($_POST['configuration_value']);
         $cID = tep_db_prepare_input($_GET['cID']);
 
         tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . tep_db_input($configuration_value) . "', last_modified = now() where configuration_id = '" . tep_db_input($cID) . "'");

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: file_manager.php,v 1.3 2003/04/18 23:15:00 r23 Exp $
+   $Id: file_manager.php,v 1.4 2003/04/18 23:18:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -53,15 +53,15 @@
         if (!$tep_remove_error) tep_redirect(tep_href_link(FILENAME_FILE_MANAGER));
         break;
       case 'insert':
-        if (mkdir($current_path . '/' . $HTTP_POST_VARS['folder_name'], 0777)) {
-          tep_redirect(tep_href_link(FILENAME_FILE_MANAGER, 'info=' . urlencode($HTTP_POST_VARS['folder_name'])));
+        if (mkdir($current_path . '/' . $_POST['folder_name'], 0777)) {
+          tep_redirect(tep_href_link(FILENAME_FILE_MANAGER, 'info=' . urlencode($_POST['folder_name'])));
         }
         break;
       case 'save':
-        if ($fp = fopen($current_path . '/' . $HTTP_POST_VARS['filename'], 'w+')) {
-          fputs($fp, stripslashes($HTTP_POST_VARS['file_contents']));
+        if ($fp = fopen($current_path . '/' . $_POST['filename'], 'w+')) {
+          fputs($fp, stripslashes($_POST['file_contents']));
           fclose($fp);
-          tep_redirect(tep_href_link(FILENAME_FILE_MANAGER, 'info=' . urlencode($HTTP_POST_VARS['filename'])));
+          tep_redirect(tep_href_link(FILENAME_FILE_MANAGER, 'info=' . urlencode($_POST['filename'])));
         }
         break;
       case 'processuploads':

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: define_language.php,v 1.3 2003/04/18 23:15:00 r23 Exp $
+   $Id: define_language.php,v 1.4 2003/04/18 23:18:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -38,7 +38,7 @@
           }
           @rename($file, 'bak' . $file);
           $new_file = fopen($file, 'w');
-          $file_contents = stripslashes($HTTP_POST_VARS['file_contents']);
+          $file_contents = stripslashes($_POST['file_contents']);
           fwrite($new_file, $file_contents, strlen($file_contents));
           fclose($new_file);
         }
