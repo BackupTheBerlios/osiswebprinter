@@ -1,27 +1,39 @@
 <?php
-/*
-  $Id: owp_box.php,v 1.1 2003/04/19 06:32:02 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: owp_box.php,v 1.2 2003/04/19 06:35:01 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: box.php,v 1.5 2002/03/16 00:20:11 hpdl
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2002 osCommerce
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- 
+   Example usage:
+ 
+   $heading = array();
+   $heading[] = array('params' => 'class="menuBoxHeading"',
+                      'text'  => BOX_HEADING_TOOLS,
+                      'link'  => tep_href_link(basename($PHP_SELF), tep_get_all_get_params(array('selected_box')) . 'selected_box=tools'));
 
-  Released under the GNU General Public License
+   $contents = array();
+   $contents[] = array('text'  => SOME_TEXT);
 
-  Example usage:
-
-  $heading = array();
-  $heading[] = array('params' => 'class="menuBoxHeading"',
-                     'text'  => BOX_HEADING_TOOLS,
-                     'link'  => tep_href_link(basename($PHP_SELF), tep_get_all_get_params(array('selected_box')) . 'selected_box=tools'));
-
-  $contents = array();
-  $contents[] = array('text'  => SOME_TEXT);
-
-  $box = new box;
-  echo $box->infoBox($heading, $contents);
-*/
+   $box = new box;
+   echo $box->infoBox($heading, $contents);
+   ---------------------------------------------------------------------- */
 
   class box extends tableBlock {
     function box() {

@@ -1,14 +1,26 @@
 <?php
-/*
-  $Id: owp_split_page_results.php,v 1.1 2003/04/19 06:32:45 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: owp_split_page_results.php,v 1.2 2003/04/19 06:35:38 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: split_page_results.php,v 1.10 2002/04/17 23:09:03 hpdl
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2002 osCommerce
-
-  Released under the GNU General Public License
-*/
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
   class splitPageResults {
     function splitPageResults(&$current_page_number, $max_rows_per_page, &$sql_query, &$query_num_rows) {

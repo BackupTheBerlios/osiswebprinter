@@ -1,21 +1,33 @@
 <?php
-/*
-  $Id: owp_message_stack.php,v 1.1 2003/04/19 06:32:45 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: owp_message_stack.php,v 1.2 2003/04/19 06:35:38 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: message_stack.php,v 1.4 2002/03/08 21:59:40 hpdl
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2002 osCommerce
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ----------------------------------------------------------------------
+   Example usage:
 
-  Released under the GNU General Public License
-
-  Example usage:
-
-  $messageStack = new messageStack();
-  $messageStack->add('Error: Error 1', 'error');
-  $messageStack->add('Error: Error 2', 'warning');
-  if ($messageStack->size > 0) echo $messageStack->output();
-*/
+   $messageStack = new messageStack();
+   $messageStack->add('Error: Error 1', 'error');
+   $messageStack->add('Error: Error 2', 'warning');
+   if ($messageStack->size > 0) echo $messageStack->output();
+   ---------------------------------------------------------------------- */
 
   class messageStack extends tableBlock {
     var $size = 0;
