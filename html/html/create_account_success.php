@@ -1,14 +1,26 @@
 <?php
-/*
-  $Id: create_account_success.php,v 1.1 2003/05/05 08:44:31 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: create_account_success.php,v 1.2 2003/05/05 08:47:53 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: create_account_success.php,v 1.28 2002/07/21 23:38:57 hpdl
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2002 osCommerce
-
-  Released under the GNU General Public License
-*/
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
   require('includes/application_top.php');
 

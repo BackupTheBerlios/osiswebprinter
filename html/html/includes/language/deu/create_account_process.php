@@ -1,14 +1,26 @@
 <?php
-/*
-  $Id: create_account_process.php,v 1.1 2003/05/05 08:45:40 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: create_account_process.php,v 1.2 2003/05/05 08:48:39 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: create_account_process.php,v 1.14 2002/07/07 05:15:54 project3000
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2002 osCommerce
-
-  Released under the GNU General Public License
-*/
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
 define('NAVBAR_TITLE_1', 'Konto erstellen');
 define('NAVBAR_TITLE_2', 'Bearbeitung');

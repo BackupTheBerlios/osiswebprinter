@@ -1,14 +1,32 @@
 <?php
-/*
-  $Id: owp_validations.php,v 1.1 2003/05/05 08:44:31 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: owp_validations.php,v 1.2 2003/05/05 08:47:53 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: validations.php,v 1.7 2002/03/16 14:42:36 project3000
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2002 osCommerce
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Based on:
+   This function is converted from a JavaScript written by 
+   Sandeep V. Tamhankar (stamhankar@hotmail.com). The original JavaScript
+   is available at http://javascript.internet.com   
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
-  Released under the GNU General Public License
-*/
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //
