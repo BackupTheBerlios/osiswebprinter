@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: file_manager.php,v 1.11 2003/04/22 07:22:17 r23 Exp $
+   $Id: file_manager.php,v 1.12 2003/04/23 07:04:35 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -173,7 +173,7 @@
     if (!isset($file_writeable)) $file_writeable = true;
     $file_contents = '';
     if ($_GET['action'] == 'new_file') {
-      $filename_input_field = tep_draw_input_field('filename');
+      $filename_input_field = owpInputField('filename');
     } elseif ($_GET['action'] == 'edit') {
       if ($file_array = file($current_path . '/' . $_GET['info'])) {
         $file_contents = htmlspecialchars(implode('', $file_array));
@@ -198,7 +198,7 @@
             <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>
           </tr>
           <tr>
-            <td align="right" class="main" colspan="2"><?php if ($file_writeable) echo owpImage_submit('button_save.gif', IMAGE_SAVE) . '&nbsp;'; echo '<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info'])) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>'; ?></td>
+            <td align="right" class="main" colspan="2"><?php if ($file_writeable) echo owpImageSubmit('button_save.gif', IMAGE_SAVE) . '&nbsp;'; echo '<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info'])) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>'; ?></td>
           </tr>
         </table></td>
       </form></tr>
@@ -299,8 +299,8 @@
               <tr>
                 <td colspan="7"><table border="0" width="100%" cellspacing="0" cellpadding="2">
                   <tr valign="top">
-                    <td class="smallText"><?php echo '<a href="' . owpLink($owpFilename['file_manager'], 'action=reset') . '">' . owpImage_button('button_reset.gif', IMAGE_RESET) . '</a>'; ?></td>
-                    <td class="smallText" align="right"><?php echo '<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info']) . '&action=upload') . '">' . owpImage_button('button_upload.gif', IMAGE_UPLOAD) . '</a>&nbsp;<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info']) . '&action=new_file') . '">' . owpImage_button('button_new_file.gif', IMAGE_NEW_FILE) . '</a>&nbsp;<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info']) . '&action=new_folder') . '">' . owpImage_button('button_new_folder.gif', IMAGE_NEW_FOLDER) . '</a>'; ?></td>
+                    <td class="smallText"><?php echo '<a href="' . owpLink($owpFilename['file_manager'], 'action=reset') . '">' . owpImageButton('button_reset.gif', IMAGE_RESET) . '</a>'; ?></td>
+                    <td class="smallText" align="right"><?php echo '<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info']) . '&action=upload') . '">' . owpImageButton('button_upload.gif', IMAGE_UPLOAD) . '</a>&nbsp;<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info']) . '&action=new_file') . '">' . owpImageButton('button_new_file.gif', IMAGE_NEW_FILE) . '</a>&nbsp;<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info']) . '&action=new_folder') . '">' . owpImageButton('button_new_folder.gif', IMAGE_NEW_FOLDER) . '</a>'; ?></td>
                   </tr>
                 </table></td>
               </tr>
@@ -315,15 +315,15 @@
         $contents = array('form' => owpDrawForm('file', $owpFilename['file_manager'], 'info=' . urlencode($fInfo->name) . '&action=deleteconfirm'));
         $contents[] = array('text' => TEXT_DELETE_INTRO);
         $contents[] = array('text' => '<br><b>' . $fInfo->name . '</b>');
-        $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_delete.gif', IMAGE_DELETE) . ' <a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($fInfo->name)) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+        $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_delete.gif', IMAGE_DELETE) . ' <a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($fInfo->name)) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
         break;
       case 'new_folder':
         $heading[] = array('text' => '<b>' . TEXT_NEW_FOLDER . '</b>');
 
         $contents = array('form' => owpDrawForm('folder', $owpFilename['file_manager'], 'action=insert'));
         $contents[] = array('text' => TEXT_NEW_FOLDER_INTRO);
-        $contents[] = array('text' => '<br>' . TEXT_FILE_NAME . '<br>' . tep_draw_input_field('folder_name'));
-        $contents[] = array('align' => 'center', 'text' => '<br>' . (($directory_writeable) ? owpImage_submit('button_save.gif', IMAGE_SAVE) : '') . ' <a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info'])) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+        $contents[] = array('text' => '<br>' . TEXT_FILE_NAME . '<br>' . owpInputField('folder_name'));
+        $contents[] = array('align' => 'center', 'text' => '<br>' . (($directory_writeable) ? owpImageSubmit('button_save.gif', IMAGE_SAVE) : '') . ' <a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info'])) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
         break;
       case 'upload':
         $heading[] = array('text' => '<b>' . TEXT_INFO_HEADING_UPLOAD . '</b>');
@@ -332,13 +332,13 @@
         $contents[] = array('text' => TEXT_UPLOAD_INTRO);
         for ($i=1; $i<6; $i++) $file_upload .= tep_draw_file_field('file_' . $i) . '<br>';
         $contents[] = array('text' => '<br>' . $file_upload);
-        $contents[] = array('align' => 'center', 'text' => '<br>' . (($directory_writeable) ? owpImage_submit('button_upload.gif', IMAGE_UPLOAD) : '') . ' <a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info'])) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+        $contents[] = array('align' => 'center', 'text' => '<br>' . (($directory_writeable) ? owpImageSubmit('button_upload.gif', IMAGE_UPLOAD) : '') . ' <a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($_GET['info'])) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
         break;
       default:
         if (is_object($fInfo)) {
           $heading[] = array('text' => '<b>' . $fInfo->name . '</b>');
 
-          if (!$fInfo->is_dir) $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($fInfo->name) . '&action=edit') . '">' . owpImage_button('button_edit.gif', IMAGE_EDIT) . '</a>');
+          if (!$fInfo->is_dir) $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['file_manager'], 'info=' . urlencode($fInfo->name) . '&action=edit') . '">' . owpImageButton('button_edit.gif', IMAGE_EDIT) . '</a>');
           $contents[] = array('text' => '<br>' . TEXT_FILE_NAME . ' <b>' . $fInfo->name . '</b>');
           if (!$fInfo->is_dir) $contents[] = array('text' => '<br>' . TEXT_FILE_SIZE . ' <b>' . $fInfo->size . '</b>');
           $contents[] = array('text' => '<br>' . TEXT_LAST_MODIFIED . ' ' . $fInfo->last_modified);

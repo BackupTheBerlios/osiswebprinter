@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletters.php,v 1.11 2003/04/22 07:27:37 r23 Exp $
+   $Id: newsletters.php,v 1.12 2003/04/23 07:08:25 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -38,7 +38,7 @@
         $newsletter_id = tep_db_prepare_input($_GET['nID']);
         $status = (($_GET['action'] == 'lock') ? '1' : '0');
 
-        tep_db_query("update " . TABLE_NEWSLETTERS . " set locked = '" . $status . "' where newsletters_id = '" . tep_db_input($newsletter_id) . "'");
+        tep_db_query("update " . TABLE_NEWSLETTERS . " set locked = '" . $status . "' WHERE newsletters_id = '" . tep_db_input($newsletter_id) . "'");
 
         owpRedirect(owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']));
         break;
@@ -78,7 +78,7 @@
       case 'deleteconfirm':
         $newsletter_id = tep_db_prepare_input($_GET['nID']);
 
-        tep_db_query("delete from " . TABLE_NEWSLETTERS . " where newsletters_id = '" . tep_db_input($newsletter_id) . "'");
+        tep_db_query("delete FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($newsletter_id) . "'");
 
         owpRedirect(owpLink($owpFilename['newsletters'], 'page=' . $_GET['page']));
         break;
@@ -88,7 +88,7 @@
       case 'confirm_send':
         $newsletter_id = tep_db_prepare_input($_GET['nID']);
 
-        $check_query = tep_db_query("select locked from " . TABLE_NEWSLETTERS . " where newsletters_id = '" . tep_db_input($newsletter_id) . "'");
+        $check_query = tep_db_query("SELECT locked FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($newsletter_id) . "'");
         $check = tep_db_fetch_array($check_query);
 
         if ($check['locked'] < 1) {
@@ -146,7 +146,7 @@
       $nID = tep_db_prepare_input($_GET['nID']);
       $form_action = 'update';
 
-      $newsletter_query = tep_db_query("select title, content, module from " . TABLE_NEWSLETTERS . " where newsletters_id = '" . tep_db_input($nID) . "'");
+      $newsletter_query = tep_db_query("SELECT title, content, module FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($nID) . "'");
       $newsletter = tep_db_fetch_array($newsletter_query);
 
       $nInfo = new objectInfo($newsletter);
@@ -188,7 +188,7 @@
           </tr>
           <tr>
             <td class="main"><?php echo TEXT_NEWSLETTER_TITLE; ?></td>
-            <td class="main"><?php echo tep_draw_input_field('title', $nInfo->title, '', true); ?></td>
+            <td class="main"><?php echo owpInputField('title', $nInfo->title, '', true); ?></td>
           </tr>
           <tr>
             <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>
@@ -205,7 +205,7 @@
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
-            <td class="main" align="right"><?php echo (($form_action == 'insert') ? owpImage_submit('button_save.gif', IMAGE_SAVE) : owpImage_submit('button_update.gif', IMAGE_UPDATE)). '&nbsp;&nbsp;<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>'; ?></td>
+            <td class="main" align="right"><?php echo (($form_action == 'insert') ? owpImageSubmit('button_save.gif', IMAGE_SAVE) : owpImageSubmit('button_update.gif', IMAGE_UPDATE)). '&nbsp;&nbsp;<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>'; ?></td>
           </tr>
         </table></td>
       </form></tr>
@@ -213,25 +213,25 @@
   } elseif ($_GET['action'] == 'preview') {
     $nID = tep_db_prepare_input($_GET['nID']);
 
-    $newsletter_query = tep_db_query("select title, content, module from " . TABLE_NEWSLETTERS . " where newsletters_id = '" . tep_db_input($nID) . "'");
+    $newsletter_query = tep_db_query("SELECT title, content, module FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($nID) . "'");
     $newsletter = tep_db_fetch_array($newsletter_query);
 
     $nInfo = new objectInfo($newsletter);
 ?>
       <tr>
-        <td align="right"><?php echo '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . owpImage_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
+        <td align="right"><?php echo '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . owpImageButton('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
       </tr>
       <tr>
         <td><tt><?php echo nl2br($nInfo->content); ?></tt></td>
       </tr>
       <tr>
-        <td align="right"><?php echo '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . owpImage_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
+        <td align="right"><?php echo '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . owpImageButton('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
       </tr>
 <?php
   } elseif ($_GET['action'] == 'send') {
     $nID = tep_db_prepare_input($_GET['nID']);
 
-    $newsletter_query = tep_db_query("select title, content, module from " . TABLE_NEWSLETTERS . " where newsletters_id = '" . tep_db_input($nID) . "'");
+    $newsletter_query = tep_db_query("SELECT title, content, module FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($nID) . "'");
     $newsletter = tep_db_fetch_array($newsletter_query);
 
     $nInfo = new objectInfo($newsletter);
@@ -248,7 +248,7 @@
   } elseif ($_GET['action'] == 'confirm') {
     $nID = tep_db_prepare_input($_GET['nID']);
 
-    $newsletter_query = tep_db_query("select title, content, module from " . TABLE_NEWSLETTERS . " where newsletters_id = '" . tep_db_input($nID) . "'");
+    $newsletter_query = tep_db_query("SELECT title, content, module FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($nID) . "'");
     $newsletter = tep_db_fetch_array($newsletter_query);
 
     $nInfo = new objectInfo($newsletter);
@@ -265,7 +265,7 @@
   } elseif ($_GET['action'] == 'confirm_send') {
     $nID = tep_db_prepare_input($_GET['nID']);
 
-    $newsletter_query = tep_db_query("select newsletters_id, title, content, module from " . TABLE_NEWSLETTERS . " where newsletters_id = '" . tep_db_input($nID) . "'");
+    $newsletter_query = tep_db_query("SELECT newsletters_id, title, content, module FROM " . TABLE_NEWSLETTERS . " WHERE newsletters_id = '" . tep_db_input($nID) . "'");
     $newsletter = tep_db_fetch_array($newsletter_query);
 
     $nInfo = new objectInfo($newsletter);
@@ -298,7 +298,7 @@
         <td><?php echo owpTransLine('1', '10'); ?></td>
       </tr>
       <tr>
-        <td><?php echo '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . owpImage_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
+        <td><?php echo '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . owpImageButton('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
       </tr>
 <?php
   } else {
@@ -316,7 +316,7 @@
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
-    $newsletters_query_raw = "select newsletters_id, title, length(content) as content_length, module, date_added, date_sent, status, locked from " . TABLE_NEWSLETTERS . " order by date_added desc";
+    $newsletters_query_raw = "SELECT newsletters_id, title, length(content) as content_length, module, date_added, date_sent, status, locked FROM " . TABLE_NEWSLETTERS . " order by date_added desc";
     $newsletters_split = new owpSplitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $newsletters_query_raw, $newsletters_query_numrows);
     $newsletters_query = tep_db_query($newsletters_query_raw);
     while ($newsletters = tep_db_fetch_array($newsletters_query)) {
@@ -347,7 +347,7 @@
                     <td class="smallText" align="right"><?php echo $newsletters_split->display_links($newsletters_query_numrows, MAX_DISPLAY_SEARCH_RESULTS, MAX_DISPLAY_PAGE_LINKS, $_GET['page']); ?></td>
                   </tr>
                   <tr>
-                    <td align="right" colspan="2"><?php echo '<a href="' . owpLink($owpFilename['newsletters'], 'action=new') . '">' . owpImage_button('button_new_newsletter.gif', IMAGE_NEW_NEWSLETTER) . '</a>'; ?></td>
+                    <td align="right" colspan="2"><?php echo '<a href="' . owpLink($owpFilename['newsletters'], 'action=new') . '">' . owpImageButton('button_new_newsletter.gif', IMAGE_NEW_NEWSLETTER) . '</a>'; ?></td>
                   </tr>
                 </table></td>
               </tr>
@@ -362,19 +362,19 @@
       $contents = array('form' => owpDrawForm('newsletters', $owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=deleteconfirm'));
       $contents[] = array('text' => TEXT_INFO_DELETE_INTRO);
       $contents[] = array('text' => '<br><b>' . $nInfo->title . '</b>');
-      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_delete.gif', IMAGE_DELETE) . ' <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_delete.gif', IMAGE_DELETE) . ' <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     default:
       if (is_object($nInfo)) {
         $heading[] = array('text' => '<b>' . $nInfo->title . '</b>');
 
         if ($nInfo->locked > 0) {
-          $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=new') . '">' . owpImage_button('button_edit.gif', IMAGE_EDIT) . '</a> <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=delete') . '">' . owpImage_button('button_delete.gif', IMAGE_DELETE) . '</a> <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=preview') . '">' . owpImage_button('button_preview.gif', IMAGE_PREVIEW) . '</a> <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=send') . '">' . owpImage_button('button_send.gif', IMAGE_SEND) . '</a> <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=unlock') . '">' . owpImage_button('button_unlock.gif', IMAGE_UNLOCK) . '</a>');
+          $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=new') . '">' . owpImageButton('button_edit.gif', IMAGE_EDIT) . '</a> <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=delete') . '">' . owpImageButton('button_delete.gif', IMAGE_DELETE) . '</a> <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=preview') . '">' . owpImageButton('button_preview.gif', IMAGE_PREVIEW) . '</a> <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=send') . '">' . owpImageButton('button_send.gif', IMAGE_SEND) . '</a> <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=unlock') . '">' . owpImageButton('button_unlock.gif', IMAGE_UNLOCK) . '</a>');
         } else {
-          $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=preview') . '">' . owpImage_button('button_preview.gif', IMAGE_PREVIEW) . '</a> <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=lock') . '">' . owpImage_button('button_lock.gif', IMAGE_LOCK) . '</a>');
+          $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=preview') . '">' . owpImageButton('button_preview.gif', IMAGE_PREVIEW) . '</a> <a href="' . owpLink($owpFilename['newsletters'], 'page=' . $_GET['page'] . '&nID=' . $nInfo->newsletters_id . '&action=lock') . '">' . owpImageButton('button_lock.gif', IMAGE_LOCK) . '</a>');
         }
-        $contents[] = array('text' => '<br>' . TEXT_NEWSLETTER_DATE_ADDED . ' ' . tep_date_short($nInfo->date_added));
-        if ($nInfo->status == '1') $contents[] = array('text' => TEXT_NEWSLETTER_DATE_SENT . ' ' . tep_date_short($nInfo->date_sent));
+        $contents[] = array('text' => '<br>' . TEXT_NEWSLETTER_DATE_ADDED . ' ' . owpDateShort($nInfo->date_added));
+        if ($nInfo->status == '1') $contents[] = array('text' => TEXT_NEWSLETTER_DATE_SENT . ' ' . owpDateShort($nInfo->date_sent));
       }
       break;
   }

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_object_info.php,v 1.2 2003/04/23 06:32:13 r23 Exp $
+   $Id: owp_object_info.php,v 1.3 2003/04/23 07:05:54 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -28,7 +28,7 @@
     function objectInfo($object_array) {
       reset($object_array);
       while (list($key, $value) = each($object_array)) {
-        $this->$key = tep_db_prepare_input($value);
+        $this->$key = owpPrepareInput($value);
       }
     }
   }

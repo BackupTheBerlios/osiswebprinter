@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: administrators.php,v 1.3 2003/04/22 07:22:17 r23 Exp $
+   $Id: administrators.php,v 1.4 2003/04/23 07:04:35 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -85,7 +85,7 @@
   
   if ( $action == 'delete' )
   {
-    $aSQL = "delete from " . TABLE_ADMINISTRATORS . " where ( administrator_id = '$admin_id' )";
+    $aSQL = "delete FROM " . TABLE_ADMINISTRATORS . " WHERE ( administrator_id = '$admin_id' )";
     tep_db_query( $aSQL );
   }
 ?>
@@ -149,7 +149,7 @@
                         </td>
                     </tr>
                     <?php
-                        $aResult  = tep_db_query( 'select * from ' . TABLE_ADMINISTRATORS );
+                        $aResult  = tep_db_query( 'SELECT * FROM ' . TABLE_ADMINISTRATORS );
                         $aNumRows = tep_db_num_rows( $aResult );
                         
                         if ( $aNumRows > 0 )
@@ -276,14 +276,14 @@
                                     </td>
                                     <td class="main">
                                         <?php print( TEXT_PARTIAL_ACCESS ); ?><br><br>
-                                        <select name="adm_pages[]" size="<?php print( count( $aADMBoxes ) ); ?>" multiple>
+                                        <SELECT name="adm_pages[]" size="<?php print( count( $aADMBoxes ) ); ?>" multiple>
                                         <?php
                                             foreach( $aADMBoxes as $aKey => $aValue )
                                             {
                                                 print( "<option value=\"$aKey\">$aValue</option>" );
                                             }
                                         ?>
-                                        </select>
+                                        </SELECT>
                                     </td>
                                 </tr>
                             </table>

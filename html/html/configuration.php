@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: configuration.php,v 1.11 2003/04/22 07:22:17 r23 Exp $
+   $Id: configuration.php,v 1.12 2003/04/23 07:04:35 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -30,21 +30,26 @@
   } 
   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['configuration']);
-
+  $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['configuration'], 'gID=1', 'NONSSL'));
+  
   if ($_GET['action']) {
     switch ($_GET['action']) {
       case 'save':
-        $configuration_value = tep_db_prepare_input($_POST['configuration_value']);
-        $cID = tep_db_prepare_input($_GET['cID']);
-
-        tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . tep_db_input($configuration_value) . "', last_modified = now() where configuration_id = '" . tep_db_input($cID) . "'");
-        owpRedirect(owpLink(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $cID));
+        $today = date("Y-m-d H:i:s");
+        $db->Execute("UPDATE " . $owpDBTable['configuration'] . " 
+	                 SET configuration_value = " . $db->qstr($configuration_value) . ", 
+                             last_modified = " . $db->DBTimeStamp($today). "
+                       WHERE configuration_id = '" . $_GET['cID'] . "'");
+        owpRedirect(owpLink($owpFilename['configuration'], 'gID=' . $_GET['gID'] . '&cID=' . $_GET['cID']));
         break;
     }
   }
 
-  $cfg_group_query = tep_db_query("select configuration_group_title from " . TABLE_CONFIGURATION_GROUP . " where configuration_group_id = '" . $_GET['gID'] . "'");
-  $cfg_group = tep_db_fetch_array($cfg_group_query);
+  $sql = "SELECT configuration_group_title 
+          FROM " . $owpDBTable['configuration_group'] . " 
+          WHERE configuration_group_id = '" . $_GET['gID'] . "'";
+  $cfg_group_query = $db->Execute($sql);
+  $cfg_group = $cfg_group_query->fields;
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -90,8 +95,12 @@
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
-  $configuration_query = tep_db_query("select configuration_id, configuration_title, configuration_value, use_function from " . TABLE_CONFIGURATION . " where configuration_group_id = '" . $_GET['gID'] . "' order by sort_order");
-  while ($configuration = tep_db_fetch_array($configuration_query)) {
+  $sql = "SELECT configuration_id, configuration_title, configuration_value, use_function 
+          FROM " . $owpDBTable['configuration'] . " 
+          WHERE configuration_group_id = '" . $_GET['gID'] . "' 
+          ORDER BY sort_order";
+  $configuration_query = $db->Execute($sql);
+  while ($configuration = $configuration_query->fields) {   
     if (owpNotNull($configuration['use_function'])) {
       $use_function = $configuration['use_function'];
       if (ereg('->', $use_function)) {
@@ -100,33 +109,36 @@
           include(OWP_CLASSES_DIR . $class_method[0] . '.php');
           ${$class_method[0]} = new $class_method[0]();
         }
-        $cfgValue = tep_call_function($class_method[1], $configuration['configuration_value'], ${$class_method[0]});
+        $cfgValue = owpCallFunction($class_method[1], $configuration['configuration_value'], ${$class_method[0]});
       } else {
-        $cfgValue = tep_call_function($use_function, $configuration['configuration_value']);
+        $cfgValue = owpCallFunction($use_function, $configuration['configuration_value']);
       }
     } else {
       $cfgValue = $configuration['configuration_value'];
     }
 
     if (((!$_GET['cID']) || (@$_GET['cID'] == $configuration['configuration_id'])) && (!$cInfo) && (substr($_GET['action'], 0, 3) != 'new')) {
-      $cfg_extra_query = tep_db_query("select configuration_key, configuration_description, date_added, last_modified, use_function, set_function from " . TABLE_CONFIGURATION . " where configuration_id = '" . $configuration['configuration_id'] . "'");
-      $cfg_extra = tep_db_fetch_array($cfg_extra_query);
-
-      $cInfo_array = tep_array_merge($configuration, $cfg_extra);
+      $sql = "SELECT configuration_key, configuration_description, date_added, 
+                     last_modified, use_function, set_function 
+              FROM " . $owpDBTable['configuration'] . " 
+              WHERE configuration_id = '" . $configuration['configuration_id'] . "'";
+      $cfg_extra_query = $db->Execute($sql);
+      $cInfo_array = owpArrayMerge($configuration, $cfg_extra_query->fields);
       $cInfo = new objectInfo($cInfo_array);
     }
 
     if ( (is_object($cInfo)) && ($configuration['configuration_id'] == $cInfo->configuration_id) ) {
-      echo '                  <tr class="dataTableRowSelected" onmouseover="this.style.cursor=\'hand\'" onclick="document.location.href=\'' . owpLink(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id . '&action=edit') . '\'">' . "\n";
+      echo '                  <tr class="dataTableRowSelected" onmouseover="this.style.cursor=\'hand\'" onclick="document.location.href=\'' . owpLink($owpFilename['configuration'], 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id . '&action=edit') . '\'">' . "\n";
     } else {
-      echo '                  <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . owpLink(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $configuration['configuration_id']) . '\'">' . "\n";
+      echo '                  <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . owpLink($owpFilename['configuration'], 'gID=' . $_GET['gID'] . '&cID=' . $configuration['configuration_id']) . '\'">' . "\n";
     }
 ?>
                 <td class="dataTableContent"><?php echo $configuration['configuration_title']; ?></td>
                 <td class="dataTableContent"><?php echo htmlspecialchars($cfgValue); ?></td>
-                <td class="dataTableContent" align="right"><?php if ( (is_object($cInfo)) && ($configuration['configuration_id'] == $cInfo->configuration_id) ) { echo owpImage(OWP_INCLUDES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . owpLink(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $configuration['configuration_id']) . '">' . owpImage(OWP_INCLUDES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" align="right"><?php if ( (is_object($cInfo)) && ($configuration['configuration_id'] == $cInfo->configuration_id) ) { echo owpImage(OWP_IMAGES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . owpLink($owpFilename['configuration'], 'gID=' . $_GET['gID'] . '&cID=' . $configuration['configuration_id']) . '">' . owpImage(OWP_IMAGES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
+    $configuration_query->MoveNext();
   }
 ?>
             </table></td>
@@ -140,22 +152,22 @@
       if ($cInfo->set_function) {
         eval('$value_field = ' . $cInfo->set_function . "'" . $cInfo->configuration_value . "');");
       } else {
-        $value_field = tep_draw_input_field('configuration_value', $cInfo->configuration_value);
+        $value_field = owpInputField('configuration_value', $cInfo->configuration_value);
       }
 
-      $contents = array('form' => owpDrawForm('configuration', FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id . '&action=save'));
+      $contents = array('form' => owpDrawForm('configuration', $owpFilename['configuration'], 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id . '&action=save'));
       $contents[] = array('text' => TEXT_INFO_EDIT_INTRO);
       $contents[] = array('text' => '<br><b>' . $cInfo->configuration_title . '</b><br>' . $cInfo->configuration_description . '<br>' . $value_field);
-      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_update.gif', IMAGE_UPDATE) . '&nbsp;<a href="' . owpLink(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_update.gif', IMAGE_UPDATE) . '&nbsp;<a href="' . owpLink($owpFilename['configuration'], 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     default:
       if (is_object($cInfo)) {
         $heading[] = array('text' => '<b>' . $cInfo->configuration_title . '</b>');
 
-        $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id . '&action=edit') . '">' . owpImage_button('button_edit.gif', IMAGE_EDIT) . '</a>');
+        $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['configuration'], 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id . '&action=edit') . '">' . owpImageButton('button_edit.gif', IMAGE_EDIT) . '</a>');
         $contents[] = array('text' => '<br>' . $cInfo->configuration_description);
-        $contents[] = array('text' => '<br>' . TEXT_INFO_DATE_ADDED . ' ' . tep_date_short($cInfo->date_added));
-        if (owpNotNull($cInfo->last_modified)) $contents[] = array('text' => TEXT_INFO_LAST_MODIFIED . ' ' . tep_date_short($cInfo->last_modified));
+        $contents[] = array('text' => '<br>' . TEXT_INFO_DATE_ADDED . ' ' . owpDateShort($cInfo->date_added));
+        if (owpNotNull($cInfo->last_modified)) $contents[] = array('text' => TEXT_INFO_LAST_MODIFIED . ' ' . owpDateShort($cInfo->last_modified));
       }
       break;
   }

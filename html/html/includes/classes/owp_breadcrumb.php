@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_breadcrumb.php,v 1.3 2003/04/22 07:23:42 r23 Exp $
+   $Id: owp_breadcrumb.php,v 1.4 2003/04/23 07:04:35 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -42,7 +42,7 @@
       $trail_size = sizeof($this->_trail);
 
       for ($i=0; $i<$trail_size; $i++) {
-        if (tep_not_null($this->_trail[$i]['link'])) {
+        if (owpNotNull($this->_trail[$i]['link'])) {
           $trail_string .= '<a href="' . $this->_trail[$i]['link'] . '" class="headerNavigation">' . $this->_trail[$i]['title'] . '</a>';
         } else {
           $trail_string .= $this->_trail[$i]['title'];

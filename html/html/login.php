@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: login.php,v 1.3 2003/04/22 07:27:37 r23 Exp $
+   $Id: login.php,v 1.4 2003/04/23 07:07:22 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -43,34 +43,39 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  require('includes/system.php');
-  
-  require_once(OWP_FUNCTIONS_DIR . $owpFilename['password_crypt']); 
-  
-  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['login']);
+  require('includes/system.php');  
 
-  if ( !empty( $Submit ) ) {
-    $aSQL    = "select administrator_id from " . TABLE_ADMINISTRATORS . " where ( username = '$username' ) and ( password = '$password' )";
-    $aResult = tep_db_query( $aSQL );  
-    $aCount  = tep_db_num_rows( $aResult );
-    //print( $aCount );
-    if ( $aCount > 0 ) {
-        $aResult  = tep_db_fetch_array( $aResult );
-        tep_session_unregister( 'login_id' );
-        tep_session_register( 'login_id' );
-        $login_id = $aResult['administrator_id'];
+  if ($_GET['action'] == 'process') {
+    include_once(OWP_FUNCTIONS_DIR . $owpFilename['password_crypt']);
+    $sql = "SELECT admin_id, admin_gender, admin_firstname, admin_lastname,
+                   admin_email_address, admin_password 
+            FROM " . $owpDBTable['administrators'] . " 
+            WHERE admin_email_address = '" . owpDBInput($email_address) . "'";
+    $check_admin_query = $db->Execute($sql);     
+    if ($check_admin_query->RecordCount()) {
+      $check_admin = $check_admin->fields;
+      if (validate_password($password, $check_admin['admin_password'])) {
+        $_SESSION['user_id'] = $check_admin['admin_id'];
+        $_SESSION['gender'] = $check_admin['admin_gender'];
+        $_SESSION['firstname'] = $check_admin['admin_firstname'];
+        $_SESSION['lastname'] = $check_admin['lastname'];
         if (sizeof($navigation->snapshot) > 0) {
-          $origin_href = tep_href_link($navigation->snapshot['page'], tep_array_to_string($navigation->snapshot['get'], array(tep_session_name())), $navigation->snapshot['mode']);
+          $origin_href = owpLink($navigation->snapshot['page'], owpArraytoString($_SESSION['navigation']->snapshot['get'], array(owpSessionName())), $_SESSION['navigation']->snapshot['mode']);
           $navigation->clear_snapshot();
-          tep_redirect($origin_href);
+          owpRedirect($origin_href);
         } else {
-          tep_redirect(tep_href_link(FILENAME_DEFAULT));
+          owpRedirect(owpLink($owpFilename['index']));
         }
+      } else {
+        $login_error = TEXT_LOGIN_ERROR;
+      }
     } else {
         $login_error = TEXT_LOGIN_ERROR;
     }
   }
 
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['login']);
+  $breadcrumb->add(NAVBAR_TITLE, owpLink($owpFilename['login'], '', 'SSL'));
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -118,7 +123,7 @@
             <td colspan="5"><?php echo owpDrawForm('login', $owpFilename['login'], 'action=process'); ?><table>
               <tr>
                 <td class="main"><?php echo TEXT_INFO_USER_NAME; ?>&nbsp;</td>
-                <td><input type="text" name="username"></td>
+                <td><input type="text" name="email_address"></td>
               </tr>
               <tr>
                 <td class="main"><?php echo TEXT_INFO_PASSWORD; ?>&nbsp;</td>

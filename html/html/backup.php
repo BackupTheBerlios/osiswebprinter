@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: backup.php,v 1.11 2003/04/22 07:22:17 r23 Exp $
+   $Id: backup.php,v 1.12 2003/04/23 07:04:35 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -34,7 +34,7 @@
   if ($_GET['action']) {
     switch ($_GET['action']) {
       case 'forget':
-        tep_db_query("delete from " . TABLE_CONFIGURATION . " where configuration_key = 'DB_LAST_RESTORE'");
+        tep_db_query("delete FROM " . TABLE_CONFIGURATION . " WHERE configuration_key = 'DB_LAST_RESTORE'");
         $messageStack->add_session(SUCCESS_LAST_RESTORE_CLEARED, 'success');
         owpRedirect(owpLink($owpFilename['backup']));
         break;
@@ -56,7 +56,7 @@
           $schema .= 'drop table if exists ' . $table . ';' . "\n" .
                      'create table ' . $table . ' (' . "\n";
           $table_list = array();
-          $fields_query = tep_db_query("show fields from " . $table);
+          $fields_query = tep_db_query("show fields FROM " . $table);
           while ($fields = tep_db_fetch_array($fields_query)) {
             $table_list[] = $fields['Field'];
             $schema .= '  ' . $fields['Field'] . ' ' . $fields['Type'];
@@ -69,7 +69,7 @@
 
           // Add the keys
           $index = array();
-          $keys_query = tep_db_query("show keys from " . $table);
+          $keys_query = tep_db_query("show keys FROM " . $table);
           while ($keys = tep_db_fetch_array($keys_query)) {
             $kname = $keys['Key_name'];
             if (!isset($index[$kname])) {
@@ -92,7 +92,7 @@
           $schema .= "\n" . ');' . "\n\n";
 
           // Dump the data
-          $rows_query = tep_db_query("select " . implode(',', $table_list) . " from " . $table);
+          $rows_query = tep_db_query("SELECT " . implode(',', $table_list) . " FROM " . $table);
           while ($rows = tep_db_fetch_array($rows_query)) {
             $schema_insert = 'insert into ' . $table . ' (' . implode(', ', $table_list) . ') values (';
             reset($table_list);
@@ -180,30 +180,30 @@
         owpSetTimeLimit(0);
 
         if ($_GET['action'] == 'restorenow') {
-          $read_from = $_GET['file'];
+          $read_FROM = $_GET['file'];
           if (file_exists(DIR_FS_BACKUP . $_GET['file'])) {
             $restore_file = DIR_FS_BACKUP . $_GET['file'];
             $extension = substr($_GET['file'], -3);
             if ( ($extension == 'sql') || ($extension == '.gz') || ($extension == 'zip') ) {
               switch ($extension) {
                 case 'sql':
-                  $restore_from = $restore_file;
+                  $restore_FROM = $restore_file;
                   $remove_raw = false;
                   break;
                 case '.gz':
-                  $restore_from = substr($restore_file, 0, -3);
-                  exec(LOCAL_EXE_GUNZIP . ' ' . $restore_file . ' -c > ' . $restore_from);
+                  $restore_FROM = substr($restore_file, 0, -3);
+                  exec(LOCAL_EXE_GUNZIP . ' ' . $restore_file . ' -c > ' . $restore_FROM);
                   $remove_raw = true;
                   break;
                 case 'zip':
-                  $restore_from = substr($restore_file, 0, -4);
+                  $restore_FROM = substr($restore_file, 0, -4);
                   exec(LOCAL_EXE_UNZIP . ' ' . $restore_file . ' -d ' . DIR_FS_BACKUP);
                   $remove_raw = true;
               }
 
-              if ( ($restore_from) && (file_exists($restore_from)) && (filesize($restore_from) > 15000) ) {
-                $fd = fopen($restore_from, 'rb');
-                $restore_query = fread($fd, filesize($restore_from));
+              if ( ($restore_FROM) && (file_exists($restore_FROM)) && (filesize($restore_FROM) > 15000) ) {
+                $fd = fopen($restore_FROM, 'rb');
+                $restore_query = fread($fd, filesize($restore_FROM));
                 fclose($fd);
               }
             }
@@ -213,7 +213,7 @@
 
           if (is_uploaded_file($sql_file['tmp_name'])) {
             $restore_query = fread(fopen($sql_file['tmp_name'], 'r'), filesize($sql_file['tmp_name']));
-            $read_from = $sql_file['name'];
+            $read_FROM = $sql_file['name'];
           }
         }
 
@@ -233,7 +233,7 @@
                 if (trim($restore_query[$j]) != '') {
                   $next = substr($restore_query, $j, 6);
                   if ($next[0] == '#') {
-// find out where the break position is so we can remove this line (#comment line)
+// find out WHERE the break position is so we can remove this line (#comment line)
                     for ($k=$j; $k<$sql_length; $k++) {
                       if ($restore_query[$k] == "\n") break;
                     }
@@ -268,11 +268,11 @@
             tep_db_query($sql_array[$i]);
           }
 
-          tep_db_query("delete from " . TABLE_CONFIGURATION . " where configuration_key = 'DB_LAST_RESTORE'");
-          tep_db_query("insert into " . TABLE_CONFIGURATION . " values ('', 'Last Database Restore', 'DB_LAST_RESTORE', '" . $read_from . "', 'Last database restore file', '6', '', '', now(), '', '')");
+          tep_db_query("delete FROM " . TABLE_CONFIGURATION . " WHERE configuration_key = 'DB_LAST_RESTORE'");
+          tep_db_query("insert into " . TABLE_CONFIGURATION . " values ('', 'Last Database Restore', 'DB_LAST_RESTORE', '" . $read_FROM . "', 'Last database restore file', '6', '', '', now(), '', '')");
 
           if ($remove_raw) {
-            unlink($restore_from);
+            unlink($restore_FROM);
           }
         }
 
@@ -408,7 +408,7 @@
 ?>
               <tr>
                 <td class="smallText" colspan="3"><?php echo TEXT_BACKUP_DIRECTORY . ' ' . DIR_FS_BACKUP; ?></td>
-                <td align="right" class="smallText"><?php if ( ($_GET['action'] != 'backup') && ($dir) ) echo '<a href="' . owpLink($owpFilename['backup'], 'action=backup') . '">' . owpImage_button('button_backup.gif', IMAGE_BACKUP) . '</a>'; if ( ($_GET['action'] != 'restorelocal') && ($dir) ) echo '&nbsp;&nbsp;<a href="' . owpLink($owpFilename['backup'], 'action=restorelocal') . '">' . owpImage_button('button_restore.gif', IMAGE_RESTORE) . '</a>'; ?></td>
+                <td align="right" class="smallText"><?php if ( ($_GET['action'] != 'backup') && ($dir) ) echo '<a href="' . owpLink($owpFilename['backup'], 'action=backup') . '">' . owpImageButton('button_backup.gif', IMAGE_BACKUP) . '</a>'; if ( ($_GET['action'] != 'restorelocal') && ($dir) ) echo '&nbsp;&nbsp;<a href="' . owpLink($owpFilename['backup'], 'action=restorelocal') . '">' . owpImageButton('button_restore.gif', IMAGE_RESTORE) . '</a>'; ?></td>
               </tr>
 <?php
   if (defined('DB_LAST_RESTORE')) {
@@ -440,13 +440,13 @@
         $contents[] = array('text' => '<br>' . tep_draw_checkbox_field('download', 'yes') . ' ' . TEXT_INFO_DOWNLOAD_ONLY . '*<br><br>*' . TEXT_INFO_BEST_THROUGH_HTTPS);
       }
 
-      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_backup.gif', IMAGE_BACKUP) . '&nbsp;<a href="' . owpLink($owpFilename['backup']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_backup.gif', IMAGE_BACKUP) . '&nbsp;<a href="' . owpLink($owpFilename['backup']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'restore':
       $heading[] = array('text' => '<b>' . $buInfo->date . '</b>');
 
       $contents[] = array('text' => owpBreakString(sprintf(TEXT_INFO_RESTORE, DIR_FS_BACKUP . (($buInfo->compression != TEXT_NO_EXTENSION) ? substr($buInfo->file, 0, strrpos($buInfo->file, '.')) : $buInfo->file), ($buInfo->compression != TEXT_NO_EXTENSION) ? TEXT_INFO_UNPACK : ''), 35, ' '));
-      $contents[] = array('align' => 'center', 'text' => '<br><a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file . '&action=restorenow') . '">' . owpImage_button('button_restore.gif', IMAGE_RESTORE) . '</a>&nbsp;<a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br><a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file . '&action=restorenow') . '">' . owpImageButton('button_restore.gif', IMAGE_RESTORE) . '</a>&nbsp;<a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'restorelocal':
       $heading[] = array('text' => '<b>' . TEXT_INFO_HEADING_RESTORE_LOCAL . '</b>');
@@ -455,7 +455,7 @@
       $contents[] = array('text' => TEXT_INFO_RESTORE_LOCAL . '<br><br>' . TEXT_INFO_BEST_THROUGH_HTTPS);
       $contents[] = array('text' => '<br>' . tep_draw_file_field('sql_file'));
       $contents[] = array('text' => TEXT_INFO_RESTORE_LOCAL_RAW_FILE);
-      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_restore.gif', IMAGE_restore) . '&nbsp;<a href="' . owpLink($owpFilename['backup']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_restore.gif', IMAGE_restore) . '&nbsp;<a href="' . owpLink($owpFilename['backup']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'delete':
       $heading[] = array('text' => '<b>' . $buInfo->date . '</b>');
@@ -463,13 +463,13 @@
       $contents = array('form' => owpDrawForm('delete', $owpFilename['backup'], 'file=' . $buInfo->file . '&action=deleteconfirm'));
       $contents[] = array('text' => TEXT_DELETE_INTRO);
       $contents[] = array('text' => '<br><b>' . $buInfo->file . '</b>');
-      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_delete.gif', IMAGE_DELETE) . ' <a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_delete.gif', IMAGE_DELETE) . ' <a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     default:
       if (is_object($buInfo)) {
         $heading[] = array('text' => '<b>' . $buInfo->date . '</b>');
 
-        $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file . '&action=restore') . '">' . owpImage_button('button_restore.gif', IMAGE_RESTORE) . '</a> <a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file . '&action=delete') . '">' . owpImage_button('button_delete.gif', IMAGE_DELETE) . '</a>');
+        $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file . '&action=restore') . '">' . owpImageButton('button_restore.gif', IMAGE_RESTORE) . '</a> <a href="' . owpLink($owpFilename['backup'], 'file=' . $buInfo->file . '&action=delete') . '">' . owpImageButton('button_delete.gif', IMAGE_DELETE) . '</a>');
         $contents[] = array('text' => '<br>' . TEXT_INFO_DATE . ' ' . $buInfo->date);
         $contents[] = array('text' => TEXT_INFO_SIZE . ' ' . $buInfo->size);
         $contents[] = array('text' => '<br>' . TEXT_INFO_COMPRESSION . ' ' . $buInfo->compression);

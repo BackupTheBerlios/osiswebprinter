@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: define_language.php,v 1.11 2003/04/22 07:22:17 r23 Exp $
+   $Id: define_language.php,v 1.12 2003/04/23 07:04:35 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -135,7 +135,7 @@
                 <td><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
-                <td align="right"><?php if ($file_writeable) { echo owpImage_submit('button_save.gif', IMAGE_SAVE) . '&nbsp;<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>'; } else { echo '<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_back.gif', IMAGE_BACK) . '</a>'; } ?></td>
+                <td align="right"><?php if ($file_writeable) { echo owpImage_submit('button_save.gif', IMAGE_SAVE) . '&nbsp;<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>'; } else { echo '<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImageButton('button_back.gif', IMAGE_BACK) . '</a>'; } ?></td>
               </tr>
             </table></td>
           </form></tr>
@@ -149,7 +149,7 @@
             <td><?php echo owpTransLine('1', '10'); ?></td>
           </tr>
           <tr>
-            <td><?php echo '<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImage_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
+            <td><?php echo '<a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $_GET['lngdir']) . '">' . owpImageButton('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
           </tr>
 <?php
     }
@@ -185,7 +185,7 @@
             <td><?php echo owpTransLine('1', '10'); ?></td>
           </tr>
           <tr>
-            <td align="right"><?php echo '<a href="' . owpLink(FILENAME_FILE_MANAGER, 'current_path=' . DIR_FS_CATALOG_LANGUAGES . $_GET['lngdir']) . '">' . owpImage_button('button_file_manager.gif', IMAGE_FILE_MANAGER) . '</a>'; ?></td>
+            <td align="right"><?php echo '<a href="' . owpLink(FILENAME_FILE_MANAGER, 'current_path=' . DIR_FS_CATALOG_LANGUAGES . $_GET['lngdir']) . '">' . owpImageButton('button_file_manager.gif', IMAGE_FILE_MANAGER) . '</a>'; ?></td>
           </tr>
 <?php
   }

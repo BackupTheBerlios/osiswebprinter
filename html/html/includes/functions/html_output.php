@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: html_output.php,v 1.5 2003/04/20 16:06:10 r23 Exp $
+   $Id: html_output.php,v 1.6 2003/04/23 07:05:54 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -78,7 +78,7 @@
   function owpImageSubmit($image, $alt, $params = '') {
     global $language;
 
-    return '<input type="image" src="' . OWP_LANGUAGES_DIR . $language . '/images/buttons/' . $image . '" border="0" alt="' . $alt . '"' . (($params) ? ' ' . $params : '') . '>';
+    return '<input type="image" src="' . OWP_LANGUAGES_DIR . $language . '/buttons/' . $image . '" border="0" alt="' . $alt . '"' . (($params) ? ' ' . $params : '') . '>';
   }
 
 ////
@@ -95,10 +95,10 @@
 
 ////
 // Output a function button in the selected language
-  function tep_image_button($image, $alt = '', $params = '') {
+  function owpImageButton($image, $alt = '', $params = '') {
     global $language;
 
-    return tep_image(OWP_LANGUAGES_DIR . $language . '/images/buttons/' . $image, $alt, '', '', $params);
+    return tep_image(OWP_LANGUAGES_DIR . $language . '/buttons/' . $image, $alt, '', '', $params);
   }
 
 ////
@@ -152,7 +152,7 @@
 
 ////
 // Output a form input field
-  function tep_draw_input_field($name, $value = '', $parameters = '', $required = false, $type = 'text', $reinsert_value = true) {
+  function owpInputField($name, $value = '', $parameters = '', $required = false, $type = 'text', $reinsert_value = true) {
     $field = '<input type="' . $type . '" name="' . $name . '"';
     if ( ($GLOBALS[$name]) && ($reinsert_value) ) {
       $field .= ' value="' . htmlspecialchars(trim($GLOBALS[$name])) . '"';
@@ -172,7 +172,7 @@
 ////
 // Output a form password field
   function tep_draw_password_field($name, $value = '', $required = false) {
-    $field = tep_draw_input_field($name, $value, 'maxlength="40"', $required, 'password', false);
+    $field = owpInputField($name, $value, 'maxlength="40"', $required, 'password', false);
 
     return $field;
   }
@@ -180,7 +180,7 @@
 ////
 // Output a form filefield
   function tep_draw_file_field($name, $required = false) {
-    $field = tep_draw_input_field($name, '', '', $required, 'file');
+    $field = owpInputField($name, '', '', $required, 'file');
 
     return $field;
   }

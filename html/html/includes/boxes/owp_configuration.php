@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_configuration.php,v 1.5 2003/04/22 07:22:17 r23 Exp $
+   $Id: owp_configuration.php,v 1.6 2003/04/23 07:04:35 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -34,12 +34,17 @@
 
   if ($selected_box == 'configuration') {
     $cfg_groups = '';
-  /*
-    $configuration_groups_query = tep_db_query("select configuration_group_id as cgID, configuration_group_title as cgTitle from " . TABLE_CONFIGURATION_GROUP . " where visible = '1' order by sort_order");
-    while ($configuration_groups = tep_db_fetch_array($configuration_groups_query)) {
-      $cfg_groups .= '<a href="' . owpLink(FILENAME_CONFIGURATION, 'gID=' . $configuration_groups['cgID'], 'NONSSL') . '" class="menuBoxContentLink">' . $configuration_groups['cgTitle'] . '</a><br>';
+
+    $sql = "SELECT configuration_group_id as cgID, configuration_group_title as cgTitle 
+            FROM " . $owpDBTable['configuration_group'] . "  
+            WHERE visible = '1' 
+            ORDER BY sort_order";
+    $db->cacheSecs = 3600*24; # cache 24 hours
+    $configuration_groups_query = $db->CacheExecute($sql);
+    while ($configuration_groups = $configuration_groups_query->fields) {   
+      $cfg_groups .= '<a href="' . owpLink($owpFilename['configuration'], 'gID=' . $configuration_groups['cgID'], 'NONSSL') . '" class="menuBoxContentLink">' . $configuration_groups['cgTitle'] . '</a><br>';
+      $configuration_groups_query->MoveNext();
     }
-*/
     $contents[] = array('text'  => $cfg_groups);
   }
 

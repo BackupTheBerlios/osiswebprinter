@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.3 2003/04/22 07:27:37 r23 Exp $
+   $Id: mail.php,v 1.4 2003/04/23 07:08:25 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -34,22 +34,22 @@
   if ( ($_GET['action'] == 'send_email_to_user') && ($_POST['customers_email_address']) && (!$_POST['back_x']) ) {
     switch ($_POST['customers_email_address']) {
       case '***':
-        $mail_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from " . TABLE_CUSTOMERS);
+        $mail_query = tep_db_query("SELECT customers_firstname, customers_lastname, customers_email_address FROM " . TABLE_CUSTOMERS);
         $mail_sent_to = TEXT_ALL_CUSTOMERS;
         break;
       case '**D':
-        $mail_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from " . TABLE_CUSTOMERS . " where customers_newsletter = '1'");
+        $mail_query = tep_db_query("SELECT customers_firstname, customers_lastname, customers_email_address FROM " . TABLE_CUSTOMERS . " WHERE customers_newsletter = '1'");
         $mail_sent_to = TEXT_NEWSLETTER_CUSTOMERS;
         break;
       default:
         $customers_email_address = tep_db_prepare_input($_POST['customers_email_address']);
 
-        $mail_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from " . TABLE_CUSTOMERS . " where customers_email_address = '" . tep_db_input($customers_email_address) . "'");
+        $mail_query = tep_db_query("SELECT customers_firstname, customers_lastname, customers_email_address FROM " . TABLE_CUSTOMERS . " WHERE customers_email_address = '" . tep_db_input($customers_email_address) . "'");
         $mail_sent_to = $_POST['customers_email_address'];
         break;
     }
 
-    $from = tep_db_prepare_input($_POST['from']);
+    $FROM = tep_db_prepare_input($_POST['FROM']);
     $subject = tep_db_prepare_input($_POST['subject']);
     $message = tep_db_prepare_input($_POST['message']);
 
@@ -59,7 +59,7 @@
     $mimemessage->add_text($message);
     $mimemessage->build_message();
     while ($mail = tep_db_fetch_array($mail_query)) {
-      $mimemessage->send($mail['customers_firstname'] . ' ' . $mail['customers_lastname'], $mail['customers_email_address'], '', $from, $subject);
+      $mimemessage->send($mail['customers_firstname'] . ' ' . $mail['customers_lastname'], $mail['customers_email_address'], '', $FROM, $subject);
     }
 
     tep_redirect(owpLink($owpFilename['mail'], 'mail_sent_to=' . urlencode($mail_sent_to)));
@@ -134,7 +134,7 @@
                 <td><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
-                <td class="smallText"><b><?php echo TEXT_FROM; ?></b><br><?php echo htmlspecialchars(stripslashes($_POST['from'])); ?></td>
+                <td class="smallText"><b><?php echo TEXT_FROM; ?></b><br><?php echo htmlspecialchars(stripslashes($_POST['FROM'])); ?></td>
               </tr>
               <tr>
                 <td><?php echo owpTransLine('1', '10'); ?></td>
@@ -184,7 +184,7 @@
     $customers[] = array('id' => '', 'text' => TEXT_SELECT_CUSTOMER);
     $customers[] = array('id' => '***', 'text' => TEXT_ALL_CUSTOMERS);
     $customers[] = array('id' => '**D', 'text' => TEXT_NEWSLETTER_CUSTOMERS);
-    $mail_query = tep_db_query("select customers_email_address, customers_firstname, customers_lastname from " . TABLE_CUSTOMERS . " order by customers_lastname");
+    $mail_query = tep_db_query("SELECT customers_email_address, customers_firstname, customers_lastname FROM " . TABLE_CUSTOMERS . " order by customers_lastname");
     while($customers_values = tep_db_fetch_array($mail_query)) {
       $customers[] = array('id' => $customers_values['customers_email_address'],
                            'text' => $customers_values['customers_lastname'] . ', ' . $customers_values['customers_firstname'] . ' (' . $customers_values['customers_email_address'] . ')');
@@ -199,14 +199,14 @@
               </tr>
               <tr>
                 <td class="main"><?php echo TEXT_FROM; ?></td>
-                <td><?php echo tep_draw_input_field('from', EMAIL_FROM); ?></td>
+                <td><?php echo owpInputField('FROM', EMAIL_FROM); ?></td>
               </tr>
               <tr>
                 <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
                 <td class="main"><?php echo TEXT_SUBJECT; ?></td>
-                <td><?php echo tep_draw_input_field('subject'); ?></td>
+                <td><?php echo owpInputField('subject'); ?></td>
               </tr>
               <tr>
                 <td colspan="2"><?php echo owpTransLine('1', '10'); ?></td>

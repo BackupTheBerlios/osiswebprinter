@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.6 2003/04/21 21:52:11 r23 Exp $
+   $Id: general.php,v 1.7 2003/04/23 07:05:54 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -97,14 +97,14 @@
     $minute = (int)substr($raw_date, 14, 2);
     $second = (int)substr($raw_date, 17, 2);
 
-    return strftime(DATE_FORMAT_LONG, mktime($hour, $minute, $second, $month, $day, $year));
+    return strftime(DATE_LONG, mktime($hour, $minute, $second, $month, $day, $year));
   }
 
 ////
 // Output a raw date string in the selected locale date format
 // $raw_date needs to be in this format: YYYY-MM-DD HH:MM:SS
 // NOTE: Includes a workaround for dates before 01/01/1970 that fail on windows servers
-  function tep_date_short($raw_date) {
+  function owpDateShort($raw_date) {
     if ( ($raw_date == '0000-00-00 00:00:00') || ($raw_date == '') ) return false;
 
     $year = substr($raw_date, 0, 4);
@@ -121,7 +121,7 @@
     }
   }
 
-  function tep_datetime_short($raw_datetime) {
+  function owpDatetimeShort($raw_datetime) {
     if ( ($raw_datetime == '0000-00-00 00:00:00') || ($raw_datetime == '') ) return false;
 
     $year = (int)substr($raw_datetime, 0, 4);
@@ -134,7 +134,7 @@
     return strftime(DATE_TIME_FORMAT, mktime($hour, $minute, $second, $month, $day, $year));
   }
 
-  function tep_array_merge($array1, $array2, $array3 = '') {
+  function owpArrayMerge($array1, $array2, $array3 = '') {
     if ($array3 == '') $array3 = array();
     if (function_exists('array_merge')) {
       $array_merged = array_merge($array1, $array2, $array3);
@@ -159,6 +159,23 @@
 
     return false;
   }
+
+  function owpArraytoString($array, $exclude = '', $equals = '=', $separator = '&') {
+    if ($exclude == '') $exclude = array();
+
+    $get_string = '';
+    if (sizeof($array) > 0) {
+      while (list($key, $value) = each($array)) {
+        if ( (!in_array($key, $exclude)) && ($key != 'x') && ($key != 'y') ) {
+          $get_string .= $key . $equals . $value . $separator;
+        }
+      }
+      $remove_chars = strlen($separator);
+      $get_string = substr($get_string, 0, -$remove_chars);
+    }
+
+    return $get_string;
+  } 
 
   function tep_get_category_tree($parent_id = '0', $spacing = '', $exclude = '', $category_tree_array = '', $include_itself = false) {
     global $languages_id;
@@ -241,27 +258,35 @@
     return $output;
   }
 
-  function tep_get_country_name($country_id) {
-    $country_query = tep_db_query("select countries_name from " . TABLE_COUNTRIES . " where countries_id = '" . $country_id . "'");
+  function owpGetCountryName($country_id) {
+    GLOBAL $db;
 
-    if (!tep_db_num_rows($country_query)) {
+    $owpDBTable = owpDBGetTables();
+
+    $country = $db->Execute("select countries_name from " . $owpDBTable['countries'] . " where countries_id = '" . $country_id . "'");
+
+    if (!$country->RecordCount()) {
       return $country_id;
     } else {
-      $country = tep_db_fetch_array($country_query);
-      return $country['countries_name'];
+      return $country->fields['countries_name'];
     }
   }
 
-  function tep_get_zone_name($zone_id) {
-    $zone_query = tep_db_query("select zone_name from " . TABLE_ZONES . " where zone_id = '" . $zone_id . "'");
 
-    if (!tep_db_num_rows($zone_query)) {
+  function owpGetZoneName($zone_id) {
+    GLOBAL $db;
+
+    $owpDBTable = owpDBGetTables();
+
+    $zone = $db->Execute("select zone_name from " . $owpDBTable['zones'] . " where zone_id = '" . $zone_id . "'");
+
+    if (!$zone->RecordCount()) {
       return $zone_id;
     } else {
-      $zone = tep_db_fetch_array($zone_query);
-      return $zone['zone_name'];
+      return $zone->fields['zone_name'];
     }
   }
+
 
   function owpNotNull($value) {
     if (is_array($value)) {
@@ -353,7 +378,7 @@
     $zone_id = $address['zone_id'];
     $postcode = addslashes($address['postcode']);
     $zip = $postcode;
-    $country = tep_get_country_name($country_id);
+    $country = owpGetCountryName($country_id);
     $state = tep_get_zone_code($country_id, $zone_id, $state);
 
     if ($html) {
@@ -573,16 +598,17 @@
 ////
 // Returns an array with countries
 // TABLES: countries
-  function tep_get_countries($default = '') {
+  function owpGetCountries($default = '') {
+    GLOBAL $db;
+
+    $owpDBTable = owpDBGetTables();
+
     $countries_array = array();
-    if ($default) {
-      $countries_array[] = array('id' => '',
-                                 'text' => $default);
-    }
-    $countries_query = tep_db_query("select countries_id, countries_name from " . TABLE_COUNTRIES . " order by countries_name");
-    while ($countries = tep_db_fetch_array($countries_query)) {
-      $countries_array[] = array('id' => $countries['countries_id'],
-                                 'text' => $countries['countries_name']);
+    if ($default) $countries_array[] = array('id' => '', 'text' => $default);
+    $countries_query = $db->Execute("select countries_id, countries_name from " . $owpDBTable['countries'] . " order by countries_name");
+    while ($countries = $countries_query->fields) {
+      $countries_array[] = array('id' => $countries['countries_id'], 'text' => $countries['countries_name']);
+      $countries_query->MoveNext();
     }
 
     return $countries_array;
@@ -590,17 +616,21 @@
 
 ////
 // return an array with country zones
-  function tep_get_country_zones($country_id) {
+  function owpGetCountryZones($country_id) {
+    GLOBAL $db;
+
+    $owpDBTable = owpDBGetTables();
+
     $zones_array = array();
-    $zones_query = tep_db_query("select zone_id, zone_name from " . TABLE_ZONES . " where zone_country_id = '" . $country_id . "' order by zone_name");
-    while ($zones = tep_db_fetch_array($zones_query)) {
-      $zones_array[] = array('id' => $zones['zone_id'],
-                             'text' => $zones['zone_name']);
+    $zones_query = $db->Execute("select zone_id, zone_name from " . $owpDBTable['zones'] . " where zone_country_id = '" . $country_id . "' order by zone_name");
+    while ($zones = $zones_query->fields) {
+      $zones_array[] = array('id' => $zones['zone_id'], 'text' => $zones['zone_name']);
+      $zones_query->MoveNext();
     }
 
     return $zones_array;
   }
-
+  
   function tep_prepare_country_zones_pull_down($country_id = '') {
 // preset the width of the drop-down for Netscape
     $pre = '';
@@ -608,11 +638,11 @@
       for ($i=0; $i<45; $i++) $pre .= '&nbsp;';
     }
 
-    $zones = tep_get_country_zones($country_id);
+    $zones = owpGetCountryZones($country_id);
 
     if (sizeof($zones) > 0) {
       $zones_select = array(array('id' => '', 'text' => PLEASE_SELECT));
-      $zones = tep_array_merge($zones_select, $zones);
+      $zones = owpArrayMerge($zones_select, $zones);
     } else {
       $zones = array(array('id' => '', 'text' => TYPE_BELOW));
 // create dummy options for Netscape to preset the height of the drop-down
@@ -628,12 +658,12 @@
 
 ////
 // Alias function for Store configuration values in the Administration Tool
-  function tep_cfg_pull_down_country_list($country_id) {
-    return tep_draw_pull_down_menu('configuration_value', tep_get_countries(), $country_id);
+  function owpCfgPullDownCountryList($country_id) {
+    return tep_draw_pull_down_menu('configuration_value', owpGetCountries(), $country_id);
   }
 
-  function tep_cfg_pull_down_zone_list($zone_id) {
-    return tep_draw_pull_down_menu('configuration_value', tep_get_country_zones(STORE_COUNTRY), $zone_id);
+  function owpCfgPullDownZoneList($zone_id) {
+    return tep_draw_pull_down_menu('configuration_value', owpGetCountryZones(STORE_COUNTRY), $zone_id);
   }
 
   function tep_cfg_pull_down_tax_classes($tax_class_id, $key = '') {
@@ -656,8 +686,8 @@
   }
 
 ////
-// Alias function for Store configuration values in the Administration Tool
-  function tep_cfg_select_option($select_array, $key_value, $key = '') {
+// Alias function for OSIS WEbPrinter configuration values in the Administration Tool
+  function owpCfgSelectOption($select_array, $key_value, $key = '') {
     for ($i=0; $i<sizeof($select_array); $i++) {
       $name = (($key) ? 'configuration[' . $key . ']' : 'configuration_value');
       $string .= '<br><input type="radio" name="' . $name . '" value="' . $select_array[$i] . '"';
@@ -1047,7 +1077,7 @@
   }
 
 
-  function tep_call_function($function, $parameter, $object = '') {
+  function owpCallFunction($function, $parameter, $object = '') {
     if ($object == '') {
       return call_user_func($function, $parameter);
     } elseif (PHP_VERSION < 4) {
@@ -1059,26 +1089,25 @@
   
 // Retreive server information
   function owpGetSystemInformation() {
-    global $HTTP_SERVER_VARS;
+    GLOBAL $db;
 
- #   $db_query = tep_db_query("select now() as datetime");
- #   $db = tep_db_fetch_array($db_query);
+    $db_time = $db->Execute("select now() as datetime");
 
     list($system, $host, $kernel) = preg_split('/[\s,]+/', @exec('uname -a'), 5);
 
-    return array('date' => tep_datetime_short(date('Y-m-d H:i:s')),
+    return array('date' => owpDatetimeShort(date('Y-m-d H:i:s')),
                  'system' => $system,
                  'kernel' => $kernel,
                  'host' => $host,
                  'ip' => gethostbyname($host),
                  'uptime' => @exec('uptime'),
-                 'http_server' => $HTTP_SERVER_VARS['SERVER_SOFTWARE'],
+                 'http_server' => $_SERVER['SERVER_SOFTWARE'],
                  'php' => PHP_VERSION,
                  'zend' => (function_exists('zend_version') ? zend_version() : ''),
-                 'db_server' => DB_SERVER,
-                 'db_ip' => gethostbyname(DB_SERVER),
+                 'db_server' => OWP_DB_SERVER,
+                 'db_ip' => gethostbyname(OWP_DB_SERVER),
                  'db_version' => 'MySQL ' . (function_exists('mysql_get_server_info') ? mysql_get_server_info() : ''),
-                 'db_date' => tep_datetime_short($db['datetime']));
+                 'db_date' => owpDatetimeShort($db['datetime']));
   }
   
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.11 2003/04/22 07:27:37 r23 Exp $
+   $Id: languages.php,v 1.12 2003/04/23 07:07:22 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -44,25 +44,25 @@
       $insert_id = tep_db_insert_id();
 
 // create additional categories_description records
-      $categories_query = tep_db_query("select c.categories_id, cd.categories_name from " . TABLE_CATEGORIES . " c left join " . TABLE_CATEGORIES_DESCRIPTION . " cd on c.categories_id = cd.categories_id where cd.language_id = '" . $languages_id . "'");
+      $categories_query = tep_db_query("SELECT c.categories_id, cd.categories_name FROM " . TABLE_CATEGORIES . " c left join " . TABLE_CATEGORIES_DESCRIPTION . " cd on c.categories_id = cd.categories_id WHERE cd.language_id = '" . $languages_id . "'");
       while ($categories = tep_db_fetch_array($categories_query)) {
         tep_db_query("insert into " . TABLE_CATEGORIES_DESCRIPTION . " (categories_id, language_id, categories_name) values ('" . $categories['categories_id'] . "', '" . $insert_id . "', '" . tep_db_input($categories['categories_name']) . "')");
       }
 
 // create additional products_description records
-      $products_query = tep_db_query("select p.products_id, pd.products_name, pd.products_description, pd.products_url from " . TABLE_PRODUCTS . " p left join " . TABLE_PRODUCTS_DESCRIPTION . " pd on p.products_id = pd.products_id where pd.language_id = '" . $languages_id . "'");
+      $products_query = tep_db_query("SELECT p.products_id, pd.products_name, pd.products_description, pd.products_url FROM " . TABLE_PRODUCTS . " p left join " . TABLE_PRODUCTS_DESCRIPTION . " pd on p.products_id = pd.products_id WHERE pd.language_id = '" . $languages_id . "'");
       while ($products = tep_db_fetch_array($products_query)) {
         tep_db_query("insert into " . TABLE_PRODUCTS_DESCRIPTION . " (products_id, language_id, products_name, products_description, products_url) values ('" . $products['products_id'] . "', '" . $insert_id . "', '" . tep_db_input($products['products_name']) . "', '" . tep_db_input($products['products_description']) . "', '" . tep_db_input($products['products_url']) . "')");
       }
 
 // create additional products_options records
-      $products_options_query = tep_db_query("select products_options_id, products_options_name from " . TABLE_PRODUCTS_OPTIONS . " where language_id = '" . $languages_id . "'");
+      $products_options_query = tep_db_query("SELECT products_options_id, products_options_name FROM " . TABLE_PRODUCTS_OPTIONS . " WHERE language_id = '" . $languages_id . "'");
       while ($products_options = tep_db_fetch_array($products_options_query)) {
         tep_db_query("insert into " . TABLE_PRODUCTS_OPTIONS . " (products_options_id, language_id, products_options_name) values ('" . $products_options['products_options_id'] . "', '" . $insert_id . "', '" . tep_db_input($products_options['products_options_name']) . "')");
       }
 
       if ($_POST['default'] == 'on') {
-        tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . tep_db_input($code) . "' where configuration_key = 'DEFAULT_LANGUAGE'");
+        tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . tep_db_input($code) . "' WHERE configuration_key = 'DEFAULT_LANGUAGE'");
       }
 
       tep_redirect(owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $insert_id));
@@ -75,10 +75,10 @@
       $directory = tep_db_prepare_input($_POST['directory']);
       $sort_order = tep_db_prepare_input($_POST['sort_order']);
 
-      tep_db_query("update " . TABLE_LANGUAGES . " set name = '" . tep_db_input($name) . "', code = '" . tep_db_input($code) . "', image = '" . tep_db_input($image) . "', directory = '" . tep_db_input($directory) . "', sort_order = '" . tep_db_input($sort_order) . "' where languages_id = '" . tep_db_input($lID) . "'");
+      tep_db_query("update " . TABLE_LANGUAGES . " set name = '" . tep_db_input($name) . "', code = '" . tep_db_input($code) . "', image = '" . tep_db_input($image) . "', directory = '" . tep_db_input($directory) . "', sort_order = '" . tep_db_input($sort_order) . "' WHERE languages_id = '" . tep_db_input($lID) . "'");
 
       if ($_POST['default'] == 'on') {
-        tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . tep_db_input($code) . "' where configuration_key = 'DEFAULT_LANGUAGE'");
+        tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . tep_db_input($code) . "' WHERE configuration_key = 'DEFAULT_LANGUAGE'");
       }
 
       tep_redirect(owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $_GET['lID']));
@@ -86,21 +86,21 @@
     case 'deleteconfirm':
       $lID = tep_db_prepare_input($_GET['lID']);
 
-      $lng_query = tep_db_query("select languages_id from " . TABLE_LANGUAGES . " where code = '" . DEFAULT_CURRENCY . "'");
+      $lng_query = tep_db_query("SELECT languages_id FROM " . TABLE_LANGUAGES . " WHERE code = '" . DEFAULT_CURRENCY . "'");
       $lng = tep_db_fetch_array($lng_query);
       if ($lng['languages_id'] == $lID) {
-        tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '' where configuration_key = 'DEFAULT_CURRENCY'");
+        tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '' WHERE configuration_key = 'DEFAULT_CURRENCY'");
       }
 
-      tep_db_query("delete from " . TABLE_CATEGORIES_DESCRIPTION . " where language_id = '" . tep_db_input($lID) . "'");
-      tep_db_query("delete from " . TABLE_LANGUAGES . " where languages_id = '" . tep_db_input($lID) . "'");
+      tep_db_query("delete FROM " . TABLE_CATEGORIES_DESCRIPTION . " WHERE language_id = '" . tep_db_input($lID) . "'");
+      tep_db_query("delete FROM " . TABLE_LANGUAGES . " WHERE languages_id = '" . tep_db_input($lID) . "'");
 
       tep_redirect(owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page']));
       break;
     case 'delete':
       $lID = tep_db_prepare_input($_GET['lID']);
 
-      $lng_query = tep_db_query("select code from " . TABLE_LANGUAGES . " where languages_id = '" . tep_db_input($lID) . "'");
+      $lng_query = tep_db_query("SELECT code FROM " . TABLE_LANGUAGES . " WHERE languages_id = '" . tep_db_input($lID) . "'");
       $lng = tep_db_fetch_array($lng_query);
 
       $remove_language = true;
@@ -155,7 +155,7 @@
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
-  $languages_query_raw = "select languages_id, name, code, image, directory, sort_order from " . TABLE_LANGUAGES . " order by sort_order";
+  $languages_query_raw = "SELECT languages_id, name, code, image, directory, sort_order FROM " . TABLE_LANGUAGES . " order by sort_order";
   $languages_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $languages_query_raw, $languages_query_numrows);
   $languages_query = tep_db_query($languages_query_raw);
 
@@ -192,7 +192,7 @@
   if (!$_GET['action']) {
 ?>
                   <tr>
-                    <td align="right" colspan="2"><?php echo '<a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=new') . '">' . owpImage_button('button_new_language.gif', IMAGE_NEW_LANGUAGE) . '</a>'; ?></td>
+                    <td align="right" colspan="2"><?php echo '<a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=new') . '">' . owpImageButton('button_new_language.gif', IMAGE_NEW_LANGUAGE) . '</a>'; ?></td>
                   </tr>
 <?php
   }
@@ -213,39 +213,39 @@
 
       $contents = array('form' => owpDrawForm('languages', FILENAME_LANGUAGES, 'action=insert'));
       $contents[] = array('text' => TEXT_INFO_INSERT_INTRO);
-      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_NAME . '<br>' . tep_draw_input_field('name'));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_CODE . '<br>' . tep_draw_input_field('code'));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_IMAGE . '<br>' . tep_draw_input_field('image', 'icon.gif'));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_DIRECTORY . '<br>' . tep_draw_input_field('directory'));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_SORT_ORDER . '<br>' . tep_draw_input_field('sort_order'));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_NAME . '<br>' . owpInputField('name'));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_CODE . '<br>' . owpInputField('code'));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_IMAGE . '<br>' . owpInputField('image', 'icon.gif'));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_DIRECTORY . '<br>' . owpInputField('directory'));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_SORT_ORDER . '<br>' . owpInputField('sort_order'));
       $contents[] = array('text' => '<br>' . tep_draw_checkbox_field('default') . ' ' . TEXT_SET_DEFAULT);
-      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_insert.gif', IMAGE_INSERT) . ' <a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $_GET['lID']) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_insert.gif', IMAGE_INSERT) . ' <a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $_GET['lID']) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'edit':
       $heading[] = array('text' => '<b>' . TEXT_INFO_HEADING_EDIT_LANGUAGE . '</b>');
 
       $contents = array('form' => owpDrawForm('languages', FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=save'));
       $contents[] = array('text' => TEXT_INFO_EDIT_INTRO);
-      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_NAME . '<br>' . tep_draw_input_field('name', $lInfo->name));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_CODE . '<br>' . tep_draw_input_field('code', $lInfo->code));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_IMAGE . '<br>' . tep_draw_input_field('image', $lInfo->image));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_DIRECTORY . '<br>' . tep_draw_input_field('directory', $lInfo->directory));
-      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_SORT_ORDER . '<br>' . tep_draw_input_field('sort_order', $lInfo->sort_order));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_NAME . '<br>' . owpInputField('name', $lInfo->name));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_CODE . '<br>' . owpInputField('code', $lInfo->code));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_IMAGE . '<br>' . owpInputField('image', $lInfo->image));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_DIRECTORY . '<br>' . owpInputField('directory', $lInfo->directory));
+      $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_SORT_ORDER . '<br>' . owpInputField('sort_order', $lInfo->sort_order));
       if (DEFAULT_LANGUAGE != $lInfo->code) $contents[] = array('text' => '<br>' . tep_draw_checkbox_field('default') . ' ' . TEXT_SET_DEFAULT);
-      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImage_submit('button_update.gif', IMAGE_UPDATE) . ' <a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . owpImageSubmit('button_update.gif', IMAGE_UPDATE) . ' <a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     case 'delete':
       $heading[] = array('text' => '<b>' . TEXT_INFO_HEADING_DELETE_LANGUAGE . '</b>');
 
       $contents[] = array('text' => TEXT_INFO_DELETE_INTRO);
       $contents[] = array('text' => '<br><b>' . $lInfo->name . '</b>');
-      $contents[] = array('align' => 'center', 'text' => '<br>' . (($remove_language) ? '<a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=deleteconfirm') . '">' . owpImage_button('button_delete.gif', IMAGE_DELETE) . '</a>' : '') . ' <a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id) . '">' . owpImage_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . (($remove_language) ? '<a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=deleteconfirm') . '">' . owpImageButton('button_delete.gif', IMAGE_DELETE) . '</a>' : '') . ' <a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id) . '">' . owpImageButton('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     default:
       if (is_object($lInfo)) {
         $heading[] = array('text' => '<b>' . $lInfo->name . '</b>');
 
-        $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=edit') . '">' . owpImage_button('button_edit.gif', IMAGE_EDIT) . '</a> <a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=delete') . '">' . owpImage_button('button_delete.gif', IMAGE_DELETE) . '</a> <a href="' . owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $lInfo->directory) . '">' . owpImage_button('button_define.gif', IMAGE_DEFINE) . '</a>');
+        $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=edit') . '">' . owpImageButton('button_edit.gif', IMAGE_EDIT) . '</a> <a href="' . owpLink(FILENAME_LANGUAGES, 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=delete') . '">' . owpImageButton('button_delete.gif', IMAGE_DELETE) . '</a> <a href="' . owpLink(FILENAME_DEFINE_LANGUAGE, 'lngdir=' . $lInfo->directory) . '">' . owpImageButton('button_define.gif', IMAGE_DEFINE) . '</a>');
         $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_NAME . ' ' . $lInfo->name);
         $contents[] = array('text' => TEXT_INFO_LANGUAGE_CODE . ' ' . $lInfo->code);
         $contents[] = array('text' => '<br>' . owpImage(OWP_LANGUAGES_DIR_CATALOG_LANGUAGES . $lInfo->directory . '/images/' . $lInfo->image, $lInfo->name));

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: login.php,v 1.3 2003/04/22 07:25:51 r23 Exp $
+   $Id: login.php,v 1.4 2003/04/23 07:07:22 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -41,6 +41,7 @@
    ----------------------------------------------------------------------
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
+
 
 define('TOP_BAR_TITLE', 'Logon');
 define('HEADING_TITLE', 'LogIn To Administer');

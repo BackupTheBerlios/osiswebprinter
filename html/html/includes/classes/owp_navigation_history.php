@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_navigation_history.php,v 1.3 2003/04/22 07:24:16 r23 Exp $
+   $Id: owp_navigation_history.php,v 1.4 2003/04/23 07:04:35 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -35,7 +35,7 @@
     }
 
     function add_current_page() {
-      global $owpSelf, $_GET, $_POST, $_SERVER, $cPath;
+      global $owpSelf, $_GET, $_POST, $_SERVER;
 
       $set = 'true';
       for ($i=0; $i<sizeof($this->path); $i++) {
@@ -99,7 +99,7 @@
       if (sizeof($this->snapshot) > 0) {
         echo '<br><br>';
 
-        echo $this->snapshot['mode'] . ' ' . $this->snapshot['page'] . '?' . tep_array_to_string($this->snapshot['get'], array(tep_session_name())) . '<br>';
+        echo $this->snapshot['mode'] . ' ' . $this->snapshot['page'] . '?' . owpArraytoString($this->snapshot['get'], array(owpSessionName())) . '<br>';
       }
     }
   }

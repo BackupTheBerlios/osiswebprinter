@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_api.php,v 1.3 2003/04/19 09:13:25 r23 Exp $
+   $Id: owp_api.php,v 1.4 2003/04/23 07:05:54 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -15,7 +15,7 @@
    File: newsletters.php,v 1.14 2002/03/29 13:04:25 dgw_
    ----------------------------------------------------------------------
 
-   $Id: owp_api.php,v 1.3 2003/04/19 09:13:25 r23 Exp $
+   $Id: owp_api.php,v 1.4 2003/04/23 07:05:54 r23 Exp $
    ----------------------------------------------------------------------
    POST-NUKE Content Management System
    Copyright (C) 2001 by the Post-Nuke Development Team.
@@ -43,7 +43,6 @@
    Purpose of file: The PostNuke API
    ---------------------------------------------------------------------- */
 
-
   function owpDBInit() {
     // Get database parameters
     $dbtype = OWP_DB_TYPE;
@@ -66,11 +65,12 @@
     $db = ADONewConnection($dbtype);
     $dbh = $db->Connect($dbhost, $dbuname, $dbpass, $dbname);
     if (!$dbh) {
-    $dbpass = "";
-        die("$dbtype://$dbuname:$dbpass@$dbhost/$dbname failed to connect" . $dbconn->ErrorMsg());
+      $dbpass = "";
+      die("$dbtype://$dbuname:$dbpass@$dbhost/$dbname failed to connect" . $db->ErrorMsg());
     }
+    
     global $ADODB_FETCH_MODE;
-    $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+    $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
 
     // force oracle to a consistent date format for comparison methods later on
     if (strcmp($dbtype, 'oci8') == 0) {
@@ -97,8 +97,14 @@
   * @return array of database tables
   */
   function owpDBGetTables() {
-    global $owptable;
-
-    return $owptable;
+    GLOBAL $owpDBTable;
+  
+    return $owpDBTable;
   }
+  
+  function owpDBInput($string) {
+    return addslashes($string);
+  }
+  
+  
 ?>

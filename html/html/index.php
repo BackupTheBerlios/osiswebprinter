@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.10 2003/04/22 07:25:51 r23 Exp $
+   $Id: index.php,v 1.11 2003/04/23 07:07:22 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -33,36 +33,36 @@
 
   $cat = array(array('title' => BOX_HEADING_CONFIGURATION,
                      'image' => 'configuration.gif',
-                     'href' => owpLink(FILENAME_CONFIGURATION, 'selected_box=configuration&gID=1'),
-                     'children' => array(array('title' => BOX_CONFIGURATION_MYSTORE, 'link' => owpLink(FILENAME_CONFIGURATION, 'selected_box=configuration&gID=1')),
-                                         array('title' => BOX_CONFIGURATION_LOGGING, 'link' => owpLink(FILENAME_CONFIGURATION, 'selected_box=configuration&gID=10')),
-                                         array('title' => BOX_CONFIGURATION_CACHE, 'link' => owpLink(FILENAME_CONFIGURATION, 'selected_box=configuration&gID=11')))),
+                     'href' => owpLink(FILENAME_CONFIGURATION, 'SELECTed_box=configuration&gID=1'),
+                     'children' => array(array('title' => BOX_CONFIGURATION_MYSTORE, 'link' => owpLink(FILENAME_CONFIGURATION, 'SELECTed_box=configuration&gID=1')),
+                                         array('title' => BOX_CONFIGURATION_LOGGING, 'link' => owpLink(FILENAME_CONFIGURATION, 'SELECTed_box=configuration&gID=10')),
+                                         array('title' => BOX_CONFIGURATION_CACHE, 'link' => owpLink(FILENAME_CONFIGURATION, 'SELECTed_box=configuration&gID=11')))),
                array('title' => BOX_HEADING_MODULES,
                      'image' => 'modules.gif',
-                     'href' => owpLink(FILENAME_MODULES, 'selected_box=modules&set=payment'),
-                     'children' => array(array('title' => BOX_MODULES_PAYMENT, 'link' => owpLink(FILENAME_MODULES, 'selected_box=modules&set=payment')),
-                                         array('title' => BOX_MODULES_SHIPPING, 'link' => owpLink(FILENAME_MODULES, 'selected_box=modules&set=shipping')))),
+                     'href' => owpLink(FILENAME_MODULES, 'SELECTed_box=modules&set=payment'),
+                     'children' => array(array('title' => BOX_MODULES_PAYMENT, 'link' => owpLink(FILENAME_MODULES, 'SELECTed_box=modules&set=payment')),
+                                         array('title' => BOX_MODULES_SHIPPING, 'link' => owpLink(FILENAME_MODULES, 'SELECTed_box=modules&set=shipping')))),
                array('title' => BOX_HEADING_CATALOG,
                      'image' => 'catalog.gif',
-                     'href' => owpLink(FILENAME_CATEGORIES, 'selected_box=catalog'),
-                     'children' => array(array('title' => CATALOG_CONTENTS, 'link' => owpLink(FILENAME_CATEGORIES, 'selected_box=catalog')),
-                                         array('title' => BOX_CATALOG_MANUFACTURERS, 'link' => owpLink(FILENAME_MANUFACTURERS, 'selected_box=catalog')))),
+                     'href' => owpLink(FILENAME_CATEGORIES, 'SELECTed_box=catalog'),
+                     'children' => array(array('title' => CATALOG_CONTENTS, 'link' => owpLink(FILENAME_CATEGORIES, 'SELECTed_box=catalog')),
+                                         array('title' => BOX_CATALOG_MANUFACTURERS, 'link' => owpLink(FILENAME_MANUFACTURERS, 'SELECTed_box=catalog')))),
                array('title' => BOX_HEADING_LOCALIZATION,
                      'image' => 'localization.gif',
-                     'href' => owpLink(FILENAME_CURRENCIES, 'selected_box=localization'),
-                     'children' => array(array('title' => BOX_LOCALIZATION_CURRENCIES, 'link' => owpLink(FILENAME_CURRENCIES, 'selected_box=localization')),
-                                         array('title' => BOX_LOCALIZATION_LANGUAGES, 'link' => owpLink(FILENAME_LANGUAGES, 'selected_box=localization')))),
+                     'href' => owpLink(FILENAME_CURRENCIES, 'SELECTed_box=localization'),
+                     'children' => array(array('title' => BOX_LOCALIZATION_CURRENCIES, 'link' => owpLink(FILENAME_CURRENCIES, 'SELECTed_box=localization')),
+                                         array('title' => BOX_LOCALIZATION_LANGUAGES, 'link' => owpLink(FILENAME_LANGUAGES, 'SELECTed_box=localization')))),
                array('title' => BOX_HEADING_REPORTS,
                      'image' => 'reports.gif',
-                     'href' => owpLink(FILENAME_STATS_PRODUCTS_PURCHASED, 'selected_box=reports'),
-                     'children' => array(array('title' => REPORTS_PRODUCTS, 'link' => owpLink(FILENAME_STATS_PRODUCTS_PURCHASED, 'selected_box=reports')),
-                                         array('title' => REPORTS_ORDERS, 'link' => owpLink(FILENAME_STATS_CUSTOMERS, 'selected_box=reports')))),
+                     'href' => owpLink(FILENAME_STATS_PRODUCTS_PURCHASED, 'SELECTed_box=reports'),
+                     'children' => array(array('title' => REPORTS_PRODUCTS, 'link' => owpLink(FILENAME_STATS_PRODUCTS_PURCHASED, 'SELECTed_box=reports')),
+                                         array('title' => REPORTS_ORDERS, 'link' => owpLink(FILENAME_STATS_CUSTOMERS, 'SELECTed_box=reports')))),
                array('title' => BOX_HEADING_TOOLS,
                      'image' => 'tools.gif',
-                     'href' => owpLink($owpFilename['backup'], 'selected_box=tools'),
-                     'children' => array(array('title' => TOOLS_BACKUP, 'link' => owpLink($owpFilename['backup'], 'selected_box=tools')),
-                                         array('title' => TOOLS_BANNERS, 'link' => owpLink(FILENAME_BANNER_MANAGER, 'selected_box=tools')),
-                                         array('title' => TOOLS_FILES, 'link' => owpLink($owpFilename['file_manager'], 'selected_box=tools')))));
+                     'href' => owpLink($owpFilename['backup'], 'SELECTed_box=tools'),
+                     'children' => array(array('title' => TOOLS_BACKUP, 'link' => owpLink($owpFilename['backup'], 'SELECTed_box=tools')),
+                                         array('title' => TOOLS_BANNERS, 'link' => owpLink(FILENAME_BANNER_MANAGER, 'SELECTed_box=tools')),
+                                         array('title' => TOOLS_FILES, 'link' => owpLink($owpFilename['file_manager'], 'SELECTed_box=tools')))));
 
   $languages = tep_get_languages();
   $languages_array = array();
@@ -107,7 +107,7 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
         <td><table border="0" width="600" height="440" cellspacing="0" cellpadding="0">
           <tr bgcolor="#ffffff" height="50">
             <td height="50"><?php echo owpImage(OWP_INCLUDES_DIR . 'oscommerce.gif', 'osCommerce', '204', '50'); ?></td>
-            <td align="right" class="text" nowrap><?php echo '<a href="' . owpLink(FILENAME_DEFAULT) . '">' . HEADER_TITLE_ADMINISTRATION . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="' . tep_catalog_href_link() . '">' . HEADER_TITLE_ONLINE_CATALOG . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.oscommerce.com" target="_blank">' . HEADER_TITLE_SUPPORT_SITE . '</a>'; ?>&nbsp;&nbsp;</td>
+            <td align="right" class="text" nowrap><?php echo '<a href="' . owpLink($owpFilename['index']) . '">' . HEADER_TITLE_ADMINISTRATION . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="' . tep_catalog_href_link() . '">' . HEADER_TITLE_ONLINE_CATALOG . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.oscommerce.com" target="_blank">' . HEADER_TITLE_SUPPORT_SITE . '</a>'; ?>&nbsp;&nbsp;</td>
           </tr>
           <tr bgcolor="#080381">
             <td colspan="2"><table border="0" width="460" height="390" cellspacing="0" cellpadding="2">
@@ -138,11 +138,11 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
   echo '<br>';
 
   $orders_contents = '';
-  $orders_status_query = tep_db_query("select orders_status_name, orders_status_id from " . TABLE_ORDERS_STATUS . " where language_id = '" . $languages_id . "'");
+  $orders_status_query = tep_db_query("SELECT orders_status_name, orders_status_id FROM " . TABLE_ORDERS_STATUS . " WHERE language_id = '" . $languages_id . "'");
   while ($orders_status = tep_db_fetch_array($orders_status_query)) {
-    $orders_pending_query = tep_db_query("select count(*) as count from " . TABLE_ORDERS . " where orders_status = '" . $orders_status['orders_status_id'] . "'");
+    $orders_pending_query = tep_db_query("SELECT count(*) as count FROM " . TABLE_ORDERS . " WHERE orders_status = '" . $orders_status['orders_status_id'] . "'");
     $orders_pending = tep_db_fetch_array($orders_pending_query);
-    $orders_contents .= '<a href="' . owpLink(FILENAME_ORDERS, 'selected_box=customers&status=' . $orders_status['orders_status_id']) . '">' . $orders_status['orders_status_name'] . '</a>: ' . $orders_pending['count'] . '<br>';
+    $orders_contents .= '<a href="' . owpLink(FILENAME_ORDERS, 'SELECTed_box=customers&status=' . $orders_status['orders_status_id']) . '">' . $orders_status['orders_status_name'] . '</a>: ' . $orders_pending['count'] . '<br>';
   }
   $orders_contents = substr($orders_contents, 0, -4);
 
@@ -160,11 +160,11 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
 
   echo '<br>';
 
-  $customers_query = tep_db_query("select count(*) as count from " . TABLE_CUSTOMERS);
+  $customers_query = tep_db_query("SELECT count(*) as count FROM " . TABLE_CUSTOMERS);
   $customers = tep_db_fetch_array($customers_query);
-  $products_query = tep_db_query("select count(*) as count from " . TABLE_PRODUCTS . " where products_status = '1'");
+  $products_query = tep_db_query("SELECT count(*) as count FROM " . TABLE_PRODUCTS . " WHERE products_status = '1'");
   $products = tep_db_fetch_array($products_query);
-  $reviews_query = tep_db_query("select count(*) as count from " . TABLE_REVIEWS);
+  $reviews_query = tep_db_query("SELECT count(*) as count FROM " . TABLE_REVIEWS);
   $reviews = tep_db_fetch_array($reviews_query);
 
   $heading = array();
