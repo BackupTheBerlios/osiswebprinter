@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: config-old.php,v 1.2 2003/04/02 02:03:32 r23 Exp $
+   $Id: config-old.php,v 1.3 2003/04/20 06:45:10 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -26,6 +26,20 @@
 // OWP Physical Path
 // Physical path to your main OWP directory WITHOUT trailing slash
   define('OWP_ROOT_PATH', '/path/to/owp/directory');
+  
+  define('OWP_IMAGES_DIR', 'images/');
+  define('OWP_ICONS_DIR', OWP_IMAGES_DIR . 'icons/');
+  
+  define('OWP_INCLUDES_DIR', 'includes/'); 
+  define('OWP_BOXES_DIR', OWP_INCLUDES_DIR . 'boxes/');
+  define('OWP_CLASSES_DIR', OWP_INCLUDES_DIR . 'classes/');
+  define('OWP_FUNCTIONS_DIR', OWP_INCLUDES_DIR . 'functions/');
+  define('OWP_LANGUAGES_DIR', OWP_INCLUDES_DIR . 'language/');
+  define('OWP_MODULES_DIR', OWP_INCLUDES_DIR . 'modules/');
+
+  define('OWP_ADODB_DIR', OWP_INCLUDES_DIR . 'adodb/');
+  define('OWP_MAILER_DIR', OWP_INCLUDES_DIR . 'phpmailer/');
+  define('OWP_PDF_DIR', OWP_INCLUDES_DIR . 'pfd/');
 
 // define our database connection
   define('OWP_DB_TYPE', '');

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletters.php,v 1.7 2003/04/19 21:36:24 r23 Exp $
+   $Id: newsletters.php,v 1.8 2003/04/20 06:46:43 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -113,7 +113,7 @@
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF">
 <div id="spiffycalendar" class="text"></div>
 <!-- header //-->
-<?php require(DIR_WS_INCLUDES . 'header.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'header.php'); ?>
 <!-- header_eof //-->
 
 <!-- body //-->
@@ -121,7 +121,7 @@
   <tr>
     <td width="<?php echo BOX_WIDTH; ?>" valign="top"><table border="0" width="<?php echo BOX_WIDTH; ?>" cellspacing="1" cellpadding="1" class="columnLeft">
 <!-- left_navigation //-->
-<?php require(DIR_WS_INCLUDES . 'column_left.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'column_left.php'); ?>
 <!-- left_navigation_eof //-->
     </table></td>
 <!-- body_text //-->
@@ -153,9 +153,9 @@
 
     $file_extension = substr($PHP_SELF, strrpos($PHP_SELF, '.'));
     $directory_array = array();
-    if ($dir = dir(DIR_WS_MODULES . 'newsletters/')) {
+    if ($dir = dir(OWP_MODULES_DIR . 'newsletters/')) {
       while ($file = $dir->read()) {
-        if (!is_dir(DIR_WS_MODULES . 'newsletters/' . $file)) {
+        if (!is_dir(OWP_MODULES_DIR . 'newsletters/' . $file)) {
           if (substr($file, strrpos($file, '.')) == $file_extension) {
             $directory_array[] = $file;
           }
@@ -231,8 +231,8 @@
 
     $nInfo = new objectInfo($newsletter);
 
-    include(DIR_WS_LANGUAGES . $language . '/modules/newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
-    include(DIR_WS_MODULES . 'newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
+    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
+    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
     $module_name = $nInfo->module;
     $module = new $module_name($nInfo->title, $nInfo->content);
 ?>
@@ -248,8 +248,8 @@
 
     $nInfo = new objectInfo($newsletter);
 
-    include(DIR_WS_LANGUAGES . $language . '/modules/newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
-    include(DIR_WS_MODULES . 'newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
+    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
+    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
     $module_name = $nInfo->module;
     $module = new $module_name($nInfo->title, $nInfo->content);
 ?>
@@ -265,15 +265,15 @@
 
     $nInfo = new objectInfo($newsletter);
 
-    include(DIR_WS_LANGUAGES . $language . '/modules/newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
-    include(DIR_WS_MODULES . 'newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
+    include(OWP_LANGUAGES_DIR . $language . '/modules/newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
+    include(OWP_MODULES_DIR . 'newsletters/' . $nInfo->module . substr($PHP_SELF, strrpos($PHP_SELF, '.')));
     $module_name = $nInfo->module;
     $module = new $module_name($nInfo->title, $nInfo->content);
 ?>
       <tr>
         <td><table border="0" cellspacing="0" cellpadding="2">
           <tr>
-            <td class="main" valign="middle"><?php echo tep_image(DIR_WS_IMAGES . 'ani_send_email.gif', IMAGE_ANI_SEND_EMAIL); ?></td>
+            <td class="main" valign="middle"><?php echo tep_image(OWP_INCLUDES_DIR . 'ani_send_email.gif', IMAGE_ANI_SEND_EMAIL); ?></td>
             <td class="main" valign="middle"><b><?php echo TEXT_PLEASE_WAIT; ?></b></td>
           </tr>
         </table></td>
@@ -325,12 +325,12 @@
         echo '                  <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nID=' . $newsletters['newsletters_id']) . '\'">' . "\n";
       }
 ?>
-                <td class="dataTableContent"><?php echo '<a href="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nID=' . $newsletters['newsletters_id'] . '&action=preview') . '">' . tep_image(DIR_WS_ICONS . 'preview.gif', ICON_PREVIEW) . '</a>&nbsp;' . $newsletters['title']; ?></td>
+                <td class="dataTableContent"><?php echo '<a href="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nID=' . $newsletters['newsletters_id'] . '&action=preview') . '">' . tep_image(OWP_ICONS_DIR . 'preview.gif', ICON_PREVIEW) . '</a>&nbsp;' . $newsletters['title']; ?></td>
                 <td class="dataTableContent" align="right"><?php echo number_format($newsletters['content_length']) . ' bytes'; ?></td>
                 <td class="dataTableContent" align="right"><?php echo $newsletters['module']; ?></td>
-                <td class="dataTableContent" align="center"><?php if ($newsletters['status'] == '1') { echo tep_image(DIR_WS_ICONS . 'tick.gif', ICON_TICK); } else { echo tep_image(DIR_WS_ICONS . 'cross.gif', ICON_CROSS); } ?></td>
-                <td class="dataTableContent" align="center"><?php if ($newsletters['locked'] > 0) { echo tep_image(DIR_WS_ICONS . 'locked.gif', ICON_LOCKED); } else { echo tep_image(DIR_WS_ICONS . 'unlocked.gif', ICON_UNLOCKED); } ?></td>
-                <td class="dataTableContent" align="right"><?php if ( (is_object($nInfo)) && ($newsletters['newsletters_id'] == $nInfo->newsletters_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nID=' . $newsletters['newsletters_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" align="center"><?php if ($newsletters['status'] == '1') { echo tep_image(OWP_ICONS_DIR . 'tick.gif', ICON_TICK); } else { echo tep_image(OWP_ICONS_DIR . 'cross.gif', ICON_CROSS); } ?></td>
+                <td class="dataTableContent" align="center"><?php if ($newsletters['locked'] > 0) { echo tep_image(OWP_ICONS_DIR . 'locked.gif', ICON_LOCKED); } else { echo tep_image(OWP_ICONS_DIR . 'unlocked.gif', ICON_UNLOCKED); } ?></td>
+                <td class="dataTableContent" align="right"><?php if ( (is_object($nInfo)) && ($newsletters['newsletters_id'] == $nInfo->newsletters_id) ) { echo tep_image(OWP_INCLUDES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nID=' . $newsletters['newsletters_id']) . '">' . tep_image(OWP_INCLUDES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
     }
@@ -396,9 +396,9 @@
 <!-- body_eof //-->
 
 <!-- footer //-->
-<?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'footer.php'); ?>
 <!-- footer_eof //-->
 <br>
 </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'nice_exit.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'nice_exit.php'); ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: whos_online.php,v 1.6 2003/04/19 21:36:24 r23 Exp $
+   $Id: whos_online.php,v 1.7 2003/04/20 06:48:05 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -26,7 +26,7 @@
 
   require('includes/system.php');
 
-  require(DIR_WS_CLASSES . 'currencies.php');
+  require(OWP_CLASSES_DIR . 'currencies.php');
   $currencies = new currencies();
 
 // remove entries that have expired
@@ -41,7 +41,7 @@
 </head>
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF">
 <!-- header //-->
-<?php require(DIR_WS_INCLUDES . 'header.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'header.php'); ?>
 <!-- header_eof //-->
 
 <!-- body //-->
@@ -49,7 +49,7 @@
   <tr>
     <td width="<?php echo BOX_WIDTH; ?>" valign="top"><table border="0" width="<?php echo BOX_WIDTH; ?>" cellspacing="1" cellpadding="1" class="columnLeft">
 <!-- left_navigation //-->
-<?php require(DIR_WS_INCLUDES . 'column_left.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'column_left.php'); ?>
 <!-- left_navigation_eof //-->
     </table></td>
 <!-- body_text //-->
@@ -173,9 +173,9 @@
 <!-- body_eof //-->
 
 <!-- footer //-->
-<?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'footer.php'); ?>
 <!-- footer_eof //-->
 <br>
 </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'nice_exit.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'nice_exit.php'); ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: configuration.php,v 1.7 2003/04/19 21:36:24 r23 Exp $
+   $Id: configuration.php,v 1.8 2003/04/20 06:45:10 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -49,7 +49,7 @@
 </head>
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF" onload="SetFocus();">
 <!-- header //-->
-<?php require(DIR_WS_INCLUDES . 'header.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'header.php'); ?>
 <!-- header_eof //-->
 
 <!-- body //-->
@@ -57,7 +57,7 @@
   <tr>
     <td width="<?php echo BOX_WIDTH; ?>" valign="top"><table border="0" width="<?php echo BOX_WIDTH; ?>" cellspacing="1" cellpadding="1" class="columnLeft">
 <!-- left_navigation //-->
-<?php require(DIR_WS_INCLUDES . 'column_left.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'column_left.php'); ?>
 <!-- left_navigation_eof //-->
     </table></td>
 <!-- body_text //-->
@@ -87,7 +87,7 @@
       if (ereg('->', $use_function)) {
         $class_method = explode('->', $use_function);
         if (!is_object(${$class_method[0]})) {
-          include(DIR_WS_CLASSES . $class_method[0] . '.php');
+          include(OWP_CLASSES_DIR . $class_method[0] . '.php');
           ${$class_method[0]} = new $class_method[0]();
         }
         $cfgValue = tep_call_function($class_method[1], $configuration['configuration_value'], ${$class_method[0]});
@@ -114,7 +114,7 @@
 ?>
                 <td class="dataTableContent"><?php echo $configuration['configuration_title']; ?></td>
                 <td class="dataTableContent"><?php echo htmlspecialchars($cfgValue); ?></td>
-                <td class="dataTableContent" align="right"><?php if ( (is_object($cInfo)) && ($configuration['configuration_id'] == $cInfo->configuration_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . tep_href_link(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $configuration['configuration_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" align="right"><?php if ( (is_object($cInfo)) && ($configuration['configuration_id'] == $cInfo->configuration_id) ) { echo tep_image(OWP_INCLUDES_DIR . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . tep_href_link(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $configuration['configuration_id']) . '">' . tep_image(OWP_INCLUDES_DIR . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
   }
@@ -169,9 +169,9 @@
 <!-- body_eof //-->
 
 <!-- footer //-->
-<?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'footer.php'); ?>
 <!-- footer_eof //-->
 <br>
 </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'nice_exit.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'nice_exit.php'); ?>

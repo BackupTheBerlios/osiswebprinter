@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: html_output.php,v 1.2 2003/04/19 09:08:44 r23 Exp $
+   $Id: html_output.php,v 1.3 2003/04/20 06:46:43 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -100,19 +100,19 @@
   function tep_image_submit($image, $alt, $params = '') {
     global $language;
 
-    return '<input type="image" src="' . DIR_WS_LANGUAGES . $language . '/images/buttons/' . $image . '" border="0" alt="' . $alt . '"' . (($params) ? ' ' . $params : '') . '>';
+    return '<input type="image" src="' . OWP_LANGUAGES_DIR . $language . '/images/buttons/' . $image . '" border="0" alt="' . $alt . '"' . (($params) ? ' ' . $params : '') . '>';
   }
 
 ////
 // Draw a 1 pixel black line
   function tep_black_line() {
-    return tep_image(DIR_WS_IMAGES . 'pixel_black.gif', '', '100%', '1');
+    return tep_image(OWP_INCLUDES_DIR . 'pixel_black.gif', '', '100%', '1');
   }
 
 ////
 // Output a separator either through whitespace, or with an image
   function tep_draw_separator($image = 'pixel_black.gif', $width = '100%', $height = '1') {
-    return tep_image(DIR_WS_IMAGES . $image, '', $width, $height);
+    return tep_image(OWP_INCLUDES_DIR . $image, '', $width, $height);
   }
 
 ////
@@ -120,7 +120,7 @@
   function tep_image_button($image, $alt = '', $params = '') {
     global $language;
 
-    return tep_image(DIR_WS_LANGUAGES . $language . '/images/buttons/' . $image, $alt, '', '', $params);
+    return tep_image(OWP_LANGUAGES_DIR . $language . '/images/buttons/' . $image, $alt, '', '', $params);
   }
 
 ////

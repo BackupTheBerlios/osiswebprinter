@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.6 2003/04/19 21:36:24 r23 Exp $
+   $Id: index.php,v 1.7 2003/04/20 06:46:43 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -95,7 +95,7 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
       <tr bgcolor="#000000">
         <td><table border="0" width="600" height="440" cellspacing="0" cellpadding="0">
           <tr bgcolor="#ffffff" height="50">
-            <td height="50"><?php echo tep_image(DIR_WS_IMAGES . 'oscommerce.gif', 'osCommerce', '204', '50'); ?></td>
+            <td height="50"><?php echo tep_image(OWP_INCLUDES_DIR . 'oscommerce.gif', 'osCommerce', '204', '50'); ?></td>
             <td align="right" class="text" nowrap><?php echo '<a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . HEADER_TITLE_ADMINISTRATION . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="' . tep_catalog_href_link() . '">' . HEADER_TITLE_ONLINE_CATALOG . '</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.oscommerce.com" target="_blank">' . HEADER_TITLE_SUPPORT_SITE . '</a>'; ?>&nbsp;&nbsp;</td>
           </tr>
           <tr bgcolor="#080381">
@@ -177,10 +177,10 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
   if (getenv('HTTPS') == 'on') {
     $size = ((getenv('SSL_CIPHER_ALGKEYSIZE')) ? getenv('SSL_CIPHER_ALGKEYSIZE') . '-bit' : '<i>' . BOX_CONNECTION_UNKNOWN . '</i>');
     $contents[] = array('params' => 'class="infoBox"',
-                        'text' => tep_image(DIR_WS_ICONS . 'locked.gif', ICON_LOCKED, '', '', 'align="right"') . sprintf(BOX_CONNECTION_PROTECTED, $size));
+                        'text' => tep_image(OWP_ICONS_DIR . 'locked.gif', ICON_LOCKED, '', '', 'align="right"') . sprintf(BOX_CONNECTION_PROTECTED, $size));
   } else {
     $contents[] = array('params' => 'class="infoBox"',
-                        'text' => tep_image(DIR_WS_ICONS . 'unlocked.gif', ICON_UNLOCKED, '', '', 'align="right"') . BOX_CONNECTION_UNPROTECTED);
+                        'text' => tep_image(OWP_ICONS_DIR . 'unlocked.gif', ICON_UNLOCKED, '', '', 'align="right"') . BOX_CONNECTION_UNPROTECTED);
   }
 
   $box = new box;
@@ -209,7 +209,7 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
 
     echo '                    <td><table border="0" cellspacing="0" cellpadding="2">' . "\n" .
          '                      <tr>' . "\n" .
-         '                        <td><a href="' . $cat[$i]['href'] . '">' . tep_image(DIR_WS_IMAGES . 'categories/' . $cat[$i]['image'], $cat[$i]['title'], '32', '32') . '</a></td>' . "\n" .
+         '                        <td><a href="' . $cat[$i]['href'] . '">' . tep_image(OWP_INCLUDES_DIR . 'categories/' . $cat[$i]['image'], $cat[$i]['title'], '32', '32') . '</a></td>' . "\n" .
          '                        <td><table border="0" cellspacing="0" cellpadding="2">' . "\n" .
          '                          <tr>' . "\n" .
          '                            <td class="main"><a href="' . $cat[$i]['href'] . '" class="main">' . $cat[$i]['title'] . '</a></td>' . "\n" .
@@ -242,11 +242,11 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
         </table></td>
       </tr>
       <tr>
-        <td><?php require(DIR_WS_INCLUDES . 'footer.php'); ?></td>
+        <td><?php require(OWP_INCLUDES_DIR . 'footer.php'); ?></td>
       </tr>
     </table></td>
   </tr>
 </table>
 </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'nice_exit.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'nice_exit.php'); ?>

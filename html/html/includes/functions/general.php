@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.2 2003/04/19 09:08:44 r23 Exp $
+   $Id: general.php,v 1.3 2003/04/20 06:46:43 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -228,7 +228,7 @@
 
   function tep_info_image($image, $alt, $width = '', $height = '') {
     if ( ($image) && (file_exists(DIR_FS_CATALOG_IMAGES . $image)) ) {
-      $image = tep_image(DIR_WS_CATALOG_IMAGES . $image, $alt, $width, $height);
+      $image = tep_image(OWP_IMAGES_DIR . $image, $alt, $width, $height);
     } else {
       $image = TEXT_IMAGE_NONEXISTENT;
     }
@@ -455,7 +455,7 @@
   }
 
   function tep_get_languages() {
-    $languages_query = tep_db_query("select languages_id, name, code, image, directory from " . TABLE_LANGUAGES . " order by sort_order");
+  #  $languages_query = tep_db_query("select languages_id, name, code, image, directory from " . TABLE_LANGUAGES . " order by sort_order");
     while ($languages = tep_db_fetch_array($languages_query)) {
       $languages_array[] = array('id' => $languages['languages_id'],
                                  'name' => $languages['name'],
@@ -743,29 +743,6 @@
   }
 
 ////
-// Retreive server information
-  function tep_get_system_information() {
-    global $HTTP_SERVER_VARS;
-
-    $db_query = tep_db_query("select now() as datetime");
-    $db = tep_db_fetch_array($db_query);
-
-    list($system, $host, $kernel) = preg_split('/[\s,]+/', @exec('uname -a'), 5);
-
-    return array('date' => tep_datetime_short(date('Y-m-d H:i:s')),
-                 'system' => $system,
-                 'kernel' => $kernel,
-                 'host' => $host,
-                 'ip' => gethostbyname($host),
-                 'uptime' => @exec('uptime'),
-                 'http_server' => $HTTP_SERVER_VARS['SERVER_SOFTWARE'],
-                 'php' => PHP_VERSION,
-                 'zend' => (function_exists('zend_version') ? zend_version() : ''),
-                 'db_server' => DB_SERVER,
-                 'db_ip' => gethostbyname(DB_SERVER),
-                 'db_version' => 'MySQL ' . (function_exists('mysql_get_server_info') ? mysql_get_server_info() : ''),
-                 'db_date' => tep_datetime_short($db['datetime']));
-  }
 
   function tep_get_uploaded_file($filename) {
     if (isset($_FILES[$filename])) {
@@ -1096,39 +1073,7 @@
     return $temp;
   }
 
-////
-// Output the tax percentage with optional padded decimals
-  function tep_display_tax_value($value, $padding = TAX_DECIMAL_PLACES) {
-    if (strpos($value, '.')) {
-      $loop = true;
-      while ($loop) {
-        if (substr($value, -1) == '0') {
-          $value = substr($value, 0, -1);
-        } else {
-          $loop = false;
-          if (substr($value, -1) == '.') {
-            $value = substr($value, 0, -1);
-          }
-        }
-      }
-    }
 
-    if ($padding > 0) {
-      if ($decimal_pos = strpos($value, '.')) {
-        $decimals = strlen(substr($value, ($decimal_pos+1)));
-        for ($i=$decimals; $i<$padding; $i++) {
-          $value .= '0';
-        }
-      } else {
-        $value .= '.';
-        for ($i=0; $i<$padding; $i++) {
-          $value .= '0';
-        }
-      }
-    }
-
-    return $value;
-  }
 
   function tep_mail($to_name, $to_email_address, $email_subject, $email_text, $from_email_name, $from_email_address) {
     if (SEND_EMAILS != 'true') return false;
@@ -1149,36 +1094,6 @@
     $message->send($to_name, $to_email_address, $from_email_name, $from_email_address, $email_subject);
   }
 
-  function tep_get_tax_class_title($tax_class_id) {
-    if ($tax_class_id == '0') {
-      return TEXT_NONE;
-    } else {
-      $classes_query = tep_db_query("select tax_class_title from " . TABLE_TAX_CLASS . " where tax_class_id = '" . $tax_class_id . "'");
-      $classes = tep_db_fetch_array($classes_query);
-
-      return $classes['tax_class_title'];
-    }
-  }
-
-  function tep_banner_image_extension() {
-    if (function_exists('imagetypes')) {
-      if (imagetypes() & IMG_PNG) {
-        return 'png';
-      } elseif (imagetypes() & IMG_JPG) {
-        return 'jpg';
-      } elseif (imagetypes() & IMG_GIF) {
-        return 'gif';
-      }
-    } elseif (function_exists('imagecreatefrompng') && function_exists('imagepng')) {
-      return 'png';
-    } elseif (function_exists('imagecreatefromjpeg') && function_exists('imagejpeg')) {
-      return 'jpg';
-    } elseif (function_exists('imagecreatefromgif') && function_exists('imagegif')) {
-      return 'gif';
-    }
-
-    return false;
-  }
 
 ////
 // Wrapper function for round() for php3 compatibility
@@ -1191,52 +1106,6 @@
     }
   }
 
-////
-// Add tax to a products price
-  function tep_add_tax($price, $tax) {
-    global $currencies;
-
-    if (DISPLAY_PRICE_WITH_TAX == true) {
-      return tep_round($price, $currencies->currencies[DEFAULT_CURRENCY]['decimal_places']) + tep_calculate_tax($price, $tax);
-    } else {
-      return tep_round($price, $currencies->currencies[DEFAULT_CURRENCY]['decimal_places']);
-    }
-  }
-
-// Calculates Tax rounding the result
-  function tep_calculate_tax($price, $tax) {
-    global $currencies;
-
-    return tep_round($price * $tax / 100, $currencies->currencies[DEFAULT_CURRENCY]['decimal_places']);
-  }
-
-////
-// Returns the tax rate for a zone / class
-// TABLES: tax_rates, zones_to_geo_zones
-  function tep_get_tax_rate($class_id, $country_id = -1, $zone_id = -1) {
-    global $customer_zone_id, $customer_country_id;
-
-    if ( ($country_id == -1) && ($zone_id == -1) ) {
-      if (!tep_session_is_registered('customer_id')) {
-        $country_id = STORE_COUNTRY;
-        $zone_id = STORE_ZONE;
-      } else {
-        $country_id = $customer_country_id;
-        $zone_id = $customer_zone_id;
-      }
-    }
-
-    $tax_query = tep_db_query("select SUM(tax_rate) as tax_rate from " . TABLE_TAX_RATES . " tr left join " . TABLE_ZONES_TO_GEO_ZONES . " za ON tr.tax_zone_id = za.geo_zone_id left join " . TABLE_GEO_ZONES . " tz ON tz.geo_zone_id = tr.tax_zone_id WHERE (za.zone_country_id IS NULL OR za.zone_country_id = '0' OR za.zone_country_id = '" . $country_id . "') AND (za.zone_id IS NULL OR za.zone_id = '0' OR za.zone_id = '" . $zone_id . "') AND tr.tax_class_id = '" . $class_id . "' GROUP BY tr.tax_priority");
-    if (tep_db_num_rows($tax_query)) {
-      $tax_multiplier = 0;
-      while ($tax = tep_db_fetch_array($tax_query)) {
-        $tax_multiplier += $tax['tax_rate'];
-      }
-      return $tax_multiplier;
-    } else {
-      return 0;
-    }
-  }
 
   function tep_call_function($function, $parameter, $object = '') {
     if ($object == '') {
@@ -1247,28 +1116,29 @@
       return call_user_func(array($object, $function), $parameter);
     }
   }
+  
+// Retreive server information
+  function owpGetSystemInformation() {
+    global $HTTP_SERVER_VARS;
 
-  function tep_get_zone_class_title($zone_class_id) {
-    if ($zone_class_id == '0') {
-      return TEXT_NONE;
-    } else {
-      $classes_query = tep_db_query("select geo_zone_name from " . TABLE_GEO_ZONES . " where geo_zone_id = '" . $zone_class_id . "'");
-      $classes = tep_db_fetch_array($classes_query);
+ #   $db_query = tep_db_query("select now() as datetime");
+ #   $db = tep_db_fetch_array($db_query);
 
-      return $classes['geo_zone_name'];
-    }
+    list($system, $host, $kernel) = preg_split('/[\s,]+/', @exec('uname -a'), 5);
+
+    return array('date' => tep_datetime_short(date('Y-m-d H:i:s')),
+                 'system' => $system,
+                 'kernel' => $kernel,
+                 'host' => $host,
+                 'ip' => gethostbyname($host),
+                 'uptime' => @exec('uptime'),
+                 'http_server' => $HTTP_SERVER_VARS['SERVER_SOFTWARE'],
+                 'php' => PHP_VERSION,
+                 'zend' => (function_exists('zend_version') ? zend_version() : ''),
+                 'db_server' => DB_SERVER,
+                 'db_ip' => gethostbyname(DB_SERVER),
+                 'db_version' => 'MySQL ' . (function_exists('mysql_get_server_info') ? mysql_get_server_info() : ''),
+                 'db_date' => tep_datetime_short($db['datetime']));
   }
 
-  function tep_cfg_pull_down_zone_classes($zone_class_id, $key = '') {
-    $name = (($key) ? 'configuration[' . $key . ']' : 'configuration_value');
-
-    $zone_class_array = array(array('id' => '0', 'text' => TEXT_NONE));
-    $zone_class_query = tep_db_query("select geo_zone_id, geo_zone_name from " . TABLE_GEO_ZONES . " order by geo_zone_name");
-    while ($zone_class = tep_db_fetch_array($zone_class_query)) {
-      $zone_class_array[] = array('id' => $zone_class['geo_zone_id'],
-                                  'text' => $zone_class['geo_zone_name']);
-    }
-
-    return tep_draw_pull_down_menu($name, $zone_class_array, $zone_class_id);
-  }
 ?>
