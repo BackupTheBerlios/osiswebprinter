@@ -1,14 +1,31 @@
 <?php
-/*
-  $Id: owp_whos_online.php,v 1.1 2003/04/29 16:52:25 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: owp_whos_online.php,v 1.2 2003/04/29 16:54:58 r23 Exp $
 
-  The Exchange Project - Community Made Shopping!
-  http://www.theexchangeproject.org
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: whos_online.php,v 1.5 2001/10/25 09:45:22 dgw_ 
+   ----------------------------------------------------------------------
+   The Exchange Project - Community Made Shopping!
+   http://www.theexchangeproject.org
 
-  Copyright (c) 2000,2001 The Exchange Project
+   Copyright (c) 2000,2001 The Exchange Project
+  
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Released under the GNU General Public License
-*/
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
   function tep_update_whos_online() {
     global $customer_id;
