@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_split_page_results.php,v 1.7 2003/04/24 06:03:13 r23 Exp $
+   $Id: owp_split_page_results.php,v 1.8 2003/04/25 07:10:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,6 +22,13 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
+// die classe ist für owp nicht geeigent
+// limit ist unbrauchbar für adbo
+// die string *untersuchungen* in 
+// dieser classe verhindern den
+// owp sql - style in
+// zones.php, countries.php usw.
+
   class splitPageResults {
     function splitPageResults(&$current_page_number, $max_rows_per_page, &$sql_query, &$query_num_rows) {
       GLOBAL $db;
@@ -29,7 +36,7 @@
       if (empty($current_page_number)) $current_page_number = 1;
 
       $pos_to = strlen($sql_query);
-      $pos_from = strpos($sql_query, ' from', 0);
+      $pos_from = strpos($sql_query, ' FROM', 0);
 
       $pos_group_by = strpos($sql_query, ' group by', $pos_from);
       if (($pos_group_by < $pos_to) && ($pos_group_by != false)) $pos_to = $pos_group_by;
@@ -49,8 +56,9 @@
       $offset = ($max_rows_per_page * ($current_page_number - 1));
       $sql_query .= " limit " . $offset . ", " . $max_rows_per_page;
 
-      $count_values = $db->Execute("select count(*) as total " . substr($sql_query, $pos_from, ($pos_to - $pos_from)));
+      $count_values = $db->Execute($sql);
       $query_num_rows = $count_values->fields['total'];
+      
     }
 
     function display_links($query_numrows, $max_rows_per_page, $max_page_links, $current_page_number, $parameters = '', $page_name = 'page') {
@@ -58,10 +66,10 @@
 
       if ($parameters != '') $parameters .= '&';
 
-// calculate number of pages needing links
+      // calculate number of pages needing links
       $num_pages = intval($query_numrows / $max_rows_per_page);
 
-// $num_pages now contains int of pages needed unless there is a remainder from division
+      // $num_pages now contains int of pages needed unless there is a remainder from division
       if ($query_numrows % $max_rows_per_page) $num_pages++; // has remainder so add one page
 
       $pages_array = array();
@@ -95,7 +103,7 @@
           }
         }
 
-        if (SID) $display_links .= owpDrawHiddenField(owpSessionName(), tep_session_id());
+        if (SID) $display_links .= owpDrawHiddenField(owpSessionName(), owpSessionID());
 
         $display_links .= '</form>';
       } else {
@@ -117,5 +125,13 @@
 
       return sprintf($text_output, $from_num, $to_num, $query_numrows);
     }
+  }
+  
+    function owpSessionID($sessID = '') {
+      if ($sessID != '') {
+        return session_id($sessID);
+      } else {
+        return session_id();
+      }
   }
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_message_stack.php,v 1.4 2003/04/20 07:07:07 r23 Exp $
+   $Id: owp_message_stack.php,v 1.5 2003/04/25 07:10:04 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -33,15 +33,19 @@
     var $size = 0;
 
     function messageStack() {
-      global $messageToStack;
+      global $_SESSION;
 
       $this->errors = array();
-
-      if (tep_session_is_registered('messageToStack')) {
-        for ($i=0; $i<sizeof($messageToStack); $i++) {
-          $this->add($messageToStack[$i]['text'], $messageToStack[$i]['type']);
+    
+      if (isset($_SESSION['messageToStack'])) {
+        for ($i=0; $i<sizeof($_SESSION['messageToStack']); $i++) {
+          $this->add($_SESSION['messageToStack'][$i]['text'], $_SESSION['messageToStack'][$i]['type']);
         }
-        tep_session_unregister('messageToStack');
+        if (phpversion() < '4.3.0') {
+          session_unregister('messageToStack');
+        } else {
+          unset($_SESSION['messageToStack']);
+        }
       }
     }
 
@@ -60,14 +64,13 @@
     }
 
     function add_session($message, $type = 'error') {
-      global $messageToStack;
+      global $_SESSION;
 
-      if (!tep_session_is_registered('messageToStack')) {
-        tep_session_register('messageToStack');
-        $messageToStack = array();
+      if (!isset($_SESSION['messageToStack'])) {
+        $_SESSION['messageToStack'] = array();
       }
 
-      $messageToStack[] = array('text' => $message, 'type' => $type);
+      $_SESSION['messageToStack'] = array('text' => $message, 'type' => $type);
     }
 
     function reset() {
