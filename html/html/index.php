@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.5 2003/04/19 09:13:25 r23 Exp $
+   $Id: index.php,v 1.6 2003/04/19 21:36:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -192,9 +192,9 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
                 <td width="460"><table border="0" width="460" height="390" cellspacing="0" cellpadding="2">
                   <tr>
                     <td colspan="2"><table border="0" width="100%" cellspacing="0" cellpadding="2">
-                      <tr><?php echo tep_draw_form('languages', 'index.php', '', 'get'); ?>
+                      <tr><?php # echo# tep_draw_form('languages', 'index.php', '', 'get'); ?>
                         <td class="heading"><?php echo HEADING_TITLE; ?></td>
-                        <td align="right"><?php echo tep_draw_pull_down_menu('language', $languages_array, ($_GET['language'] ? $_GET['language'] : DEFAULT_LANGUAGE), 'onChange="this.form.submit();"'); ?></td>
+                        <td align="right"><?php #echo tep_draw_pull_down_menu('language', $languages_array, ($_GET['language'] ? $_GET['language'] : DEFAULT_LANGUAGE), 'onChange="this.form.submit();"'); ?></td>
                       </form></tr>
                     </table></td>
                   </tr>
@@ -249,3 +249,4 @@ A.sub:hover { color: #dddddd; text-decoration: underline; }
 </table>
 </body>
 </html>
+<?php require(DIR_WS_INCLUDES . 'nice_exit.php'); ?>

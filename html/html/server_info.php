@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: server_info.php,v 1.4 2003/04/19 09:14:55 r23 Exp $
+   $Id: server_info.php,v 1.5 2003/04/19 21:36:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -24,7 +24,7 @@
 
   require('includes/system.php');
 
-  $system = tep_get_system_information();
+  $system = owpGetSystemInformation();
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -112,4 +112,4 @@
 <br>
 </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'application_bottom.php'); ?>
+<?php require(DIR_WS_INCLUDES . 'nice_exit.php'); ?>

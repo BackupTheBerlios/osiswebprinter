@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: file_manager.php,v 1.6 2003/04/19 09:13:25 r23 Exp $
+   $Id: file_manager.php,v 1.7 2003/04/19 21:36:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -25,7 +25,7 @@
   require('includes/system.php');
 
   if (!tep_session_is_registered('current_path')) {
-    $current_path = DIR_FS_DOCUMENT_ROOT;
+    $current_path = OWP_ROOT_PATH;
     tep_session_register('current_path');
   }
 
@@ -34,11 +34,11 @@
     tep_redirect(tep_href_link(FILENAME_FILE_MANAGER));
   }
 
-  if (strstr($current_path, '..')) $current_path = DIR_FS_DOCUMENT_ROOT;
+  if (strstr($current_path, '..')) $current_path = OWP_ROOT_PATH;
 
-  if (!is_dir($current_path)) $current_path = DIR_FS_DOCUMENT_ROOT;
+  if (!is_dir($current_path)) $current_path = OWP_ROOT_PATH;
 
-  if (!ereg('^' . DIR_FS_DOCUMENT_ROOT, $current_path)) $current_path = DIR_FS_DOCUMENT_ROOT;
+  if (!ereg('^' . OWP_ROOT_PATH, $current_path)) $current_path = OWP_ROOT_PATH;
 
   if ($_GET['action']) {
     switch ($_GET['action']) {
@@ -115,10 +115,10 @@
     }
   }
 
-  $in_directory = substr(substr(DIR_FS_DOCUMENT_ROOT, strrpos(DIR_FS_DOCUMENT_ROOT, '/')), 1);
+  $in_directory = substr(substr(OWP_ROOT_PATH, strrpos(OWP_ROOT_PATH, '/')), 1);
   $current_path_array = explode('/', $current_path);
-  $document_root_array = explode('/', DIR_FS_DOCUMENT_ROOT);
-  $goto_array = array(array('id' => DIR_FS_DOCUMENT_ROOT, 'text' => $in_directory));
+  $document_root_array = explode('/', OWP_ROOT_PATH);
+  $goto_array = array(array('id' => OWP_ROOT_PATH, 'text' => $in_directory));
   for ($i=0; $i<sizeof($current_path_array); $i++) {
     if ($current_path_array[$i] != $document_root_array[$i]) {
       $goto_array[] = array('id' => implode('/', tep_array_slice($current_path_array, 0, $i+1)), 'text' => $current_path_array[$i]);
@@ -198,7 +198,7 @@
     $contents = array();
     $dir = dir($current_path);
     while ($file = $dir->read()) {
-      if ( ($file != '.') && ($file != 'CVS') && ( ($file != '..') || ($current_path != DIR_FS_DOCUMENT_ROOT) ) ) {
+      if ( ($file != '.') && ($file != 'CVS') && ( ($file != '..') || ($current_path != OWP_ROOT_PATH) ) ) {
         $file_size = number_format(filesize($current_path . '/' . $file)) . ' bytes';
 
         $permissions = tep_get_file_permissions(fileperms($current_path . '/' . $file));
@@ -362,4 +362,4 @@
 <br>
 </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'application_bottom.php'); ?>
+<?php require(DIR_WS_INCLUDES . 'nice_exit.php'); ?>

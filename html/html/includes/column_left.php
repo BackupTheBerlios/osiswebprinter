@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: column_left.php,v 1.2 2003/04/19 09:08:44 r23 Exp $
+   $Id: column_left.php,v 1.3 2003/04/19 21:36:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,12 +22,8 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  require(DIR_WS_BOXES . 'configuration.php');
-  require(DIR_WS_BOXES . 'catalog.php');
-  require(DIR_WS_BOXES . 'modules.php');
-  require(DIR_WS_BOXES . 'customers.php');
-  require(DIR_WS_BOXES . 'taxes.php');
-  require(DIR_WS_BOXES . 'localization.php');
-  require(DIR_WS_BOXES . 'reports.php');
-  require(DIR_WS_BOXES . 'tools.php');
+  require(DIR_WS_BOXES . 'owp_configuration.php');
+  require(DIR_WS_BOXES . 'owp_customers.php');
+  require(DIR_WS_BOXES . 'owp_localization.php');
+  require(DIR_WS_BOXES . 'owp_tools.php');
 ?>
