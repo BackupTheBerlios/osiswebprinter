@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newinstall.php,v 1.11 2003/04/29 06:28:58 r23 Exp $
+   $Id: newinstall.php,v 1.12 2003/04/30 15:30:32 r23 Exp $
 
    OSIS GMBH
    http://www.osisnet.de/
@@ -114,7 +114,7 @@ function input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone
     if ($result === false) {
       echo '<br /><font class="owp-error">' .  $db->ErrorMsg() . NOTMADE . '</font>';
     } else {
-      echo '<br /><font class="owp-title">' . $prefix . '_administrators&nbsp;'. UPDATED . '</font>';
+      echo '<br /><font class="owp-title">' . $prefix . '_administrators_info&nbsp;'. UPDATED . '</font>';
     }
    
 }

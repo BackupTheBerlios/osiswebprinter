@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: file_manager.php,v 1.16 2003/04/29 06:24:52 r23 Exp $
+   $Id: file_manager.php,v 1.17 2003/04/30 15:29:12 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -36,7 +36,6 @@
   }
   if (!empty($_GET['goto'])) {
     $_SESSION['current_path'] = $_GET['goto'];
-    # owpRedirect(owpLink($owpFilename['file_manager']));
   }
   $current_path = $_SESSION['current_path'];
 

@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.4 2003/04/26 06:39:31 r23 Exp $
+   $Id: languages.php,v 1.5 2003/04/30 15:29:12 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -46,6 +46,16 @@ define('TEXT_INFO_HEADING_DELETE_LANGUAGE', 'Sprache l&ouml;schen');
 define('TEXT_DEFAULT', 'Standardsprache');
 define('TEXT_SET_DEFAULT', 'Standardsprache');
 define('ERROR_REMOVE_DEFAULT_LANGUAGE', 'Fehler: Die Standardsprache darf nicht gel&ouml;scht werden. Bitte definieren Sie eine neue Standardsprache und wiederholen Sie den Vorgang.');
+
+define('EMAIL_LANG_CVS', 'Sprachen im CSV-Format: ');
+define('EMAIL_GREET_MR', 'Sehr geehrter Herr ');
+define('EMAIL_GREET_MS', 'Sehr geehrte Frau ');
+define('EMAIL_CVS_INTRO', 'In der Anlage erhalten Sie die Sprachen in einer CSV Datei vom:');
+define('EMAIL_FTP_INFO', 'Name der Datei auf dem Server:');
+define('EMAIL_FOOT', 'Mit den besten Grüssen,' . "\n" .  OWP_NAME . "\n\n\n" . OWP_HTTP_SERVER . '/' . "\n\n");
+
+define('SUCCESS_CVS_LANG_SENT', 'Hinweis: eMail mit der CSV-Datei wurde versendet an: %s');
+
 
 define('ERROR_CSV_TEMP_DIRECTORY_NOT_WRITEABLE', 'Fehler: Das CSV-Dateiverzeichnis ist schreibgesch&uuml;tzt.');
 define('ERROR_CSV_TEMP_DIRECTORY_DOES_NOT_EXIST', 'Fehler: Das CSV-Dateiverzeichnis ist nicht vorhanden.');

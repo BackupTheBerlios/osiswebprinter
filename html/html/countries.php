@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: countries.php,v 1.7 2003/04/29 06:24:52 r23 Exp $
+   $Id: countries.php,v 1.8 2003/04/30 15:29:12 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -27,8 +27,11 @@
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
-  } 
- 
+  }
+  
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['countries']);
+  $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['countries'], '', 'NONSSL'));
+  
   if ($_GET['action']) {
     switch ($_GET['action']) {
       case 'insert':
@@ -71,9 +74,35 @@
         fclose($file);
 	
         if (CVS_SEND_MAIL == 'true') {
-	  // wir senden eine mail mit dem dateinamen $db_table_file an den user 
-        }
-	
+          $sql = "SELECT admin_gender, admin_firstname, admin_lastname, admin_email_address 
+                  FROM " . $owpDBTable['administrators'] . " 
+                  WHERE admin_id = '" . owpDBInput($_SESSION['user_id']) . "'";
+          $mail_query = $db->Execute($sql);
+          $mail_send_to = $mail_query->fields;
+          // Let's build a message object using the email class
+          $send_mail = new phpmailer();
+          $send_mail->From = OWP_OWNER_EMAIL_ADDRESS;
+          $send_mail->FromName = OWP_NAME;
+          $send_mail->Subject = EMAIL_COUNTRIES_CVS . strftime(DATE_FORMAT_LONG);
+          if ($mail_send_to['admin_gender'] == 'm') {
+            $body = EMAIL_GREET_MR . $mail_send_to['admin_lastname'] . ',' . "\n\n";
+          } else {
+            $body = EMAIL_GREET_MS . $mail_send_to['admin_lastname'] . ',' . "\n\n";
+          }    
+          $body .= EMAIL_CVS_INTRO . ' ' . strftime(DATE_FORMAT_LONG) . "\n\n";
+          $body .= EMAIL_FTP_INFO . "\n";
+          $body .= '         ' . $db_table_file . "\n\n";
+          $body .= EMAIL_FOOT; 
+   
+          $send_mail->Body = $body;
+          $send_mail->AddAddress($mail_send_to['admin_email_address'], $mail_send_to['admin_firstname'] . ' ' . $mail_send_to['admin_lastname']);
+          $send_mail->AddAttachment(OWP_CSV_TEMP . $db_table_file);
+          $send_mail->Send();
+         // Clear all addresses and attachments for next loop
+          $send_mail->ClearAddresses();
+          $send_mail->ClearAttachments();
+          $messageStack->add_session(sprintf(SUCCESS_CVS_COUNTRIES_SENT, $mail_send_to['admin_email_address']), 'notice');  
+	}
         // download
         if (CVS_DOWNLOAD == 'true') {
           $fp = fopen(OWP_CSV_TEMP . $db_table_file, 'r');     
@@ -87,15 +116,15 @@
 	  header('Expires: 0');
 	  header('Pragma: no-cache');
 	  echo $buffer;
-	} 
+	}
+	if (CVS_DELETE_FILE == 'true') {
+	  @unlink(OWP_CSV_TEMP . $db_table_file);
+	}
         owpRedirect(owpLink($owpFilename['countries'], 'page=' . $_GET['page']));
         break;
     }
   }
-  
-  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['countries']);
-  $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['countries'], '', 'NONSSL'));
-  
+    
   if (OWP_CSV_EXCEL == 'true') {
     $dir_ok = false;
     if (is_dir(owpGetLocalPath(OWP_CSV_TEMP))) {

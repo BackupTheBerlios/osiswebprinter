@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: password_forgotten.php,v 1.6 2003/04/30 07:15:27 r23 Exp $
+   $Id: password_forgotten.php,v 1.7 2003/04/30 15:30:32 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -49,7 +49,7 @@
       $email_text .= EMAIL_PASSWORD_INTRO;
       $email_text .= sprintf(EMAIL_PASSWORD_BODY, $newpass);
       $email_text .= EMAIL_PASSWORD_FOOT;               
-      owpMail($name, $check_admin['admin_email_address'], EMAIL_PASSWORD_SUBJECT, nl2br($email_text), OWP_OWNER, OWP_OWNER_EMAIL_ADDRESS);
+      owpMail($name, $check_admin['admin_email_address'], EMAIL_PASSWORD_SUBJECT, nl2br($email_text), OWP_NAME, OWP_EMAIL_ADDRESS);
       $messageStack->add_session(SUCCESS_PASSWORD_SENT, 'success');
       owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
     } else {

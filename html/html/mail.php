@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.9 2003/04/30 07:13:43 r23 Exp $
+   $Id: mail.php,v 1.10 2003/04/30 15:30:32 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -64,7 +64,6 @@
     $send_mail->From = $_POST['from_mail'];
     $send_mail->FromName = $_POST['from_name'];
     $send_mail->Subject = $subject;
-
     while ($mail = $mail_query->fields) {
       if ($mail['admin_gender'] == 'm') {
         $body = EMAIL_GREET_MR . $mail['admin_lastname'] . ',' . "\n\n";
@@ -73,6 +72,7 @@
       }    
       $body .= $message. "\n\n";
       $body .= EMAIL_FOOT; 
+      
       $send_mail->Body = $body;
       $send_mail->AddAddress($mail['admin_email_address'], $mail['admin_firstname'] . ' ' . $mail['admin_lastname']);
       $send_mail->Send();
@@ -100,7 +100,26 @@
   if ( ($_GET['action'] == 'preview') && ($_POST['from_mail'] == '') ) {
     $messageStack->add(ERROR_NO_FROM_MAIL, 'error');
   }
- 
+  
+  if ( ($_GET['action'] == 'preview') && ($_POST['user_email_address']) ) {
+    $breadcrumb->add(NAVBAR_TITLE, owpLink($owpFilename['mail']));
+    switch ($_POST['user_email_address']) {
+       case '***':
+         $mail_sent_to = TEXT_ALL_USER;
+         break;
+       case '**D':
+         $mail_sent_to = TEXT_NEWSLETTER_USER;
+         break;
+       default:
+         $sql = "SELECT admin_gender, admin_firstname, admin_lastname, admin_email_address 
+	                FROM " . $owpDBTable['administrators'] . " 
+	                WHERE admin_email_address = '" . owpDBInput($user_email_address) . "'";
+	 $mail_query = $db->Execute($sql);
+	 $mail = $mail_query->fields;
+         $mail_sent_to = $user_email_address;
+         break;
+    }
+  }
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -134,17 +153,6 @@
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
   if ( ($_GET['action'] == 'preview') && ($_POST['user_email_address']) ) {
-    switch ($_POST['user_email_address']) {
-      case '***':
-        $mail_sent_to = TEXT_ALL_USER;
-        break;
-      case '**D':
-        $mail_sent_to = TEXT_NEWSLETTER_USER;
-        break;
-      default:
-        $mail_sent_to = $_POST['user_email_address'];
-        break;
-    }
 ?>
           <tr><?php echo owpDrawForm('mail', $owpFilename['mail'], 'action=send_email_to_user'); ?>
             <td><table border="0" cellpadding="0" cellspacing="2">
@@ -153,32 +161,46 @@
               </tr>
               <tr>
                 <td class="smallText"><b><?php echo TEXT_USER; ?></b></td>
-                <td colspan="2" class="smallText">&nbsp;&nbsp;<?php echo $mail_sent_to; ?></td>
+                <td colspan="2" class="smallText"><?php echo $mail_sent_to; ?></td>
               </tr>
               <tr>
                 <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>            
               <tr>
                 <td class="smallText"><b><?php echo TEXT_FROM_NAME; ?></b></td>
-                <td colspan="2" class="smallText">&nbsp;&nbsp;<?php echo htmlspecialchars(stripslashes($_POST['from_name'])); ?></td>
+                <td colspan="2" class="smallText"><?php echo htmlspecialchars(stripslashes($_POST['from_name'])); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><b><?php echo TEXT_FROM_MAIL; ?></b></td>
-                <td colspan="2" class="smallText">&nbsp;&nbsp;<?php echo htmlspecialchars(stripslashes($_POST['from_mail'])); ?></td>
+                <td colspan="2" class="smallText"><?php echo htmlspecialchars(stripslashes($_POST['from_mail'])); ?></td>
               </tr>                            
               <tr>
                 <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><b><?php echo TEXT_SUBJECT; ?></b></td>
-                <td colspan="2" class="smallText">&nbsp;&nbsp;<?php echo htmlspecialchars(stripslashes($_POST['subject'])); ?></td>
+                <td colspan="2" class="smallText"><?php echo htmlspecialchars(stripslashes($_POST['subject'])); ?></td>
               </tr>
               <tr>
                 <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><b><?php echo TEXT_MESSAGE; ?></b></td>
-                <td colspan="2" class="smallText">&nbsp;&nbsp;<?php echo nl2br(htmlspecialchars(stripslashes($_POST['message']))); ?></td>
+                <td colspan="2" class="smallText">
+<?php 
+  if ($mail['admin_gender'] == 'm') {
+    echo EMAIL_GREET_MR . $mail['admin_lastname'] . ',<br /><br />';
+  } elseif ($mail['admin_gender'] == 'f') {
+    echo EMAIL_GREET_MS . $mail['admin_lastname'] . ',<br /><br />';
+  } else {
+    echo EMAIL_GREET_ALL . ',<br /><br />';
+  }
+  echo owpTextTool::wrap($message);
+  echo '<br ><br >';
+  $body = EMAIL_FOOT; 
+  $body = str_replace("\n","<br />",$body);      
+  echo $body; 
+?>              </td>
               </tr>
               <tr>
                 <td colspan="3"><?php echo owpTransLine('1', '10'); ?></td>

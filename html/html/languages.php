@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.16 2003/04/29 16:59:21 r23 Exp $
+   $Id: languages.php,v 1.17 2003/04/30 15:30:32 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -51,17 +51,6 @@
                         . $db->qstr($iso_639_1) . ','
                         . $db->qstr($sort_order) . ")";
       $db->Execute($sql);
-
-/*!
- ?     $insert_id = tep_db_insert_id();
-      // create additional categories_description records
-      $categories_query = $db->Execute("SELECT c.categories_id, cd.categories_name FROM " . $owpDBTable['categories'] . " c left join " . $owpDBTable['categories_description'] . " cd on c.categories_id = cd.categories_id where cd.language = '" . $languages_id . "'");
-      while ($categories = $categories_query->fields) {
-        $db->Execute("insert into " . $owpDBTable['categories_description'] . " (categories_id, language, categories_name) values ('" . $categories['categories_id'] . "', '" . tep_db_input($iso_639_2) . "', '" . tep_db_input($categories['categories_name']) . "')");
-        $categories_query->MoveNext();
-      }
-*/
-
       if ($_POST['default'] == 'on') {
         $db->Execute("UPDATE " . $owpDBTable['configuration'] . " 
 	                 SET configuration_value = " . $db->qstr($iso_639_2) . "
@@ -76,15 +65,13 @@
 	                     iso_639_2 = " . $db->qstr($iso_639_2) . ",
 	                     iso_639_1 = " . $db->qstr($iso_639_1) . ",
 	                     sort_order = " . $db->qstr($sort_order) . "
-                       WHERE languages_id = '" . $_GET['lID'] . "'");
-                       
+                       WHERE languages_id = '" . $_GET['lID'] . "'");                      
       if ($_POST['default'] == 'on') {
         $db->Execute("UPDATE " . $owpDBTable['configuration'] . " 
 	                 SET configuration_value = " . $db->qstr($iso_639_2) . "
                        WHERE configuration_key = 'DEFAULT_LANGUAGE'");
         owpSetLanguageStatus($_GET['lID'], '1');
       }
-
       owpRedirect(owpLink($owpFilename['languages'], 'page=' . $_GET['page'] . '&lID=' . $_GET['lID']));
       break;
     case 'deleteconfirm':
@@ -98,13 +85,11 @@
                          SET configuration_value = '' 
                        WHERE configuration_key = 'DEFAULT_LANGUAGE'");
       }
-
       $db->Execute("DELETE FROM " . $owpDBTable['languages'] . " WHERE languages_id = '" . $_GET['lID'] . "'");
-
       owpRedirect(owpLink($owpFilename['languages'], 'page=' . $_GET['page']));
       break;
     case 'delete':
-      $lng_query = $db->Execute("SELECT iso_639_2 FROM " . $owpDBTable['languages'] . " where languages_id = '" . $_GET['lID'] . "'");
+      $lng_query = $db->Execute("SELECT iso_639_2 FROM " . $owpDBTable['languages'] . " WHERE languages_id = '" . $_GET['lID'] . "'");
       $lng = $lng_query->fields;
 
       $remove_language = true;
@@ -126,24 +111,50 @@
       fclose($file);
   
       if (CVS_SEND_MAIL == 'true') {
-	// wir senden eine mail mit dem dateinamen $db_table_file an den user 
+        $sql = "SELECT admin_gender, admin_firstname, admin_lastname, admin_email_address 
+                FROM " . $owpDBTable['administrators'] . " 
+                WHERE admin_id = '" . owpDBInput($_SESSION['user_id']) . "'";
+        $mail_query = $db->Execute($sql);
+        $mail_send_to = $mail_query->fields;
+        // Let's build a message object using the email class
+        $send_mail = new phpmailer();
+        $send_mail->From = OWP_OWNER_EMAIL_ADDRESS;
+        $send_mail->FromName = OWP_NAME;
+        $send_mail->Subject = EMAIL_LANG_CVS . strftime(DATE_FORMAT_LONG);
+        if ($mail_send_to['admin_gender'] == 'm') {
+          $body = EMAIL_GREET_MR . $mail_send_to['admin_lastname'] . ',' . "\n\n";
+        } else {
+          $body = EMAIL_GREET_MS . $mail_send_to['admin_lastname'] . ',' . "\n\n";
+        }    
+        $body .= EMAIL_CVS_INTRO . ' ' . strftime(DATE_FORMAT_LONG) . "\n\n";
+        $body .= EMAIL_FTP_INFO . "\n";
+        $body .= '         ' . $db_table_file . "\n\n";
+        $body .= EMAIL_FOOT; 
+   
+        $send_mail->Body = $body;
+        $send_mail->AddAddress($mail_send_to['admin_email_address'], $mail_send_to['admin_firstname'] . ' ' . $mail_send_to['admin_lastname']);
+        $send_mail->AddAttachment(OWP_CSV_TEMP . $db_table_file);
+        $send_mail->Send();
+        // Clear all addresses and attachments for next loop
+        $send_mail->ClearAddresses();
+        $send_mail->ClearAttachments();
+        $messageStack->add_session(sprintf(SUCCESS_CVS_LANG_SENT, $mail_send_to['admin_email_address']), 'notice');          
       }
-	
       // download
       if (CVS_DOWNLOAD == 'true') {
         $fp = fopen(OWP_CSV_TEMP . $db_table_file, 'r');     
 	$buffer = fread($fp, filesize(OWP_CSV_TEMP . $db_table_file));
 	fclose($fp);
-	if ( (CVS_DELETE_FILE == 'true') && (CVS_SEND_MAIL == 'false') ){
-	  @ unlink(OWP_CSV_TEMP . $db_table_file);
-	}
 	header('Content-Type: application/vnd.ms-excel');
 	header('Content-Disposition: attachment; filename="' . $db_table_file . '"');
 	header('Expires: 0');
 	header('Pragma: no-cache');
 	echo $buffer;
-      } 
-    #  owpRedirect(owpLink($owpFilename['languages'], 'page=' . $_GET['page']));
+      }
+      if (CVS_DELETE_FILE == 'true') {
+        @ unlink(OWP_CSV_TEMP . $db_table_file);
+      }
+      owpRedirect(owpLink($owpFilename['languages'], 'page=' . $_GET['page']));
       break;
 
   }

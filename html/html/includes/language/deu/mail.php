@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: mail.php,v 1.4 2003/04/30 07:13:43 r23 Exp $
+   $Id: mail.php,v 1.5 2003/04/30 15:29:12 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -38,6 +38,7 @@ define('TEXT_NEWSLETTER_USER', 'An alle Newsletter-Abonnenten');
 
 define('EMAIL_GREET_MR', 'Sehr geehrter Herr ');
 define('EMAIL_GREET_MS', 'Sehr geehrte Frau ');
+define('EMAIL_GREET_ALL', 'Sehr geehrte ... ');
 define('EMAIL_FOOT', 'Mit den besten Grüssen,' . "\n" .  OWP_NAME . "\n\n\n" . OWP_HTTP_SERVER . '/' . "\n\n");
 
 define('NOTICE_EMAIL_SENT_TO', 'Hinweis: eMail wurde versendet an: %s');

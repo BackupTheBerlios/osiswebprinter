@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newsletter.php,v 1.7 2003/04/30 07:13:43 r23 Exp $
+   $Id: newsletter.php,v 1.8 2003/04/30 15:30:32 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -78,8 +78,8 @@
 
       $send_mail = new phpmailer();
 
-      $send_mail->From = EMAIL_FROM;
-      $send_mail->FromName = '';
+      $send_mail->From = OWP_EMAIL_ADDRESS
+      $send_mail->FromName = OWP_NAME;
       $send_mail->Subject = $this->title;
       
       $sql = "SELECT admin_gender, admin_firstname, admin_lastname,

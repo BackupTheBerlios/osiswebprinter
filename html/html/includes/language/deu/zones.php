@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: zones.php,v 1.4 2003/04/26 06:39:31 r23 Exp $
+   $Id: zones.php,v 1.5 2003/04/30 15:29:12 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -42,6 +42,15 @@ define('TEXT_INFO_HEADING_NEW_ZONE', 'neues Bundesland');
 define('TEXT_INFO_HEADING_EDIT_ZONE', 'Bundesland bearbeiten');
 define('TEXT_INFO_HEADING_DELETE_ZONE', 'Bundesland l&ouml;schen');
 
+define('EMAIL_ZONES_CVS', 'Bundesländer im CSV-Format: ');
+define('EMAIL_GREET_MR', 'Sehr geehrter Herr ');
+define('EMAIL_GREET_MS', 'Sehr geehrte Frau ');
+
+define('EMAIL_CVS_INTRO', 'In der Anlage erhalten Sie die Bundesländer in einer CSV Datei: ');
+define('EMAIL_FTP_INFO', 'Name der Datei auf dem Server:');
+define('EMAIL_FOOT', 'Mit den besten Grüssen,' . "\n" .  OWP_NAME . "\n\n\n" . OWP_HTTP_SERVER . '/' . "\n\n");
+
+define('SUCCESS_CVS_ZONES_SENT', 'Hinweis: eMail mit der CSV-Datei wurde versendet an: %s');
 define('ERROR_CSV_TEMP_DIRECTORY_NOT_WRITEABLE', 'Fehler: Das CSV-Dateiverzeichnis ist schreibgesch&uuml;tzt.');
 define('ERROR_CSV_TEMP_DIRECTORY_DOES_NOT_EXIST', 'Fehler: Das CSV-Dateiverzeichnis ist nicht vorhanden.');
 
