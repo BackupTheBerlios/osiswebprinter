@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: create_account.php,v 1.2 2003/05/05 08:47:53 r23 Exp $
+   $Id: create_account.php,v 1.3 2003/05/05 08:52:34 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,84 +22,71 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  require('includes/application_top.php');
+  require('includes/system.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CREATE_ACCOUNT);
-
-  $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_CREATE_ACCOUNT, '', 'NONSSL'));
+  require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['create_account']);
+  $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['create_account'], '', 'NONSSL'));
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
-<title><?php echo TITLE; ?></title>
-<base href="<?php echo (getenv('HTTPS') == 'on' ? HTTPS_SERVER : HTTP_SERVER) . DIR_WS_CATALOG; ?>">
-<link rel="stylesheet" type="text/css" href="stylesheet.css">
-<?php require('includes/form_check.js.php'); ?>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
+<title><?php echo OWP_NAME . ' :: ' . TITLE; ?></title>
+<META NAME="AUTHOR" CONTENT="OSIS GmbH">
+<META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
+<META NAME="ROBOTS" content="NOFOLLOW">
+<link rel="StyleSheet" href="style/style.css" type="text/css" />
+<script type="text/javascript" src="javascript/form_check.php"></script>
 </head>
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <!-- header //-->
-<?php require(DIR_WS_INCLUDES . 'header.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'header.php'); ?>
 <!-- header_eof //-->
 
 <!-- body //-->
-<table border="0" width="100%" cellspacing="3" cellpadding="3">
+<table border="0" width="100%" cellspacing="2" cellpadding="2">
   <tr>
-    <td width="<?php echo BOX_WIDTH; ?>" valign="top"><table border="0" width="<?php echo BOX_WIDTH; ?>" cellspacing="0" cellpadding="2">
+    <td width="<?php echo BOX_WIDTH; ?>" valign="top"><table border="0" width="<?php echo BOX_WIDTH; ?>" cellspacing="1" cellpadding="1" class="columnLeft">
 <!-- left_navigation //-->
-<?php require(DIR_WS_INCLUDES . 'column_left.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'column_left.php'); ?>
 <!-- left_navigation_eof //-->
     </table></td>
 <!-- body_text //-->
-    <td width="100%" valign="top"><form name="account_edit" method="post" <?php echo 'action="' . tep_href_link(FILENAME_CREATE_ACCOUNT_PROCESS, '', 'SSL') . '"'; ?> onSubmit="return check_form();"><input type="hidden" name="action" value="process"><table border="0" width="100%" cellspacing="0" cellpadding="0">
+    <td width="100%" valign="top"><form name="account_edit" method="post" <?php echo 'action="' . owpLink($owpFilename['create_account_process'], '', 'SSL') . '"'; ?> onSubmit="return check_form();"><input type="hidden" name="action" value="process"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
-          <tr>
-            <td class="pageHeading"><?php echo HEADING_TITLE; ?></td>
-            <td class="pageHeading" align="right"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', HEADING_TITLE, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
-          </tr>
-        </table></td>
+        <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
       </tr>
-<?php
-  if (sizeof($navigation->snapshot) > 0) {
-?>
       <tr>
-        <td class="smallText"><br><?php echo sprintf(TEXT_ORIGIN_LOGIN, tep_href_link(FILENAME_LOGIN, tep_get_all_get_params(), 'SSL')); ?></td>
-      </tr>
-<?php
-  }
-?>
-      <tr>
-        <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
+        <td><?php echo owpTransLine('1', '10'); ?></td>
       </tr>
       <tr>
         <td>
 <?php
-  $email_address = tep_db_prepare_input($HTTP_GET_VARS['email_address']);
-  $account['entry_country_id'] = STORE_COUNTRY;
-
-  require(DIR_WS_MODULES . 'account_details.php');
+  $new_account = true;
+  require(OWP_ACCOUNT_DIR . 'account_details.php');
 ?>
         </td>
       </tr>
       <tr>
-        <td align="right" class="main"><br><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></td>
+        <td><?php echo owpTransLine('1', '10'); ?></td>
+      </tr>
+      <tr>
+        <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
+          <tr>
+            <td class="main" align="right"><?php echo owpImageSubmit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></td>
+          </tr>
+        </table></td>
       </tr>
     </table></form></td>
 <!-- body_text_eof //-->
-    <td width="<?php echo BOX_WIDTH; ?>" valign="top"><table border="0" width="<?php echo BOX_WIDTH; ?>" cellspacing="0" cellpadding="2">
-<!-- right_navigation //-->
-<?php require(DIR_WS_INCLUDES . 'column_right.php'); ?>
-<!-- right_navigation_eof //-->
-    </table></td>
   </tr>
 </table>
 <!-- body_eof //-->
 
 <!-- footer //-->
-<?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'footer.php'); ?>
 <!-- footer_eof //-->
 <br>
 </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'application_bottom.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'nice_exit.php'); ?>

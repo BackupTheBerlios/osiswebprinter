@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: form_check.php,v 1.2 2003/05/05 08:49:12 r23 Exp $
+   $Id: form_check.php,v 1.3 2003/05/05 08:53:23 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,7 +22,6 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 ?>
-
 <script language="javascript"><!--
 
 var submitted = false;
@@ -39,10 +38,6 @@ function check_form() {
   var first_name = document.account_edit.firstname.value;
   var last_name = document.account_edit.lastname.value;
 
-<?php
-   if (ACCOUNT_DOB == 'true') echo '  var dob = document.account_edit.dob.value;' . "\n";
-?>
-
   var email_address = document.account_edit.email_address.value;  
   var street_address = document.account_edit.street_address.value;
   var postcode = document.account_edit.postcode.value;
@@ -51,9 +46,6 @@ function check_form() {
   var password = document.account_edit.password.value;
   var confirmation = document.account_edit.confirmation.value;
 
-<?php
-   if (ACCOUNT_GENDER == 'true') {
-?>
   if (document.account_edit.elements['gender'].type != "hidden") {
     if (document.account_edit.gender[0].checked || document.account_edit.gender[1].checked) {
     } else {
@@ -61,9 +53,6 @@ function check_form() {
       error = 1;
     }
   }
-<?php
-  }
-?>
 
   if (document.account_edit.elements['firstname'].type != "hidden") {
     if (first_name == '' || first_name.length < <?php echo ENTRY_FIRST_NAME_MIN_LENGTH; ?>) {
@@ -79,63 +68,9 @@ function check_form() {
     }
   }
 
-<?php
-   if (ACCOUNT_DOB == 'true') {
-?>
-  if (document.account_edit.elements['dob'].type != "hidden") {
-    if (dob == '' || dob.length < <?php echo ENTRY_DOB_MIN_LENGTH; ?>) {
-      error_message = error_message + "<?php echo JS_DOB; ?>";
-      error = 1;
-    }
-  }
-<?php
-  }
-?>
-
   if (document.account_edit.elements['email_address'].type != "hidden") {
     if (email_address == '' || email_address.length < <?php echo ENTRY_EMAIL_ADDRESS_MIN_LENGTH; ?>) {
       error_message = error_message + "<?php echo JS_EMAIL_ADDRESS; ?>";
-      error = 1;
-    }
-  }
-
-  if (document.account_edit.elements['street_address'].type != "hidden") {
-    if (street_address == '' || street_address.length < <?php echo ENTRY_STREET_ADDRESS_MIN_LENGTH; ?>) {
-      error_message = error_message + "<?php echo JS_ADDRESS; ?>";
-      error = 1;
-    }
-  }
-
-  if (document.account_edit.elements['postcode'].type != "hidden") {
-    if (postcode == '' || postcode.length < <?php echo ENTRY_POSTCODE_MIN_LENGTH; ?>) {
-      error_message = error_message + "<?php echo JS_POST_CODE; ?>";
-      error = 1;
-    }
-  }
-
-  if (document.account_edit.elements['city'].type != "hidden") {
-    if (city == '' || city.length < <?php echo ENTRY_CITY_MIN_LENGTH; ?>) {
-      error_message = error_message + "<?php echo JS_CITY; ?>";
-      error = 1;
-    }
-  }
-
-<?php
-  if (ACCOUNT_STATE == 'true') {
-?>
-  if (document.account_edit.elements['state'].type != "hidden") {
-    if (document.account_edit.state.value == '' || document.account_edit.state.value.length < <?php echo ENTRY_STATE_MIN_LENGTH; ?> ) {
-       error_message = error_message + "<?php echo JS_STATE; ?>";
-       error = 1;
-    }
-  }
-<?php
-  }
-?>
-
-  if (document.account_edit.elements['country'].type != "hidden") {
-    if (document.account_edit.country.value == 0) {
-      error_message = error_message + "<?php echo JS_COUNTRY; ?>";
       error = 1;
     }
   }

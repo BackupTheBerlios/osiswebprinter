@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.17 2003/05/03 15:56:02 r23 Exp $
+   $Id: system.php,v 1.18 2003/05/05 08:52:34 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -40,9 +40,15 @@
 
   $owpFilename = array();
   $owpFilename['administrators'] = $prefix_filename . 'administrators.php';
+  $owpFilename['account'] = $prefix_filename . 'account.php';
+  $owpFilename['account_edit'] = $prefix_filename . 'account_edit.php';
+  $owpFilename['account_edit_process'] = $prefix_filename . 'account_edit_process.php';  
   $owpFilename['backup'] = $prefix_filename . 'backup.php';
   $owpFilename['configuration'] = $prefix_filename . 'configuration.php';
   $owpFilename['countries'] = $prefix_filename . 'countries.php';
+  $owpFilename['create_account'] = $prefix_filename . 'create_account.php';
+  $owpFilename['create_account_process'] = $prefix_filename . 'create_account_process.php';
+  $owpFilename['create_account_success'] = $prefix_filename . 'create_account_success.php';
   $owpFilename['define_language'] = $prefix_filename . 'define_language.php';
   $owpFilename['file_manager'] = $prefix_filename . 'file_manager.php';
   $owpFilename['index'] = $prefix_filename . 'index.php';
@@ -55,6 +61,7 @@
   $owpFilename['server_info'] = $prefix_filename . 'server_info.php';
   $owpFilename['whos_online'] = $prefix_filename . 'whos_online.php';
   $owpFilename['zones'] = $prefix_filename . 'zones.php';
+
 
 // define the database table names used in the project
   $prefix_table = OWP_DB_PREFIX;
