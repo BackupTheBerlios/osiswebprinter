@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: backup.php,v 1.12 2003/04/23 07:04:35 r23 Exp $
+   $Id: backup.php,v 1.13 2003/04/23 16:28:23 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -34,7 +34,7 @@
   if ($_GET['action']) {
     switch ($_GET['action']) {
       case 'forget':
-        tep_db_query("delete FROM " . TABLE_CONFIGURATION . " WHERE configuration_key = 'DB_LAST_RESTORE'");
+        $db->Execute("delete from " . $owpDBTable['configuration'] . " where configuration_key = 'DB_LAST_RESTORE'");
         $messageStack->add_session(SUCCESS_LAST_RESTORE_CLEARED, 'success');
         owpRedirect(owpLink($owpFilename['backup']));
         break;
@@ -50,33 +50,35 @@
                   '# Database Server: ' . DB_SERVER . "\n" . 
                   '#' . "\n" .
                   '# Backup Date: ' . date(PHP_DATE_TIME_FORMAT) . "\n\n";
-        $tables_query = tep_db_query('show tables');
-        while ($tables = tep_db_fetch_array($tables_query)) {
+        $tables_query = $db->Execute('show tables');
+        while ($tables = $tables_query->fields) {
           list(,$table) = each($tables);
           $schema .= 'drop table if exists ' . $table . ';' . "\n" .
                      'create table ' . $table . ' (' . "\n";
           $table_list = array();
-          $fields_query = tep_db_query("show fields FROM " . $table);
-          while ($fields = tep_db_fetch_array($fields_query)) {
+          $fields_query = $db->Execute("show fields from " . $table);
+          while ($fields = $fields_query->fields) {
             $table_list[] = $fields['Field'];
             $schema .= '  ' . $fields['Field'] . ' ' . $fields['Type'];
             if (strlen($fields['Default']) > 0) $schema .= ' default \'' . $fields['Default'] . '\'';
             if ($fields['Null'] != 'YES') $schema .= ' not null';
             if (isset($fields['Extra'])) $schema .= ' ' . $fields['Extra'];
             $schema .= ',' . "\n";
+            $fields_query->MoveNext();
           }
           $schema = ereg_replace(",\n$", '', $schema);
 
           // Add the keys
           $index = array();
-          $keys_query = tep_db_query("show keys FROM " . $table);
-          while ($keys = tep_db_fetch_array($keys_query)) {
+          $keys_query = $db->Execute("show keys from " . $table);
+          while ($keys = $keys_query->fields) {
             $kname = $keys['Key_name'];
             if (!isset($index[$kname])) {
               $index[$kname] = array('unique' => !$keys['Non_unique'],
                                      'columns' => array());
             }
             $index[$kname]['columns'][] = $keys['Column_name'];
+            $keys_query->MoveNext();
           }
           while (list($kname, $info) = each($index)) {
             $schema .= ',' . "\n";
@@ -92,8 +94,8 @@
           $schema .= "\n" . ');' . "\n\n";
 
           // Dump the data
-          $rows_query = tep_db_query("SELECT " . implode(',', $table_list) . " FROM " . $table);
-          while ($rows = tep_db_fetch_array($rows_query)) {
+          $rows_query = $db->Execute("select " . implode(',', $table_list) . " from " . $table);
+          while ($rows = $rows_query->fields) {
             $schema_insert = 'insert into ' . $table . ' (' . implode(', ', $table_list) . ') values (';
             reset($table_list);
             while (list(,$i) = each($table_list)) {
@@ -109,8 +111,10 @@
             }
             $schema_insert = ereg_replace(', $', '', $schema_insert) . ');' . "\n";
             $schema .= $schema_insert;
+            $rows_query->MoveNext();
           }
           $schema .= "\n";
+          $tables_query->MoveNext();
         }
 
         if ($_POST['download'] == 'yes') {
@@ -180,30 +184,30 @@
         owpSetTimeLimit(0);
 
         if ($_GET['action'] == 'restorenow') {
-          $read_FROM = $_GET['file'];
+          $read_from = $_GET['file'];
           if (file_exists(DIR_FS_BACKUP . $_GET['file'])) {
             $restore_file = DIR_FS_BACKUP . $_GET['file'];
             $extension = substr($_GET['file'], -3);
             if ( ($extension == 'sql') || ($extension == '.gz') || ($extension == 'zip') ) {
               switch ($extension) {
                 case 'sql':
-                  $restore_FROM = $restore_file;
+                  $restore_from = $restore_file;
                   $remove_raw = false;
                   break;
                 case '.gz':
-                  $restore_FROM = substr($restore_file, 0, -3);
-                  exec(LOCAL_EXE_GUNZIP . ' ' . $restore_file . ' -c > ' . $restore_FROM);
+                  $restore_from = substr($restore_file, 0, -3);
+                  exec(LOCAL_EXE_GUNZIP . ' ' . $restore_file . ' -c > ' . $restore_from);
                   $remove_raw = true;
                   break;
                 case 'zip':
-                  $restore_FROM = substr($restore_file, 0, -4);
+                  $restore_from = substr($restore_file, 0, -4);
                   exec(LOCAL_EXE_UNZIP . ' ' . $restore_file . ' -d ' . DIR_FS_BACKUP);
                   $remove_raw = true;
               }
 
-              if ( ($restore_FROM) && (file_exists($restore_FROM)) && (filesize($restore_FROM) > 15000) ) {
-                $fd = fopen($restore_FROM, 'rb');
-                $restore_query = fread($fd, filesize($restore_FROM));
+              if ( ($restore_from) && (file_exists($restore_from)) && (filesize($restore_from) > 15000) ) {
+                $fd = fopen($restore_from, 'rb');
+                $restore_query = fread($fd, filesize($restore_from));
                 fclose($fd);
               }
             }
@@ -213,7 +217,7 @@
 
           if (is_uploaded_file($sql_file['tmp_name'])) {
             $restore_query = fread(fopen($sql_file['tmp_name'], 'r'), filesize($sql_file['tmp_name']));
-            $read_FROM = $sql_file['name'];
+            $read_from = $sql_file['name'];
           }
         }
 
@@ -261,18 +265,16 @@
             }
           }
 
-          tep_db_query("drop table if exists address_book, address_format, banners, banners_history, categories, categories_description, configuration, configuration_group, counter, counter_history, countries, currencies, customers, customers_basket, customers_basket_attributes, customers_info, languages, manufacturers, manufacturers_info, orders, orders_products, orders_status, orders_status_history, orders_products_attributes, orders_products_download, products, products_attributes, products_attributes_download, prodcts_description, products_options, products_options_values, products_options_values_to_products_options, products_to_categories, reviews, reviews_description, sessions, specials, tax_class, tax_rates, geo_zones, whos_online, zones, zones_to_geo_zones");
-
-          $sql_array_size = sizeof($sql_array);
-          for ($i=0; $i<$sql_array_size; $i++) {
-            tep_db_query($sql_array[$i]);
+          $db->Execute("drop table if exists address_book, address_format, banners, banners_history, categories, categories_description, configuration, configuration_group, counter, counter_history, countries, currencies, customers, customers_basket, customers_basket_attributes, customers_info, languages, manufacturers, manufacturers_info, orders, orders_products, orders_status, orders_status_history, orders_products_attributes, orders_products_download, products, products_attributes, products_attributes_download, prodcts_description, products_options, products_options_values, products_options_values_to_products_options, products_to_categories, reviews, reviews_description, sessions, specials, tax_class, tax_rates, geo_zones, whos_online, zones, zones_to_geo_zones");
+          for ($i = 0, $n = sizeof($sql_array); $i < $n; $i++) {
+            $db->Execute($sql_array[$i]);
           }
 
-          tep_db_query("delete FROM " . TABLE_CONFIGURATION . " WHERE configuration_key = 'DB_LAST_RESTORE'");
-          tep_db_query("insert into " . TABLE_CONFIGURATION . " values ('', 'Last Database Restore', 'DB_LAST_RESTORE', '" . $read_FROM . "', 'Last database restore file', '6', '', '', now(), '', '')");
+          $db->Execute("delete from " . TABLE_CONFIGURATION . " where configuration_key = 'DB_LAST_RESTORE'");
+          $db->Execute("insert into " . TABLE_CONFIGURATION . " values ('', 'Last Database Restore', 'DB_LAST_RESTORE', '" . $read_from . "', 'Last database restore file', '6', '', '', now(), '', '')");
 
           if ($remove_raw) {
-            unlink($restore_FROM);
+            unlink($restore_from);
           }
         }
 
@@ -369,8 +371,7 @@
     }
     sort($contents);
 
-    $contents_size = sizeof($contents);
-    for ($files=0; $files<$contents_size; $files++) {
+    for ($files = 0, $count = sizeof($contents); $files < $count; $files++) {
       $entry = $contents[$files];
 
       $check = 0;

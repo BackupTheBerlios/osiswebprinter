@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: system.php,v 1.9 2003/04/23 06:49:55 r23 Exp $
+   $Id: system.php,v 1.10 2003/04/23 16:28:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -48,6 +48,7 @@
   $owpFilename['administrators'] = $prefix_filename . 'administrators.php';
   $owpFilename['backup'] = $prefix_filename . 'backup.php';
   $owpFilename['configuration'] = $prefix_filename . 'configuration.php';
+  $owpFilename['countries'] = $prefix_filename . 'countries.php';
   $owpFilename['define_language'] = $prefix_filename . 'define_language.php';
   $owpFilename['file_manager'] = $prefix_filename . 'file_manager.php';
   $owpFilename['index'] = $prefix_filename . 'index.php';
@@ -55,10 +56,11 @@
   $owpFilename['login'] = $prefix_filename . 'login.php';
   $owpFilename['mail'] = $prefix_filename . 'mail.php';
   $owpFilename['newsletters'] = $prefix_filename . 'newsletters.php';
+  $owpFilename['password_forgotten'] = $prefix_filename . 'password_forgotten.php';
   $owpFilename['password_crypt'] = $prefix_filename . 'password_funcs.php';
   $owpFilename['server_info'] = $prefix_filename . 'server_info.php';
   $owpFilename['whos_online'] = $prefix_filename . 'whos_online.php';
-
+  $owpFilename['zones'] = $prefix_filename . 'zones.php';
 
 // define the database table names used in the project
   $prefix_table = OWP_DB_PREFIX;
@@ -72,6 +74,7 @@
   $owpDBTable['countries'] = $prefix_table . 'countries';
   $owpDBTable['languages'] = $prefix_table . 'languages';
   $owpDBTable['session'] = $prefix_table . 'sessions';
+  $owpDBTable['whos_online'] = $prefix_table . 'whos_online';
   $owpDBTable['zones'] = $prefix_table . 'zones';
   $owpSelf = (! empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : $_SERVER['SCRIPT_NAME'];
 
@@ -88,7 +91,8 @@
   define('ADODB_ERROR_LOG_TYPE',3);
   define('ADODB_ERROR_LOG_DEST','d:/tmp/errors.log');
   $ADODB_CACHE_DIR = 'd:/tmp/ADODB_cache';
-  include_once(OWP_ADODB_DIR .'adodb-errorhandler.inc.php');
+  include_once(OWP_ADODB_DIR . 'toexport.inc.php');
+  include_once(OWP_ADODB_DIR . 'adodb-errorhandler.inc.php');
   include_once(OWP_ADODB_DIR . 'adodb.inc.php');
   include_once(OWP_ADODB_DIR . 'tohtml.inc.php');
 
@@ -96,7 +100,7 @@
   if (!owpDBInit()) {
     die('Unable to connect to database server!');
   }
-
+define('MAX_DISPLAY_SEARCH_RESULTS', '10');
 // set the application parameters (can be modified through the administration tool)
   $configuration_query = $db->Execute('SELECT configuration_key as cfgKey, configuration_value as cfgValue FROM ' . $owpDBTable['configuration'] . '');
   while ($configuration = $configuration_query->fields) {

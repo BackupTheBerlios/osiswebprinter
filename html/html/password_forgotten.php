@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: password_forgotten.php,v 1.2 2003/04/23 16:09:00 r23 Exp $
+   $Id: password_forgotten.php,v 1.3 2003/04/23 16:28:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,11 +22,11 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  require('includes/application_top.php');
+  require('includes/system.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_PASSWORD_FORGOTTEN);
+  require(DIR_WS_LANGUAGES . $language . '/' . $owpFilename['password_forgotten']);
 
-  if ($HTTP_GET_VARS['action'] == 'process') {
+  if ($_GET['action'] == 'process') {
     $check_customer = tep_db_query("select customers_firstname, customers_lastname, customers_password, customers_id from " . TABLE_CUSTOMERS . " where customers_email_address = '" . $HTTP_POST_VARS['email_address'] . "'");
     if (tep_db_num_rows($check_customer)) {
       $check_customer_values = tep_db_fetch_array($check_customer);
@@ -37,43 +37,45 @@
       tep_db_query($sql);
       
       tep_mail($check_customer_values['customers_firstname'] . " " . $check_customer_values['customers_lastname'], $HTTP_POST_VARS['email_address'], EMAIL_PASSWORD_REMINDER_SUBJECT, nl2br(sprintf(EMAIL_PASSWORD_REMINDER_BODY, $newpass)), STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
-      tep_redirect(tep_href_link(FILENAME_LOGIN, 'info_message=' . urlencode(TEXT_PASSWORD_SENT), 'SSL', true, false));
+      owpRedirect(owpLink(FILENAME_LOGIN, 'info_message=' . urlencode(TEXT_PASSWORD_SENT), 'SSL', true, false));
     } else {
-      tep_redirect(tep_href_link(FILENAME_PASSWORD_FORGOTTEN, 'email=nonexistent', 'SSL'));
+      owpRedirect(owpLink($owpFilename['password_forgotten'], 'email=nonexistent', 'SSL'));
     }
   } else {
 
-  $breadcrumb->add(NAVBAR_TITLE_1, tep_href_link(FILENAME_LOGIN, '', 'SSL'));
-  $breadcrumb->add(NAVBAR_TITLE_2, tep_href_link(FILENAME_PASSWORD_FORGOTTEN, '', 'SSL'));
+  $breadcrumb->add(NAVBAR_TITLE_1, owpLink(FILENAME_LOGIN, '', 'SSL'));
+  $breadcrumb->add(NAVBAR_TITLE_2, owpLink($owpFilename['password_forgotten'], '', 'SSL'));
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?php echo CHARSET; ?>">
 <title><?php echo TITLE; ?></title>
-<base href="<?php echo (getenv('HTTPS') == 'on' ? HTTPS_SERVER : HTTP_SERVER) . DIR_WS_CATALOG; ?>">
-<link rel="stylesheet" type="text/css" href="stylesheet.css">
+<META NAME="AUTHOR" CONTENT="OSIS GmbH">
+<META NAME="GENERATOR" CONTENT="OSIS GmbH -- http://www.osisnet.de">
+<META NAME="ROBOTS" content="NOFOLLOW">
+<link rel="StyleSheet" href="style/style.css" type="text/css" />
 </head>
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <!-- header //-->
-<?php require(DIR_WS_INCLUDES . 'header.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'header.php'); ?>
 <!-- header_eof //-->
 
 <!-- body //-->
-<table border="0" width="100%" cellspacing="3" cellpadding="3">
+<table border="0" width="100%" cellspacing="2" cellpadding="2">
   <tr>
-    <td width="<?php echo BOX_WIDTH; ?>" valign="top"><table border="0" width="<?php echo BOX_WIDTH; ?>" cellspacing="0" cellpadding="2">
+    <td width="<?php echo BOX_WIDTH; ?>" valign="top"><table border="0" width="<?php echo BOX_WIDTH; ?>" cellspacing="1" cellpadding="1" class="columnLeft">
 <!-- left_navigation //-->
-<?php require(DIR_WS_INCLUDES . 'column_left.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'column_left.php'); ?>
 <!-- left_navigation_eof //-->
     </table></td>
 <!-- body_text //-->
-    <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="0">
+    <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr>
-            <td class="pageHeading"><?php echo HEADING_TITLE; ?></td>
-            <td class="pageHeading" align="right"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_password_forgotten.gif', HEADING_TITLE, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
+            <td class="owp-title" align="right"><?php echo owpTransLine(HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -82,46 +84,29 @@
       </tr>
       <tr>
         <td><form name="password_forgotten" method="post" action="<?php echo tep_href_link(FILENAME_PASSWORD_FORGOTTEN, 'action=process', 'SSL'); ?>"><br><table border="0" width="100%" cellspacing="0" cellpadding="3">
-          <tr>
-            <td align="right" class="main"><?php echo ENTRY_EMAIL_ADDRESS; ?></td>
-            <td class="main"><input type="text" name="email_address" maxlength="96" value="<?php echo $HTTP_COOKIE_VARS['email_address']; ?>"></td>
-          </tr>
-          <tr>
-            <td colspan="2"><br><table border="0" cellpadding="0" cellspacing="0" width="100%">
-              <tr>
-                <td valign="top"><a href="<?php echo tep_href_link(FILENAME_LOGIN, '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?></td>
-                <td align="right" valign="top"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></td>
-              </tr>
-            </table></td>
-          </tr>
-<?php
-  if ($HTTP_GET_VARS['email'] == 'nonexistent') {
-    echo '          <tr>' . "\n";
-    echo '            <td colspan="2" class="smallText">' .  TEXT_NO_EMAIL_ADDRESS_FOUND . '</td>' . "\n";
-    echo '          </tr>' . "\n";
-  }
-?>
-        </table></form></td>
+      <tr>
+        <td align="right" class="main"><?php echo ENTRY_EMAIL_ADDRESS; ?></td>
+        <td class="main"><input type="text" name="email_address" maxlength="96" value="<?php echo $HTTP_COOKIE_VARS['email_address']; ?>"></td>
+      </tr>
+      <tr>
+       <td colspan="2"><br><table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td valign="top"><a href="<?php echo tep_href_link(FILENAME_LOGIN, '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?></td>
+        <td align="right" valign="top"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></td>
+      </tr>
+      <tr>
+        <td><?php echo owpTransLine('1', '10'); ?></td>
       </tr>
     </table></td>
 <!-- body_text_eof //-->
-    <td width="<?php echo BOX_WIDTH; ?>" valign="top"><table border="0" width="<?php echo BOX_WIDTH; ?>" cellspacing="0" cellpadding="2">
-<!-- right_navigation //-->
-<?php require(DIR_WS_INCLUDES . 'column_right.php'); ?>
-<!-- right_navigation_eof //-->
-    </table></td>
   </tr>
 </table>
 <!-- body_eof //-->
 
 <!-- footer //-->
-<?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
+<?php require(OWP_INCLUDES_DIR . 'footer.php'); ?>
 <!-- footer_eof //-->
 <br>
 </body>
 </html>
-<?php
-  }
-
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
-?>
+<?php require(OWP_INCLUDES_DIR . 'nice_exit.php'); ?>

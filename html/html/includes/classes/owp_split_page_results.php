@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_split_page_results.php,v 1.5 2003/04/22 07:24:16 r23 Exp $
+   $Id: owp_split_page_results.php,v 1.6 2003/04/23 16:28:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -22,8 +22,10 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
 
-  class owpSplitPageResults {
+  class splitPageResults {
     function splitPageResults(&$current_page_number, $max_rows_per_page, &$sql_query, &$query_num_rows) {
+      GLOBAL $db;
+
       if (empty($current_page_number)) $current_page_number = 1;
 
       $pos_to = strlen($sql_query);
@@ -47,9 +49,8 @@
       $offset = ($max_rows_per_page * ($current_page_number - 1));
       $sql_query .= " limit " . $offset . ", " . $max_rows_per_page;
 
-      $reviews_count_query = tep_db_query("select count(*) as total " . substr($sql_query, $pos_from, ($pos_to - $pos_from)));
-      $reviews_count = tep_db_fetch_array($reviews_count_query);
-      $query_num_rows = $reviews_count['total'];
+      $count_values = $db->Execute("select count(*) as total " . substr($sql_query, $pos_from, ($pos_to - $pos_from)));
+      $query_num_rows = $count_values->fields['total'];
     }
 
     function display_links($query_numrows, $max_rows_per_page, $max_page_links, $current_page_number, $parameters = '', $page_name = 'page') {

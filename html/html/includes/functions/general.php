@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.7 2003/04/23 07:05:54 r23 Exp $
+   $Id: general.php,v 1.8 2003/04/23 16:28:24 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -87,7 +87,7 @@
     return $get_url;
   }
 
-  function tep_date_long($raw_date) {
+  function owpDateLong($raw_date) {
     if ( ($raw_date == '0000-00-00 00:00:00') || ($raw_date == '') ) return false;
 
     $year = (int)substr($raw_date, 0, 4);
