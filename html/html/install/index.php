@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.8 2003/04/01 02:30:23 r23 Exp $
+   $Id: index.php,v 1.9 2003/04/02 02:03:32 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -19,7 +19,7 @@
    http://www.postnuke.com/
    ----------------------------------------------------------------------
    Based on:
-   PHP-NUKE Web Portal System - http://phowuke.org/
+   PHP-NUKE Web Portal System - http://phpnuke.org/
    Thatware - http://thatware.org/
    ----------------------------------------------------------------------
    LICENSE
@@ -55,44 +55,40 @@
 
 /** initialize vars, and include all necessary files **/
 
- set_time_limit(0);
+  set_time_limit(0);
 
- define('ADODB_DIR', '../includes/adodb');
- require_once ('../includes/adodb/adodb.inc.php');
- require_once ('../includes/classes/osis_text_tool.php');
+  define('ADODB_DIR', '../includes/adodb');
+  require_once ('../includes/adodb/adodb.inc.php');
+  require_once ('../includes/classes/osis_text_tool.php');
  
- include_once 'modify_config.php'; 
- include_once 'newinstall.php'; 
- include_once 'gui.php'; 
- include_once 'db.php'; 
- include_once 'check.php'; 
+  include_once 'modify_config.php'; 
+  include_once 'newinstall.php'; 
+  include_once 'gui.php'; 
+  include_once 'db.php'; 
+  include_once 'check.php'; 
  
- include_once 'language.php'; 
+  include_once 'language.php'; 
  
- if ($_POST['op']) {
-   $dbhost = owp_prepare_input($_POST['dbhost']);
-   $dbuname = owp_prepare_input($_POST['dbuname']);
-   $dbpass = owp_prepare_input($_POST['dbpass']);
-   $dbname = owp_prepare_input($_POST['dbname']);
-   $prefix = owp_prepare_input($_POST['prefix']);
-   $dbtype = owp_prepare_input($_POST['dbtype']);
-   $currentlang = owp_prepare_input($_POST['currentlang']);
- }
- 
- if ($_POST['alanguage']) {
-   $currentlang = owp_prepare_input($_POST['alanguage']);
- }
- 
- if (!@$_POST['prefix']) {
+  if ( isset($_POST) ) {
+    foreach ($_POST as $k=>$v) {
+      $$k = owp_prepare_input($v);
+    }
+  }
+
+  if ( isset($alanguage) ) {
+    $currentlang = $alanguage;
+  }
+
+  if( !isset($prefix) ) {
     include_once '../includes/config.php';
-    $prefix = $owconfig['prefix'];
-    $dbtype = $owconfig['dbtype'];
-    $dbhost = $owconfig['dbhost'];
-    $dbuname = $owconfig['dbuname'];
-    $dbpass = $owconfig['dbpass'];
-    $dbname = $owconfig['dbname'];
-    $system = $owconfig['system'];
-    $encoded = $owconfig['encoded'];   
+    $prefix = OWP_DB_PREFIX;
+    $dbtype = OWP_DB_TYPE;
+    $dbhost = OWP_DB_SERVER;
+    $dbuname = OWP_DB_USERNAME;
+    $dbpass = OWP_DB_PASSWORD;
+    $dbname = OWP_DB_DATABASE;
+    $system = OWP_SYSTEM;
+    $encoded = OWP_ENCODED;   
   }
 
   if (!empty($encoded)) {
@@ -107,22 +103,15 @@
 // header
   include_once 'header.php';
 
-/*  This starts the switch statement that filters through the form options.
+/* This starts the switch statement that filters through the form options.
  * the @ is in front of $op to suppress error messages if $op is unset and E_ALL
  * is on
  */
- switch ($_POST['op']) {
+ switch ($op) {
     case 'Finish':
       owp_finish();
       break;
-    case 'Set Login':
-      $aid = owp_prepare_input($_POST['aid']);
-      $name = owp_prepare_input($_POST['name']);
-      $pwd = owp_prepare_input($_POST['pwd']);
-      $repeatpwd = owp_prepare_input($_POST['repeatpwd']);
-      $email = owp_prepare_input($_POST['email']);
-      $url = owp_prepare_input($_POST['url']);
-      
+    case 'Set Login':     
       $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
       input_data($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $aid, $name, $pwd, $repeatpwd, $email, $url);
       update_config_php(true); // Scott - added

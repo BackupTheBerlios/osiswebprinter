@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: modify_config.php,v 1.3 2003/03/28 02:54:52 r23 Exp $
+   $Id: modify_config.php,v 1.4 2003/04/02 02:03:32 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -47,38 +47,38 @@
 function modify_file($src, $dest, $reg_src, $reg_rep) {
     $in = @fopen($src, "r");
     if (!$in) {
-        return _MODIFY_FILE_1." $src";
+      return MODIFY_FILE_1. " $src";
     }
     $i = 0;
     while (!feof($in)) {
-        $file_buff1[$i++] = fgets($in, 4096);
+      $file_buff1[$i++] = fgets($in, 4096);
     }
     fclose($in);
 
     $lines = 0; // Keep track of the number of lines changed
 
     while (list ($bline_num, $buffer) = each ($file_buff1)) {
-        $new = preg_replace($reg_src, $reg_rep, $buffer);
-        if ($new != $buffer) {
-            $lines++;
-        }
-        $file_buff2[$bline_num] = $new;
+      $new = preg_replace($reg_src, $reg_rep, $buffer);
+      if ($new != $buffer) {
+        $lines++;
+      }
+      $file_buff2[$bline_num] = $new;
     }
 
     if ($lines == 0) {
-        // Skip the rest - no lines changed
-        return _MODIFY_FILE_3;
+      // Skip the rest - no lines changed
+      return MODIFY_FILE_3;
     }
 
     reset($file_buff1);
     $out_backup = @fopen($dest, "w");
 
     if (! $out_backup) {
-        return _MODIFY_FILE_2." $dest";
+      return MODIFY_FILE_2. " $dest";
     }
 
     while (list ($bline_num, $buffer) = each ($file_buff1)) {
-        fputs($out_backup,$buffer);
+      fputs($out_backup,$buffer);
     }
 
     fclose($out_backup);
@@ -86,11 +86,11 @@ function modify_file($src, $dest, $reg_src, $reg_rep) {
     reset($file_buff2);
     $out_original = fopen($src, "w");
     if (! $out_original) {
-        return _MODIFY_FILE_2." $src";
+      return MODIFY_FILE_2. " $src";
     }
 
     while (list ($bline_num, $buffer) = each ($file_buff2)) {
-        fputs($out_original,$buffer);
+      fputs($out_original,$buffer);
     }
 
     fclose($out_original);
@@ -107,35 +107,25 @@ $reg_rep = array();
 // Scott Kirkwood
 function add_src_rep($key, $rep) {
     global $reg_src, $reg_rep;
-
-    // Note: /x is to permit spaces in regular expressions
-    // Great for making the reg expressions easier to read
-
-    // Ex: $pnconfig['sitename'] = stripslashes("Your Site Name");
-    $reg_src[] = "/ \['$key'\] \s* = \s* stripslashes\( (\' | \") (.*) \\1 \); /x";
-    $reg_rep[] = "['$key'] = stripslashes(\\1$rep\\1);";
-
-    // Ex. $pnconfig['site_logo'] = "logo.gif";
-    $reg_src[] = "/ \['$key'\] \s* = \s* (\' | \") (.*) \\1 ; /x";
-    $reg_rep[] = "['$key'] = '$rep';";
-
-    // Ex. $pnconfig['pollcomm'] = 1;
-    $reg_src[] = "/ \['$key'\] \s* = \s* (\d*\.?\d*) ; /x";
-    $reg_rep[] = "['$key'] = $rep;";
+    
+    $reg_src[] = "/(define\()([\"'])(".$key.")\\2,\s*([\"'])(.*?)\\4\s*\)/";
+    $reg_rep[] = "define('".$key."', '".$rep."')";
 }
+
 
 function show_error_info() {
     global $dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype;
 
-    echo "<br/><br/><b>"._SHOW_ERROR_INFO_1."<br/>";
+    echo "<br/><br/><b>"._SHOW_ERROR_INFO_1. "<br/>";
 echo <<< EOT
         <tt>
-        \$owconfig['dbtype'] = '$dbtype';<br/>
-        \$owconfig['dbhost']  = '$dbhost';<br/>
-        \$owconfig['dbuname'] = '$dbuname';<br/>
-        \$owconfig['dbpass'] = '$dbpass';<br/>
-        \$owconfig['dbname'] = '$dbname';<br/>
-        \$owconfig['prefix'] = '$prefix';<br/>
+        \define('OWP_DB_TYPE', '$dbtype');<br />
+        \define('OWP_DB_SERVER', '$dbhost');<br />
+        \define('OWP_DB_USERNAME', '$dbuname');<br />
+        \define('OWP_DB_PASSWORD', '$dbpass');<br />
+        \define('OWP_DB_DATABASE', '$dbname');<br />
+        \define('OWP_DB_PREFIX', '$prefix');<br />
+        \define('OWP_ENCODED', '1');<br />
         </tt>
 EOT;
 
@@ -145,24 +135,20 @@ EOT;
 function update_config_php($db_prefs = false) {
     global $reg_src, $reg_rep;
     global $dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype;
-    global $email, $url,  $HTTP_ENV_VARS;
+    global $url, $HTTP_ENV_VARS;
 
-    add_src_rep("dbhost", $dbhost);
-    add_src_rep("dbuname", base64_encode($dbuname));
-    add_src_rep("dbpass", base64_encode($dbpass));
-    add_src_rep("dbname", $dbname);
-    add_src_rep("prefix", $prefix);
-    add_src_rep("dbtype", $dbtype);
+    add_src_rep("OWP_DB_SERVER", $dbhost);
+    add_src_rep("OWP_DB_USERNAME", base64_encode($dbuname));
+    add_src_rep("OWP_DB_PASSWORD", base64_encode($dbpass));
+    add_src_rep("OWP_DB_DATABASE", $dbname);
+    add_src_rep("OWP_DB_PREFIX", $prefix);
+    add_src_rep("OWP_DB_TYPE", $dbtype);
     if (strstr($HTTP_ENV_VARS["OS"],"Win")) {
-        add_src_rep("system" , '1');
+        add_src_rep("OWP_SYSTEM" , '1');
     } else {
-        add_src_rep("system", '0');
+        add_src_rep("OWP_SYSTEM", '0');
     }
-    add_src_rep("encoded", '1');
-
-    if ($email)  {
-        add_src_rep("adminmail", $email);
-    }
+    add_src_rep("OWP_ENCODED", '1');
 
     $ret = modify_file("../includes/config.php", "../includes/config-old.php", $reg_src, $reg_rep);
 
