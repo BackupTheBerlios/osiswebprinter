@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: general.php,v 1.13 2003/05/01 14:37:29 r23 Exp $
+   $Id: general.php,v 1.14 2003/05/03 15:58:30 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -73,7 +73,7 @@
 
     reset($_GET);
     while (list($key, $value) = each($_GET)) {
-      if (($key != owpSessionName()) && ($key != 'error') && (!owpInArray($key, $exclude_array))) $get_url .= $key . '=' . $value . '&';
+      if (($key != owpSessionName()) && ($key != 'error') && (!owpInArray($key, $exclude_array))) $get_url .= $key . '=' . $value . '&';         
     }
 
     return $get_url;
@@ -150,7 +150,7 @@
     }
 
     return false;
-  }
+  }  
 
   function owpArraytoString($array, $exclude = '', $equals = '=', $separator = '&') {
     if ($exclude == '') $exclude = array();
@@ -256,106 +256,6 @@
     }
   }
 
-
-  
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function	: tep_format_address
-//
-// Arguments	: customers_id, address_id, html
-//
-// Return	: properly formatted address
-//
-// Description	: This function will lookup the Addres format from the countries database
-//		  and properly format the address label.
-//
-//////////////////////////////////////////////////////////////////////////////////////////
-
-  function tep_address_format($address_format_id, $address, $html, $boln, $eoln) {
-    $address_format_query = tep_db_query("select address_format as format from " . TABLE_ADDRESS_FORMAT . " where address_format_id = '" . $address_format_id . "'");
-    $address_format = tep_db_fetch_array($address_format_query);
-
-    $company = addslashes($address['company']);
-    $firstname = addslashes($address['firstname']);
-    $lastname = addslashes($address['lastname']);
-    $street = addslashes($address['street_address']);
-    $suburb = addslashes($address['suburb']);
-    $city = addslashes($address['city']);
-    $state = addslashes($address['state']);
-    $country_id = $address['country_id'];
-    $zone_id = $address['zone_id'];
-    $postcode = addslashes($address['postcode']);
-    $zip = $postcode;
-    $country = owpGetCountryName($country_id);
-    $state = tep_get_zone_code($country_id, $zone_id, $state);
-
-    if ($html) {
-// HTML Mode
-      $HR = '<hr>';
-      $hr = '<hr>';
-      if ( ($boln == '') && ($eoln == "\n") ) { // Values not specified, use rational defaults
-        $CR = '<br>';
-        $cr = '<br>';
-        $eoln = $cr;
-      } else { // Use values supplied
-        $CR = $eoln . $boln;
-        $cr = $CR;
-      }
-    } else {
-// Text Mode
-      $CR = $eoln;
-      $cr = $CR;
-      $HR = '----------------------------------------';
-      $hr = '----------------------------------------';
-    }
-
-    $statecomma = '';
-    $streets = $street;
-    if ($suburb != '') $streets = $street . $cr . $suburb;
-    if ($firstname == '') $firstname = addslashes($address['name']);
-    if ($country == '') $country = addslashes($address['country']);
-    if ($state != '') $statecomma = $state . ', ';
-
-    $fmt = $address_format['format'];
-    eval("\$address = \"$fmt\";");
-    $address = stripslashes($address);
-
-    if ( (ACCOUNT_COMPANY == 'true') && (owpNotNull($company)) ) {
-      $address = $company . $cr . $address;
-    }
-
-    return $boln . $address . $eoln;
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // Function    : tep_get_zone_code
-  //
-  // Arguments   : country           country code string
-  //               zone              state/province zone_id
-  //               def_state         default string if zone==0
-  //
-  // Return      : state_prov_code   state/province code
-  //
-  // Description : Function to retrieve the state/province code (as in FL for Florida etc)
-  //
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  function tep_get_zone_code($country, $zone, $def_state) {
-
-    $state_prov_query = tep_db_query("select zone_code from " . TABLE_ZONES . " where zone_country_id = '" . $country . "' and zone_id = '" . $zone . "'");
-
-    if (!tep_db_num_rows($state_prov_query)) {
-      $state_prov_code = $def_state;
-    }
-    else {
-      $state_prov_values = tep_db_fetch_array($state_prov_query);
-      $state_prov_code = $state_prov_values['zone_code'];
-    }
-    
-    return $state_prov_code;
-  }
-
-
 ////
 // 
   function owpGetLanguages() {
@@ -376,19 +276,6 @@
 
     return $languages_array;
   }
-
-
-////
-// Wrapper for class_exists() function
-// This function is not available in all PHP versions so we test it before using it.
-  function tep_class_exists($class_name) {
-    if (function_exists('class_exists')) {
-      return class_exists($class_name);
-    } else {
-      return true;
-    }
-  }
-
 
 
 ////
@@ -426,30 +313,6 @@
     return $zones_array;
   }
   
-  function tep_prepare_country_zones_pull_down($country_id = '') {
-// preset the width of the drop-down for Netscape
-    $pre = '';
-    if ( (!owpBrowserDetect('MSIE')) && (owpBrowserDetect('Mozilla/4')) ) {
-      for ($i=0; $i<45; $i++) $pre .= '&nbsp;';
-    }
-
-    $zones = owpGetCountryZones($country_id);
-
-    if (sizeof($zones) > 0) {
-      $zones_select = array(array('id' => '', 'text' => PLEASE_SELECT));
-      $zones = owpArrayMerge($zones_select, $zones);
-    } else {
-      $zones = array(array('id' => '', 'text' => TYPE_BELOW));
-// create dummy options for Netscape to preset the height of the drop-down
-      if ( (!owpBrowserDetect('MSIE')) && (owpBrowserDetect('Mozilla/4')) ) {
-        for ($i=0; $i<9; $i++) {
-          $zones[] = array('id' => '', 'text' => $pre);
-        }
-      }
-    }
-
-    return $zones;
-  }
 
 ////
 // Alias function for Store configuration values in the Administration Tool
@@ -461,12 +324,6 @@
     return owpPullDownMenu('configuration_value', owpGetCountryZones(OWP_COUNTRY), $zone_id);
   }
 
-
-////
-// Function to read in text area in admin
- function tep_cfg_textarea($text) {
-    return owpTextareaField('configuration_value', false, 35, 5, $text);
-  }
 
 ////
 // Alias function for OSIS WEbPrinter configuration values in the Administration Tool
@@ -481,22 +338,8 @@
     return $string;
   }
 
-////
-// Alias function for module configuration keys
-  function tep_mod_select_option($select_array, $key_name, $key_value) {
-    reset($select_array);
-    while (list($key, $value) = each($select_array)) {
-      if (is_int($key)) $key = $value;
-      $string .= '<br><input type="radio" name="configuration[' . $key_name . ']" value="' . $key . '"';
-      if ($key_value == $key) $string .= ' CHECKED';
-      $string .= '> ' . $value;
-    }
-
-    return $string;
-  }
 
 ////
-
   function owpGetUploadedFile($filename) {
     if (isset($_FILES[$filename])) {
       $uploaded_file = array('name' => $_FILES[$filename]['name'],
@@ -537,7 +380,7 @@
     return $path;
   }
 
-  function tep_array_shift(&$array) {
+  function owpArrayShift(&$array) {
     if (function_exists('array_shift')) {
       return array_shift($array);
     } else {
@@ -568,23 +411,6 @@
       }
       return $reversed_array;
     }
-  }
-
-
-  function tep_output_generated_category_path($id, $from = 'category') {
-    $calculated_category_path_string = '';
-    $calculated_category_path = tep_generate_category_path($id, $from);
-    for ($i=0; $i<sizeof($calculated_category_path); $i++) {
-      for ($j=0; $j<sizeof($calculated_category_path[$i]); $j++) {
-        $calculated_category_path_string .= $calculated_category_path[$i][$j]['text'] . '&nbsp;&gt;&nbsp;';
-      }
-      $calculated_category_path_string = substr($calculated_category_path_string, 0, -16) . '<br>';
-    }
-    $calculated_category_path_string = substr($calculated_category_path_string, 0, -4);
-
-    if (strlen($calculated_category_path_string) < 1) $calculated_category_path_string = TEXT_TOP;
-
-    return $calculated_category_path_string;
   }
 
  
@@ -716,19 +542,6 @@
     }
   }
 
-////
-// Wrapper for constant() function
-// Needed because its only available in PHP 4.0.4 and higher.
-  function tep_constant($constant) {
-    if (function_exists('constant')) {
-      $temp = constant($constant);
-    } else {
-      eval("\$temp=$constant;");
-    }
-    return $temp;
-  }
-
-
 
   function owpMail($to_name, $to_email_address, $email_subject, $email_text, $from_email_name, $from_email_address) {
     if (SEND_EMAILS != 'true') return false;
@@ -754,19 +567,6 @@
     // Send message
     $mail->Send();
   }
-
-
-////
-// Wrapper function for round() for php3 compatibility
-  function tep_round($value, $precision) {
-    if (PHP_VERSION < 4) {
-      $exp = pow(10, $precision);
-      return round($value * $exp) / $exp;
-    } else {
-      return round($value, $precision);
-    }
-  }
-
 
   function owpCallFunction($function, $parameter, $object = '') {
     if ($object == '') {

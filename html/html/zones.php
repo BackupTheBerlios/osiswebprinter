@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: zones.php,v 1.9 2003/05/01 14:39:04 r23 Exp $
+   $Id: zones.php,v 1.10 2003/05/03 15:59:28 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -27,7 +27,8 @@
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
-  } 
+  }
+  
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['zones']);
   $breadcrumb->add(NAVBAR_TITLE,  owpLink($owpFilename['zones'], '', 'NONSSL'));
   if ($_GET['action']) {

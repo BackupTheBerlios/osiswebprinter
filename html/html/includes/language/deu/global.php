@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.6 2003/05/02 09:49:24 r23 Exp $
+   $Id: global.php,v 1.7 2003/05/03 15:58:30 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -11,6 +11,17 @@
    Copyright (c) 2003 r23
    ----------------------------------------------------------------------
    Based on:
+   
+   File: german.php,v 1.93 2002/09/29 14:14:29 project3000 
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
+   
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- 
+   and Based on:   
 
    File: global.php,v 1.104.2.1 2002/04/03 21:11:45 jgm 
    ----------------------------------------------------------------------
@@ -63,6 +74,29 @@ define('FEEDBACK', 'Feedback');
 define('SUPPOORT', 'Support-Zentren');
 define('BUGS', 'Bug?');
 
+define('BOX_HEADING_LOGIN', 'Login');
+define('BOX_PASSWORD_FORGOTTEN', 'Passwort vergessen?');
+
+define('BOX_HEADING_CONFIGURATION', 'Konfiguration');
+
+define('BOX_HEADING_LOCALIZATION', 'L&auml;nder');
+define('BOX_TAXES_COUNTRIES', 'Land');
+define('BOX_TAXES_ZONES', 'Bundesl&auml;nder');
+
+define('BOX_HEADING_LANGUAGES', 'Sprachen');
+define('BOX_TOOLS_DEFINE_LANGUAGE', 'Sprachen definieren');
+define('BOX_LOCALIZATION_LANGUAGES', 'Sprachen');
+
+define('BOX_HEADING_TOOLS', 'Programme');
+define('BOX_TOOLS_BACKUP', 'Datenbanksicherung');
+define('BOX_TOOLS_FILE_MANAGER', 'Datei-Manager');
+define('BOX_TOOLS_MAIL', 'eMail versenden');
+define('BOX_TOOLS_NEWSLETTER_MANAGER', 'Rundschreiben Manager');
+define('BOX_TOOLS_SERVER_INFO', 'Server Info');
+define('BOX_TOOLS_WHOS_ONLINE', 'Wer ist Online');
+
+define('BOX_HEADING_ADMINISTRATORS', 'Anwender');
+define('BOX_ADMINISTRATORS_SETUP', 'Zugriffsrechte');
 
 define('_ABOUTPOSTING','About posting');
 define('_ACCESS_ADD','Add');
@@ -274,74 +308,6 @@ define('_WROTE','wrote');
 define('_YES','Yes');
 define('_YOUARELOGGEDOUT','You are now logged out!');
 define('_YOUCANUSEHTML','(You can use HTML code for links as an example)');
-//
-// Regional Specific Date texts
-//
-// A little help for date manipulation, from PHP manual on function strftime():
-//
-// %a - abbreviated weekday name according to the current locale
-// %A - full weekday name according to the current locale
-// %b - abbreviated month name according to the current locale
-// %B - full month name according to the current locale
-// %c - preferred date and time representation for the current locale
-// %C - century number (the year divided by 100 and truncated to an integer, range 00 to 99)
-// %d - day of the month as a decimal number (range 01 to 31)
-// %D - same as %m/%d/%y
-// %e - day of the month as a decimal number, a single digit is preceded by a space
-//      (range ' 1' to '31')
-// %h - same as %b
-// %H - hour as a decimal number using a 24-hour clock (range 00 to 23)
-// %I - hour as a decimal number using a 12-hour clock (range 01 to 12)
-// %j - day of the year as a decimal number (range 001 to 366)
-// %m - month as a decimal number (range 01 to 12)
-// %M - minute as a decimal number
-// %n - newline character
-// %p - either `am' or `pm' according to the given time value, or the corresponding strings for
-//      the current locale
-// %r - time in a.m. and p.m. notation
-// %R - time in 24 hour notation
-// %S - second as a decimal number
-// %t - tab character
-// %T - current time, equal to %H:%M:%S
-// %u - weekday as a decimal number [1,7], with 1 representing Monday
-// %U - week number of the current year as a decimal number, starting with the first Sunday as
-//      the first day of the first week
-// %V - The ISO 8601:1988 week number of the current year as a decimal number, range 01 to 53,
-//      where week 1 is the first week that has at least 4 days in the current year, and with
-//      Monday as the first day of the week.
-// %W - week number of the current year as a decimal number, starting with the first Monday as
-//      the first day of the first week
-// %w - day of the week as a decimal, Sunday being 0
-// %x - preferred date representation for the current locale without the time
-// %X - preferred time representation for the current locale without the date
-// %y - year as a decimal number without a century (range 00 to 99)
-// %Y - year as a decimal number including the century
-// %Z - time zone or name or abbreviation
-// %% - a literal `%' character
-//
-// Note: _DATESTRING is used for Articles and Comments Date
-//       _LINKSDATESTRING is used for Web Links creation Date
-//       _DATESTRING2 is used for Older Articles box on Home
-//
-
-define('_TIMEZONES','IDLW NT HST YST PST MST CST EST AST GMT-3:30 GMT-3 AT WAT GMT CET EET BT GMT+3:30 GMT+4 GMT+4:30 GMT+5 GMT+5:30 GMT+6 WAST CCT JST ACS GST GMT+11 NZST'); 
-define('_TZOFFSETS','0 1 2 3 4 5 6 7 8 8.5 9 10 11 12 13 14 15 15.5 16 16.5 17 17.5 18 19 20 21 21.5 22 23 24'); 
-define('_DATEBRIEF','%b %d, %Y');
-define('_DATELONG','%A, %B %d, %Y'); 
-define('_DATESTRING','%A, %B %d @ %H:%M:%S %Z'); 
-//define('_DATESTRING','%A, %B %d @ %H:%M:%S'); TimeZone Fix
-define('_DATESTRING2','%A, %B %d');
-define('_DATETIMEBRIEF','%b %d, %Y - %I:%M %p');
-define('_DATETIMELONG','%A, %B %d, %Y - %I:%M %p %Z'); 
-// define('_DATETIMELONG','%A, %B %d, %Y - %I:%M %p'); TimeZone Fix
-define('_LINKSDATESTRING','%d-%b-%Y');
-define('_TIMEBRIEF','%I:%M %p');
-define('_TIMELONG','%I:%M %p %Z');
-//
-define('_DAY_OF_WEEK_LONG','Sunday Monday Tuesday Wednesday Thursday Friday Saturday');
-define('_DAY_OF_WEEK_SHORT','Sun Mon Tue Wed Thu Fri Sat');
-define('_MONTH_LONG','January February March April May June July August September October November December');
-define('_MONTH_SHORT','Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec');
 
 
 
@@ -357,7 +323,7 @@ define('FEMALE', 'Frau');
 
 
 // configuration box text in includes/boxes/configuration.php
-define('BOX_HEADING_CONFIGURATION', 'Konfiguration');
+
 define('BOX_CONFIGURATION_MYSTORE', 'My Store');
 define('BOX_CONFIGURATION_LOGGING', 'Logging');
 define('BOX_CONFIGURATION_CACHE', 'Cache');
@@ -367,28 +333,11 @@ define('BOX_HEADING_CUSTOMERS', 'Kunden');
 define('BOX_CUSTOMERS_CUSTOMERS', 'Kunden');
 define('BOX_CUSTOMERS_ORDERS', 'Bestellungen');
 
-// taxes box text in includes/boxes/taxes.php
-define('BOX_HEADING_LOCATION_AND_TAXES', 'Land / Steuer');
-define('BOX_TAXES_COUNTRIES', 'Land');
-define('BOX_TAXES_ZONES', 'Bundesl&auml;nder');
-define('BOX_TAXES_GEO_ZONES', 'Steuerzonen');
-define('BOX_TAXES_TAX_CLASSES', 'Steuerklassen');
-define('BOX_TAXES_TAX_RATES', 'Steuers&auml;tze');
 
-// tools text in includes/boxes/tools.php
-define('BOX_HEADING_TOOLS', 'Programme');
-define('BOX_TOOLS_BACKUP', 'Datenbanksicherung');
-define('BOX_TOOLS_CACHE', 'Cache Steuerung');
-define('BOX_TOOLS_DEFINE_LANGUAGE', 'Sprachen definieren');
-define('BOX_TOOLS_FILE_MANAGER', 'Datei-Manager');
-define('BOX_TOOLS_MAIL', 'eMail versenden');
-define('BOX_TOOLS_NEWSLETTER_MANAGER', 'Rundschreiben Manager');
-define('BOX_TOOLS_SERVER_INFO', 'Server Info');
-define('BOX_TOOLS_WHOS_ONLINE', 'Wer ist Online');
+
 
 // localizaion box text in includes/boxes/localization.php
-define('BOX_LOCALIZATION_LANGUAGES', 'Sprachen');
-define('BOX_LOCALIZATION_ORDERS_STATUS', 'Bestellstatus');
+
 
 // javascript messages
 // images

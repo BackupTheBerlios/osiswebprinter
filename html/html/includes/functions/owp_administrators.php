@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: owp_administrators.php,v 1.2 2003/04/22 07:16:46 r23 Exp $
+   $Id: owp_administrators.php,v 1.3 2003/05/03 15:58:30 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -34,109 +34,51 @@
    ----------------------------------------------------------------------
    Released under the GNU General Public License
    ---------------------------------------------------------------------- */
-    include_once( DIR_WS_FUNCTIONS . 'database.php' );
-    include_once( DIR_WS_FUNCTIONS . 'languages.php' );
-    if ( ( !$language ) || ( $HTTP_GET_VARS['language'] ) ) 
-    {
-        if ( !$language ) 
-        {
-          tep_session_register('language');
-          tep_session_register('languages_id');
-        }
     
-        $language = tep_get_languages_directory( $HTTP_GET_VARS['language'] );
-        if ( !$language ) $language = tep_get_languages_directory( DEFAULT_LANGUAGE );
-    }
-    
-    // include the language translations
-    include_once( DIR_WS_LANGUAGES . $language . '.php' );
-    
-    $aADMBoxes = array ( 'administrators.php'   => BOX_HEADING_ADMINISTRATORS, 
-                         'banners.php'          => BOX_HEADING_BANNERS, 
-                         'catalog.php'          => BOX_HEADING_CATALOG, 
-                         'configuration.php'    => BOX_HEADING_CONFIGURATION,
-                         'customers.php'        => BOX_HEADING_CUSTOMERS, 
-                         'localization.php'     => BOX_HEADING_LOCALIZATION,
-												 'taxes.php'            => BOX_HEADING_LOCATION_AND_TAXES, 
-                         'modules.php'          => BOX_HEADING_MODULES, 
-                         'reports.php'          => BOX_HEADING_REPORTS,
-                         'tools.php'            => BOX_HEADING_TOOLS,
+    $aADMBoxes = array ( 'owp_administrators.php'   => BOX_HEADING_ADMINISTRATORS, 
+                         'owp_configuration.php'    => BOX_HEADING_CONFIGURATION,
+                         'owp_countries.php'        => BOX_HEADING_LOCALIZATION,
+			 'owp_localization.php'     => BOX_HEADING_LANGUAGES, 
+                         'owp_tools.php'            => BOX_HEADING_TOOLS,
                          );
-                      
+                     
     // associate all the admin pages with the box class that includes it                      
-    $aADMPages = array( 'configuration.php'            => 'configuration.php',
-                        'default.php'                  => '*',
-                        'categories.php'               => '*',
-                        'modules.php'                  => 'modules.php',
-                        'products_attributes.php'      => 'catalog.php',
-                        'manufacturers.php'            => 'catalog.php',
-                        'reviews.php'                  => 'catalog.php',
-                        'specials.php'                 => 'catalog.php', 
-                        'products_expected.php'        => 'catalog.php',
-                        'customers.php'                => 'customers.php',
-                        'orders.php'                   => 'customers.php',
-                        'countries.php'                => 'taxes.php',
-                        'zones.php'                    => 'taxes.php',
-                        'geo_zones.php'                => 'taxes.php',
-                        'tax_classes.php'              => 'taxes.php',
-                        'tax_rates.php'                => 'taxes.php',
-                        'banner_manager.php'           => 'banners.php',
-                        'currencies.php'               => 'localization.php',
-                        'languages.php'                => 'localization.php',
-                        'orders_status.php'            => 'localization.php',
-                        'stats_products_viewed.php'    => 'reports.php',
-                        'stats_products_purchased.php' => 'reports.php',
-                        'stats_customers.php'          => 'reports.php',
-                        'file_manager.php'             => 'tools.php',
-                        'backup.php'                   => 'tools.php',
-                        'whos_online.php'              => 'tools.php',
-                        'cache.php'                    => 'tools.php',
-                        'mail.php'                     => 'mail.php',
-                        'administrators.php'           => 'administrators.php',
+    $aADMPages = array( $owpFilename['configuration']   => 'owp_configuration.php',
+                        $owpFilename['countries']       => 'owp_countries.php',
+                        $owpFilename['zones']           => 'owp_countries.php',
+                        $owpFilename['define_language'] => 'owp_localization.php',
+                        $owpFilename['languages']       => 'owp_localization.php',
+                        $owpFilename['backup']          => 'owp_tools.php',
+                        $owpFilename['file_manager']    => 'owp_tools.php',
+                        $owpFilename['mail']            => 'owp_tools.php',
+                        $owpFilename['newsletters']     => 'owp_tools.php',
+                        $owpFilename['server_info']     => 'owp_tools.php',
+                        $owpFilename['whos_online']     => 'owp_tools.php',
+                        $owpFilename['administrators']  => 'owp_administrators.php',
                      );                    
     
-    // check to see if php implemented session management functions - if not, include php3/php4 compatible session class
-    if ( !function_exists( 'session_start' ) ) 
-    {
-        include_once( DIR_WS_CLASSES . 'sessions.php' );
-    }
 
-    // include mysql session storage handler
-    if ( STORE_SESSIONS == 'mysql' ) 
-    {
-        include( DIR_WS_FUNCTIONS . 'sessions_mysql.php' );
-    }
-    
-    function RequireLoginValidForPage( $aRetPage )
-    {
+    function RequireLoginValidForPage( $aRetPage ) {
         global $PHP_SELF, $in_login, $login_id, $aADMPages;
         
         $aThisPage = basename( $PHP_SELF );
         //print( "$login_id<br>" );
         $aRetPage  = str_replace( $aThisPage, 'default.php', $aRetPage );
         
-        if ( empty( $in_login ) )
-        {
-            if ( !tep_session_is_registered( 'login_id' ) ) 
-            {
+        if ( empty( $in_login ) ) {
+            if ( !tep_session_is_registered( 'login_id' ) ) {
                 header( 'Location: login.php?in_login=yes&retpage=' . urlencode( $aRetPage ) . "\n" );
-            }
-            else
-            {
+            } else {
                 $aSQL = "select allowed_pages from administrators where ( administrator_id = '$login_id' )";
                 $aRes = tep_db_query( $aSQL );
-                if ( $aVal = tep_db_fetch_array( $aRes ) )
-                {
+                if ( $aVal = tep_db_fetch_array( $aRes ) )  {
                     $aPages = $aVal['allowed_pages'];
-                    if ( trim( $aPages != '*' ) )
-                    {
+                    if ( trim( $aPages != '*' ) ) {
                         $aAllowedPages   = explode( '|', $aPages );
                         $aCurrentPageBox = $aADMPages[$aThisPage];
                         //print( "$aThisPage, $aCurrentPageBox<br>" ); 
-                        if ( $aCurrentPageBox != '*' )
-                        {
-                            if ( !in_array( $aCurrentPageBox, $aAllowedPages ) )
-                            {
+                        if ( $aCurrentPageBox != '*' ) {
+                            if ( !in_array( $aCurrentPageBox, $aAllowedPages ) )  {
                                 header( 'Location: login.php?' . urlencode( $aRetPage ) . "\n" );
                             }
                         }
@@ -146,26 +88,20 @@
         }
     }
     
-    function CanShowBox( $aBoxName )
-    {
+    function CanShowBox( $aBoxName )  {
         global $login_id;
         //print( "CanShowBox( $aBoxName )<br>" );
         $aSQL = "select allowed_pages from administrators where ( administrator_id = '$login_id' )";
         $aRes = tep_db_query( $aSQL );
-        if ( $aVal = tep_db_fetch_array( $aRes ) )
-        {
+        if ( $aVal = tep_db_fetch_array( $aRes ) ) {
             $aPages = $aVal['allowed_pages'];
-            if ( trim( $aPages != '*' ) )
-            {
+            if ( trim( $aPages != '*' ) )  {
                 $aAllowedPages   = explode( '|', $aPages );
                 $aCurrentPageBox = $aBoxName;
-                if ( in_array( $aCurrentPageBox, $aAllowedPages ) )
-                {
+                if ( in_array( $aCurrentPageBox, $aAllowedPages ) ) {
                     return true;
                 }
-            }
-            else
-            {
+            } else {
                 return true;
             }
         }

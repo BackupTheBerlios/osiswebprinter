@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: html_output.php,v 1.9 2003/04/29 17:02:07 r23 Exp $
+   $Id: html_output.php,v 1.10 2003/05/03 15:58:30 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -46,7 +46,8 @@
     }  
 
     while ( (substr($link, -1) == '&') || (substr($link, -1) == '?') ) $link = substr($link, 0, -1);
-
+    while (strstr($link, '&&')) $link = str_replace('&&', '&', $link);
+    
     return $link;
   }
 

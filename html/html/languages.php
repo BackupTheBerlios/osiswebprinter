@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.17 2003/04/30 15:30:32 r23 Exp $
+   $Id: languages.php,v 1.18 2003/05/03 15:58:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -27,7 +27,7 @@
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
-  }  
+  }
   
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['languages']);
 

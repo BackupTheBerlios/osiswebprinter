@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: administrators.php,v 1.7 2003/05/02 17:00:39 r23 Exp $
+   $Id: administrators.php,v 1.8 2003/05/03 15:58:29 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -43,47 +43,40 @@
    ---------------------------------------------------------------------- */
 
   require('includes/system.php');
-/*
+
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['navigation']->set_snapshot();
     owpRedirect(owpLink($owpFilename['login'], '', 'SSL'));
   } 
-*/
+
   require(OWP_LANGUAGES_DIR . $language . '/' . $owpFilename['administrators']);
   require_once(OWP_FUNCTIONS_DIR . 'owp_administrators.php');
-/*
-  $aErrors = '';
-  if ( $REQUEST_METHOD == 'POST' ) 
-  {
-      if ( !empty( $username ) )
-      {
-        if ( ( $password == $confpwd ) && ( trim( $password ) != '' ) )
-        {
-            //var_dump( $HTTP_POST_VARS );
-            
-            if ( $adm_type == 'all' )
-            {
-                $aSQL = "insert into " . TABLE_ADMINISTRATORS . " ( username, password, allowed_pages ) values ( '$username', '$password', '*' )";
-            }
-            else
-            {
-                $aPages = implode( '|', $adm_pages ); 
-                $aSQL = "insert into " . TABLE_ADMINISTRATORS . " ( username, password, allowed_pages ) values ( '$username', '$password', '$aPages' )";
-            }
-            tep_db_query( $aSQL );
-        }
-        else
-        {
-            $aErrors = TEXT_PWD_ERROR;
-        }
-      }
-      else
-      {
-        $aErrors = TEXT_UNAME_ERROR;
-      }
-  } 
-*/  
+ 
   switch ($_GET['action']) {
+    case 'update':
+      $sPages = $_POST['adm_pages'];       
+      if ( $adm_type == 'all' ) {
+        $aPages = '*';
+      } else {
+        $aPages = implode( '|', $sPages ); 
+      }
+      $db->Execute("UPDATE " . $owpDBTable['administrators'] . " 
+	               SET admin_gender = " . $db->qstr($admin_gender) . ", 
+                           admin_firstname = " . $db->qstr($admin_firstname) . ", 
+                           admin_lastname = " . $db->qstr($admin_lastname) . ",
+                           admin_email_address = " . $db->qstr($admin_email_address) . ", 
+                           admin_telephone = " . $db->qstr($admin_telephone) . ",
+                           admin_fax = " . $db->qstr($admin_fax) . ",
+                           admin_allowed_pages = " . $db->qstr($aPages) . ", 
+                           admin_newsletter = " . $db->qstr($admin_newsletter) . " 
+                     WHERE admin_id = '" . $_GET['aID'] . "'");
+      $today = date("Y-m-d H:i:s");
+      $db->Execute("UPDATE " . $owpDBTable['administrators_info'] . " 
+	               SET admin_info_date_account_last_modified = " . $db->DBTimeStamp($today) . "
+                     WHERE admin_info_id = '" . $_GET['aID'] . "'");
+ 
+      owpRedirect(owpLink($owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $_GET['aID']));
+      break;  
     case 'deleteconfirm':
       $db->Execute("DELETE FROM " . $owpDBTable['administrators'] . " WHERE admin_id = '" . $_GET['aID'] . "'");
       $db->Execute("DELETE FROM " . $owpDBTable['administrators_info'] . " WHERE admin_info_id = '" . $_GET['aID'] . "'");
@@ -140,7 +133,7 @@
       <tr>
         <td><?php echo owpTransLine('1', '10');; ?></td>
       </tr>
-      <tr><?php echo owpDrawForm('user', $owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $aInfo->admin_id . 'action=update', 'post', 'onSubmit="return check_form();"'); ?>
+        <tr><?php echo owpDrawForm('user', $owpFilename['administrators'], 'page=' . $_GET['page'] . '&aID=' . $aInfo->admin_id . '&action=update', 'post'); ?>
         <td class="formAreaTitle"><?php echo CATEGORY_PERSONAL; ?></td>
       </tr>
       <tr>
@@ -207,7 +200,7 @@
    }
 ?>
               </SELECT></td>
-          </tr>
+          </tr>        
         </table></td>
       </tr>
       <tr>
