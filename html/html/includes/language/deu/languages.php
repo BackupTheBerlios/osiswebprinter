@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.6 2003/05/02 09:49:24 r23 Exp $
+   $Id: languages.php,v 1.7 2003/05/07 17:51:03 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -25,6 +25,11 @@
 define('TITLE', 'Sprachen');
 define('NAVBAR_TITLE', 'Sprachen');
 define('HEADING_TITLE', 'Sprachen');
+
+define('HEADING_TITLE_SEARCH', 'Suche:');
+define('HEADING_TITLE_STATUS', 'Status:');
+define('TEXT_ALL_LANGUAGES', 'alle Sprachen');
+define('TEXT_ACTIVE_LANGUAGES', 'aktive Sprachen');
 
 define('TABLE_HEADING_LANGUAGE_NAME', 'Name');
 define('TABLE_HEADING_LANGUAGE_ISO_639_2', 'ISO 639-2');

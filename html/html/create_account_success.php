@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: create_account_success.php,v 1.4 2003/05/05 16:47:38 r23 Exp $
+   $Id: create_account_success.php,v 1.5 2003/05/07 17:51:03 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -59,7 +59,7 @@
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr>
             <td><?php echo owpImage(OWP_IMAGES_DIR . 'table_background_man_on_board.gif', HEADING_TITLE); ?></td>
-            <td valign="top" class="main"><div align="center" class="pageHeading"><?php echo HEADING_TITLE; ?></div><br><?php echo TEXT_ACCOUNT_CREATED; ?></td>
+            <td valign="top" class="main"><div align="center" class="owp-title"><?php echo HEADING_TITLE; ?></div><br><?php echo TEXT_ACCOUNT_CREATED; ?></td>
           </tr>
         </table></td>
       </tr>

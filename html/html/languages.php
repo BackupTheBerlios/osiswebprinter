@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: languages.php,v 1.18 2003/05/03 15:58:29 r23 Exp $
+   $Id: languages.php,v 1.19 2003/05/07 17:51:03 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -170,7 +170,8 @@
       $messageStack->add(ERROR_CSV_TEMP_DIRECTORY_DOES_NOT_EXIST, 'error');
     }
   }      
-  
+  $lang_select_array = array(array('id' => '0', 'text' => TEXT_ALL_LANGUAGES),
+                             array('id' => '1','text' => TEXT_ACTIVE_LANGUAGES));
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -197,23 +198,50 @@
 <!-- left_navigation_eof //-->
     </table></td>
 <!-- body_text //-->
-    <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
-      <tr>
-        <td class="owp-title"><?php echo HEADING_TITLE; ?></td>
-      </tr>
-      <tr>
-        <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
-          <tr>
-            <td valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
-              <tr class="dataTableHeadingRow">
-                <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_LANGUAGE_NAME; ?></td>
-                <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_LANGUAGE_ISO_639_2; ?></td>
-                <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_LANGUAGE_ISO_639_1; ?></td>
-                <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_LANGUAGE_STATUS; ?></td>
-                <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
-              </tr>
+   <td width="100%"><table border="0" width="100%" cellspacing="0" cellpadding="0">
+     <tr>
+       <td class="owp-title"><table border="0" width="100%" cellspacing="0" cellpadding="0">
+         <tr>
+           <td class="owp-title"><?php echo HEADING_TITLE; ?></td> 
+           <td class="owp-title" align="right"></td>
+           <td align="right"><table border="0" width="100%" cellspacing="0" cellpadding="0">
+            <tr><?php echo owpDrawForm('search', $owpFilename['languages'], '', 'get'); ?>
+              <td class="smallText" align="right"><?php echo HEADING_TITLE_SEARCH . ' ' . owpInputField('search'); ?></td>
+              </form></tr>
+            <tr><?php echo owpDrawForm('status', $owpFilename['languages'], '', 'get'); ?>
+              <td class="smallText" align="right"><?php echo HEADING_TITLE_STATUS . ' ' . owpPullDownMenu('status', $lang_select_array, '0', 'onChange="this.form.submit();"'); ?></td>
+            </form></tr>
+           </table></td>
+         </tr>
+       </table></td>
+     </tr>
+     <tr>
+       <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
+         <tr>
+           <td valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
+             <tr class="dataTableHeadingRow">
+               <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_LANGUAGE_NAME; ?></td>
+               <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_LANGUAGE_ISO_639_2; ?></td>
+               <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_LANGUAGE_ISO_639_1; ?></td>
+               <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_LANGUAGE_STATUS; ?></td>
+               <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
+             </tr>
 <?php
-  $languages_query_raw = "select languages_id, name, iso_639_2, iso_639_1, active, sort_order from " . $owpDBTable['languages'] . " order by sort_order";
+    $search = '';
+    if ( ($_GET['search']) && (owpNotNull($_GET['search'])) ) {
+      $keywords = owpPrepareInput($_GET['search']);
+      $search = "where name like '%" . $keywords . "%' or iso_639_2 like '%" . $keywords . "%' or iso_639_1 like '%" . $keywords . "'";
+    }
+    if ($_GET['status']) {
+      $status = owpPrepareInput($_GET['status']);
+      if (!empty($_GET['search'])) {
+        $seach .= "and active = '". $status . "'";
+      } else {
+        $search ="where active = '". $status . "'";
+      }
+    }
+
+  $languages_query_raw = "select languages_id, name, iso_639_2, iso_639_1, active, sort_order from " . $owpDBTable['languages'] . " " . $search . " order by sort_order";
   $languages_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $languages_query_raw, $languages_query_numrows);
   $languages_query = $db->Execute($languages_query_raw);
   while ($languages = $languages_query->fields) {
@@ -316,7 +344,7 @@
         $contents[] = array('align' => 'center', 'text' => '<a href="' . owpLink($owpFilename['languages'], 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=edit') . '">' . owpImageButton('button_edit.gif', IMAGE_EDIT) . '</a> <a href="' . owpLink($owpFilename['languages'], 'page=' . $_GET['page'] . '&lID=' . $lInfo->languages_id . '&action=delete') . '">' . owpImageButton('button_delete.gif', IMAGE_DELETE) . '</a> <a href="' . owpLink($owpFilename['define_language'], 'lngdir=' . $lInfo->iso_639_2) . '">' . owpImageButton('button_define.gif', IMAGE_DEFINE) . '</a>');
         $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_NAME . ' ' . $lInfo->name);
         $contents[] = array('text' => TEXT_INFO_LANGUAGE_ISO_639_2 . ' ' . $lInfo->iso_639_2);
-        $contents[] = array('text' => '<br>' . owpImage(OWP_LANGUAGES_DIR . $lInfo->iso_639_2 . '/images/icon.gif', $lInfo->name));
+        $contents[] = array('text' => '<br>' . owpImage(OWP_FLAGS . $lInfo->iso_639_2 . '.gif', $lInfo->name));
         $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_DIRECTORY . '<br>' . OWP_LANGUAGES_DIR . '<b>' . $lInfo->iso_639_2 . '</b>');
         $contents[] = array('text' => '<br>' . TEXT_INFO_LANGUAGE_SORT_ORDER . ' ' . $lInfo->sort_order);
       }
