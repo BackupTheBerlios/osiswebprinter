@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: gui.php,v 1.12 2003/04/02 06:34:02 r23 Exp $
+   $Id: gui.php,v 1.13 2003/04/03 21:51:52 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -125,7 +125,21 @@ function owp_form_hidden() {
    return $formHidden;
 }
 
+function owp_admin_hidden() {
+   global $gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone, $fax, $root_path, $owp_url;
 
+   $formHidden = '<input type="hidden" name="gender" value="' . $gender . '">' . "\n" .
+                 '<input type="hidden" name="firstname" value="' . $firstname . '">' . "\n" .
+                 '<input type="hidden" name="name" value="' . $name . '">' . "\n" .
+                 '<input type="hidden" name="pwd" value="' . $pwd . '">' . "\n" .
+                 '<input type="hidden" name="repeatpwd" value="' . $repeatpwd . '">' . "\n" .
+                 '<input type="hidden" name="email" value="' . $email . '">' . "\n" .
+                 '<input type="hidden" name="phone" value="' . $phone . '">' . "\n" .
+                 '<input type="hidden" name="fax" value="' . $fax . '">' . "\n" .
+                 '<input type="hidden" name="root_path" value="' . $root_path . '">' . "\n" .
+                 '<input type="hidden" name="owp_url" value="' . $owp_url . '">' . "\n";
+   return $formHidden;
+}
 function owp_CHM_check() {
    global $currentlang;
 
@@ -257,43 +271,217 @@ function owp_start() {
 
 
 function owp_continue() {
- $continue = '<font class="owp-title">' . CONTINUE_1 . '</font>' . "\n" .
-             '<font class="owp-normal">' . CONTINUE_2 . '</font>' . "\n" .
-             '<br /><br />' . "\n" .
-             '<center><form action="index.php" method="post"><table width="50%" border=1>' . "\n" .
-             ' <tr>' . "\n" .
-             '  <td align="left"><font class="owp-normal">' . ADMIN_LOGIN . '</font></td>' . "\n" .
-             '  <td><input type="text" name="aid" SIZE=30 maxlength=80 value="Admin"></td>' . "\n" .
-             ' </tr>' . "\n" .
-             ' <tr>' . "\n" .
-             '  <td align="left"><font class="owp-normal">' . ADMIN_NAME . '</font></td>' . "\n" .
-             '  <td><input type="text" name="name" SIZE=30 maxlength=80 value="Admin"></td>' . "\n" .
-             ' </tr>' . "\n" .
-             ' <tr>' . "\n" .
-             '  <td align="left"><font class="owp-normal">' . ADMIN_PASS . '</font></td>' . "\n" .
-             '  <td><input type="password" name="pwd" SIZE=30 maxlength=80 value=""></td>' . "\n" .
-             ' </tr>' . "\n" .
-             ' <tr>' . "\n" .
-             '  <td align="left"><font class="owp-normal">' . ADMIN_REPEATPASS . '</font></td>' . "\n" .
-             '  <td><input type="password" name="repeatpwd" SIZE=30 maxlength=80 value=""></td>' . "\n" .
-             ' </tr>' . "\n" .
-             ' <tr>' . "\n" .
-             '  <td align="left"><font class="owp-normal">' . ADMIN_EMAIL . '</font></td>' . "\n" .
-             '  <td><input type="text" name="email" SIZE=30 maxlength=80 value="none@none.com"></td>' . "\n" .
-             ' </tr>' . "\n" .
-             ' <tr>' . "\n" .
-             '  <td align="left"><font class="owp-normal">' . ADMIN_URL . '</font></td>' . "\n" .
-             '  <td><input type="text" name="url" SIZE=30 maxlength=80 value="http://www.osisnet.de"></td>' . "\n" .
-             ' </tr>' . "\n" .
-             '</table>' . "\n";
+   global $_SERVER;
+
+   $root_path = str_replace("\\","/",getcwd()); // "
+   $root_path = str_replace("/install", "", $root_path);
+        
+   $filepath = (! empty($_SERVER['REQUEST_URI'])) ? dirname($_SERVER['REQUEST_URI']) : dirname($_SERVER['SCRIPT_NAME']);
+        
+   $filepath = str_replace("\\", "/", $filepath); // "
+   $filepath = str_replace("/install", "", $filepath);
+   if ( substr($filepath, 0, 1) == "/" ) {
+     $filepath = substr($filepath,1);
+   }
+   if ( substr($filepath, -1) == "/" ) {
+     $filepath = substr($filepath, 0, -1);
+   }
+   $protocol = ($HTTP_SERVER_VARS['HTTPS'] == 'on') ? 'https://' : 'http://';
+   $owp_url = (!empty($filepath)) ? $protocol.$_SERVER['HTTP_HOST']."/".$filepath : $protocol.$_SERVER['HTTP_HOST'];
+
+   $continue = '<font class="owp-title">' . CONTINUE_1 . '</font>' . "\n" .
+               '<font class="owp-normal">' . CONTINUE_2 . '</font>' . "\n" .
+               '<br /><br />' . "\n" .
+               '<center><form action="index.php" method="post"><table width="60%" border="0">' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_GENDER . '</font></td>' . "\n" .
+               '  <td><font class="owp-normal"><input type="radio" name="gender" value="m" checked>&nbsp;' . MALE . '&nbsp;&nbsp;<input type="radio" name="gender" value="f">&nbsp;' . FEMALE . '&nbsp;</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_FIRSTNAME . '</font></td>' . "\n" .
+               '  <td><input type="text" name="firstname" SIZE=30 maxlength=80 value=""></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_NAME . '</font></td>' . "\n" .
+               '  <td><input type="text" name="name" SIZE=30 maxlength=80 value="Admin"></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_PASS . '</font></td>' . "\n" .
+               '  <td><input type="password" name="pwd" SIZE=30 maxlength=80 value=""></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_REPEATPASS . '</font></td>' . "\n" .
+               '  <td><input type="password" name="repeatpwd" SIZE=30 maxlength=80 value=""></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_EMAIL . '</font></td>' . "\n" .
+               '  <td><input type="text" name="email" SIZE=30 maxlength=80 value="none@none.com"></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_PHONE . '</font></td>' . "\n" .
+               '  <td><input type="text" name="phone" SIZE=30 maxlength=80 value=""></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_FAX . '</font></td>' . "\n" .
+               '  <td><input type="text" name="fax" SIZE=30 maxlength=80 value=""></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ROOT_DIR . '</font></td>' . "\n" .
+               '  <td><input type="text" name="root_path" SIZE=30 maxlength=80 value="' . $root_path . '"></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . OWP_URL . '</font></td>' . "\n" .
+               '  <td><input type="text" name="owp_url" SIZE=30 maxlength=80 value="' . $owp_url . '"></td>' . "\n" .
+               ' </tr>' . "\n" .
+               '</table>' . "\n" .
+               '<br /><br />' . "\n";
    $continue .= owp_form_hidden();
-   $continue .= '<input type="hidden" name="op" value="Set Login">' . "\n" .
+   $continue .= '<input type="hidden" name="op" value="Login">' . "\n" .
+                '<input type="submit" value="' . BTN_CONTINUE . '">' . "\n" .
+                '</form></center>' . "\n";
+   return $continue;
+
+}
+
+function owp_change_login() {
+   global $gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone, $fax, $root_path, $owp_url; 
+   
+   $continue = '<font class="owp-title">' . CONTINUE_1 . '</font>' . "\n";
+
+   if ($pwd == '') {
+     $continue .= '<br /><font class="owp-error">' . ADMIN_ERROR . '&nbsp;' . ADMIN_PASSWORD_ERROR . '</font>' . "\n";
+   } 
+   if ($email == '') {
+     $continue .= '<br /><font class="owp-error">' . ADMIN_ERROR . '&nbsp;' . ADMIN_EMAIL_ERROR. '</font>' . "\n";
+   }
+   if ($pwd != $repeatpwd) {
+     $continue .= '<br /><font class="owp-error">' . ADMIN_ERROR . '&nbsp;' . PASSWORD_ERROR . '</font>' . "\n";
+   } 
+   $continue .= '<br /><br />' . "\n" .
+                '<center><form action="index.php" method="post"><table width="50%" border="0">' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="left"><font class="owp-normal">' . ADMIN_GENDER . '</font></td>' . "\n" .
+                '  <td><font class="owp-normal"><input type="radio" name="gender" value="m" checked>&nbsp;' . MALE . '&nbsp;&nbsp;<input type="radio" name="gender" value="f">&nbsp;' . FEMALE . '&nbsp;</font></td>' . "\n" .
+                ' </tr>' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="left"><font class="owp-normal">' . ADMIN_FIRSTNAME . '</font></td>' . "\n" .
+                '  <td><input type="text" name="firstname" SIZE=30 maxlength=80 value="' . $firstname . '"></td>' . "\n" .
+                ' </tr>' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="left"><font class="owp-normal">' . ADMIN_NAME . '</font></td>' . "\n" .
+                '  <td><input type="text" name="name" SIZE=30 maxlength=80 value="' . $name . '"></td>' . "\n" .
+                ' </tr>' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="left"><font class="owp-normal">' . ADMIN_PASS . '</font></td>' . "\n" .
+                '  <td><input type="password" name="pwd" SIZE=30 maxlength=80 value="' . $pwd . '"></td>' . "\n" .
+                ' </tr>' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="left"><font class="owp-normal">' . ADMIN_REPEATPASS . '</font></td>' . "\n" .
+                '  <td><input type="password" name="repeatpwd" SIZE=30 maxlength=80 value="' . $repeatpwd . '"></td>' . "\n" .
+                ' </tr>' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="left"><font class="owp-normal">' . ADMIN_EMAIL . '</font></td>' . "\n" .
+                '  <td><input type="text" name="email" SIZE=30 maxlength=80 value="' . $email . '"></td>' . "\n" .
+                ' </tr>' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="left"><font class="owp-normal">' . ADMIN_PHONE . '</font></td>' . "\n" .
+                '  <td><input type="text" name="phone" SIZE=30 maxlength=80 value="' . $phone . '"></td>' . "\n" .
+                ' </tr>' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="left"><font class="owp-normal">' . ADMIN_FAX . '</font></td>' . "\n" .
+                '  <td><input type="text" name="fax" SIZE=30 maxlength=80 value="' . $fax . '"></td>' . "\n" .
+                ' </tr>' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="left"><font class="owp-normal">' . ROOT_DIR . '</font></td>' . "\n" .
+                '  <td><input type="text" name="root_path" SIZE=30 maxlength=80 value="' . $root_path . '"></td>' . "\n" .
+                ' </tr>' . "\n" .
+                ' <tr>' . "\n" .
+                '  <td align="left"><font class="owp-normal">' . OWP_URL . '</font></td>' . "\n" .
+                '  <td><input type="text" name="owp_url" SIZE=30 maxlength=80 value="' . $owp_url . '"></td>' . "\n" .
+                ' </tr>' . "\n" .
+                '</table>' . "\n";
+   $continue .= owp_form_hidden();
+   $continue .= '<input type="hidden" name="op" value="Login">' . "\n" .
                 '<input type="submit" value="' . BTN_SET_LOGIN . '">' . "\n" .
                 '</form></center>' . "\n";
    return $continue;
 
 }
 
+function owp_login() {
+   global $gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone, $fax, $root_path, $owp_url; 
+
+   $owp_gender = ($gender == 'm') ? MALE : FEMALE;
+
+   $continue = '<font class="owp-title">' . CONTINUE_1 . '</font>' . "\n" .
+               '<font class="owp-normal">' . CONTINUE_2 . '</font>' . "\n" .
+               '<br /><br />' . "\n" .
+               '<center><form name="change login" action="index.php" method="post"><table width="80%" border="0">' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_GENDER . '</font></td>' . "\n" .
+               '  <td><font class="owp-normal">' . $owp_gender . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_FIRSTNAME . '</font></td>' . "\n" .
+               '  <td><font class="owp-normal">' . $firstname . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_NAME . '</font></td>' . "\n" .
+               '  <td><font class="owp-normal">' . $name . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_PASS . '</font></td>' . "\n" .
+               '  <td><font class="owp-normal">' . PASSWORD_HIDDEN . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_REPEATPASS . '</font></td>' . "\n" .
+               '  <td><font class="owp-normal">' . PASSWORD_HIDDEN . '</td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_EMAIL . '</font></td>' . "\n" .
+               '  <td><font class="owp-normal">' . $email . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_PHONE . '</font></td>' . "\n" .
+               '  <td><font class="owp-normal">' . $phone . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ADMIN_FAX . '</font></td>' . "\n" .
+               '  <td><font class="owp-normal">' . $fax . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . ROOT_DIR . '</font></td>' . "\n" .
+               '  <td><font class="owp-normal">' . $root_path . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left"><font class="owp-normal">' . OWP_URL . '</font></td>' . "\n" .
+               '  <td><font class="owp-normal">' . $owp_url . '</font></td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td align="left">&nbsp;</td>' . "\n" .
+               '  <td>&nbsp;</td>' . "\n" .
+               ' </tr>' . "\n" .
+               ' <tr>' . "\n" .
+               '  <td>&nbsp;</td>' . "\n" .
+               '  <td>' . "\n";
+   $continue .= owp_form_hidden();
+   $continue .= owp_admin_hidden();
+   $continue .= '<input type="hidden" name="op" value="Change Login">' . "\n" . 
+                '<input type="submit" value="' . BTN_CHANGE_INFO . '"><br />' . "\n" .
+                '  </td>' . "\n" .
+                ' </tr>' . "\n" .
+                '</table></form></center>' . "\n" .
+                '<br /><font class="owp-normal">' . ADMIN_INSTALL . '</font>' . "\n" .
+                '<form name="login install" action="index.php" method="post">' . "\n";
+   $continue .= owp_form_hidden();
+   $continue .= owp_admin_hidden();
+   $continue .= '<input type="hidden" name="op" value="Set Login">' . "\n" .
+                '<input type="submit" value="' . BTN_LOGIN_SUBMIT . '">' . "\n" .
+                '</form>' . "\n" .
+                '' . "\n";
+   return $continue;
+
+}
 
 function owp_set_login() {
    $setLogin .= '<form action="index.php" method="post"><center><table width="50%">' . "\n";

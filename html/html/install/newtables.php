@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: newtables.php,v 1.6 2003/04/02 06:34:02 r23 Exp $
+   $Id: newtables.php,v 1.7 2003/04/03 21:51:52 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -68,20 +68,20 @@ $sql = "
 ";
 dosql($table,$sql);
 
-$table = $prefix.'_user';
+$table = $prefix.'_administrators';
 $sql = "
 CREATE TABLE ".$prefix."_user (
-  owp_user_id int(11) NOT NULL auto_increment,
-  owp_user_gender char(1) NOT NULL default '',
-  owp_user_firstname varchar(32) NOT NULL default '',
-  owp_user_lastname varchar(32) NOT NULL default '',
-  owp_user_email_address varchar(96) NOT NULL default '                                                                                                ',
-  owp_user_telephone varchar(32) NOT NULL default '                                                                                                         ',
-  owp_user_fax varchar(32) default NULL,
-  owp_user_password varchar(40) NOT NULL default '',
+  owp_admin_id int(11) NOT NULL auto_increment,
+  owp_admin_gender char(1) NOT NULL default '',
+  owp_admin_firstname varchar(32) NOT NULL default '',
+  owp_admin_lastname varchar(32) NOT NULL default '',
+  owp_admin_email_address varchar(96) NOT NULL default '                                                                                                ',
+  owp_admin_telephone varchar(32) NOT NULL default '                                                                                                         ',
+  owp_admin_fax varchar(32) default NULL,
+  owp_admin_password varchar(40) NOT NULL default '',
   owp_last_modified datetime default NULL,
   owp_date_added datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY (owp_user_id)
+  PRIMARY KEY (owp_admin_id)
 )
 ";
 dosql($table,$sql);

@@ -1,6 +1,6 @@
 <?php 
 /* ----------------------------------------------------------------------
-   $Id: global.php,v 1.9 2003/04/02 06:34:02 r23 Exp $
+   $Id: global.php,v 1.10 2003/04/03 21:51:52 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -37,6 +37,7 @@ define('BTN_START','Start');
 define('BTN_SUBMIT','best&auml;tigen');
 define('BTN_NEW_INSTALL', 'Installation');
 define('BTN_CHANGE_INFO', 'Daten &auml;ndern');
+define('BTN_LOGIN_SUBMIT','Admin Installation');
 
 define('GREAT', 'Willkommen bei OSIS Web Printer.');
 define('GREAT_1', 'Die Komplettlösung zur schnellen Anbindung von Webanwendungen an Toshiba Tec Web Printer.'); 
@@ -68,7 +69,7 @@ define('CHMOD_CHECK_4', 'Bitte &auml;ndern Sie die Zugriffsrechte (CHMOD 666) de
 define('CHMOD_CHECK_5', 'CHMOD ~/includes/config-old.php ist 666 -- RICHTIG');
 define('CHMOD_CHECK_6', 'Bitte &auml;ndern Sie die Zugriffsrechte (CHMOD 666) der Datei ~/includes/config-old.php ');
 
-define('CHM_CHECK_1', 'Bitte geben Sie die Zugangsdaten Ihrer Datenbank an. Sollten Sie keine Root-Rechte bei Ihrer Datenbank haben (z.b. virtual Hosting) erstellen Sie die Datenbank vorher. Zur Erstellung einer Datenbank empfehlen wir Ihnen phpMyAdmin. OSIS Web Printer Installtion wird in Ihrer Datenbank die notwendigen Tabelle anlegen.');
+define('CHM_CHECK_1', 'Bitte geben Sie die Zugangsdaten Ihrer Datenbank ein. Sollten Sie keine Root-Rechte bei Ihrer Datenbank haben (z.b. virtual Hosting) erstellen Sie die Datenbank vorher. Zur Erstellung einer Datenbank empfehlen wir Ihnen phpMyAdmin. OSIS Web Printer Installation wird in Ihre Datenbank die notwendigen Tabelle anlegen.');
 define('DBHOST', 'Datenbank Server');
 define('DBINFO', 'Datenbank Information');
 define('DBNAME', 'Datenbank Name');
@@ -90,7 +91,6 @@ define('NEW_INSTALL_2', 'Die OSIS WebPrinter Datenbank wird mit folgenden Zugang
 define('NEW_INSTALL_3', 'Soll die Datenbank erstellt werden <samp>(root)</samp>, aktivieren Sie <b>Datenbank anlegen</b>.<br />Ist die Datenbank bereits angelegt, klicken Sie bitte auf Start. Es werden die Tabellen angelegt.');
 define('NEW_INSTALL_4', 'Datenbank anlegen');
 
-
 define('MADE', ' erstellt.');
 define('MAKE_DB_1', 'Datenbank konnte nicht erstellt werden');
 define('MAKE_DB_2', 'wurde angelegt.');
@@ -100,13 +100,29 @@ define('MODIFY_FILE_2', 'Error: unable to open for write:');
 define('MODIFY_FILE_3', '0 lines changed, did nothing');
 
 
+define('CONTINUE_1','Setting Your DB Preferences');
+define('CONTINUE_2','You can now set up your administrative account. If you pass on this set up, your login for the administrative account will be Admin / Password (case sensitive).  It is advisable to set it up now, and not wait until later.');
 
+define('ADMIN_GENDER', 'Admin Anrede');
+define('MALE', 'Herr');
+define('FEMALE', 'Frau');
+define('ADMIN_FIRSTNAME', 'Admin Vorname');
+define('ADMIN_NAME', 'Admin Name');
 define('ADMIN_EMAIL','Admin Email');
-define('ADMIN_LOGIN','Admin Login');
-define('ADMIN_NAME','Admin Name');
-define('ADMIN_PASS','Admin Password');
-define('ADMIN_REPEATPASS','Admin Password (verify)');
-define('ADMIN_URL','Admin URL');
+define('ADMIN_FIRSTNAME', 'Vorname');
+define('ADMIN_NAME', 'Admin Name');
+define('ADMIN_PHONE', 'Admin Telefon');
+define('ADMIN_FAX', 'Admin Fax');
+define('ADMIN_PASS','Admin Passwort');
+define('ADMIN_REPEATPASS','Passwort best&auml;tigen');
+define('PASSWORD_HIDDEN', '--VERSTECKT--');
+define('OWP_URL', 'Virtual Path (URL)');
+define('ROOT_DIR', 'Webserver Root Directory');
+define('ADMIN_INSTALL', 'Sind die Angaben korrekt, klicken Sie bitte auf <code>Admin Installation</code>');
+define('PASSWORD_ERROR', 'Das \'Passwort\' und die \'Best&auml;tigung\' müssen übereinstimmen!');
+define('ADMIN_ERROR', 'Fehler:');
+define('ADMIN_PASSWORD_ERROR', 'Bitte geben Sie ein \'Passwort\' ein!');
+define('ADMIN_EMAIL_ERROR', 'Bitte geben Sie Ihre \'E-Mail Adresse\' ein!');
 
 define('FINISH_1','The Credits');
 define('FINISH_2','These are the scripts and people that make PostNuke go. Take some time and let these people know how much you appreciate their work. If you would like to be listed here, contact us about being a part of the developement team. We are always looking for some help.');

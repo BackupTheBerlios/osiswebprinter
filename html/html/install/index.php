@@ -1,6 +1,6 @@
 <?php
 /* ----------------------------------------------------------------------
-   $Id: index.php,v 1.10 2003/04/02 06:34:02 r23 Exp $
+   $Id: index.php,v 1.11 2003/04/03 21:51:52 r23 Exp $
 
    OSIS WebPrinter for your Homepage
    http://www.osisnet.de
@@ -96,15 +96,11 @@
     $dbpass = base64_decode($dbpass);
   }
 
- # $owconfig['prefix'] = $prefix;
-
   installer_get_language();
 
 // header
   include_once 'header.php';
-  
-  echo '<b>' . $prefix . '</b><br>' . $dbname;
-  
+   
 /* This starts the switch statement that filters through the form options.
  * the @ is in front of $op to suppress error messages if $op is unset and E_ALL
  * is on
@@ -113,11 +109,26 @@
     case 'Finish':
       owp_finish();
       break;
-    case 'Set Login':     
-      $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
-      input_data($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $aid, $name, $pwd, $repeatpwd, $email, $url);
-      update_config_php(true); // Scott - added
-      echo owp_set_login();
+    case 'Set Login':
+      if ($pwd != $repeatpwd) {
+        echo owp_change_login();
+      } else {     
+       $dbconn = dbconnect($dbhost, $dbuname, $dbpass, $dbname, $dbtype);
+       input_data($gender, $firstname, $name, $pwd, $repeatpwd, $email, $phone, $fax);
+       #input_data($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype, $aid, $name, $pwd, $repeatpwd, $email, $url);
+       update_config_php(true); // Scott - added
+       echo owp_set_login();
+      }
+      break;
+    case 'Change Login':
+       echo owp_change_login();
+      break;
+    case 'Login':
+      if ( ($pwd == '') || ($email == '') || ($pwd != $repeatpwd) ) {
+        echo owp_change_login();
+      } else {     
+        echo owp_login();
+      }
       break;
     case 'Continue':
       echo owp_continue();
