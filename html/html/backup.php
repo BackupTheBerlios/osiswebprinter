@@ -1,14 +1,26 @@
 <?php
-/*
-  $Id: backup.php,v 1.1 2003/04/18 22:52:09 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: backup.php,v 1.2 2003/04/18 22:59:37 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: backup.php,v 1.54 2002/10/27 18:43:35 dgw_
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2002 osCommerce
-
-  Released under the GNU General Public License
-*/
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
   require('includes/application_top.php');
 
@@ -21,8 +33,8 @@
         break;
       case 'backupnow':
         tep_set_time_limit(0);
-        $schema = '# osCommerce, Open Source E-Commerce Solutions' . "\n" .
-                  '# http://www.oscommerce.com' . "\n" .
+        $schema = '# OSIS WebPrinter for your Homepage' . "\n" .
+                  '# http://www.osisnet.de' . "\n" .
                   '#' . "\n" .
                   '# Database Backup For ' . STORE_NAME . "\n" . 
                   '# Copyright (c) ' . date('Y') . ' ' . STORE_OWNER . "\n" .

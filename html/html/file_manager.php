@@ -1,14 +1,26 @@
 <?php
-/*
-  $Id: file_manager.php,v 1.1 2003/04/18 22:52:09 r23 Exp $
+/* ----------------------------------------------------------------------
+   $Id: file_manager.php,v 1.2 2003/04/18 22:59:37 r23 Exp $
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+   OSIS WebPrinter for your Homepage
+   http://www.osisnet.de
+   
+   Ralf Zschemisch
+   http://www.r23.de/
+   
+   Copyright (c) 2003 r23
+   ----------------------------------------------------------------------
+   Based on:
+   
+   File: file_manager.php,v 1.37 2002/08/19 01:45:23 hpdl
+   ----------------------------------------------------------------------
+   osCommerce, Open Source E-Commerce Solutions
+   http://www.oscommerce.com
 
-  Copyright (c) 2002 osCommerce
-
-  Released under the GNU General Public License
-*/
+   Copyright (c) 2002 osCommerce
+   ----------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------- */
 
   require('includes/application_top.php');
 
